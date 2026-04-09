@@ -19,7 +19,7 @@ export interface PiedraType extends UtilityBaseType {
 }
 
 /**
- * Representa una piedra/objeto en el juego con sus propiedades.
+ * Representa la piedra en el item cuando ya esta incrustada.
  * @property {number} 0 - ID de la piedra
  * @property {string} 1 - Nombre completo de la piedra
  * @property {number} 2 - Valor de mejora de la piedra

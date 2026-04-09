@@ -1,4 +1,4 @@
-import { BonusInItem } from 'src/modules/bonus/types/bonus-in-item.type';
+import { BonusInItem, SpecialCorruptBonus } from 'src/modules/bonus/types/bonus-in-item.type';
 import { GenericType } from '../types/entities-props/item-base.type';
 import { PiedraType } from '../types/entities-props/piedra.type';
 import { UtilityBaseType } from '../types/entities-props/utility-base.type';
