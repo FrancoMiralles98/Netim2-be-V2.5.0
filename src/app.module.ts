@@ -9,6 +9,7 @@ import { envValidationSchema } from './config/env-validation';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppConfigType } from './config/types/app-config.type';
 import { BonusModule } from './modules/bonus/bonus.module';
+import { ItemModule } from './modules/item/item.module';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { BonusModule } from './modules/bonus/bonus.module';
         uri: config.getOrThrow('db',{infer:true}).uri
       })
     }),
-    BonusModule
+    BonusModule,
+    ItemModule
   ],
   controllers: [AppController],
   providers: [AppService],
