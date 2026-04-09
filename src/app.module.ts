@@ -8,6 +8,7 @@ import { databaseConfig } from './config/database.config';
 import { envValidationSchema } from './config/env-validation';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AppConfigType } from './config/types/app-config.type';
+import { BonusModule } from './modules/bonus/bonus.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { AppConfigType } from './config/types/app-config.type';
       useFactory: (config:ConfigService<AppConfigType>) => ({
         uri: config.getOrThrow('db',{infer:true}).uri
       })
-    })
+    }),
+    BonusModule
   ],
   controllers: [AppController],
   providers: [AppService],
