@@ -4,9 +4,8 @@ import { BonusRefKeys } from "./ref-bonus-name.type";
 
 /**
  * Tipo base que representa la estructura común de todos los bonuses del juego.
- * @interface BonusList
  * @property {[number, number]} values - Rango de valores del bonus [mínimo, máximo].
- * @property {subTypeEquip[]} valid - Tipos de items que pueden tener este bonus.
+ * @property {subTypeEquip[]} valid - Tipos de items que pueden tener este bonus (arma, amadura, botas).
  */
 export interface BonusList {
   values: [number, number];
@@ -16,9 +15,9 @@ export interface BonusList {
 /**
  * Estructura interna y a que hace referencia cada porpiedad de las listas de bonus
  * @extends BonusList
- * @property {[Tier1MainBonusName, Tier1RefBonusName, ValueBonusType]} name
- *   @property {TierBonusType} name.0 - Nombre visual para el cliente.
- *   @property {TierBonusType} name.1 - Clave interna para referencias en el código.
+ * @property {[allFullNameBonusList, BonusRefKeys, ValueBonusType]} name
+ *   @property {TierBonusType} name.0 - Nombre visual del bonus para el cliente.
+ *   @property {TierBonusType} name.1 - Clave interna del bouns para referencias en el código.
  *   @property {ValueBonusType.FLAT | ValueBonusType.PORCENTAGE} name.2 - Tipo del valor.
  * @property {number} tier - A que tier pertenece el bonus.
  *  //Se usa para que a la hora de tener que agrupar todas las listas de los bonus en una sola

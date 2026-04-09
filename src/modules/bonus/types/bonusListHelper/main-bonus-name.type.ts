@@ -1,6 +1,6 @@
 /**
  * @description - se generaron tipados para los nombres de cada tier de bonus para tener 
- * una mejor validacion a la hora de crear estas listas de bonus y evitar errores gramaticos
+ * una mejor validacion a la hora de crear estas listas de bonus, evitar errores gramaticos
  * y tener otro nivel de proteccion a la hora de agregar un bonus a una lista equivocada
  */
 
