@@ -18,3 +18,8 @@ export type ItemDTO =
   | PocionType
   | CeboType
   | UtilityType;
+
+/**
+* Tipo para agrupar todas los objetos de tipo utility
+*/
+export type UtilityItemDTO = Extract<ItemDTO, {type:'utility'}>

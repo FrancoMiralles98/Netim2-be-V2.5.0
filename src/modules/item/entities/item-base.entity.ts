@@ -3,8 +3,9 @@ import {
   Position,
   Size,
 } from '../types/entities-props/item-base.type';
+import { ItemDTO } from '../types/item-dto';
 
-export abstract class ItemBase {
+export abstract class ItemBase<T extends ItemDTO> {
   protected readonly idItem: number;
   protected readonly name: string;
   protected readonly size: Size;
@@ -22,6 +23,7 @@ export abstract class ItemBase {
     this.img = props.img;
     this.leyenda = props.leyenda;
     this.name = props.name;
+    this.acc = props.acc
     this.position = props.position;
     this.price = props.price;
     this.size = props.size;
