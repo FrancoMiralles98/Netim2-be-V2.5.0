@@ -2,7 +2,6 @@ import { ItemDTO, UtilityItemDTO } from "src/modules/item/types/item-dto";
 import { InventoryItem, Position } from "../types/inventory-item.type";
 import { isUtilityItem } from "src/modules/shared/types/type-guard";
 import { ItemToUpdate } from "../types/item-to-update.types";
-import { randomUUID } from "crypto";
 import { InventoryItemFactory } from "../factories/inventory-item.factory";
 import { AddItemResult } from "../types/inventory-result.types";
 
@@ -17,7 +16,7 @@ export class Inventory {
         this.items = items
     }
 
-    getItems(): InventoryItem[] {
+    getInventory(): InventoryItem[] {
         return this.items
     }
 
@@ -29,12 +28,28 @@ export class Inventory {
         return itemToFind
     }
 
-    findItemWithSameId(id: string): boolean {
-        return this.items.some(i => i.id === id)
-    }
-
     isStackable(item: InventoryItem): boolean {
         return item.acc
+    }
+
+    moveItem(id:string, position:Position): InventoryItem {
+        const itemToMove = this.items.find(i=> i.id === id)
+        if (!itemToMove) {
+            throw new Error('Id Item not found')
+        }
+        const isAvailable = this.isSpaceAvailable(
+            itemToMove,
+            position.row,
+            position.col,
+            this.items,
+            this.DEFAULT_ROWS,
+            this.DEFAULT_COLS
+        )
+        if (!isAvailable) {
+            throw new Error ('Espacio no disponible')
+        }
+        itemToMove.position = position
+        return itemToMove
     }
 
     addItem(item: InventoryItem):AddItemResult {
@@ -64,6 +79,7 @@ export class Inventory {
         item: UtilityItemDTO
     ): AddItemResult {
         let totalQuantity = item.cantidad
+        /** Arrelgo para agregar los cambios realizados a los items para luego pasarlos al cliente */
         const updatedItems: ItemToUpdate[] = []
         const sameItems = this.findSameStackItems(item.idItem)
         for (const storedItem of sameItems) {
@@ -71,7 +87,7 @@ export class Inventory {
                 throw new Error ('Error de tipo de item')
             }
             if (totalQuantity <= 0) break
-            const availableQuantity = item.maxCantidad - item.cantidad
+            const availableQuantity = item.maxCantidad - storedItem.cantidad
             const quantityToAdd = Math.min(availableQuantity,totalQuantity)
             totalQuantity -= quantityToAdd
             storedItem.cantidad += quantityToAdd
@@ -93,14 +109,13 @@ export class Inventory {
     }
 
     private addNonStackableItem(item: InventoryItem):AddItemResult {
-        if (!this.findFirstAvailableSpace(this.items, item)) {
-            throw new Error('No hay espacio suficiente')
+         const position = this.findFirstAvailableSpace(this.items, item)
+        if (!position) {
+            throw new Error('No hay espacio suficiente en el inventario')
         }
-        if (!item.id || this.findItemWithSameId(item.id)) {
-            item.id = randomUUID()
-        }
-        this.items.push(item)
-        return {newItems:[item],updatedItems:[]}
+        const newItem = InventoryItemFactory.create(item,position)
+        this.items.push(newItem)
+        return {newItems:[newItem],updatedItems:[]}
     }
 
     private findSameStackItems(idItem: number): InventoryItem[] {
@@ -152,7 +167,4 @@ export class Inventory {
         }
         return true;
     }
-
-
-
 }
