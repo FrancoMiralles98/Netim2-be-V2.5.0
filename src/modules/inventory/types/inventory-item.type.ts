@@ -11,6 +11,10 @@ export type InventoryItem = ItemDTO & {
     position: Position
 }
 
+/**
+ * @description
+ * posicion del eje y con del eje x que se encuentra ubicado el item en el inventario
+ */
 export interface Position {
   row: number;
   col: number;

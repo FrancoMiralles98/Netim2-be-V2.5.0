@@ -1,6 +1,10 @@
 import { ItemDTO, UtilityItemDTO } from "src/modules/item/types/item-dto";
 import { InventoryItem, Position } from "../types/inventory-item.type";
 import { isUtilityItem } from "src/modules/shared/types/type-guard";
+import { ItemToUpdate } from "../types/item-to-update.types";
+import { randomUUID } from "crypto";
+import { InventoryItemFactory } from "../factories/inventory-item.factory";
+import { AddItemResult } from "../types/inventory-result.types";
 
 export class Inventory {
     //espacio total del inventario tanto eje x como y
@@ -33,12 +37,11 @@ export class Inventory {
         return item.acc
     }
 
-    addItem(item: InventoryItem) {
+    addItem(item: InventoryItem):AddItemResult {
         if (this.isStackable(item) && isUtilityItem(item)) {
-            this.addStackableItem(item)
-            return
+          return  this.addStackableItem(item)
         }
-        this.addNonStackableItem(item)
+        return this.addNonStackableItem(item)
     }
 
     findFirstAvailableSpace(
@@ -57,18 +60,51 @@ export class Inventory {
         return null;
     }
 
-    private addStackableItem(item: UtilityItemDTO) {
-
+    private addStackableItem(
+        item: UtilityItemDTO
+    ): AddItemResult {
+        let totalQuantity = item.cantidad
+        const updatedItems: ItemToUpdate[] = []
+        const sameItems = this.findSameStackItems(item.idItem)
+        for (const storedItem of sameItems) {
+            if (!isUtilityItem(storedItem)) {
+                throw new Error ('Error de tipo de item')
+            }
+            if (totalQuantity <= 0) break
+            const availableQuantity = item.maxCantidad - item.cantidad
+            const quantityToAdd = Math.min(availableQuantity,totalQuantity)
+            totalQuantity -= quantityToAdd
+            storedItem.cantidad += quantityToAdd
+            updatedItems.push({id:storedItem.id,cantidad:storedItem.cantidad})
+        }
+        if (totalQuantity > 0) {
+            const position = this.findFirstAvailableSpace(this.items,{
+                    ...item,
+                    cantidad: totalQuantity
+                })
+            if (!position) {
+                throw new Error ('Error al encontrar un espacio en el inventario')
+            }
+            const newItem = InventoryItemFactory.create(item,position)
+            this.items.push(newItem)
+            return {newItems: [newItem],updatedItems}
+        }
+        return {newItems:[],updatedItems}
     }
 
-    private addNonStackableItem(item: InventoryItem) {
+    private addNonStackableItem(item: InventoryItem):AddItemResult {
         if (!this.findFirstAvailableSpace(this.items, item)) {
             throw new Error('No hay espacio suficiente')
         }
         if (!item.id || this.findItemWithSameId(item.id)) {
-            throw new Error('el item debe tener un id unico')
+            item.id = randomUUID()
         }
         this.items.push(item)
+        return {newItems:[item],updatedItems:[]}
+    }
+
+    private findSameStackItems(idItem: number): InventoryItem[] {
+        return this.items.filter(i=> i.idItem === idItem)
     }
 
     /**

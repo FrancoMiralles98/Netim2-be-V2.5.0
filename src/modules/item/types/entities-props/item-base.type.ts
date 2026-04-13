@@ -11,7 +11,6 @@ export interface ItemBaseType {
   acc: boolean;
   corrupt?: boolean;
   leyenda?: string;
-  position?: Position;
   type: GenericType;
 }
 

@@ -1,11 +1,9 @@
 import {
   ItemBaseType,
-  Position,
   Size,
 } from '../types/entities-props/item-base.type';
-import { ItemDTO } from '../types/item-dto';
 
-export abstract class ItemBase<T extends ItemDTO> {
+export abstract class ItemBase {
   protected readonly idItem: number;
   protected readonly name: string;
   protected readonly size: Size;
@@ -15,7 +13,6 @@ export abstract class ItemBase<T extends ItemDTO> {
   protected price: number;
   protected corrupt: boolean;
   protected leyenda?: string;
-  protected position?: Position;
 
   protected constructor(props: ItemBaseType) {
     this.idItem = props.idItem;
@@ -24,7 +21,6 @@ export abstract class ItemBase<T extends ItemDTO> {
     this.leyenda = props.leyenda;
     this.name = props.name;
     this.acc = props.acc
-    this.position = props.position;
     this.price = props.price;
     this.size = props.size;
   }
