@@ -8,9 +8,9 @@ export interface ItemBaseType {
   price: number;
   size: Size;
   img: string;
+  acc: boolean;
   corrupt?: boolean;
   leyenda?: string;
-  position?: Position;
   type: GenericType;
 }
 

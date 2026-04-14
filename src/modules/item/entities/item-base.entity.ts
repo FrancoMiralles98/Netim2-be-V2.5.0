@@ -1,6 +1,5 @@
 import {
   ItemBaseType,
-  Position,
   Size,
 } from '../types/entities-props/item-base.type';
 
@@ -14,7 +13,6 @@ export abstract class ItemBase {
   protected price: number;
   protected corrupt: boolean;
   protected leyenda?: string;
-  protected position?: Position;
 
   protected constructor(props: ItemBaseType) {
     this.idItem = props.idItem;
@@ -22,7 +20,7 @@ export abstract class ItemBase {
     this.img = props.img;
     this.leyenda = props.leyenda;
     this.name = props.name;
-    this.position = props.position;
+    this.acc = props.acc
     this.price = props.price;
     this.size = props.size;
   }

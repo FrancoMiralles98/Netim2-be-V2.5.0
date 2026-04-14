@@ -10,6 +10,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AppConfigType } from './config/types/app-config.type';
 import { BonusModule } from './modules/bonus/bonus.module';
 import { ItemModule } from './modules/item/item.module';
+import { InventoryModule } from './modules/inventory/inventory.module';
 
 @Module({
   imports: [
@@ -25,7 +26,8 @@ import { ItemModule } from './modules/item/item.module';
       })
     }),
     BonusModule,
-    ItemModule
+    ItemModule,
+    InventoryModule
   ],
   controllers: [AppController],
   providers: [AppService],
