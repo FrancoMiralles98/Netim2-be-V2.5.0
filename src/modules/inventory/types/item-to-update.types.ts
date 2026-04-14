@@ -1,11 +1,11 @@
 /**
  * @description
- * Se usa para agregar los datos que cambiaron del item para luego pasarlos al cliente
- * Principalmente cuando se agrega un item y se distribuye la cantidad en items del mismo tipo que 
- * todavia tiene espacio suficiente para almacenar
+ * Se usa para especificar los items espeficios que se cambiaron, puede ser que se consumieron o se agregaron
+ * y luego pasarlos al cliente
+ * @property {cantidad} - aca el valor es la cantidad FINAL que tiene el item, NO un valor que se suma o se resta
+ * - @note - si no se especifica una cantidad se tomara que el item se tiene remover del inventario
  */
-export interface ItemToUpdate {
+export interface InventoryChangeResult {
     id: string,
-    cantidad?: number,
-    price?: number
+    cantidad?: number
 }
