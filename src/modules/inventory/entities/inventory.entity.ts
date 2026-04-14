@@ -18,7 +18,7 @@ export class Inventory {
     }
 
     getInventory(): InventoryItem[] {
-        return this.items.map(i => structuredClone(i))
+        return [...this.items]
     }
 
     getItemById(id: string): InventoryItem {
@@ -97,7 +97,7 @@ export class Inventory {
     }
 
     addItem(item: InventoryItem | ItemDTO): AddItemResult {
-        if (this.isStackable(item) && isUtilityItem(item)) {
+        if (isUtilityItem(item)) {
             return this.addStackableItem(item)
         }
         return this.addNonStackableItem(item)
@@ -136,10 +136,6 @@ export class Inventory {
                 this.removeItemById(item.id)
             }
         }
-    }
-
-    private isStackable(item: InventoryItem | ItemDTO): boolean {
-        return 'cantidad' in item && 'maxCantidad' in item
     }
 
     /**
