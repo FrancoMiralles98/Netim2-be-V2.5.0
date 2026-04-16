@@ -11,6 +11,8 @@ import { AppConfigType } from './config/types/app-config.type';
 import { BonusModule } from './modules/bonus/bonus.module';
 import { ItemModule } from './modules/item/item.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
+import { SkillModule } from './modules/skill/skill.module';
+import { CharacterModule } from './modules/character/character.module';
 
 @Module({
   imports: [
@@ -27,7 +29,9 @@ import { InventoryModule } from './modules/inventory/inventory.module';
     }),
     BonusModule,
     ItemModule,
-    InventoryModule
+    InventoryModule,
+    SkillModule,
+    CharacterModule
   ],
   controllers: [AppController],
   providers: [AppService],

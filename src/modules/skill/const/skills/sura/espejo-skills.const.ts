@@ -1,0 +1,115 @@
+import { Skill } from "src/modules/skill/types/skill.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+
+export const ESPEJO_SKILLS: Skill[] = [
+    {
+      nombre: 'Golpe de Dedo',
+      daño: [0, 0],
+      lv: 0,
+      tipo_daño: 'ad',
+      cd: 10,
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 0,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      bonus_damage: 0,
+      idPosition: 1,
+      tipo: 'Daño',
+      icon: { x: 0, y: 0 },
+      descripcion: 'Realiza una gran explosión con la yema de tus dedos.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.GOLPE_DE_DEDO,
+    },
+    {
+      nombre: 'Remolino Dragón',
+      daño: [0, 0],
+      lv: 0,
+      tipo_daño: 'ad',
+      cd: 15,
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 0,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      bonus_damage: 0,
+      idPosition: 4,
+      tipo: 'Daño',
+      descripcion:'Provoca un poderoso tornado para derrotar a varios enemigos.',
+      icon: { x: 112, y: 0 },
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.REMOLINO_DRAGON,
+    },
+    {
+      nombre: 'Anular Magia',
+      lv: 0,
+      daño: [0, 0],
+      cd: 12,
+      tipo_daño: 'ap',
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 0,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      idPosition: 6,
+      tipo: 'Daño',
+      bonus_damage: 0,
+      descripcion: 'Lanza un orbe de anti-magia a tu enemigo.',
+      icon: { x: 112, y: 36 },
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.ANULAR_MAGIA,
+    },
+    {
+      nombre: 'Hoja Encantada',
+      lv: 0,
+      buffos: {
+        media: 0,
+        daño_absorbido_hp: 0,
+      },
+      idPosition: 2,
+      tipo: 'Aura',
+      descripcion:
+        'Encanta tu espada con magia oscura,incrementa tu valor de ataque y absorberas HP del daño realizado.',
+      icon: { x: 0, y: 35 },
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.HOJA_ENCANTADA,
+    },
+    {
+      nombre: 'Armadura Encantada',
+      lv: 0,
+      buffos: {
+        def_media:0,
+        reflectar: 0,
+      },
+      idPosition: 3,
+      tipo: 'Aura',
+      descripcion: 'Proteje tu cuerpo con una armadura oscura.',
+      icon: { x: 0, y: 0 },
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.ARMADURA_ENCANTADA,
+    },
+    {
+      nombre: 'Miedo',
+      lv: 0,
+      buffos: {
+        bloquear_ataques: 0,
+        esquivar_flecha: 0,
+      },
+      idPosition: 5,
+      tipo: 'Aura',
+      descripcion:
+        'Rodeate de una aura maldita y debilita las habilidades de los enemigos que te atacan.',
+      icon: { x: 112, y: 71 },
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.MIEDO,
+    },
+  ]

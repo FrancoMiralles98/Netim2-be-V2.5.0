@@ -1,0 +1,100 @@
+import { Skill } from "src/modules/skill/types/skill.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+
+export const CORPORAL_SKILLS: Skill[] = [
+    {
+      nombre: 'Corte de Tres Maneras',
+      daño: [0, 0],
+      lv: 0,
+      tipo_daño: 'ad',
+      cd: 12,
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 0,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      bonus_damage: 0,
+      idPosition: 1,
+      tipo: 'Daño',
+      icon: { x: 0, y: 0 },
+      descripcion: 'Realiza un ataque frontal tres veces.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.CORTE_DE_TRES_MANERAS,
+    },
+    {
+      nombre: 'Rociada',
+      daño: [0, 0],
+      lv: 0,
+      tipo_daño: 'ad',
+      cd: 16,
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 100,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      bonus_damage: 0,
+      idPosition: 3,
+      tipo: 'Daño',
+      icon: { x: 0, y: 0 },
+      descripcion: 'Ataca rapidamente con tu cuerpo al oponente, causa desmayo.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.ROCIADA,
+    },
+    {
+      nombre: 'Giro de Espada',
+      daño: [0, 0],
+      lv: 0,
+      tipo_daño: 'ad',
+      cd: 15,
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 0,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      bonus_damage: 0,
+      idPosition: 4,
+      tipo: 'Daño',
+      icon: { x: 0, y: 0 },
+      descripcion: 'Gira la espada para atacar al enemigo.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.GIRO_DE_ESPADA,
+    },
+    {
+      nombre: 'Bersek',
+      lv: 0,
+      idPosition: 2,
+      buffos: {
+        vm: 0,
+        va: 0,
+        damage_taken: 0,
+      },
+      tipo: 'Aura',
+      icon: { x: 0, y: 0 },
+      descripcion:
+        'Entra en un estado de ira e incrementa tu velocidad de ataque, de movimiento a cambio de recibir más daño.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.BERSEK,
+    },
+    {
+      nombre: 'Aura de Espada',
+      lv: 0,
+      buffos: {
+        media: 0,
+      },
+      idPosition: 5,
+      tipo: 'Aura',
+      icon: { x: 0, y: 0 },
+      descripcion: 'Canaliza tu poder en el arma y aumenta tu AD.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.AURA_DE_ESPADA,
+    },
+  ]

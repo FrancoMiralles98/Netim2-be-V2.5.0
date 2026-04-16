@@ -8,3 +8,6 @@ MODULO
     - bonus:
         - types:
             -bonus-list.type: en la interface BonusList en el valor de "valid" falta agregarle el tipo que valida que sea los nombres del equipo (arma,armadura,botas, etc...) 
+    - skill
+        - types
+            -skill-damage.type: en la documentacion falta agregar un enlace en bonus_damage sobre como funciona ese valor dependiendo de cada skill especial que lo tenga, (emboscada, lluvia de flechas, daga rodante, etc)
