@@ -1,8 +1,24 @@
 /**
- * @description - en homenaje al juego que me inspiro, tenia una mecanica que al llegar al lv 17 el siguiente
- * nivel la skill se "masterizaba" y pasaba del lv 16 a 'M1', ahi uno podia subir la skill sin necesidad de subir de nivel
- * pero necesitarias un material especifico para subir, "libros de skill", hasta llegar a M10, despues pasaria a G1 que 
- * hace la misma mecanica pero con otro item diferente 'Piedra alma' hasta llegar a 'P' que es el nivel maximo de la skill
+ * Representa los rangos avanzados de una skill una vez superado el nivel base.
+ *
+ * @description
+ * Cuando una skill alcanza su nivel máximo base (lv 16),
+ * el siguiente progreso la convierte en una skill "masterizada",
+ * iniciando una nueva etapa de niveles especiales.
+ *
+ * Progresión completa:
+ * - lv 1 → 16 → nivel base
+ * - M1 → M10 → Master
+ * - G1 → G10 → Grand Master
+ * - P → Perfect (nivel máximo)
+ *
+ * @note
+ * A partir de M1, las skills ya no suben de nivel mediante experiencia,
+ * sino utilizando materiales específicos:
+ *
+ * - M (Master) → libros de skill
+ * - G (Grand Master) → piedra alma
+ * - P (Perfect) → nivel máximo, no se puede mejorar más
  */
 export type MasteryLvRank = 
 'M1' |

@@ -4,7 +4,7 @@ import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 export const DRAGON_SKILLS: Skill[] = [
     {
       nombre: 'Disparo del Dragón',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 8,
@@ -27,7 +27,7 @@ export const DRAGON_SKILLS: Skill[] = [
     },
     {
       nombre: 'Talismán Volador',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 7,
@@ -49,7 +49,7 @@ export const DRAGON_SKILLS: Skill[] = [
     },
     {
       nombre: 'Rugido del Dragón',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 20,

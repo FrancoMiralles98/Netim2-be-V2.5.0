@@ -1,18 +1,38 @@
 import { MasteryLvRank } from "./skill-lv-rank.types";
 
 /**
- * @description - Estrucutra base de las propiedades de las skill de cualquier raza
- * @property {string} nombre - nombre completo de la skill 
- * @property {number | @see MasteryLvRank} lv - nivel de la skill, que va del lv 1 al 17 y despues esta
- * skill se masteriza y pasa a ser string M1..M10..G1 hasta el P
- * @property {number} idPosition - este id hace referencia a la posición que se encuentra en la lista de skill
- * ya que cada skill tiene una posicion fija , sirve mas que nada para identificar el icono de la skill
- * @property {'Daño' | 'Aura'} tipo - cual es el tipo de skill 
- * @property {IconPisition} icon - posicion que se utiliza en el cliente para saber cual posicion es la correcta
- * del icono de la skill, porque dependiendo del nivel que tenga el icono va cambiado 
- *  @example - cuando la skill pasa del lv 17 => M1 , el icono cambia , tambien de M10 => G1 y de G10 => P 
- * @property {string} descripcion - descripcion breve de lo que hace la skill
- * @property {number} idSkill - id unico de la skill
+ * Estructura base que representa una skill del juego,
+ * independientemente de su tipo (Daño o Aura).
+ *
+ * @property {string} nombre
+ * Nombre completo de la skill.
+ *
+ * @property {number | MasteryLvRank} lv
+ * Nivel actual de la skill.
+ *
+ * @property {number} idPosition
+ * Posición fija de la skill dentro del listado de habilidades de la clase.
+ *
+ * @description
+ * Se utiliza principalmente para determinar la ubicación del icono
+ * dentro del spritesheet en el cliente.
+ *
+ * @property {'Daño' | 'Aura'} tipo
+ * Tipo de skill:
+ * - 'Daño' → habilidades que infligen daño
+ * - 'Aura' → habilidades que aplican buffos
+ *
+ * @property {IconPosition} icon
+ * Coordenadas del icono dentro del spritesheet.
+ *
+ * @property {string} descripcion
+ * Descripción breve de la habilidad.
+ *
+ * @property {number} idSkill
+ * Identificador único de la skill dentro del sistema.
+ *
+ * @property {unknown} escalado
+ * Configuración de escalado de la skill.
  */
 export interface BaseSkill {
     nombre: string,

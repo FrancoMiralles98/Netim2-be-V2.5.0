@@ -4,7 +4,7 @@ import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 export const CORPORAL_SKILLS: Skill[] = [
     {
       nombre: 'Corte de Tres Maneras',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 12,
@@ -26,7 +26,7 @@ export const CORPORAL_SKILLS: Skill[] = [
     },
     {
       nombre: 'Rociada',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 16,
@@ -48,7 +48,7 @@ export const CORPORAL_SKILLS: Skill[] = [
     },
     {
       nombre: 'Giro de Espada',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 15,

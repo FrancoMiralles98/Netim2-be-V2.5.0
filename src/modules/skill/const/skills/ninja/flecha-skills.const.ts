@@ -4,7 +4,7 @@ import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 export const FLECHA_SKILLS: Skill[] = [
     {
       nombre: 'Disparo Repetido',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 14,
@@ -26,7 +26,7 @@ export const FLECHA_SKILLS: Skill[] = [
     },
     {
       nombre: 'Flecha de Fuego',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 17,
@@ -49,7 +49,7 @@ export const FLECHA_SKILLS: Skill[] = [
     },
     {
       nombre: 'Flecha Venenosa',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 20,
@@ -72,7 +72,7 @@ export const FLECHA_SKILLS: Skill[] = [
     },
     {
       nombre: 'Lluvia de Flechas',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 14,

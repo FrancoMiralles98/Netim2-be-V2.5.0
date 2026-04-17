@@ -4,7 +4,7 @@ import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 export const LUZ_SKILLS:Skill[] = [
     {
       nombre: 'Llamada Relámpago',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 15,
@@ -26,7 +26,7 @@ export const LUZ_SKILLS:Skill[] = [
     },
     {
       nombre: 'Tiro Relámpago',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 7,
@@ -48,7 +48,7 @@ export const LUZ_SKILLS:Skill[] = [
     },
     {
       nombre: 'Garra Relámpago',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 10,
@@ -71,7 +71,7 @@ export const LUZ_SKILLS:Skill[] = [
     },
     {
       nombre: 'Curación',
-      daño: [500, 600],
+      daño: {min:500, max:600},
       lv: 0,
       tipo_daño: 'ap',
       cd: 10,

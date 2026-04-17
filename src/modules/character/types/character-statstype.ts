@@ -1,3 +1,5 @@
+import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type"
+
 /**
  * @description - Nombre de todas las especialidades de las razas
  */
@@ -18,4 +20,4 @@ export type CharacterRace =
     'guerrero' |
     'sura'
 
-export type CharacterAttribute = 'DEX' | 'STR' | 'INT' | 'VIT'
+export type CharacterAttribute = Extract<BonusRefKeys, 'VIT'| 'INT'| 'STR'| 'DEX'>

@@ -4,7 +4,7 @@ import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 export const MAGIA_NEGRA_SKILLS: Skill[] =  [
     {
       nombre: 'Golpe Oscuro',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 7,
@@ -26,7 +26,7 @@ export const MAGIA_NEGRA_SKILLS: Skill[] =  [
     },
     {
       nombre: 'Espíritu de la LLama',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 3,
@@ -48,7 +48,7 @@ export const MAGIA_NEGRA_SKILLS: Skill[] =  [
     },
     {
       nombre: 'Golpe Espiritual',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 12,
@@ -71,7 +71,7 @@ export const MAGIA_NEGRA_SKILLS: Skill[] =  [
     },
     {
       nombre: 'Golpe de Llama',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 12,
@@ -93,7 +93,7 @@ export const MAGIA_NEGRA_SKILLS: Skill[] =  [
     },
     {
       nombre: 'Orbe Oscuro',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 24,

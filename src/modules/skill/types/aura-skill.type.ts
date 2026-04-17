@@ -2,12 +2,25 @@ import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-
 import { BaseSkill } from "./base-skill.type";
 
 /**
- * @description - tipo de los datos especificos que tiene AuraSkill se exiende de @extends {@see BaseSkill}
- *  @property {'Aura'} tipo - tienen que tener el tipo espeficio de 'Aura'
- *  @property {Record<BonusRefKeys,number>} buffos - se usa como key los @see {@see BonusRefKeys} para 
- * identificar despues cual es el potenciador que hace dicho buffo
- * @example - en buffos puede aparecer criticos: 10, eso quiere decir que agrega un 10% a las chances de 
- * hacer critico 
+ * Representa una skill de tipo Aura.
+ *
+ * @description
+ * Las AuraSkills no infligen daño directo, sino que aplican buffos
+ * que modifican las estadísticas del personaje (ej: crítico, defensa, velocidad, etc.).
+ *
+ * Extiende {@link BaseSkill}, manteniendo todas las propiedades comunes
+ *
+ * @property {Partial<Record<BonusRefKeys, number>>} buffos
+ * Define los bonus que aplica la skill y su valor correspondiente.
+ *
+ * @description
+ * - Cada clave representa un tipo de bonus (según {@link BonusRefKeys})
+ * - Cada valor representa la magnitud del efecto aplicado
+ *
+ * @example
+ * buffos: { critico: 10}
+ *
+ * → Incrementa un 10% la probabilidad de golpe crítico
  */
 export interface AuraSkill extends BaseSkill {
     buffos: Partial<Record<BonusRefKeys,number>>

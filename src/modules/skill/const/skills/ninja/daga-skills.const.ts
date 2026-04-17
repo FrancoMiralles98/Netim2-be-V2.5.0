@@ -4,7 +4,7 @@ import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 export const DAGA_SKILLS: Skill[] = [
     {
       nombre: 'Emboscada',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 12,
@@ -27,7 +27,7 @@ export const DAGA_SKILLS: Skill[] = [
     },
     {
       nombre: 'Daga Rodante',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 18,
@@ -50,7 +50,7 @@ export const DAGA_SKILLS: Skill[] = [
     },
     {
       nombre: 'Nube Tóxica',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ap',
       cd: 18,
@@ -73,7 +73,7 @@ export const DAGA_SKILLS: Skill[] = [
     },
     {
       nombre: 'Ataque Rápido',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 16,
@@ -97,7 +97,7 @@ export const DAGA_SKILLS: Skill[] = [
 
     {
       nombre: 'Camuflaje',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 20,

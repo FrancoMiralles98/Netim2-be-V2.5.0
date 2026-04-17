@@ -4,7 +4,7 @@ import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 export const ESPEJO_SKILLS: Skill[] = [
     {
       nombre: 'Golpe de Dedo',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 10,
@@ -26,7 +26,7 @@ export const ESPEJO_SKILLS: Skill[] = [
     },
     {
       nombre: 'Remolino Dragón',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 15,
@@ -49,7 +49,7 @@ export const ESPEJO_SKILLS: Skill[] = [
     {
       nombre: 'Anular Magia',
       lv: 0,
-      daño: [0, 0],
+      daño: {min:0,max:0},
       cd: 12,
       tipo_daño: 'ap',
       bonus_efecto: {

@@ -1,13 +1,29 @@
 /**
- * @see - en el cliente cada clase tiene una imagen donde se encuentran todas las skills de dicha clase
- * y con todas sus versiones dependiendo del nivel de la misma, estos valores fijos determinan cuanto tiene que moverse
- * la imagen (en px) para poder seleccionar el recuadro que identifica la skill
- *  */
+ * Define las coordenadas de los iconos de skills dentro del spritesheet del cliente.
+ *
+ * @description
+ * En el cliente, cada clase utiliza una única imagen (spritesheet) que contiene
+ * todos los iconos de sus habilidades en distintas versiones según el nivel:
+ * - nivel normal (1–16)
+ * - Master (M)
+ * - Grand Master (G)
+ * - Perfect (P)
+ *
+ * Para renderizar correctamente un icono, es necesario desplazar la imagen
+ * en los ejes X e Y (en píxeles) hasta ubicar el recuadro correspondiente.
+ *
+ * Estas constantes contienen esos desplazamientos fijos.
+ */
 
 /**
- * @description - objeto con los valores del eje Y a la que representa cada skill segun su 'idPosition'
+ * Coordenada en el eje Y para cada skill según su `idPosition`.
+ *
+ * @description
+ * Cada skill ocupa una fila específica dentro del spritesheet.
+ * Este valor indica cuánto debe desplazarse verticalmente la imagen
+ * para ubicar el icono correcto.
  */
-const ICON_POSITION_Y = {
+export const ICON_POSITION_Y = {
     1: 0,
     2: 35,
     3: 72,
@@ -17,11 +33,23 @@ const ICON_POSITION_Y = {
 } as const
 
 /**
- * @description - por como esta distribuido los iconos de las skills en la imagen, se agrupan en 2 grupos
- * ya que comparten el mismo eje x (solo que con un eje Y diferente) solo cambia el valor segun el nivel
- * de la skills, aca lo unico que nos interesa es si es un numero o que letra tiene cuando se masteriza
+ * Coordenadas en el eje X para los iconos según el grupo de skills
+ * y el nivel/rango de la habilidad.
+ *
+ * @description
+ * Los iconos están organizados en dos grupos horizontales dentro del spritesheet:
+ *
+ * - Grupo 1  → skills con idPosition ≤ 3
+ * - Grupo 2  → skills con idPosition > 3
+ *
+ * Cada grupo comparte la misma estructura horizontal,
+ * pero el desplazamiento cambia según el rango de la skill:
+ *
+ * - 'number' → nivel normal (1–16)
+ * - 'M' → Master
+ * - 'G' → Grand Master
  */
-const ICON_POSITION_X = {
+export const ICON_POSITION_X = {
     3: { // idPosition con id <=  3
         'number': 0,
         'M': 37,

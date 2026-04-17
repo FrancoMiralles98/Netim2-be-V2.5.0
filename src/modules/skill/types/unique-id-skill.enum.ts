@@ -1,6 +1,11 @@
 /**
- * @description - IdSkills de todas las skills del juego - estas id son unicas
- * y representa una skill especifica de una clase y raza determinada
+ * Identificadores únicos de todas las skills del juego.
+ *
+ * @description
+ * Cada skill posee un ID único que permite identificarla de forma consistente en todo el sistema
+ *
+ * Estos IDs se utilizan como referencia principal para:
+ * - identificar la skill en lógica de combate
  */
 export enum UNIQUE_ID_SKILLS {
     GOLPE_OSCURO = 1,

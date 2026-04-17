@@ -1,4 +1,5 @@
 import { CHANGE_MASTERY_RANK_LV_VALUES } from "../const/change-rank-values.const";
+import { ICON_POSITION_X, ICON_POSITION_Y } from "../const/icon-position.const";
 import { BaseSkill, IconPisition } from "../types/base-skill.type";
 import { MasteryLvRank } from "../types/skill-lv-rank.types";
 import { AuraSkillEntity } from "./aura-skill.entity";

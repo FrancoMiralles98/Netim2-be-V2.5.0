@@ -4,7 +4,7 @@ import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 export const MENTAL_SKILLS: Skill[] = [
       {
       nombre: 'Tocón',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 18,
@@ -27,7 +27,7 @@ export const MENTAL_SKILLS: Skill[] = [
     },
     {
       nombre: 'Pulso Espiritual',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 17,
@@ -49,7 +49,7 @@ export const MENTAL_SKILLS: Skill[] = [
     },
     {
       nombre: 'Golpe',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 13,
@@ -71,7 +71,7 @@ export const MENTAL_SKILLS: Skill[] = [
     },
     {
       nombre: 'Golpe de Espada',
-      daño: [0, 0],
+      daño: {min:0,max:0},
       lv: 0,
       tipo_daño: 'ad',
       cd: 14,
