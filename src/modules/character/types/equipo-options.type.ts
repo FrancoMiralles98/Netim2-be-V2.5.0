@@ -12,8 +12,7 @@
  *
  * @property {boolean} equipo3_on
  * Indica si el set de equipo 3 está disponible. (se consigue mediante md)
- * 
- * @note 
+ *
  * 
  */
 export interface EquipoOptions {

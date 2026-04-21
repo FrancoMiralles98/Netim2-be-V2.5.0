@@ -1,4 +1,4 @@
-import { DiscoveryWorld } from "../../character/types/discovery-world.type";
+import { DiscoveryWorld } from "../types/discovery-world.type";
 
 /**
  * No se ponen "Mazmorra de Monos, "Cueva de Arañas" y "Torre Demoniaca" porque al ser nombre
