@@ -1,0 +1,122 @@
+import { Skill } from "src/modules/skill/types/skill.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+
+export const LUZ_SKILLS:Skill[] = [
+    {
+      nombre: 'Llamada Relámpago',
+      daño: {min:0,max:0},
+      lv: 0,
+      tipo_daño: 'ap',
+      cd: 15,
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 10,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      bonus_damage: 0,
+      idPosition: 4,
+      tipo: 'Daño',
+      icon: { x: 0, y: 0 },
+      descripcion: 'Evoca un relámpago del cielo.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.LLAMADA_RELAMPAGO,
+    },
+    {
+      nombre: 'Tiro Relámpago',
+      daño: {min:0,max:0},
+      lv: 0,
+      tipo_daño: 'ap',
+      cd: 7,
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 0,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      bonus_damage: 0,
+      idPosition: 1,
+      tipo: 'Daño',
+      icon: { x: 0, y: 0 },
+      descripcion: 'Canaliza tu arma para generar un ataque con relámpagos.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.TIRO_RELAMPAGO,
+    },
+    {
+      nombre: 'Garra Relámpago',
+      daño: {min:0,max:0},
+      lv: 0,
+      tipo_daño: 'ap',
+      cd: 10,
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 0,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      bonus_damage: 0,
+      idPosition: 2,
+      tipo: 'Daño',
+      icon: { x: 0, y: 0 },
+      descripcion:
+        'Convocas un relampago para dividirlo y lanzarlo al objetivo.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.GARRA_RELAMPAGO,
+    },
+    {
+      nombre: 'Curación',
+      daño: {min:500, max:600},
+      lv: 0,
+      tipo_daño: 'ap',
+      cd: 10,
+      bonus_efecto: {
+        penetracion_habilidad:0,
+        desmayo: 0,
+        incendio: 0,
+        retardo: 0,
+        veneno: 0,
+        sangrado: 0
+      },
+      bonus_damage: 0,
+      idPosition: 5,
+      tipo: 'Daño',
+      icon: { x: 0, y: 0 },
+      descripcion: 'Cura las heridas con la ayuda de la luz.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.CURACION,
+    },
+    {
+      nombre: 'Remolinos',
+      lv: 0,
+      buffos: {
+        vm: 0,
+        vh: 0,
+      },
+      idPosition: 3,
+      tipo: 'Aura',
+      icon: { x: 0, y: 0 },
+      descripcion:
+        'Obten el poder del viento e incrementa tu velocidad de movimiento y de hechizo.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.REMOLINOS,
+    },
+    {
+      nombre: 'Ataque',
+      lv: 0,
+      buffos: {
+        ad: 0,
+      },
+      idPosition: 6,
+      tipo: 'Aura',
+      icon: { x: 0, y: 0 },
+      descripcion: 'Obten AD gracias al poder de la Luz.',
+      escalado: {},
+      idSkill: UNIQUE_ID_SKILLS.ATAQUE,
+    },
+  ]
