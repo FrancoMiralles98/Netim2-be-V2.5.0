@@ -85,7 +85,7 @@ export type Bonus6_7RefBonusName =
    * unificarlo y tener todas las referencias en en un solo tipo, 
    */
 
-  type BonusStatsGeneralRefKeys =
+  export type BonusStatsGeneralRefKeys =
   | 'VIT'
   | 'INT'
   | 'STR'
@@ -99,7 +99,7 @@ export type Bonus6_7RefBonusName =
   | 'ad'
   | 'ap';
 
-type BonusDañoRefKeys =
+export type BonusDañoRefKeys =
   | 'veneno'
   | 'animales'
   | 'incendio'
@@ -126,7 +126,7 @@ type BonusDañoRefKeys =
   | 'ninja'
   | 'chaman';
 
-type BonusDefensaRefKeys =
+export type BonusDefensaRefKeys =
   | 'daño_absorbido_hp'
   | 'bloquear_ataques'
   | 'esquivar_ataques'
@@ -153,9 +153,9 @@ type BonusDefensaRefKeys =
   | 'def_incendio'
   | 'damage_taken';
 
-type BonusCCRefKeys = 'retardo' | 'desmayo';
+export type BonusCCRefKeys = 'retardo' | 'desmayo';
 
-type BonusMiscsRefKeys =
+export type BonusMiscsRefKeys =
   | 'chances_yang'
   | 'chances_objetos'
   | 'chances_raros'
