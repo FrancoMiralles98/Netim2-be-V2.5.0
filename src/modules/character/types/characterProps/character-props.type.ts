@@ -141,7 +141,7 @@ import { HistorialInUser } from "./historial-in-user.type";
 export interface CharacterProps {
     nombre: string
     discovery_world: DiscoveryWorld;
-    stars_discovery: StarDiscovery;
+    stars_discovery: StarDiscovery[];
     icono: { x: number, y: number };
     timer_mob: number;
     timer_metin: number;

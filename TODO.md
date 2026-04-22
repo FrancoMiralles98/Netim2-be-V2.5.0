@@ -18,3 +18,9 @@ MODULO
         -types
             -mission-option.type: Tiene valores en any, ya que el modulo de missiones y sus tipos todavia no esta creado
             -dungeon-in-progress.type: Tiene valores en any ya que el modulo de Dungeon y sus types todavia no esta creado
+        - schema
+            -character.schema.ts: el timer_lv se tiene que agregar por default el valor inicial, la definicion de dicho valor no esta, segun fijado no va en modulo de character iria en modulo de fight o mob , como a dia de fecha no esta realizada todavia no se puso
+        - const
+            -base-pvp-data: en "remainingLosses" falta agregar el valor por default que no esta definido ya que el modulo de Arena no esta configurado
+            -stats-progress-by-race.const: agregado de la estructura base de como sera la nueva progresion de estadisitcas de los personajes segun la raza y luego aplicarlo tambien a especialidad, falta el desarrollo de los numeros y luego los metodos apropiados para aplicar dicho escalados de estadisticas
+        
