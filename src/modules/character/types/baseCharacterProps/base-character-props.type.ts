@@ -1,6 +1,6 @@
 import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
-import { EquipType } from "src/modules/item/types/entities-props/equip.type";
-import { CharacterStats } from "./character-stats.type";
+import { EquipType, TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
+import { CharacterRace, CharacterSpeciality, CharacterStats } from "./character-stats.type";
 import { MonturaType } from "src/modules/item/types/entities-props/montura.type";
 import { DiscoveryWorld } from "./discovery-world.type";
 import { StarDiscovery } from "./stars-discovery.type";
@@ -13,9 +13,10 @@ import { MissionOption } from "./mission-option.type";
 import { DungeonInProgressType } from "./dungeon-in-progress.type";
 import { PvpDataType } from "./pvp-data.type";
 import { HistorialInUser } from "./historial-in-user.type";
+import { Skill } from "src/modules/skill/types/skill.type";
+import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 
 /**
- * Esquema de Mongoose que representa a un personaje del juego.
  *
  * @description
  * Contiene toda la información persistida del personaje, incluyendo progreso,
@@ -138,7 +139,7 @@ import { HistorialInUser } from "./historial-in-user.type";
  * Datos relacionado al progreso del personaje dentro de una dungeon especifica
  * @see {DungeonInProgressType}
  */
-export interface CharacterProps {
+export interface BaseCharacterProps {
     nombre: string
     discovery_world: DiscoveryWorld;
     stars_discovery: StarDiscovery[];
@@ -153,7 +154,6 @@ export interface CharacterProps {
     puntos_atributos: number;
     puntos_habilidad: number;
     buffos: AppliedBuffos[];
-    inventario: InventoryItem[];
     equipo_1: EquipType[];
     equipo_2: EquipType[];
     equipo_3: EquipType[];
@@ -176,5 +176,9 @@ export interface CharacterProps {
     dungeon_in_progress: DungeonInProgressType;
     pvp_data: PvpDataType;
     historial: HistorialInUser[];
-    party: Partial<CharacterProps>[]
+    party: Partial<BaseCharacterProps>[]
+    type_weapon: TypeWeapon | ''
+    target_type: Extract<AllTargetType,"medio_humanos">;
+    raza: CharacterRace;
+    especialidad: CharacterSpeciality;
 }

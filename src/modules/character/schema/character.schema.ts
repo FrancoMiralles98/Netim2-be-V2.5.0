@@ -1,18 +1,18 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { DiscoveryWorld } from "../types/characterProps/discovery-world.type";
-import { StarDiscovery } from "../types/characterProps/stars-discovery.type";
+import { DiscoveryWorld } from "../types/baseCharacterProps/discovery-world.type";
+import { StarDiscovery } from "../types/baseCharacterProps/stars-discovery.type";
 import { ReinosNames } from "src/modules/gameData/types/reinos-names.type";
-import { AppliedBuffos } from "../types/characterProps/buffos-in-character.type";
+import { AppliedBuffos } from "../types/baseCharacterProps/buffos-in-character.type";
 import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
-import { EquipType } from "src/modules/item/types/entities-props/equip.type";
-import { EquipoOptions } from "../types/characterProps/equipo-options.type";
-import { GremioOptions } from "../types/characterProps/gremio-options.type";
-import { CharacterStats } from "../types/characterProps/character-stats.type";
-import { CharacterRole } from "../types/characterProps/character-role.enum";
+import { EquipType, TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
+import { EquipoOptions } from "../types/baseCharacterProps/equipo-options.type";
+import { GremioOptions } from "../types/baseCharacterProps/gremio-options.type";
+import { CharacterRace, CharacterSpeciality, CharacterStats } from "../types/baseCharacterProps/character-stats.type";
+import { CharacterRole } from "../types/baseCharacterProps/character-role.enum";
 import { MonturaType } from "src/modules/item/types/entities-props/montura.type";
-import { MissionOption } from "../types/characterProps/mission-option.type";
-import { DungeonInProgressType } from "../types/characterProps/dungeon-in-progress.type";
-import { PvpDataType } from "../types/characterProps/pvp-data.type";
+import { MissionOption } from "../types/baseCharacterProps/mission-option.type";
+import { DungeonInProgressType } from "../types/baseCharacterProps/dungeon-in-progress.type";
+import { PvpDataType } from "../types/baseCharacterProps/pvp-data.type";
 import { BASE_DISCOVERY_WORLD } from "../const/characterProps/base-discovery-world.const";
 import { BASE_EQUIPO_OPTIONS } from "../const/characterProps/base-equipo-options.const";
 import { EXP_PER_LV } from "../const/exp-per-lv.const";
@@ -20,6 +20,7 @@ import { BASE_PVP_DATA } from "../const/characterProps/base-pvp-data-default.con
 import { BASE_DUNGEON_IN_PROGRESS } from "../const/characterProps/base-dungeon-in-progress.const";
 import { BASE_MISSION_IN_PROGRESS } from "../const/characterProps/base-mission-in-progress.const";
 import { HydratedDocument } from "mongoose";
+import { Skill } from "src/modules/skill/types/skill.type";
 
 @Schema({ timestamps: true })
 export class CharacterModel {
@@ -83,7 +84,7 @@ export class CharacterModel {
     @Prop({ type: Number, default: 1 })
     equipo_selected!: 1 | 2 | 3;
 
-    @Prop({ type: Number, default: 10})
+    @Prop({ type: Number, default: 10 })
     yang!: number;
 
     @Prop({ type: Object })
@@ -130,6 +131,21 @@ export class CharacterModel {
 
     @Prop({ type: Object, default: BASE_PVP_DATA })
     pvp_data!: PvpDataType;
+
+    @Prop({ type: Array, default: [] })
+    hab!: Skill[];
+
+    @Prop({ type: String })
+    especialidad!: CharacterSpeciality;
+
+    @Prop({ type: String, required: true })
+    raza!: CharacterRace;
+
+    @Prop({ type: String, required: true })
+    target_type!: string;
+
+    @Prop({ type: String, default: '' })
+    type_weapon!: TypeWeapon | '';
 }
 
 export type CharacterDocument = HydratedDocument<CharacterModel>

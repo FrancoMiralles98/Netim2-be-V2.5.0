@@ -1,6 +1,4 @@
 import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys, BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type"
-import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
-import { Skill } from "src/modules/skill/types/skill.type";
 
 /**
  * Especialidades disponibles para cada raza del personaje.
@@ -60,20 +58,15 @@ export interface CharacterStats {
     INT: CharacterAttributeValue;
     STR: CharacterAttributeValue;
     DEX: CharacterAttributeValue;
-    hp: number;
+    hp: {actual:number, max: number};
     regen_hp: number;
     def: number;
     vh: number;
     va: number;
     vm: number;
-    target_type: string;
-    type_weapon: TypeWeapon | '';
-    raza: CharacterRace;
-    especialidad: CharacterSpeciality;
     ad: { min: number, max: number };
     ap: { min: number, max: number };
   };
-  hab: Skill[];
   bonus: {
     daño: Record<BonusDañoRefKeys, number>
     defensa: Record<BonusDefensaRefKeys, number>
@@ -91,7 +84,6 @@ export interface CharacterStats {
  * generadas a lo largo de una pelea.
  */
 export interface CharacterFightProps {
-  hp: number; //hp final del personaje despues del combate
   ad_realizado: number;
   ap_realizado: number;
   critico_realizado: number;

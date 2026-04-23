@@ -1,4 +1,4 @@
-import { PvpDataType } from "../../types/characterProps/pvp-data.type";
+import { PvpDataType } from "../../types/baseCharacterProps/pvp-data.type";
 
 export const BASE_PVP_DATA: PvpDataType = {
     battledCharacters: [],

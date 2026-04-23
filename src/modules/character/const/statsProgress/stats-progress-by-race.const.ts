@@ -1,5 +1,5 @@
 import { CharacterStatsProgress } from "../../types/character-stats-progress.type";
-import { CharacterRace } from "../../types/characterProps/character-stats.type";
+import { CharacterRace } from "../../types/baseCharacterProps/character-stats.type";
 
 export const STATS_PROGRESS_BY_RACE:Record<CharacterRace,CharacterStatsProgress> = {
     guerrero: {

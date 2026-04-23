@@ -1,2 +1,7 @@
 export type AllTargetType = 
-'medio_humanos'
+'medio_humanos' |
+'orcos' |
+'animales' |
+'misticos' |
+'demonios' |
+'monstruos'

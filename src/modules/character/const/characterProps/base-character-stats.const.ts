@@ -1,4 +1,4 @@
-import { CharacterStats } from "../../types/characterProps/character-stats.type";
+import { CharacterStats } from "../../types/baseCharacterProps/character-stats.type";
 
 export const GENERAL_CHARACTER_STATS: CharacterStats = {
     general: {
@@ -9,12 +9,8 @@ export const GENERAL_CHARACTER_STATS: CharacterStats = {
         ad: {min:0, max: 0},
         ap: {min:0, max: 0},
         def: 0,
-        especialidad: "",
-        hp: 1000,
-        raza: "guerrero",
+        hp: {actual:1000, max: 1000},
         regen_hp: 1,
-        target_type: 'medio_humanos',
-        type_weapon: '',
         va: 0,
         vh: 0,
         vm: 0
@@ -88,7 +84,6 @@ export const GENERAL_CHARACTER_STATS: CharacterStats = {
             time_reduction: 0,
         }
     },
-    hab: [],
     fight: {
         ad_ataque_basico: 0,
         ad_mitigado: 0,
@@ -106,7 +101,6 @@ export const GENERAL_CHARACTER_STATS: CharacterStats = {
         doble_golpe_realizado: 0,
         flecha_esquivado: 0,
         skills_used: [],
-        hp: 0,
         incendio_aplicado: 0,
         incendio_realizado: 0,
         penetracion_realizado: 0,
