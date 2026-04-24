@@ -11,8 +11,12 @@ import { ATTRIBUTE_SPECIALITY_CAPS } from "../const/statsProgress/attribute-spec
 import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.const";
 import { AddItemResult } from "src/modules/inventory/types/inventory-result.types";
 import { isUtilityItem } from "src/modules/shared/types/type-guard";
+import { AttributePointProgression } from "../types/attribute-point-progression.enum";
+import { EXP_PER_LV } from "../const/exp-per-lv.const";
 
 export class CharacterEntity {
+    private readonly MAX_LV = 125 //nivel maximo del personaje 
+
     constructor(private props: CharacterDomain) { }
 
     setCurrentHp(hp: number): void {
@@ -53,24 +57,60 @@ export class CharacterEntity {
         return result
     }
 
-    sellItem (itemToSell:InventoryItem): InventoryChangeResult[] {
+    sellItem(itemToSell: InventoryItem): InventoryChangeResult[] {
         const result = this.props.inventario.consumeItems([{
-            idItem:itemToSell.idItem,
+            idItem: itemToSell.idItem,
             cantidad: isUtilityItem(itemToSell) ? itemToSell.cantidad : undefined,
             id: itemToSell.id
         }])
 
-        const gain = isUtilityItem(itemToSell) ? 
-        itemToSell.cantidad * itemToSell.price 
-        : itemToSell.price
-        
+        const gain = isUtilityItem(itemToSell) ?
+            itemToSell.cantidad * itemToSell.price
+            : itemToSell.price
+
         this.addYang(gain)
 
         return result
     }
 
+    gainExp(expToGain: number) {
+        let remainingExp = expToGain;
+        while (remainingExp > 0) {
 
+            const expNeeded = this.props.exp_next_lv - this.props.exp
+            const expApplied = Math.min(remainingExp, expNeeded)
 
+            this.props.exp += expApplied;
+            remainingExp -= expApplied;
+
+            const percentageExp = (this.props.exp * 100) / this.props.exp_next_lv;
+
+            if (percentageExp >= 100 && this.props.lv === this.MAX_LV) {
+                this.props.exp = this.props.exp_next_lv
+                break;
+            }
+
+            const attributePointGained = this.checkGainAttributePoint(percentageExp)
+            this.props.puntos_atributos += attributePointGained
+
+            if (this.props.exp >= this.props.exp_next_lv) {
+                expToGain = expToGain + this.props.exp - this.props.exp_next_lv
+                this.props.exp = 0
+                this.lvUp()
+            }
+        }
+    }
+
+    lvUp(): void {
+        //si esta al maximo lv, se queda en el nivel maximo con 100% de EXP
+        if (this.props.lv >= this.MAX_LV) {
+            throw new Error('Error al subir de nivel: nivel máximo alcanzado')
+        }
+        this.props.lv += 1
+        this.props.atribute_per_lv = 0
+        this.props.puntos_habilidad += 1
+        this.props.exp_next_lv = EXP_PER_LV[this.props.lv]
+    }
 
     addYang(value: number): void {
         this.props.yang += value
@@ -150,5 +190,23 @@ export class CharacterEntity {
             throw new Error(`No se encuentra la skill idSkill: ${idSkill}`)
         }
         return skill
+    }
+
+    private checkGainAttributePoint(percentageExp: number): number {
+        let newAttributeProgress = this.props.atribute_per_lv;
+
+        if (percentageExp >= AttributePointProgression.THIRD) {
+            newAttributeProgress = 3;
+        } else if (percentageExp >= AttributePointProgression.SECOND) {
+            newAttributeProgress = 2;
+        } else if (percentageExp >= AttributePointProgression.FIRST) {
+            newAttributeProgress = 1;
+        }
+
+        const gainedPoints = newAttributeProgress - this.props.atribute_per_lv;
+
+        this.props.atribute_per_lv = newAttributeProgress;
+
+        return Math.max(gainedPoints, 0);
     }
 }

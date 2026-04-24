@@ -127,4 +127,4 @@ export const EXP_PER_LV: Record<number,number> = {
   123: 2540000000,
   124: 2550000000,
   125: 2560000000,
-}
+} as const 
