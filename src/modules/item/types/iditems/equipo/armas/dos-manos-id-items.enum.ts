@@ -1,3 +1,7 @@
+/**
+ * El Rango de IdItems de Dos Manos va de
+ * 200 - 299
+ */
 export enum DosManosIdItem {
     GLAIVE = 200,
     LANZA = 201,

@@ -1,3 +1,7 @@
+/**
+ * El Rango de IdItems de Espada va de
+ * 100 - 199
+ */
 export enum EspadaIdItems {
     ESPADA = 100,
     ESPADA_LARGA = 101,

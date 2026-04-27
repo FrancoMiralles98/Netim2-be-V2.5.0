@@ -1,0 +1,14 @@
+/**
+ * El Rango de IdItems de Escudo va de
+ * 751 - 760
+ */
+export enum EscudoIdItem
+{
+  ESCUDO_DE_BATALLA= 751,
+  ESCUDO_PENTAGONO= 752,
+  ESCUDO_NEGRO_REDONDO= 753,
+  ESCUDO_HALCON= 754,
+  ESCUDO_LIMITE_LEON= 755,
+  ESCUDO_TIGRE= 756,
+  ESCUDO_ESCAMA_DRAGON= 757
+}

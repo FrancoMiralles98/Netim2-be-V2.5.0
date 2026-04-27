@@ -1,3 +1,7 @@
+/**
+ * El Rango de IdItems de Daga va de
+ * 300 - 399
+ */
 export enum DagaIdItems {
     DAGA = 300,
     AMIJA = 301,

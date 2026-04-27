@@ -1,3 +1,7 @@
+/**
+ * El Rango de IdItems de Arco va de
+ * 400 - 499
+ */
 export enum ArcoIdItem {
     ARCO = 400,
     ARCO_LARGO = 401,
