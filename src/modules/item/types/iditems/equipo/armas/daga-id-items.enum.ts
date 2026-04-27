@@ -1,0 +1,24 @@
+/**
+ * El Rango de IdItems de Daga va de
+ * 300 - 399
+ */
+export enum DagaIdItems {
+    DAGA = 300,
+    AMIJA = 301,
+    DAGA_COBRA = 302,
+    NUEVE_HOJAS = 303,
+    DAGA_TIJERA = 304,
+    CUCHILLO_CORTO = 305,
+    DIRK_HOJA_NEGRA = 306,
+    DAGA_AFORTUNADA = 307,
+    DAGA_MORDISCO_DE_GATO = 308,
+    DAGA_MASCARA_DIABLO = 309,
+    DAGA_PUNO_DIABLO = 310,
+    DAGA_SANGRIENTA = 311,
+    DAGA_COSTILLA = 312,
+    CHAKRAM = 313,
+    DAGA_RELAMPAGO = 314,
+    DAGA_DRAGON = 315,
+    DAGA_SIAMESA = 316,
+    CHAKRAM_ALA_DEMONIO = 317,
+}

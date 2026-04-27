@@ -2,22 +2,46 @@ import { allFullNameBonusList } from "./bonusListHelper/bonus-list-full-name.enu
 import { BonusRefKeys } from "./bonusListHelper/ref-bonus-name.type";
 
 /**
- * Representa los bonus del item
- * @property {string} - nombre completo del bonus
- * @property {Array}
- *  @property {number} 0 : 
- * Es el valor que tiene el bonus, puede ser un valor numerico o un arreglo de 2 valores,
- * esto depende principalemnte con las armas, los valores de los bonus de daño de las armas son 
- * un arreglo , ya que tiene un valor minimo y un valor maximo, para los demas, son siempre un valor
- * unico
- *  @property {string} 1 : Es el nombre de referencia del bonus
- *  @property {string} 2 : es el tipo valor del bonus si es "flat" o "porcentage"
+ * Representa un bonus aplicado a un ítem.
+ *
+ * Un bonus puede tener:
+ * - un valor único (ej: +500 HP)
+ * - o un rango (ej: daño 10 - 20 en armas)
+ *
+ * @property bonusFullName Nombre completo del bonus (para mostrar en UI)
+ * @property bonusRef Identificador interno del bonus
+ * @property bonusValue Valor del bonus:
+ *  - number → valor único
+ *  - { min, max } → rango de valores (usado principalmente en armas)
+ * @property bonusValueType Tipo de valor del bonus:
+ *  - 'flat' → valor plano
+ *  - 'porcentage' → valor porcentual
+ *
+ * @example
+ * // Bonus plano
+ * {
+ *   bonusFullName: "Max HP",
+ *   bonusRef: "max_hp",
+ *   bonusValue: 500,
+ *   bonusValueType: "flat"
+ * }
  */
-export type BonusInItem = Record<
-  allFullNameBonusList,
-  [number | [number, number], BonusRefKeys, ValueBonusType]
->;
+export interface BonusInItem {
+  bonusFullName: allFullNameBonusList;
+  bonusRef: BonusRefKeys;
+  bonusValue: number | { min: number; max: number };
+  bonusValueType: ValueBonusType;
+}
 
+/**
+ * Representa un bonus especial corrupto.
+ *
+ * Estos bonus no tienen valor numérico directo,
+ * sino que aplican efectos especiales sobre el ítem.
+ *
+ * @property nameOfBonus Nombre visible del bonus
+ * @property refBonus Identificador del tipo de bonus especial
+ */
 export interface SpecialCorruptBonus {
   nameOfBonus: string;
   refBonus: SpecialCorruptRefBonusNameType;
@@ -26,18 +50,15 @@ export interface SpecialCorruptBonus {
 export type SpecialCorruptRefBonusNameType = 'add1Slot' | 'add1Level'
 
 /**
- * @description
- *   - Indica como se tiene que visualizar el valor, es decir con o sin "%"
+ * Define cómo se interpreta y muestra el valor de un bonus.
  *
- * @property {string} PORCENTAGE - Indica que el valor es porcentual.
- *   - Se debe mostrar con el símbolo "%"
- *   @example
- *   "Velocidad de ataque +15%"
+ * @property PORCENTAGE Valor porcentual
+ *  - Se muestra con símbolo "%"
+ *  @example "Velocidad de ataque +15%"
  *
- * @property {string} FLAT - Indica que el valor es plano
- *   - Se muestra tal cual sin símbolo.
- *   @example
- *   "Max HP +500"
+ * @property FLAT Valor plano
+ *  - Se muestra sin símbolo adicional
+ *  @example "Max HP +500"
  */
 export enum ValueBonusType {
   PORCENTAGE = 'porcentage',

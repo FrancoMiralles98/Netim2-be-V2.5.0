@@ -1,6 +1,7 @@
-import { BonusInItem, SpecialCorruptBonus } from 'src/modules/bonus/types/bonus-in-item.type';
-import { GenericType } from './item-base.type';
+import { BonusInItem, SpecialCorruptBonus, ValueBonusType } from 'src/modules/bonus/types/bonus-in-item.type';
 import { UtilityBaseType } from './utility-base.type';
+import { BonusRefKeys } from 'src/modules/bonus/types/bonusListHelper/ref-bonus-name.type';
+import { subTypeEquip } from './equip.type';
 
 /**
  * @description - Hace referencia a los objetos que son de utilidad en este caso las Piedras
@@ -14,30 +15,36 @@ export interface PiedraType extends UtilityBaseType {
   type_utility: 'piedra';
   priceForge: number[];
   itemsForge: UtilityBaseType[];
-  specialCorruptBonus: SpecialCorruptBonus;
-  restricted: GenericType[];
+  specialCorruptBonus?: SpecialCorruptBonus;
+  restricted: subTypeEquip[];
 }
 
 /**
- * Representa la piedra en el item cuando ya esta incrustada.
- * @property {number} 0 - ID de la piedra
- * @property {string} 1 - Nombre completo de la piedra
- * @property {number} 2 - Valor de mejora de la piedra
- * @property {string} 3 - Nombre completo del bonus que se mostrará al cliente
- * @property {Array} 4 - Array del bonus:
- *   @property {number} 0 - Valor del bonus
- *   @property {string} 1 - Nombre de referencia del bonus
- *   @property {string} 2 - Tipo de bonus ("porcentaje" o "flat")
- * @property {string} 5 - Ruta de la imagen de la piedra
+ * Representa una piedra ya incrustada en un ítem.
+ *
+ * Contiene tanto la información visual como el bonus que aporta.
+ *
+ * @property {idItem} - Identificador de la piedra
+ * @property {fullItemName} - Nombre completo de la piedra (para mostrar en UI)
+ * @property {upgradeLv} - Nivel de mejora de la piedra
+ * @property {fullBonusName} - Nombre completo del bonus que otorga (para mostrar en UI)
+ * @property {bonusValue} - Valor del bonus aplicado
+ * @property {bonusRef} - Identificador interno del bonus
+ * @property {bonusType} - Tipo de valor del bonus:
+ *  - 'flat' → valor plano
+ *  - 'porcentage' → valor porcentual
+ * @property {imgUrl} - Ruta o URL de la imagen de la piedra
  */
-export type PiedrasOfItem = [
-  number,
-  string,
-  number,
-  string,
-  [number | [number, number], string, string],
-  string,
-];
+export interface PiedrasInItem {
+  idItem: number;
+  fullItemName: string;
+  upgradeLv: number;
+  fullBonusName: string;
+  bonusValue: number;
+  bonusRef: BonusRefKeys;
+  bonusType: ValueBonusType;
+  imgUrl: string;
+}
 
 /**
  * @description - Si la piedra falla se añade un tipo diferente de piedra

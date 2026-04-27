@@ -1,125 +1,73 @@
-
 import { BonusInItem, SpecialCorruptBonus } from 'src/modules/bonus/types/bonus-in-item.type';
-import {
-  EquipType,
-  subTypeEquip,
-  TypeWeapon,
-} from '../types/entities-props/equip.type';
-import { GenericType } from '../types/entities-props/item-base.type';
-import { PiedrasOfItem } from '../types/entities-props/piedra.type';
+import {EquipType,} from '../types/entities-props/equip.type';
+import { PiedrasInItem } from '../types/entities-props/piedra.type';
 import { ItemBase } from './item-base.entity';
-import { EQUIP_RULES, PIEDRA_ROTA } from '../const/item-const';
+import { EQUIP_RULES, PIEDRA_ROTA } from '../const/items-rule.const';
 
 export class Equip extends ItemBase {
-  protected readonly lvReq: number;
-  protected readonly upgradeMax: number;
-  protected readonly legendary: boolean;
-  protected readonly itemsForge: [];
-  protected readonly restricted: string[];
-  protected readonly especial: boolean;
-  protected readonly type_weapon?: TypeWeapon;
-  protected readonly type: GenericType;
-  protected readonly sub_type_equip: subTypeEquip;
 
-  protected piedras: PiedrasOfItem[];
-  protected bonus6_7?: BonusInItem;
-  protected corruptExplicitBonus?: BonusInItem;
-  protected corruptImplicitBonus?: BonusInItem;
-  protected corruptSpecialBonus?: SpecialCorruptBonus[];
-
-  protected explicitBonus?: BonusInItem;
-  protected implicitBonus: BonusInItem;
-  protected priceForge: number;
-  protected slot: number;
-  protected weight: number;
-  protected upgradeLv: number;
-
-  constructor(props: EquipType) {
+  constructor(private props: EquipType) {
     super(props);
-    this.lvReq = props.lvReq;
 
-    this.upgradeLv = props.upgradeLv;
-    this.upgradeMax = props.upgradeMax;
-
-    this.type_weapon = props.type_weapon;
-    this.restricted = props.restricted;
-    this.weight = props.weight;
-    this.type = props.type;
-    this.sub_type_equip = props.sub_type_equip;
-
-    this.especial = props.especial;
-    this.legendary = props.legendary ?? false;
-
-    this.implicitBonus = props.implicitBonus;
-    this.explicitBonus = props.explicitBonus;
-
-    this.piedras = props.piedras;
-
-    this.slot = props.slot;
-    this.bonus6_7 = props.bonus6_7;
-
-    this.corruptExplicitBonus = props.corruptExplicitBonus;
-    this.corruptImplicitBonus = props.corruptImplicitBonus;
-    this.corruptSpecialBonus = props.corruptSpecialBonus;
   }
 
   isSpecialItem(): boolean {
-    return this.especial;
+    return this.props.especial;
   }
 
   isLegendaryItem(): boolean {
-    return this.legendary;
+    return this.props.legendary;
   }
 
   applyUpgrade(implicitBonus: BonusInItem): void {
     if (!this.canUpgrade()) {
       throw new Error('The item is already at the max level');
     }
-    this.upgradeLv++;
-    this.implicitBonus = implicitBonus;
+    this.props.upgradeLv++;
+    this.props.implicitBonus = implicitBonus;
   }
 
   applyReduceUpgrade(implicitBonus: BonusInItem): void {
     if (this.canReduceUpgrade()) {
       throw new Error('The item cannot be reduced further');
     }
-    this.upgradeLv--;
-    this.implicitBonus = implicitBonus;
+    this.props.upgradeLv--;
+    this.props.implicitBonus = implicitBonus;
   }
 
   changeWeightBonus(valor: number): void {
     if (valor < 0) {
       throw new Error('The number cannot be negative.');
     }
-    this.weight = valor;
+    this.props.weight = valor;
   }
 
-  insertStone(stone: PiedrasOfItem): void {
+  insertStone(stone: PiedrasInItem): void {
     if (!this.canInsertStone()) {
       throw new Error('The item does not have enough space');
     }
-    this.piedras.push(stone);
+    this.props.piedras.push(stone);
   }
 
-  removeLastStone(): PiedrasOfItem {
-    if (this.piedras.length < 1) {
+  removeLastStone(): PiedrasInItem {
+    if (this.props.piedras.length < 1) {
       throw new Error('there are no stones');
     }
-    return this.piedras.pop()!;
+    return this.props.piedras.pop()!;
   }
 
   cleanBrokenStones(): void {
-    this.piedras = this.piedras.filter(
+    this.props.piedras = this.props.piedras.filter(
       (piedra) => piedra[0] !== PIEDRA_ROTA.idItem,
     );
   }
 
   canUpgrade(): boolean {
-    return this.upgradeLv < this.upgradeMax;
+    return this.props.upgradeLv < this.props.upgradeMax;
   }
 
   canReduceUpgrade(): boolean {
-    return this.upgradeLv > 0;
+    return this.props.upgradeLv > 0;
   }
 
   canInsertStone(): boolean {
@@ -130,7 +78,7 @@ export class Equip extends ItemBase {
     if (this.isCorrupted()) {
       throw new Error('Item is already corrupted');
     }
-    this.corrupt = true;
+    this.props.corrupt = true;
   }
 
   insert6_7Bonus(bonus: BonusInItem) {
@@ -139,7 +87,7 @@ export class Equip extends ItemBase {
         `the Max number of bonus is ${EQUIP_RULES.MAX_6_7_BONUS}`,
       );
     }
-    this.bonus6_7 = bonus;
+    this.props.bonus6_7 = bonus;
   }
 
   insertExplicitBonus(bonus: BonusInItem): void {
@@ -151,14 +99,14 @@ export class Equip extends ItemBase {
     if (this.isLegendaryItem()) {
       throw new Error('cannot change explicit bonuses on a legendary item.');
     }
-    this.explicitBonus = bonus;
+    this.props.explicitBonus = bonus;
   }
 
   insertImplicitCorruptBonus(bonus: BonusInItem): void {
     if (!this.isCorrupted()) {
       throw new Error('Item not corrupted');
     }
-    this.corruptImplicitBonus = bonus;
+    this.props.corruptImplicitBonus = bonus;
   }
 
   insertCorruptExplicitBonus(bonus: BonusInItem): void {
@@ -170,24 +118,24 @@ export class Equip extends ItemBase {
         `the Max number of bonus is ${EQUIP_RULES.MAX_CORRUPT_EXPLICIT_BONUS}`,
       );
     }
-    this.corruptExplicitBonus = bonus;
+    this.props.corruptExplicitBonus = bonus;
   }
 
   insertSpecialCorruptBonus(bonus: SpecialCorruptBonus[]): void {
     if (!this.isCorrupted()) {
       throw new Error('Item not corrupted');
     }
-    this.corruptSpecialBonus = bonus;
+    this.props.corruptSpecialBonus = bonus;
   }
 
   isWeaponItem(): boolean {
-    return this.type_weapon !== undefined && this.sub_type_equip === 'arma';
+    return this.props.type_weapon !== undefined && this.props.sub_type_equip === 'arma';
   }
 
   private hasFreeStoneSlot(): boolean {
-    return this.piedras.length < this.slot;
+    return this.props.piedras.length < this.props.slot;
   }
   private supportsStone(): boolean {
-    return this.sub_type_equip === 'arma' || this.sub_type_equip === 'armadura';
+    return this.props.sub_type_equip === 'arma' || this.props.sub_type_equip === 'armadura';
   }
 }

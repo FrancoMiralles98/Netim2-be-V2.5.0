@@ -1,0 +1,24 @@
+/**
+ * El Rango de IdItems de Dos Manos va de
+ * 200 - 299
+ */
+export enum DosManosIdItem {
+    GLAIVE = 200,
+    LANZA = 201,
+    GUILLOTINA = 202,
+    LANZA_ARANA = 203,
+    GISAME = 204,
+    GUADANA_DE_GUERRA = 205,
+    HIERRO_ROJO = 206,
+    HORCA_DE_BATALLA = 207,
+    HALBERD = 208,
+    HACHA_GIGANTE = 209,
+    PICO_GLACIAR = 210,
+    ESPADA_DOCE_ESPIRITUS = 211,
+    HOJA_SALVACION = 212,
+    LEON_ASESINO = 213,
+    ESPADA_ELECTROMAGNETICA = 214,
+    PARTIDARIO = 215,
+    HOJA_ROBA_ALMAS = 216,
+    ESPADA_RESENTIMIENTO = 217,
+}

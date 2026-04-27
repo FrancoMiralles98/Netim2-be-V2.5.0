@@ -1,4 +1,4 @@
-import { CharacterAttribute, CharacterSpeciality } from "src/modules/character/types/character-statstype";
+import { CharacterAttribute, CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { SkillBonusEffectKeys } from "./damage-skill.type";
 import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
 import { UNIQUE_ID_SKILLS } from "./unique-id-skill.enum";

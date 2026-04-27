@@ -5,7 +5,7 @@ import {
   MonturaType,
 } from '../types/entities-props/montura.type';
 import { UtilityBase } from './utility-base.entity';
-import { MONUTRA_RULES } from '../const/item-const';
+import { MONUTRA_RULES } from '../const/items-rule.const';
 
 export class Montura extends UtilityBase {
   protected monturaLv: number;

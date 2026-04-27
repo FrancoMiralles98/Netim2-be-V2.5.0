@@ -1,6 +1,6 @@
 import { BonusInItem, SpecialCorruptBonus } from 'src/modules/bonus/types/bonus-in-item.type';
 import { ItemBaseType } from './item-base.type';
-import { PiedrasOfItem } from './piedra.type';
+import { PiedrasInItem } from './piedra.type';
 
 /**
  * @description Representa un ítem de tipo "Equip" (equipamiento) dentro del sistema.
@@ -55,7 +55,7 @@ export interface EquipType extends ItemBaseType {
   especial: boolean;
   implicitBonus: BonusInItem;
   explicitBonus: BonusInItem;
-  piedras: PiedrasOfItem[];
+  piedras: PiedrasInItem[];
   bonus6_7: BonusInItem;
   corruptExplicitBonus: BonusInItem;
   corruptImplicitBonus: BonusInItem;

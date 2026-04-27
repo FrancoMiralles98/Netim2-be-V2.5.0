@@ -1,0 +1,17 @@
+/**
+ * El Rango de IdItems de Armadura Chaman va de
+ * 61 - 80
+ */
+export enum ArmaduraChamanIdItem
+{
+  ROPAJE_AZUL= 61,
+  ROPAJE_TURQUESA= 62,
+  ROPAJE_ROSA= 63,
+  ROPAJE_AMOROSO= 64,
+  VESTIDO_DIVINO= 65,
+  ROPAJE_SOLAR= 66,
+  VESTIDO_MORAL= 67,
+  VESTIDO_GATO_NARANJA= 68,
+  VESTIDO_DE_BARONESA= 69,
+  ROPAJE_NEGRO= 70
+}

@@ -1,9 +1,10 @@
+import { ItemIdList } from "../iditems/id-item-list.type";
 
 /**
  * @description - Hace referencia a las caracteristicas base de todo item del juego
  */
 export interface ItemBaseType {
-  idItem: number;
+  idItem: ItemIdList;
   name: string;
   price: number;
   size: Size;

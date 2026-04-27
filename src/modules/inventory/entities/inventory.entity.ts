@@ -161,13 +161,20 @@ export class Inventory {
     }
 
     /**
-     * @description - metodo para consumir items de tuilidad del mismo tipo 
+     * @description - metodo para consumir items de tuilidad del mismo tipo o con un id especifico
      * @returns {@see InventoryChangeResult[]} - arreglo de los items especificos a consumir con su cantidad a ajustar
      */
     private consumeStackableItem(item: ItemsToConsumeType, inventory: InventoryItem[]): InventoryChangeResult[] {
         const itemsToUpdate: InventoryChangeResult[] = []
         let totalQuantity = item.cantidad! //se afirma que es number porque se verifico en la validacion
-        const sameItems = inventory.filter(i => i.idItem === item.idItem)
+        const sameItems = item.id ?
+            inventory.filter(i => i.id === item.id)
+            : inventory.filter(i => i.idItem === item.idItem)
+            
+        if (!sameItems) {
+            throw new Error ('No se encuentra items para consumir')
+        }
+        
         for (const storedItem of sameItems) {
             if (totalQuantity <= 0) break;
             if (!isUtilityItem(storedItem)) {
@@ -187,10 +194,13 @@ export class Inventory {
 
     /**
      * @description - metodo para buscar el item que no tiene una cantidad para consumir del inventario
+     * @note - si no se especifica el id a eliminar, se eliminara el primer item que coincida con el "idItem"
      * @returns {@see InventoryChangeResult[]} - el id del item a consumir y eliminar del inventario
      */
     private consumeNonStackableItem(item: ItemsToConsumeType, inventory: InventoryItem[]): InventoryChangeResult[] {
-        const itemToConsume = inventory.find(i => i.id === item.id)
+        const itemToConsume = item.id ?
+            inventory.find(i => i.id === item.id)
+            : inventory.find(i => i.idItem === item.idItem)
         if (!itemToConsume) {
             throw new Error('item id not found')
         }

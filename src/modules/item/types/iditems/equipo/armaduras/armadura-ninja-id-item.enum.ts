@@ -1,0 +1,17 @@
+/**
+ * El Rango de IdItems de Armadura Ninja va de
+ * 21 - 40
+ */
+export enum ArmaduraNinjaIdItem
+{
+  TRAJE_AZUL= 21,
+  TRAJE_DE_MARFIL= 22,
+  TRAJE_CARMESI= 23,
+  TRAJE_DE_HORMIGA_ROJA= 24,
+  TRAJE_DE_HORMIGA_LEON= 25,
+  TRAJE_DE_ASESINO= 26,
+  TRAJE_DE_DRAGON_JOVEN= 27,
+  TRAJE_VIENTO_MATADOR= 28,
+  TRAJE_FUCSIA= 29,
+  TRAJE_VIENTO_NEGRO= 30
+}

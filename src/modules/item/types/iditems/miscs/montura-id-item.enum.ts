@@ -1,0 +1,11 @@
+/**
+ * El Rango de IdItems de Monturas va de
+ * 6000 - 7000
+ */
+export enum MonturaIdItem
+{
+  LICENCIA_DE_CABALLO= 6000,
+  LICENCIA_DE_CABALLO_ARMADO= 6001,
+  LICENCIA_DE_CABALLO_MILITAR= 6002,
+  SELLO_DE_CABALLO_FANTASMA= 6003
+}

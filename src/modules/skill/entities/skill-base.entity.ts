@@ -5,9 +5,21 @@ import { MasteryLvRank } from "../types/skill-lv-rank.types";
 import { AuraSkillEntity } from "./aura-skill.entity";
 import { DamageSkillEntity } from "./damage-skill.entity";
 
-export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
+export class SkillEntity<T extends BaseSkill = BaseSkill> {
 
-    protected constructor(protected props: T) { }
+    constructor(private props: T) { }
+
+    get idSkill(): number {
+        return this.props.idSkill
+    }
+
+    get lv(): number | MasteryLvRank {
+        return this.props.lv
+    }
+
+    toPrimitives (): BaseSkill {
+        return structuredClone(this.props)
+    }
 
     isDamageSkill(): this is DamageSkillEntity {
         return this.props.tipo === 'Daño'
@@ -19,6 +31,7 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
 
     upgradeRankLv(): void {
         this.props.lv = this.getNextLv(this.props.lv)
+        this.props.icon = this.getIconPosition()
     }
 
     /**
@@ -27,16 +40,16 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
      * @note - para saber mas el porque de calcular las posiciones del icono de las skills
      * {@link ICON_POSITION_Y} {@link ICON_POSITION_X}
      */
-    getIconPosition():IconPisition {
+    getIconPosition(): IconPisition {
         const ejeY = ICON_POSITION_Y[this.props.idPosition] ?? 0
         const groupOfPosition = this.props.idPosition <= 3 ? 3 : 6
         /*en el eje X, para saber su coordenada solo necesitamos si es un numero o la primera letra 
         si la habilidad esta masterizada */
         const categoryOfLvToUse = typeof this.props.lv === "number" ?
-        'number'
-        : this.props.lv.charAt(0)
+            'number'
+            : this.props.lv.charAt(0)
         const ejeX = ICON_POSITION_X[groupOfPosition][categoryOfLvToUse] ?? 0
-        return {x:ejeX, y: ejeY}
+        return { x: ejeX, y: ejeY }
     }
 
     /**
@@ -55,18 +68,18 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
      * // Avance dentro de un rango
      * upgradeSkillLv('M5'); // Retorna 'M6'
      */
-    private getNextLv(skillLv:number | MasteryLvRank) {
+    private getNextLv(skillLv: number | MasteryLvRank) {
         if (skillLv === 'P') {
             return skillLv
         }
         let newLv: number | MasteryLvRank = 0
-        if (typeof skillLv  === 'number') {
-            newLv = skillLv < 16 ? skillLv + 1 : 'M1' 
+        if (typeof skillLv === 'number') {
+            newLv = skillLv < 16 ? skillLv + 1 : 'M1'
         } else {
-            const {letterLv,numberLv} = this.getLetterAndNumberOfMasteryLvRank(skillLv)
-            newLv = numberLv < 10 ? 
-            `${letterLv}${numberLv+1}` as MasteryLvRank 
-            : CHANGE_MASTERY_RANK_LV_VALUES[skillLv]
+            const { letterLv, numberLv } = this.getLetterAndNumberOfMasteryLvRank(skillLv)
+            newLv = numberLv < 10 ?
+                `${letterLv}${numberLv + 1}` as MasteryLvRank
+                : CHANGE_MASTERY_RANK_LV_VALUES[skillLv]
         }
         return newLv
     }
@@ -78,9 +91,9 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
      * getLetterAndNumberOfLvSkill('G5'); 
      * @returns letterLv: 'G', numberLv: 5
      */
-    private getLetterAndNumberOfMasteryLvRank (skillLv: MasteryLvRank) {
+    private getLetterAndNumberOfMasteryLvRank(skillLv: MasteryLvRank) {
         return {
-            numberLv:Number(skillLv.slice(1)),
+            numberLv: Number(skillLv.slice(1)),
             letterLv: skillLv.charAt(0)
         }
     }
