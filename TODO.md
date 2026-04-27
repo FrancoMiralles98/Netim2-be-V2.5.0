@@ -7,6 +7,7 @@ CRITICAS
  Cambios estructurales de los stats/atributos de los characters
 Cambios estructurales de las props de character
 - ahora la prop de "hab" , "especialidad","raza","type_weapon","target_type" esta en un orden superior y ya no se encuentra dentro de la prop de "stats"
+- Se ha reestructurado el "BonusInItem" y "PiedraInItem"
 
 MODULO    
     - bonus:
