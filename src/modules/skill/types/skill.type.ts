@@ -1,4 +1,4 @@
-import { AuraSkill } from "./aura-skill.type";
-import { DamageSkill } from "./damage-skill.type";
+import { AuraSkillType } from "./aura-skill.type";
+import { DamageSkillType } from "./damage-skill.type";
 
-export type Skill = DamageSkill | AuraSkill
+export type SkillType = DamageSkillType | AuraSkillType

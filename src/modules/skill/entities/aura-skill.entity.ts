@@ -1,8 +1,14 @@
-import { AuraSkill } from "../types/aura-skill.type";
+import { AuraSkillType } from "../types/aura-skill.type";
 import { BaseSkillEntity } from "./skill-base.entity";
 
-export class AuraSkillEntity extends BaseSkillEntity<AuraSkill> {
-    constructor(props: AuraSkill) {
+export class AuraSkillEntity extends BaseSkillEntity<AuraSkillType> {
+    constructor(props: AuraSkillType) {
         super(props)
+    }
+
+    toPrimitives(): AuraSkillType {
+        return structuredClone({
+            ...this.props
+        })
     }
 }

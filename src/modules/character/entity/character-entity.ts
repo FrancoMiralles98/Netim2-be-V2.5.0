@@ -1,11 +1,10 @@
 import { ItemDTO } from "src/modules/item/types/item-dto";
-import { CharacterDomain } from "../types/character-props.type";
+import { CharacterDomain } from "../types/character-domain.type";
 import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
 import { ItemsToConsumeType } from "src/modules/inventory/types/items-to-consume.types";
 import { InventoryChangeResult } from "src/modules/inventory/types/item-to-update.types";
 import { Position } from "src/modules/item/types/entities-props/item-base.type";
 import { CharacterAttribute, CharacterRace, CharacterSpeciality } from "../types/baseCharacterProps/character-stats.type";
-import { SkillEntity } from "src/modules/skill/entities/skill-base.entity";
 import { MasteryLvRank } from "src/modules/skill/types/skill-lv-rank.types";
 import { ATTRIBUTE_SPECIALITY_CAPS } from "../const/statsProgress/attribute-speciality-caps.const";
 import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.const";
@@ -13,11 +12,22 @@ import { AddItemResult } from "src/modules/inventory/types/inventory-result.type
 import { isUtilityItem } from "src/modules/shared/types/type-guard";
 import { AttributePointProgression } from "../types/attribute-point-progression.enum";
 import { EXP_PER_LV } from "../const/exp-per-lv.const";
+import { CharacterPersistence } from "../types/character-persistence.type";
+import { AuraSkillEntity } from "src/modules/skill/entities/aura-skill.entity";
+import { DamageSkillEntity } from "src/modules/skill/entities/damage-skill.entity";
 
 export class CharacterEntity {
     private readonly MAX_LV = 125 //nivel maximo del personaje 
 
     constructor(private props: CharacterDomain) { }
+
+    toPrimitives(): CharacterPersistence  {
+        return structuredClone({
+            ...this.props,
+            inventario: this.props.inventario.getInventory(),
+            hab: this.props.hab.map(h=> h.toPrimitives())
+        })
+    }
 
     setCurrentHp(hp: number): void {
         if (hp <= 0) {
@@ -136,7 +146,7 @@ export class CharacterEntity {
         this.props.puntos_atributos -= 1
     }
 
-    increaseSkillLv(idSkill: number): SkillEntity {
+    increaseSkillLv(idSkill: number): AuraSkillEntity | DamageSkillEntity {
         const skill = this.findSkillById(idSkill)
         if (!this.canUpgradeSkill(skill.lv)) {
             throw new Error(`No se puede subir de nivel la skill idSkill: ${idSkill} `)
@@ -183,7 +193,7 @@ export class CharacterEntity {
         return attributesCaps[attribute]
     }
 
-    private findSkillById(idSkill: number): SkillEntity {
+    private findSkillById(idSkill: number): AuraSkillEntity | DamageSkillEntity  {
         const skill = this.props.hab.find(h => h.idSkill === idSkill)
 
         if (!skill) {
