@@ -23,7 +23,7 @@ import { PiedraIdItem } from "./miscs/piedra-id-item.enum";
 import { PocionIdItem } from "./miscs/pocion-id-item.enum";
 import { SpecialMiscIdITem } from "./miscs/special-miscs.enum";
 
-export const ItemId = {
+export const IdItem = {
   ...ArcoIdItem,
   ...CampanaIdItems,
   ...DagaIdItems,
@@ -50,4 +50,4 @@ export const ItemId = {
   ...SpecialMiscIdITem,
 } as const;
 
-export type ItemIdList = (typeof ItemId)[keyof typeof ItemId];
+export type IdItemList = (typeof IdItem)[keyof typeof IdItem];

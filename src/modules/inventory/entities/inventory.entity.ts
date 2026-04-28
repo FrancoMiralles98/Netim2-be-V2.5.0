@@ -5,6 +5,7 @@ import { InventoryChangeResult } from "../types/item-to-update.types";
 import { InventoryItemFactory } from "../factories/inventory-item.factory";
 import { AddItemResult } from "../types/inventory-result.types";
 import { ItemsToConsumeType } from "../types/items-to-consume.types";
+import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type";
 
 export class Inventory {
     //espacio total del inventario tanto eje x como y
@@ -260,7 +261,7 @@ export class Inventory {
         return { newItems: [newItem], updatedItems: [] }
     }
 
-    private findSameStackItems(idItem: number, inventory = this.items): InventoryItem[] {
+    private findSameStackItems(idItem: IdItemList, inventory = this.items): InventoryItem[] {
         return inventory.filter(i => i.idItem === idItem)
     }
 

@@ -1,3 +1,5 @@
+import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type"
+
 /**
  * Tipado de parametro que se usa para consumir una x cantidad de items del mismo tipo
  * - @property {cantidad} - es opcional ya que puede ser que se necesite consumir un item que no sea utilidad
@@ -8,6 +10,6 @@
  */
 export interface ItemsToConsumeType {
 id?: string
-idItem: number,
+idItem: IdItemList,
 cantidad?: number
 }
