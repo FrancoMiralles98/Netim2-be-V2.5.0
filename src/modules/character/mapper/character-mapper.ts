@@ -4,8 +4,19 @@ import { CharacterEntity } from "../entity/character-entity";
 import { CharacterModel } from "../schema/character.schema";
 import { SkillFactory } from "src/modules/skill/factories/skill.factory";
 
+/**
+ * Mapper encargado de transformar datos entre las distintas capas:
+ *
+ * DB (Mongo) → Persistence → Domain → Persistence
+ */
 export class CharacterMapper {
 
+   /**
+   * Convierte un documento de MongoDB a `CharacterPersistence`.
+   *
+   * Normaliza datos que pueden no existir en la base de datos
+   * y asegura una estructura consistente para la capa de aplicación.
+   */
     static fromDb(doc: CharacterModel): CharacterPersistence {
         return {
             ...doc,
@@ -17,6 +28,13 @@ export class CharacterMapper {
     }
 
 
+    /**
+   * Convierte datos de `CharacterPersistence` a `CharacterEntity`.
+   *
+   * Reconstruye las sub-entidades necesarias:
+   * - Inventory → entidad con lógica de inventario
+   * - Skills → entidades específicas
+   */
     static toDomain(props: CharacterPersistence): CharacterEntity {
         return new CharacterEntity({
             ...props,
@@ -26,6 +44,10 @@ export class CharacterMapper {
     }
 
 
+   /**
+   * Convierte una entidad de dominio 
+   * a datos planos listos para persistir en la base de datos
+   */
     static toPersistence(entity:CharacterEntity): CharacterPersistence {
         return entity.toPrimitives()
     }

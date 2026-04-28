@@ -1,8 +1,9 @@
 import { DiscoveryWorld } from "../../types/baseCharacterProps/discovery-world.type";
 
 /**
- * No se ponen "Mazmorra de Monos, "Cueva de Arañas" y "Torre Demoniaca" porque al ser nombre
- * de ubicaciones, estos son mazmorras, no "mundo abierto"
+ * Estructura base del descubrimiento de mobs en cada zona al comenzar con un personaje
+ * No se ponen "Mazmorra de Monos, "Cueva de Arañas" y "Torre Demoniaca" porque estos entran
+ * en la categoria de "dungeons" y no la de "mundo abierto"
  */
 export const BASE_DISCOVERY_WORLD: Partial<DiscoveryWorld> = {
     city1: 0,

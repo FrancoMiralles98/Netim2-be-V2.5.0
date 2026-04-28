@@ -6,6 +6,10 @@ import { CharacterEntity } from "../entity/character-entity";
 import { CharacterMapper } from "../mapper/character-mapper";
 import { CharacterPersistence } from "../types/character-persistence.type";
 
+/**
+ * Repositorio encargado de acceder y modificar los datos de personajes
+ * en MongoDB, basicamente un CRUD
+ */
 @Injectable()
 export class CharacterRepository {
     constructor(

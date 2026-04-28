@@ -21,11 +21,11 @@ export class CharacterEntity {
 
     constructor(private props: CharacterDomain) { }
 
-    toPrimitives(): CharacterPersistence  {
+    toPrimitives(): CharacterPersistence {
         return structuredClone({
             ...this.props,
             inventario: this.props.inventario.getInventory(),
-            hab: this.props.hab.map(h=> h.toPrimitives())
+            hab: this.props.hab.map(h => h.toPrimitives())
         })
     }
 
@@ -66,7 +66,13 @@ export class CharacterEntity {
         this.removeYang(price)
         return result
     }
-
+    /**
+     * Vende un ítem del inventario.
+     *
+     * - Consume el ítem (o cantidad si es stackeable)
+     * - Calcula la ganancia en Yang
+     * - Suma el Yang al personaje
+     */
     sellItem(itemToSell: InventoryItem): InventoryChangeResult[] {
         const result = this.props.inventario.consumeItems([{
             idItem: itemToSell.idItem,
@@ -83,7 +89,19 @@ export class CharacterEntity {
         return result
     }
 
-    gainExp(expToGain: number) {
+    /**
+    * Aplica experiencia al personaje y gestiona el leveo.
+    *
+    * Flujo:
+    * - Suma la EXP recibida de forma progresiva
+    * - Calcula cuánta EXP falta para subir de nivel
+    * - Otorga puntos de atributo según el % alcanzado
+    * - Si alcanza el límite, sube de nivel y continúa con la EXP restante
+    * - Si está en nivel máximo, capea la EXP y termina
+    *
+    * @param expToGain Cantidad de experiencia a agregar
+    */
+    gainExp(expToGain: number): void {
         let remainingExp = expToGain;
         while (remainingExp > 0) {
 
@@ -93,6 +111,10 @@ export class CharacterEntity {
             this.props.exp += expApplied;
             remainingExp -= expApplied;
 
+            /**
+             * Se calcula el porcentage de la EXP total que tiene el personaje
+             * ya que con eso se calcula los puntos de atributo @see checkGainAttributePoint
+             */
             const percentageExp = (this.props.exp * 100) / this.props.exp_next_lv;
 
             if (percentageExp >= 100 && this.props.lv === this.MAX_LV) {
@@ -117,6 +139,7 @@ export class CharacterEntity {
             throw new Error('Error al subir de nivel: nivel máximo alcanzado')
         }
         this.props.lv += 1
+        //El valor 0 significa que ahora tiene disponible conseguir los puntos de atributo correspondiente
         this.props.atribute_per_lv = 0
         this.props.puntos_habilidad += 1
         this.props.exp_next_lv = EXP_PER_LV[this.props.lv]
@@ -178,6 +201,13 @@ export class CharacterEntity {
         return this.props.puntos_habilidad > 0
     }
 
+    /**
+     * Obtiene el Cap maximo de atributo a subir de la especialidad y raza especifica
+     * @param attribute - atributo que se desea aumentar
+     * @param race - raza del personaje
+     * @param speciality - especialidad del personaje si ya la tiene
+     * @returns 
+     */
     private getAttributeCap(
         attribute: CharacterAttribute,
         race: CharacterRace,
@@ -193,7 +223,7 @@ export class CharacterEntity {
         return attributesCaps[attribute]
     }
 
-    private findSkillById(idSkill: number): AuraSkillEntity | DamageSkillEntity  {
+    private findSkillById(idSkill: number): AuraSkillEntity | DamageSkillEntity {
         const skill = this.props.hab.find(h => h.idSkill === idSkill)
 
         if (!skill) {
@@ -202,7 +232,27 @@ export class CharacterEntity {
         return skill
     }
 
+    /**
+    * Calcula cuántos puntos de atributo debe ganar el personaje
+    * según el porcentaje de experiencia actual dentro del nivel.
+    *
+    * Funcionamiento:
+    * - Compara el porcentaje de EXP con los umbrales definidos en
+    *   `AttributePointProgression` (25%, 50%, 75%).
+    * - Determina el progreso actual (1, 2 o 3) en base a esos valores.
+    * - Calcula la diferencia con el progreso anterior (`atribute_per_lv`)
+    *   para saber cuántos puntos nuevos corresponden.
+    * - Actualiza el progreso interno para evitar duplicar recompensas.
+    *
+    * Nota:
+    * - La lógica completa de los umbrales y su comportamiento se encuentra
+    *   documentada en @see AttributePointProgression.
+    *
+    * @param percentageExp Porcentaje actual de EXP dentro del nivel
+    * @returns Cantidad de puntos de atributo ganados
+    */
     private checkGainAttributePoint(percentageExp: number): number {
+        //atribute_per_lv son los puntos de atributo ya obtenidos en el nivel 
         let newAttributeProgress = this.props.atribute_per_lv;
 
         if (percentageExp >= AttributePointProgression.THIRD) {
