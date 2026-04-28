@@ -13,6 +13,7 @@ import { ItemModule } from './modules/item/item.module';
 import { InventoryModule } from './modules/inventory/inventory.module';
 import { SkillModule } from './modules/skill/skill.module';
 import { CharacterModule } from './modules/character/character.module';
+import { MobModule } from './modules/mob/mob.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { CharacterModule } from './modules/character/character.module';
     ItemModule,
     InventoryModule,
     SkillModule,
-    CharacterModule
+    CharacterModule,
+    MobModule
   ],
   controllers: [AppController],
   providers: [AppService],
