@@ -1,11 +1,10 @@
 import { ItemDTO } from "src/modules/item/types/item-dto";
-import { CharacterDomain } from "../types/character-props.type";
+import { CharacterDomain } from "../types/character-domain.type";
 import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
 import { ItemsToConsumeType } from "src/modules/inventory/types/items-to-consume.types";
 import { InventoryChangeResult } from "src/modules/inventory/types/item-to-update.types";
 import { Position } from "src/modules/item/types/entities-props/item-base.type";
 import { CharacterAttribute, CharacterRace, CharacterSpeciality } from "../types/baseCharacterProps/character-stats.type";
-import { SkillEntity } from "src/modules/skill/entities/skill-base.entity";
 import { MasteryLvRank } from "src/modules/skill/types/skill-lv-rank.types";
 import { ATTRIBUTE_SPECIALITY_CAPS } from "../const/statsProgress/attribute-speciality-caps.const";
 import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.const";
@@ -13,11 +12,22 @@ import { AddItemResult } from "src/modules/inventory/types/inventory-result.type
 import { isUtilityItem } from "src/modules/shared/types/type-guard";
 import { AttributePointProgression } from "../types/attribute-point-progression.enum";
 import { EXP_PER_LV } from "../const/exp-per-lv.const";
+import { CharacterPersistence } from "../types/character-persistence.type";
+import { AuraSkillEntity } from "src/modules/skill/entities/aura-skill.entity";
+import { DamageSkillEntity } from "src/modules/skill/entities/damage-skill.entity";
 
 export class CharacterEntity {
     private readonly MAX_LV = 125 //nivel maximo del personaje 
 
     constructor(private props: CharacterDomain) { }
+
+    toPrimitives(): CharacterPersistence {
+        return structuredClone({
+            ...this.props,
+            inventario: this.props.inventario.getInventory(),
+            hab: this.props.hab.map(h => h.toPrimitives())
+        })
+    }
 
     setCurrentHp(hp: number): void {
         if (hp <= 0) {
@@ -56,7 +66,13 @@ export class CharacterEntity {
         this.removeYang(price)
         return result
     }
-
+    /**
+     * Vende un ítem del inventario.
+     *
+     * - Consume el ítem (o cantidad si es stackeable)
+     * - Calcula la ganancia en Yang
+     * - Suma el Yang al personaje
+     */
     sellItem(itemToSell: InventoryItem): InventoryChangeResult[] {
         const result = this.props.inventario.consumeItems([{
             idItem: itemToSell.idItem,
@@ -73,7 +89,19 @@ export class CharacterEntity {
         return result
     }
 
-    gainExp(expToGain: number) {
+    /**
+    * Aplica experiencia al personaje y gestiona el leveo.
+    *
+    * Flujo:
+    * - Suma la EXP recibida de forma progresiva
+    * - Calcula cuánta EXP falta para subir de nivel
+    * - Otorga puntos de atributo según el % alcanzado
+    * - Si alcanza el límite, sube de nivel y continúa con la EXP restante
+    * - Si está en nivel máximo, capea la EXP y termina
+    *
+    * @param expToGain Cantidad de experiencia a agregar
+    */
+    gainExp(expToGain: number): void {
         let remainingExp = expToGain;
         while (remainingExp > 0) {
 
@@ -83,6 +111,10 @@ export class CharacterEntity {
             this.props.exp += expApplied;
             remainingExp -= expApplied;
 
+            /**
+             * Se calcula el porcentage de la EXP total que tiene el personaje
+             * ya que con eso se calcula los puntos de atributo @see checkGainAttributePoint
+             */
             const percentageExp = (this.props.exp * 100) / this.props.exp_next_lv;
 
             if (percentageExp >= 100 && this.props.lv === this.MAX_LV) {
@@ -107,6 +139,7 @@ export class CharacterEntity {
             throw new Error('Error al subir de nivel: nivel máximo alcanzado')
         }
         this.props.lv += 1
+        //El valor 0 significa que ahora tiene disponible conseguir los puntos de atributo correspondiente
         this.props.atribute_per_lv = 0
         this.props.puntos_habilidad += 1
         this.props.exp_next_lv = EXP_PER_LV[this.props.lv]
@@ -136,7 +169,7 @@ export class CharacterEntity {
         this.props.puntos_atributos -= 1
     }
 
-    increaseSkillLv(idSkill: number): SkillEntity {
+    increaseSkillLv(idSkill: number): AuraSkillEntity | DamageSkillEntity {
         const skill = this.findSkillById(idSkill)
         if (!this.canUpgradeSkill(skill.lv)) {
             throw new Error(`No se puede subir de nivel la skill idSkill: ${idSkill} `)
@@ -168,6 +201,13 @@ export class CharacterEntity {
         return this.props.puntos_habilidad > 0
     }
 
+    /**
+     * Obtiene el Cap maximo de atributo a subir de la especialidad y raza especifica
+     * @param attribute - atributo que se desea aumentar
+     * @param race - raza del personaje
+     * @param speciality - especialidad del personaje si ya la tiene
+     * @returns 
+     */
     private getAttributeCap(
         attribute: CharacterAttribute,
         race: CharacterRace,
@@ -183,7 +223,7 @@ export class CharacterEntity {
         return attributesCaps[attribute]
     }
 
-    private findSkillById(idSkill: number): SkillEntity {
+    private findSkillById(idSkill: number): AuraSkillEntity | DamageSkillEntity {
         const skill = this.props.hab.find(h => h.idSkill === idSkill)
 
         if (!skill) {
@@ -192,7 +232,27 @@ export class CharacterEntity {
         return skill
     }
 
+    /**
+    * Calcula cuántos puntos de atributo debe ganar el personaje
+    * según el porcentaje de experiencia actual dentro del nivel.
+    *
+    * Funcionamiento:
+    * - Compara el porcentaje de EXP con los umbrales definidos en
+    *   `AttributePointProgression` (25%, 50%, 75%).
+    * - Determina el progreso actual (1, 2 o 3) en base a esos valores.
+    * - Calcula la diferencia con el progreso anterior (`atribute_per_lv`)
+    *   para saber cuántos puntos nuevos corresponden.
+    * - Actualiza el progreso interno para evitar duplicar recompensas.
+    *
+    * Nota:
+    * - La lógica completa de los umbrales y su comportamiento se encuentra
+    *   documentada en @see AttributePointProgression.
+    *
+    * @param percentageExp Porcentaje actual de EXP dentro del nivel
+    * @returns Cantidad de puntos de atributo ganados
+    */
     private checkGainAttributePoint(percentageExp: number): number {
+        //atribute_per_lv son los puntos de atributo ya obtenidos en el nivel 
         let newAttributeProgress = this.props.atribute_per_lv;
 
         if (percentageExp >= AttributePointProgression.THIRD) {

@@ -5,7 +5,7 @@ import { CharacterAttribute, CharacterSpeciality } from "../../types/baseCharact
  *
  * @description
  * Define el valor máximo que cada atributo (STR, DEX, INT, VIT)
- * puede alcanzar mediante progresión por nivel una vez elegida
+ * puede alcanzar mediante progresión por nivel (puntos_atributos) una vez elegida
  * una especialidad.
  *
  * @note

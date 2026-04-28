@@ -25,4 +25,5 @@ MODULO
         - const
             -base-pvp-data: en "remainingLosses" falta agregar el valor por default que no esta definido ya que el modulo de Arena no esta configurado
             -stats-progress-by-race.const: agregado de la estructura base de como sera la nueva progresion de estadisitcas de los personajes segun la raza y luego aplicarlo tambien a especialidad, falta el desarrollo de los numeros y luego los metodos apropiados para aplicar dicho escalados de estadisticas
-        
+        - entity
+            -character-entity: falta agregar mas metodos principales, como Equipar desequipar, y tambien en la funcion de subir de nivel una skill falta agregar el consumo de libros o piedra alma cuando la skill esta especializada 

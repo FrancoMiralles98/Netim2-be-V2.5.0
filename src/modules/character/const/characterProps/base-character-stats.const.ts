@@ -1,5 +1,8 @@
 import { CharacterStats } from "../../types/baseCharacterProps/character-stats.type";
 
+/**
+ * Estructura general de la propiedad `Stats` del character
+ */
 export const GENERAL_CHARACTER_STATS: CharacterStats = {
     general: {
         VIT: {lvPoints:0,bonusPoints:0},
@@ -9,8 +12,8 @@ export const GENERAL_CHARACTER_STATS: CharacterStats = {
         ad: {min:0, max: 0},
         ap: {min:0, max: 0},
         def: 0,
-        hp: {actual:1000, max: 1000},
-        regen_hp: 1,
+        hp: {actual:0, max: 0},
+        regen_hp: 0,
         va: 0,
         vh: 0,
         vm: 0

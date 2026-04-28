@@ -52,7 +52,7 @@ import { BaseSkill } from "./base-skill.type";
  * - índice 0 → daño mínimo
  * - índice 1 → daño máximo
  */
-export interface DamageSkill extends BaseSkill {
+export interface DamageSkillType extends BaseSkill {
     tipo_daño: 'ad' | 'ap';
     cd: number;
     bonus_efecto: SkillBonusEffectList;

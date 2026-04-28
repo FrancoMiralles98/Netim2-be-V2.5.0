@@ -5,9 +5,12 @@ import { MasteryLvRank } from "../types/skill-lv-rank.types";
 import { AuraSkillEntity } from "./aura-skill.entity";
 import { DamageSkillEntity } from "./damage-skill.entity";
 
-export class SkillEntity<T extends BaseSkill = BaseSkill> {
+export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
+    protected  props: T
 
-    constructor(private props: T) { }
+    constructor(props: T) {
+        this.props = props
+     }
 
     get idSkill(): number {
         return this.props.idSkill
@@ -15,10 +18,6 @@ export class SkillEntity<T extends BaseSkill = BaseSkill> {
 
     get lv(): number | MasteryLvRank {
         return this.props.lv
-    }
-
-    toPrimitives (): BaseSkill {
-        return structuredClone(this.props)
     }
 
     isDamageSkill(): this is DamageSkillEntity {

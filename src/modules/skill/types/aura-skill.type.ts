@@ -22,6 +22,6 @@ import { BaseSkill } from "./base-skill.type";
  *
  * → Incrementa un 10% la probabilidad de golpe crítico
  */
-export interface AuraSkill extends BaseSkill {
+export interface AuraSkillType extends BaseSkill {
     buffos: Partial<Record<BonusRefKeys,number>>
 }
