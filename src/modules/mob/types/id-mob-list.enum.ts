@@ -1,3 +1,6 @@
+/**
+ * Identidicador Unico de cada Mob
+ */
 export enum IdMob {
     PERRO_SALVAJE = 1,
     LOBO_ALFA = 2,
