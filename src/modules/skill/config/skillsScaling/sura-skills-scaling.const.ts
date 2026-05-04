@@ -230,7 +230,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                     perfectMulti: 1,
                     scaleWithAtribute: false
                 },
-                esquivar_flecha: {
+                esquivar_ataques: {
                     perLv: 0.4,
                     basicMulti: 1,
                     masterMulti: 1,

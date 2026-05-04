@@ -1,6 +1,6 @@
-import { ValueBonusType } from "../../types/bonus-in-item.type";
-import { allFullNameBonusList } from "../../types/bonusListHelper/bonus-list-full-name.enum";
-import { BonusType } from "../../types/bonusListHelper/bonus-list.type";
+import { ValueBonusType } from "../types/bonus-in-item.type";
+import { allFullNameBonusList } from "../types/bonusListHelper/bonus-list-full-name.enum";
+import { BonusType } from "../types/bonusListHelper/bonus.type";
 
 
 export const tier2BonusList: BonusType[] = [
@@ -9,7 +9,7 @@ export const tier2BonusList: BonusType[] = [
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_ESPADA,
-      bonus_ref_name: 'espada',
+      bonus_ref_name: 'def_espada',
       type_value: ValueBonusType.PORCENTAGE,
     },
     values: { min: 5, max: 10 },
@@ -20,7 +20,7 @@ export const tier2BonusList: BonusType[] = [
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_DOS_MANOS,
-      bonus_ref_name: 'dos_manos',
+      bonus_ref_name: 'def_dos_manos',
       type_value: ValueBonusType.PORCENTAGE,
     },
     values: { min: 5, max: 10 },
@@ -31,7 +31,7 @@ export const tier2BonusList: BonusType[] = [
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_DAGA,
-      bonus_ref_name: 'daga',
+      bonus_ref_name: 'def_daga',
       type_value: ValueBonusType.PORCENTAGE,
     },
     values: { min: 5, max: 10 },
@@ -42,7 +42,7 @@ export const tier2BonusList: BonusType[] = [
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_FAN,
-      bonus_ref_name: 'fan',
+      bonus_ref_name: 'def_fan',
       type_value: ValueBonusType.PORCENTAGE
     },
     values: { min: 5, max: 10 },
@@ -53,7 +53,7 @@ export const tier2BonusList: BonusType[] = [
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_CAMPANA,
-      bonus_ref_name: 'campana',
+      bonus_ref_name: 'def_campana',
       type_value: ValueBonusType.PORCENTAGE,
     },
     values: { min: 5, max: 10 },
@@ -64,7 +64,7 @@ export const tier2BonusList: BonusType[] = [
     category: "generic",
     name: {
       full_name: allFullNameBonusList.RESISTENCIA_A_FLECHAS,
-      bonus_ref_name: 'flecha',
+      bonus_ref_name: 'def_flecha',
       type_value: ValueBonusType.PORCENTAGE,
     },
     values: { min: 5, max: 10 },
@@ -75,7 +75,7 @@ export const tier2BonusList: BonusType[] = [
     category: "generic",
     name: {
       full_name: allFullNameBonusList.RESISTENCIA_MAGIA,
-      bonus_ref_name: 'magia',
+      bonus_ref_name: 'def_magia',
       type_value: ValueBonusType.PORCENTAGE,
     },
     values: { min: 1, max: 10 },

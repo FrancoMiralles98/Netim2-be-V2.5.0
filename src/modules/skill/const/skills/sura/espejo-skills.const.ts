@@ -1,7 +1,7 @@
-import { Skill } from "src/modules/skill/types/skill.type";
+import { SkillType } from "src/modules/skill/types/skill.type";
 import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 
-export const ESPEJO_SKILLS: Skill[] = [
+export const ESPEJO_SKILLS: SkillType[] = [
     {
       nombre: 'Golpe de Dedo',
       daño: {min:0,max:0},
@@ -102,7 +102,7 @@ export const ESPEJO_SKILLS: Skill[] = [
       lv: 0,
       buffos: {
         bloquear_ataques: 0,
-        esquivar_flecha: 0,
+        esquivar_ataques: 0,
       },
       idPosition: 5,
       tipo: 'Aura',

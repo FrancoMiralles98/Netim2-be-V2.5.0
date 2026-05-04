@@ -1,6 +1,6 @@
-import { ValueBonusType } from "../../types/bonus-in-item.type";
-import { allFullNameBonusList } from "../../types/bonusListHelper/bonus-list-full-name.enum";
-import { BonusType } from "../../types/bonusListHelper/bonus-list.type";
+import { ValueBonusType } from "../types/bonus-in-item.type";
+import { allFullNameBonusList } from "../types/bonusListHelper/bonus-list-full-name.enum";
+import { BonusType } from "../types/bonusListHelper/bonus.type";
 
 export const bonus6_7BonusList: BonusType[] = [
   {
@@ -362,7 +362,7 @@ export const bonus6_7BonusList: BonusType[] = [
   {
     category: 'bonus6_7',
     name: {
-      full_name: allFullNameBonusList.PROB_DE_BLOQUEAR_ATAQUES_CUERPO_A_CUERPO,
+      full_name: allFullNameBonusList.PROB_DE_BLOQUEAR_ATAQUES_BASICOS,
       bonus_ref_name: 'bloquear_ataques',
       type_value: ValueBonusType.PORCENTAGE,
     },

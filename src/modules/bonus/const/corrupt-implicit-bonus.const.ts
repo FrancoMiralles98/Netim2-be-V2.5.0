@@ -1,6 +1,6 @@
-import { ValueBonusType } from "../../types/bonus-in-item.type";
-import { allFullNameBonusList } from "../../types/bonusListHelper/bonus-list-full-name.enum";
-import { BonusType } from "../../types/bonusListHelper/bonus-list.type";
+import { ValueBonusType } from "../types/bonus-in-item.type";
+import { allFullNameBonusList } from "../types/bonusListHelper/bonus-list-full-name.enum";
+import { BonusType } from "../types/bonusListHelper/bonus.type";
 
 export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
   {
@@ -200,7 +200,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
      bonus_ref_name: 'vh',
      type_value: ValueBonusType.FLAT
     },
-    values: {min:1,max: 3},
+    values: {min:1,max: 1},
     valid: ['collar'],
   },
   {

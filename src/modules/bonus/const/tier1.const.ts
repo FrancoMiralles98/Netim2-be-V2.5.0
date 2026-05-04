@@ -1,6 +1,6 @@
-import { ValueBonusType } from "../../types/bonus-in-item.type";
-import { allFullNameBonusList } from "../../types/bonusListHelper/bonus-list-full-name.enum";
-import { BonusType } from "../../types/bonusListHelper/bonus-list.type";
+import { ValueBonusType } from "../types/bonus-in-item.type";
+import { allFullNameBonusList } from "../types/bonusListHelper/bonus-list-full-name.enum";
+import { BonusType } from "../types/bonusListHelper/bonus.type";
 
 export const tier1BonusList: BonusType[] = [
   {
@@ -62,7 +62,7 @@ export const tier1BonusList: BonusType[] = [
     tier: 1,
     category: "generic",
     name: {
-      full_name: allFullNameBonusList.PROB_ES_DE_REFLECTAR_GOLPES_CUERPO_A_CUERPO,
+      full_name: allFullNameBonusList.PROB_ES_DE_REFLECTAR_GOLPES_BASICOS,
       bonus_ref_name: 'reflectar',
       type_value: ValueBonusType.PORCENTAGE,
     },
@@ -73,7 +73,7 @@ export const tier1BonusList: BonusType[] = [
     tier: 1,
     category: "generic",
     name: {
-      full_name: allFullNameBonusList.PROB_DE_BLOQUEAR_ATAQUES_CUERPO_A_CUERPO,
+      full_name: allFullNameBonusList.PROB_DE_BLOQUEAR_ATAQUES_BASICOS,
       bonus_ref_name: 'bloquear_ataques',
       type_value: ValueBonusType.PORCENTAGE,
     },
@@ -112,16 +112,5 @@ export const tier1BonusList: BonusType[] = [
     },
     values: { min: 1, max: 10 },
     valid: ['casco', 'botas', 'armadura'],
-  },
-  {
-    tier: 1,
-    category: "generic",
-    name: {
-      full_name: allFullNameBonusList.PROB_DE_EVITAR_FLECHAS,
-      bonus_ref_name: 'esquivar_flecha',
-      type_value: ValueBonusType.PORCENTAGE,
-    },
-    values: { min: 5, max: 15 },
-    valid: ['casco', 'botas'],
   },
 ];

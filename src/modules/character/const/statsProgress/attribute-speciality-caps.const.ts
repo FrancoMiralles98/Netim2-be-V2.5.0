@@ -38,9 +38,9 @@ export const ATTRIBUTE_SPECIALITY_CAPS: Partial<Record<CharacterSpeciality, Reco
         VIT: 102
     },
     Mental: {
-        DEX: 60,
-        INT: 57,
-        STR: 112,
+        DEX: 50,
+        INT: 72,
+        STR: 102,
         VIT: 122
     },
     Daga: {
