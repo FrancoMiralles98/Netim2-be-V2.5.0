@@ -1,11 +1,16 @@
 import { ValueBonusType } from "../../types/bonus-in-item.type";
 import { allFullNameBonusList } from "../../types/bonusListHelper/bonus-list-full-name.enum";
-import { TierBonusType } from "../../types/bonusListHelper/bonus-list.type";
+import { BonusType } from "../../types/bonusListHelper/bonus-list.type";
 
-export const bonus6_7BonusList: TierBonusType[] = [
+export const bonus6_7BonusList: BonusType[] = [
   {
-    name: [allFullNameBonusList.VALOR_DE_ATAQUE, 'ad', ValueBonusType.FLAT],
-    values: [10, 25],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.VALOR_DE_ATAQUE,
+      bonus_ref_name: 'ad',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 10, max: 25 },
     valid: [
       'armadura',
       'brazalete',
@@ -18,12 +23,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.VALOR_DE_ATAQUE_MAGICO,
-      'ap',
-      ValueBonusType.FLAT,
-    ],
-    values: [10, 25],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.VALOR_DE_ATAQUE_MAGICO,
+      bonus_ref_name: 'ap',
+      type_value: ValueBonusType.FLAT,
+    },
+    values: { min: 10, max: 25 },
     valid: [
       'armadura',
       'brazalete',
@@ -36,12 +42,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.RESISTENCIA_AL_VENENO,
-      'def_veneno',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.RESISTENCIA_AL_VENENO,
+      bonus_ref_name: 'def_veneno',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 5 },
     valid: [
       'armadura',
       'brazalete',
@@ -54,12 +61,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.RESISTENCIA_AL_FUEGO,
-      'def_incendio',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.RESISTENCIA_AL_FUEGO,
+      bonus_ref_name: 'def_incendio',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 5 },
     valid: [
       'armadura',
       'brazalete',
@@ -72,12 +80,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.RESISTENCIA_AL_SANGRADO,
-      'def_sangrado',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.RESISTENCIA_AL_SANGRADO,
+      bonus_ref_name: 'def_sangrado',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 5 },
     valid: [
       'armadura',
       'brazalete',
@@ -90,12 +99,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.FUERZA_CONTRA_CHAMANES,
-      'chaman',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [5, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.FUERZA_CONTRA_CHAMANES,
+      bonus_ref_name: 'chaman',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 5, max: 10 },
     valid: [
       'armadura',
       'brazalete',
@@ -108,12 +118,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.FUERZA_CONTRA_GUERREROS,
-      'guerrero',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [5, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.FUERZA_CONTRA_GUERREROS,
+      bonus_ref_name: 'guerrero',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 5, max: 10 },
     valid: [
       'armadura',
       'brazalete',
@@ -126,12 +137,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.FUERZA_CONTRA_SURAS,
-      'sura',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [5, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.FUERZA_CONTRA_SURAS,
+      bonus_ref_name: 'sura',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 5, max: 10 },
     valid: [
       'armadura',
       'brazalete',
@@ -144,12 +156,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.FUERZA_CONTRA_NINJAS,
-      'ninja',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [5, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.FUERZA_CONTRA_NINJAS,
+      bonus_ref_name: 'ninja',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 5, max: 10 },
     valid: [
       'armadura',
       'brazalete',
@@ -162,12 +175,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.DEFENSA_CHAMAN,
-      'def_chaman',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [3, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.DEFENSA_CHAMAN,
+      bonus_ref_name: 'def_chaman',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 3, max: 5 },
     valid: [
       'armadura',
       'brazalete',
@@ -180,12 +194,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.DEFENSA_GUERRERO,
-      'def_guerrero',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [3, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.DEFENSA_GUERRERO,
+      bonus_ref_name: 'def_guerrero',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 3, max: 5 },
     valid: [
       'armadura',
       'brazalete',
@@ -198,12 +213,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.DEFENSA_NINJA,
-      'def_ninja',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [3, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.DEFENSA_NINJA,
+      bonus_ref_name: 'def_ninja',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 3, max: 5 },
     valid: [
       'armadura',
       'brazalete',
@@ -216,12 +232,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.DEFENSA_SURA,
-      'def_sura',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [3, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.DEFENSA_SURA,
+      bonus_ref_name: 'def_sura',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 3, max: 5 },
     valid: [
       'armadura',
       'brazalete',
@@ -234,8 +251,13 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [allFullNameBonusList.MAX_HP, 'hp', ValueBonusType.FLAT],
-    values: [50, 800],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.MAX_HP,
+      bonus_ref_name: 'hp',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 50, max: 800 },
     valid: [
       'armadura',
       'brazalete',
@@ -248,95 +270,123 @@ export const bonus6_7BonusList: TierBonusType[] = [
     ],
   },
   {
-    name: [
-      allFullNameBonusList.VELOCIDAD_DE_ATAQUE,
-      'va',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.VELOCIDAD_DE_ATAQUE,
+      bonus_ref_name: 'va',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 10 },
     valid: ['arma'],
   },
   {
-    name: [
-      allFullNameBonusList.FUERZA_CONTRA_MONSTRUOS,
-      'monstruos',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [5, 20],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.FUERZA_CONTRA_MONSTRUOS,
+      bonus_ref_name: 'monstruos',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 5, max: 20 },
     valid: ['collar'],
   },
   {
-    name: [
-      allFullNameBonusList.RESISTENCIA_AL_DAÑO_DE_HABILIDAD,
-      'def_hab',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.RESISTENCIA_AL_DAÑO_DE_HABILIDAD,
+      bonus_ref_name: 'def_hab',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 5 },
     valid: ['armadura'],
   },
   {
-    name: [
-      allFullNameBonusList.RESISTENCIA_AL_DAÑO_DE_MEDIA,
-      'def_media',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.RESISTENCIA_AL_DAÑO_DE_MEDIA,
+      bonus_ref_name: 'def_media',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 5 },
     valid: ['armadura'],
   },
   {
-    name: [allFullNameBonusList.STR, 'STR', ValueBonusType.FLAT],
-    values: [1, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.STR,
+      bonus_ref_name: 'STR',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 1, max: 10 },
     valid: ['brazalete'],
   },
   {
-    name: [allFullNameBonusList.INT, 'INT', ValueBonusType.FLAT],
-    values: [1, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.INT,
+      bonus_ref_name: 'INT',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 1, max: 10 },
     valid: ['brazalete'],
   },
   {
-    name: [allFullNameBonusList.DEX, 'DEX', ValueBonusType.FLAT],
-    values: [1, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.DEX,
+      bonus_ref_name: 'DEX',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 1, max: 10 },
     valid: ['brazalete'],
   },
   {
-    name: [allFullNameBonusList.VIT, 'VIT', ValueBonusType.FLAT],
-    values: [1, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.VIT,
+      bonus_ref_name: 'VIT',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 1, max: 10 },
     valid: ['brazalete'],
   },
   {
-    name: [
-      allFullNameBonusList.DAÑO_ABSORBIDO_POR_HP,
-      'daño_absorbido_hp',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 5],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.DAÑO_ABSORBIDO_POR_HP,
+      bonus_ref_name: 'daño_absorbido_hp',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 5 },
     valid: ['botas'],
   },
   {
-    name: [
-      allFullNameBonusList.PROB_DE_BLOQUEAR_ATAQUES_CUERPO_A_CUERPO,
-      'bloquear_ataques',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 10],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.PROB_DE_BLOQUEAR_ATAQUES_CUERPO_A_CUERPO,
+      bonus_ref_name: 'bloquear_ataques',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 10 },
     valid: ['escudo'],
   },
   {
-    name: [
-      allFullNameBonusList.VELOCIDAD_DE_MOVIMIENTO,
-      'vm',
-      ValueBonusType.FLAT,
-    ],
-    values: [1, 20],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.VELOCIDAD_DE_MOVIMIENTO,
+      bonus_ref_name: 'vm',
+      type_value: ValueBonusType.FLAT,
+    },
+    values: { min: 1, max: 20 },
     valid: ['escudo'],
   },
   {
-    name: [
-      allFullNameBonusList.REGENERACION_DE_HP,
-      'regen_hp',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 35],
+    category: 'bonus6_7',
+    name: {
+      full_name: allFullNameBonusList.REGENERACION_DE_HP,
+      bonus_ref_name: 'regen_hp',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 35 },
     valid: ['pendiente'],
   },
 ];

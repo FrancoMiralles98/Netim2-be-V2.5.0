@@ -18,31 +18,47 @@ import { MobStats } from "src/modules/mob/types/mobProps/mob-stats.type";
  * @param extra - Estructura parcial de stats a combinar.
  * @returns Nueva estructura de stats con los valores combinados.
  */
-export const mergeStats = (
-    base: CharacterStats | MobStats,
-    extra: Partial<CharacterStats | MobStats>
-): CharacterStats | MobStats => {
+
+export const mergeStats = <T extends CharacterStats | MobStats>(
+    base: T,
+    extra: Partial<T>
+): T => {
     const result = structuredClone(base);
 
-    function merge(target: CharacterStats | MobStats, source: Partial<CharacterStats | MobStats>) {
-        for (const key in source) {
-            const value = source[key];
+    function merge(target: Record<string,unknown>, source: Record<string,unknown>): void {
+    for (const key of Object.keys(source)) {
+      const value = source[key];
 
-            if (value === undefined) continue;
+      if (value === undefined) continue;
 
-            if (typeof value === 'number') {
-                target[key] = (target[key] ?? 0) + value;
-            } else if (
-                typeof value === 'object' &&
-                value !== null
-                && !Array.isArray(value)
-            ) {
-                merge(target[key], value);
-            } else {
-                target[key] = value;
-            }
+      if (typeof value === 'number') {
+        const current = target[key];
+        target[key] = (typeof current === 'number' ? current : 0) + value;
+        continue;
+      }
+
+      if (
+        typeof value === 'object' &&
+        value !== null &&
+        !Array.isArray(value)
+      ) {
+        const current = target[key];
+
+        if (
+          typeof current !== 'object' ||
+          current === null ||
+          Array.isArray(current)
+        ) {
+          target[key] = {};
         }
+
+        merge(target[key], value);
+        continue;
+      }
+
+      target[key] = value;
     }
+  }
 
     merge(result, extra);
     return result;

@@ -1,100 +1,150 @@
 import { ValueBonusType } from "../../types/bonus-in-item.type";
 import { allFullNameBonusList } from "../../types/bonusListHelper/bonus-list-full-name.enum";
-import { TierBonusType } from "../../types/bonusListHelper/bonus-list.type";
+import { BonusType } from "../../types/bonusListHelper/bonus-list.type";
 
 
-export const tier3BonusList: TierBonusType[] = [
+export const tier3BonusList: BonusType[] = [
   {
-    name: [
-      allFullNameBonusList.VELOCIDAD_DE_ATAQUE,
-      'va',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 10],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.VELOCIDAD_DE_ATAQUE,
+      bonus_ref_name: 'va',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 10 },
     valid: ['botas', 'casco'],
   },
   {
-    name: [allFullNameBonusList.MAX_HP, 'hp', ValueBonusType.FLAT],
-    values: [100, 2500],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.MAX_HP,
+      bonus_ref_name: 'hp',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 100, max: 2500 },
     valid: ['brazalete', 'collar', 'armadura', 'botas'],
   },
   {
-    name: [allFullNameBonusList.VALOR_DE_ATAQUE, 'ad', ValueBonusType.FLAT],
-    values: [10, 30],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.VALOR_DE_ATAQUE,
+      bonus_ref_name: 'ad',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 10, max: 30 },
     valid: ['armadura'],
   },
   {
-    name: [
-      allFullNameBonusList.OPCION_DE_ENVENENAMIENTO,
-      'veneno',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 15],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.OPCION_DE_ENVENENAMIENTO,
+      bonus_ref_name: 'veneno',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 15 },
     valid: ['arma', 'casco'],
   },
   {
-    name: [allFullNameBonusList.STR, 'STR', ValueBonusType.FLAT],
-    values: [2, 12],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.STR,
+      bonus_ref_name: 'STR',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 2, max: 12 },
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
-    name: [allFullNameBonusList.INT, 'INT', ValueBonusType.FLAT],
-    values: [2, 12],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.INT,
+      bonus_ref_name: 'INT',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 2, max: 12 },
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
-    name: [allFullNameBonusList.DEX, 'DEX', ValueBonusType.FLAT],
-    values: [2, 12],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.DEX,
+      bonus_ref_name: 'DEX',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 2, max: 12 },
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
-    name: [allFullNameBonusList.VIT, 'VIT', ValueBonusType.FLAT],
-    values: [2, 12],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.VIT,
+      bonus_ref_name: 'VIT',
+      type_value: ValueBonusType.FLAT
+    },
+    values: { min: 2, max: 12 },
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
-    name: [
-      allFullNameBonusList.OPCION_DE_DESMAYO,
-      'desmayo',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 10],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.OPCION_DE_DESMAYO,
+      bonus_ref_name: 'desmayo',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 10 },
     valid: ['arma', 'collar', 'botas'],
   },
   {
-    name: [
-      allFullNameBonusList.FUERZA_CONTRA_MONSTRUOS,
-      'monstruos',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [5, 20],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.FUERZA_CONTRA_MONSTRUOS,
+      bonus_ref_name: 'monstruos',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 5, max: 20 },
     valid: ['pendiente', 'collar', 'escudo'],
   },
   {
-    name: [
-      allFullNameBonusList.FUERZA_CONTRA_MEDIO_HUMANOS,
-      'medio_humanos',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [5, 20],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.FUERZA_CONTRA_MEDIO_HUMANOS,
+      bonus_ref_name: 'medio_humanos',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 5, max: 20 },
     valid: ['escudo', 'brazalete', 'pendiente'],
   },
   {
-    name: [
-      allFullNameBonusList.DAÑO_CRITICO,
-      'daño_critico',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 15],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.DAÑO_CRITICO,
+      bonus_ref_name: 'daño_critico',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 15 },
     valid: ['casco', 'armadura', 'collar'],
   },
   {
-    name: [
-      allFullNameBonusList.CORTA_CURACION,
-      'corta_curacion',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 50],
+    tier:3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.CORTA_CURACION,
+      bonus_ref_name: 'corta_curacion',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 50 },
     valid: ['armadura', 'escudo'],
   },
 ];

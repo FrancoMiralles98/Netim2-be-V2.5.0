@@ -1,214 +1,246 @@
 import { ValueBonusType } from "../../types/bonus-in-item.type";
 import { allFullNameBonusList } from "../../types/bonusListHelper/bonus-list-full-name.enum";
-import { TierBonusType } from "../../types/bonusListHelper/bonus-list.type";
+import { BonusType } from "../../types/bonusListHelper/bonus-list.type";
 
-export const CORRUPT_IMPLICIT_BONUS: TierBonusType[] = [
+export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_VIT,
-      'VIT',
-      ValueBonusType.FLAT,
-    ],
-    values: [1, 1],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_VIT,
+     bonus_ref_name: 'VIT',
+     type_value: ValueBonusType.FLAT,
+    },
+    values: {min:1,max: 1},
     valid: ['escudo', 'arma'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_MISTICOS,
-      'misticos',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 2],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_MISTICOS,
+     bonus_ref_name: 'misticos',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 2},
     valid: ['escudo', 'arma'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_STR,
-      'STR',
-      ValueBonusType.FLAT,
-    ],
-    values: [1, 1],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_STR,
+     bonus_ref_name: 'STR',
+     type_value: ValueBonusType.FLAT,
+    },
+    values: {min:1,max: 1},
     valid: ['casco', 'botas'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_DEMONIOS,
-      'demonios',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 2],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_DEMONIOS,
+     bonus_ref_name: 'demonios',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 2},
     valid: ['casco', 'botas'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_INT,
-      'INT',
-      ValueBonusType.FLAT,
-    ],
-    values: [1, 1],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_INT,
+     bonus_ref_name: 'INT',
+     type_value: ValueBonusType.FLAT,
+    },
+    values: {min:1,max: 1},
     valid: ['armadura', 'brazalete'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_ORCOS,
-      'orcos',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 2],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_ORCOS,
+     bonus_ref_name: 'orcos',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 2},
     valid: ['armadura', 'brazalete'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_DEX,
-      'DEX',
-      ValueBonusType.FLAT,
-    ],
-    values: [1, 1],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_DEX,
+     bonus_ref_name: 'DEX',
+     type_value: ValueBonusType.FLAT,
+    },
+    values: {min:1,max: 1},
     valid: ['pendiente', 'collar'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_ANIMALES,
-      'animales',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 2],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_ANIMALES,
+     bonus_ref_name: 'animales',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 2},
     valid: ['pendiente', 'collar'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_PENETRACION_HABILIDAD,
-      'penetracion_habilidad',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 1],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_PENETRACION_HABILIDAD,
+     bonus_ref_name: 'penetracion_habilidad',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 1},
     valid: ['arma'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_VA,
-      'va',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 2],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_VA,
+     bonus_ref_name: 'va',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 2},
     valid: ['arma'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_MEDIO_HUMANOS,
-      'medio_humanos',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 5],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_MEDIO_HUMANOS,
+     bonus_ref_name: 'medio_humanos',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 5},
     valid: ['casco'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_MONSTRUOS,
-      'monstruos',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 5],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_MONSTRUOS,
+     bonus_ref_name: 'monstruos',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 5},
     valid: ['casco'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_DAÑO_CRITICO,
-      'daño_critico',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 5],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_DAÑO_CRITICO,
+     bonus_ref_name: 'daño_critico',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 5},
     valid: ['armadura'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_MAX_HP,
-      'hp',
-      ValueBonusType.FLAT,
-    ],
-    values: [150, 700],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_MAX_HP,
+     bonus_ref_name: 'hp',
+     type_value: ValueBonusType.FLAT,
+    },
+    values: {min:150,max: 700},
     valid: ['armadura'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_DURACION_ESTADO,
-      'duracion_estado',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 4],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_DURACION_ESTADO,
+     bonus_ref_name: 'duracion_estado',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 4},
     valid: ['escudo'],
   },
   {
-    name: [allFullNameBonusList.CORRUPT_IMPLICIT_VM, 'vm', ValueBonusType.FLAT],
-    values: [1, 5],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_VM,
+     bonus_ref_name: 'vm',
+     type_value: ValueBonusType.FLAT
+    },
+    values: {min:1,max: 5},
     valid: ['escudo'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_BONUS_ESTADO,
-      'bonus_estado',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 2],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_BONUS_ESTADO,
+     bonus_ref_name: 'bonus_estado',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 2},
     valid: ['botas'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_REGEN_HP,
-      'regen_hp',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [5, 10],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_REGEN_HP,
+     bonus_ref_name: 'regen_hp',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:5,max: 10},
     valid: ['botas'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_BONUS_VENENO,
-      'bonus_veneno',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 4],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_BONUS_VENENO,
+     bonus_ref_name: 'bonus_veneno',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 4},
     valid: ['collar'],
   },
   {
-    name: [allFullNameBonusList.CORRUPT_IMPLICIT_VH, 'vh', ValueBonusType.FLAT],
-    values: [1, 3],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_VH,
+     bonus_ref_name: 'vh',
+     type_value: ValueBonusType.FLAT
+    },
+    values: {min:1,max: 3},
     valid: ['collar'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_BONUS_SANGRAD,
-      'bonus_sangrado',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 4],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_BONUS_SANGRAD,
+     bonus_ref_name: 'bonus_sangrado',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 4},
     valid: ['brazalete'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_RESISTENCIA_AL_DAÑO_DE_HABILIDAD,
-      'def_hab',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 1],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_RESISTENCIA_AL_DAÑO_DE_HABILIDAD,
+     bonus_ref_name: 'def_hab',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 1},
     valid: ['brazalete'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_BONUS_INCENDIO,
-      'bonus_fuego',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 4],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_BONUS_INCENDIO,
+     bonus_ref_name: 'bonus_fuego',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 4},
     valid: ['pendiente'],
   },
   {
-    name: [
-      allFullNameBonusList.CORRUPT_IMPLICIT_RESISTENCIA_AL_DAÑO_DE_MEDIA,
-      'def_media',
-      ValueBonusType.PORCENTAGE,
-    ],
-    values: [1, 1],
+    category: 'corrupt',
+    name: {
+     full_name: allFullNameBonusList.CORRUPT_IMPLICIT_RESISTENCIA_AL_DAÑO_DE_MEDIA,
+     bonus_ref_name: 'def_media',
+     type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: {min:1,max: 1},
     valid: ['pendiente'],
   },
 ];

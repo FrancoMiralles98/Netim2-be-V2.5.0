@@ -4,34 +4,61 @@ import { allFullNameBonusList } from "./bonus-list-full-name.enum";
 import { BonusRefKeys } from "./ref-bonus-name.type";
 
 /**
- * Tipo base que representa la estructura común de todos los bonuses del juego.
- * @property {[number, number]} values - Rango de valores del bonus [mínimo, máximo].
- * @property {subTypeEquip[]} valid - Tipos de items que pueden tener este bonus (arma, amadura, botas).
+ * Categorías de bonus disponibles en el sistema.
+ *
+ * Define a qué pool pertenece un bonus y cómo debe ser tratado
+ * durante su generación.
+ *
+ * - `generic` → Bonus estándar que utilizan tiers numéricos (1–4).
+ * - `corrupt` → Bonus especiales corruptos con reglas propias.
+ * - `bonus6_7` → Bonus especiales de alto nivel (slots 6 y 7).
  */
-export interface BonusList {
-  values: [number, number];
-  valid: subTypeEquip[];
-}
+export type BonusCategory = 'generic' | 'corrupt' | 'bonus6_7'
+
 
 /**
- * Estructura interna y a que hace referencia cada porpiedad de las listas de bonus
- * @extends BonusList
- * @property {[allFullNameBonusList, BonusRefKeys, ValueBonusType]} name
- *   @property {TierBonusType} name.0 - Nombre visual del bonus para el cliente.
- *   @property {TierBonusType} name.1 - Clave interna del bouns para referencias en el código.
- *   @property {ValueBonusType.FLAT | ValueBonusType.PORCENTAGE} name.2 - Tipo del valor.
- * @property {number} tier - A que tier pertenece el bonus.
- *  //Se usa para que a la hora de tener que agrupar todas las listas de los bonus en una sola
- *  constante se sepa de que tier viene dicho bouns
- *  @example
- *   en el la carpeta "bonusList" el archivo 'index.ts' se añade el tier para usar en funciones auxiliares
- *   en otros servicios
+ * Niveles de tier para bonus genéricos.
+ *
+ * Representa la calidad o potencia del bonus.
+ * A mayor tier, mejores valores dentro de su rango.
+ *
+ * Solo aplica para bonus de categoría `generic`.
  */
-export interface TierBonusType extends BonusList {
-  name: [
-    allFullNameBonusList,
-    BonusRefKeys,
-    ValueBonusType.FLAT | ValueBonusType.PORCENTAGE,
-  ];
-  tier?: number;
+export type BonusTierLv = 1 | 2 | 3 | 4
+
+
+/**
+ * Representa un bonus completo dentro del sistema.
+ *
+ * @property name - Información de identificación del bonus.
+ *
+ * @property name.full_name - Nombre visual del bonus mostrado al cliente.
+ *
+ * @property name.bonus_ref_name - Clave interna utilizada en el código
+ * para referenciar el bonus
+ *
+ * @property name.type_value - Tipo de valor del bonus:
+ * - `FLAT` → valor directo
+ * - `PORCENTAGE` → valor porcentual
+ *
+ * @property category - Categoría del bonus, determina el tipo de bonus que pertenece
+ *
+ * @property tier - Nivel del bonus (solo para categoría `generic`).
+ * Define la calidad del bonus cuanto mas mas dificil es de conseguirlo
+ * 
+ * @property {{min: number, max: number}} values - Rango de valores del bonus [mínimo, máximo].
+ * 
+ * @property {subTypeEquip[]} valid - Tipos de items que pueden tener este bonus (arma, amadura, botas).
+ *
+ */
+export interface BonusType {
+  name: {
+    full_name: allFullNameBonusList;
+    bonus_ref_name: BonusRefKeys;
+    type_value: ValueBonusType;
+  };
+  category: BonusCategory;
+  tier?: BonusTierLv;
+  values: { min: number, max: number };
+  valid: subTypeEquip[];
 }
