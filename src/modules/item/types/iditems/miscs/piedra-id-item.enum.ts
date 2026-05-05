@@ -4,6 +4,7 @@
  */
 export enum PiedraIdItem
 {
+  PIEDRA_ROTA = 0,
   PIEDRA_DE_FUERZA= 1500,
   PIEDRA_DE_IRA= 1501,
   PIEDRA_CONTRA_GUERREROS= 1502,
