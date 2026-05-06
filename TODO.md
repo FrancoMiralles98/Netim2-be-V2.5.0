@@ -8,6 +8,7 @@ CRITICAS
 Cambios estructurales de las props de character
 - ahora la prop de "hab" , "especialidad","raza","type_weapon","target_type" esta en un orden superior y ya no se encuentra dentro de la prop de "stats"
 - Se ha reestructurado el "BonusInItem" y "PiedraInItem"
+- Se saco el bonus "esquivar_flechas"
 
 MODULO    
     - bonus:
@@ -27,3 +28,7 @@ MODULO
             -stats-progress-by-race.const: agregado de la estructura base de como sera la nueva progresion de estadisitcas de los personajes segun la raza y luego aplicarlo tambien a especialidad, falta el desarrollo de los numeros y luego los metodos apropiados para aplicar dicho escalados de estadisticas
         - entity
             -character-entity: falta agregar mas metodos principales, como Equipar desequipar, y tambien en la funcion de subir de nivel una skill falta agregar el consumo de libros o piedra alma cuando la skill esta especializada 
+        - item
+            - Se quito el bonus "esquivar_flechas" por ende se tiene que cambiar de bonus los items que lo tienen y fijar si se cambia el bonus o se quita la piedra re regate
+        - character
+            -stats.fight: como se quito el bonus esquivar_flechas tambien hay que sacarlo de las estadisticas de pelea "flechas esquivadas" y luego tambien cambiarlo en el modulo de Fight

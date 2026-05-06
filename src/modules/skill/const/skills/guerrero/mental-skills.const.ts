@@ -1,7 +1,7 @@
-import { Skill } from "src/modules/skill/types/skill.type";
+import { SkillType } from "src/modules/skill/types/skill.type";
 import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
 
-export const MENTAL_SKILLS: Skill[] = [
+export const MENTAL_SKILLS: SkillType[] = [
       {
       nombre: 'Tocón',
       daño: {min:0,max:0},

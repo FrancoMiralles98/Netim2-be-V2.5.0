@@ -1,91 +1,4 @@
-/**
- * @description
- * Nombre de referencia que tiene cada tier de bonus
- * Se utiliza mas para tener una validacion de que esta bien escrito en cada lista
- * y ademas para evitar que lista de bonus tengas referencias a bonus de 
- * diferente tier
- * 
- */
-
-export type Tier1RefBonusName =
-  | 'orcos'
-  | 'animales'
-  | 'misticos'
-  | 'demonios'
-  | 'def_retardo'
-  | 'reflectar'
-  | 'bloquear_ataques'
-  | 'def_incendio'
-  | 'def_veneno'
-  | 'esquivar_flecha';
-
-export type Tier2RefBonusName =
-  | 'espada'
-  | 'dos_manos'
-  | 'daga'
-  | 'fan'
-  | 'campana'
-  | 'flecha'
-  | 'magia'
-  | 'critico'
-  | 'retardo'
-  | 'penetracion'
-  | 'chances_objetos'
-  | 'chances_raros'
-  | 'chances_yang'
-  | 'chances_exp'
-  | 'def_desmayo';
-
-export type Tier3RefBonusName =
-  | 'va'
-  | 'hp'
-  | 'ad'
-  | 'veneno'
-  | 'STR'
-  | 'INT'
-  | 'DEX'
-  | 'VIT'
-  | 'desmayo'
-  | 'monstruos'
-  | 'medio_humanos';
-
-export type Tier4RefBonusName =
-  | 'media'
-  | 'regen_hp'
-  | 'habilidad'
-  | 'daño_absorbido_hp'
-  | 'def_hab'
-  | 'def_media';
-
-export type Bonus6_7RefBonusName =
-  | 'ad'
-  | 'ap'
-  | 'def_veneno'
-  | 'def_incendio'
-  | 'hp'
-  | 'va'
-  | 'monstruos'
-  | 'def_hab'
-  | 'def_media'
-  | 'hab'
-  | 'media'
-  | 'STR'
-  | 'INT'
-  | 'DEX'
-  | 'VIT'
-  | 'daño_absorbido_hp'
-  | 'bloquear_ataques'
-  | 'vm'
-  | 'regen_hp';
-
-  /**
-   * 
-   * @description
-   * Se hace un tipado de todos los ref bonus que existen en el juego para luego
-   * unificarlo y tener todas las referencias en en un solo tipo, 
-   */
-
-  export type BonusStatsGeneralRefKeys =
+export type BonusStatsGeneralRefKeys =
   | 'VIT'
   | 'INT'
   | 'STR'
@@ -97,7 +10,8 @@ export type Bonus6_7RefBonusName =
   | 'va'
   | 'vm'
   | 'ad'
-  | 'ap';
+  | 'ap'
+
 
 export type BonusDañoRefKeys =
   | 'veneno'
@@ -131,17 +45,16 @@ export type BonusDefensaRefKeys =
   | 'bloquear_ataques'
   | 'esquivar_ataques'
   | 'reflectar'
-  | 'esquivar_flecha'
   | 'corta_curacion'
-  | 'espada'
+  | 'def_espada'
   | 'def_desmayo'
   | 'def_retardo'
-  | 'dos_manos'
-  | 'daga'
-  | 'flecha'
-  | 'fan'
-  | 'campana'
-  | 'magia'
+  | 'def_dos_manos'
+  | 'def_daga'
+  | 'def_flecha'
+  | 'def_fan'
+  | 'def_campana'
+  | 'def_magia'
   | 'def_veneno'
   | 'def_sangrado'
   | 'def_media'
@@ -170,3 +83,73 @@ export type BonusRefKeys =
   | BonusDefensaRefKeys
   | BonusCCRefKeys
   | BonusMiscsRefKeys;
+
+export type Tier1RefBonusName = Extract<BonusRefKeys,
+  | 'orcos'
+  | 'animales'
+  | 'misticos'
+  | 'demonios'
+  | 'def_retardo'
+  | 'reflectar'
+  | 'bloquear_ataques'
+  | 'def_incendio'
+  | 'def_veneno'>
+
+export type Tier2RefBonusName = Extract<BonusRefKeys,
+  | 'def_espada'
+  | 'def_dos_manos'
+  | 'def_daga'
+  | 'def_fan'
+  | 'def_campana'
+  | 'def_flecha'
+  | 'def_magia'
+  | 'critico'
+  | 'retardo'
+  | 'penetracion'
+  | 'chances_objetos'
+  | 'chances_raros'
+  | 'chances_yang'
+  | 'chances_exp'
+  | 'def_desmayo'>
+
+export type Tier3RefBonusName = Extract<BonusRefKeys,
+  | 'va'
+  | 'hp'
+  | 'ad'
+  | 'veneno'
+  | 'STR'
+  | 'INT'
+  | 'DEX'
+  | 'VIT'
+  | 'desmayo'
+  | 'monstruos'
+  | 'medio_humanos'>
+
+export type Tier4RefBonusName = Extract<BonusRefKeys,
+  | 'media'
+  | 'regen_hp'
+  | 'habilidad'
+  | 'daño_absorbido_hp'
+  | 'def_hab'
+  | 'def_media'>
+
+export type Bonus6_7RefBonusName = Extract<BonusRefKeys,
+  | 'ad'
+  | 'ap'
+  | 'def_veneno'
+  | 'def_incendio'
+  | 'hp'
+  | 'va'
+  | 'monstruos'
+  | 'def_hab'
+  | 'def_media'
+  | 'hab'
+  | 'media'
+  | 'STR'
+  | 'INT'
+  | 'DEX'
+  | 'VIT'
+  | 'daño_absorbido_hp'
+  | 'bloquear_ataques'
+  | 'vm'
+  | 'regen_hp'>

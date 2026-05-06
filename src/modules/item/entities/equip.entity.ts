@@ -1,8 +1,9 @@
 import { BonusInItem, SpecialCorruptBonus } from 'src/modules/bonus/types/bonus-in-item.type';
-import {EquipType,} from '../types/entities-props/equip.type';
+import { EquipType, } from '../types/entities-props/equip.type';
 import { PiedrasInItem } from '../types/entities-props/piedra.type';
 import { ItemBase } from './item-base.entity';
-import { EQUIP_RULES, PIEDRA_ROTA } from '../const/items-rule.const';
+import { EQUIP_RULES } from '../config/items-rule.const';
+import { PiedraIdItem } from '../types/iditems/miscs/piedra-id-item.enum';
 
 export class Equip extends ItemBase {
 
@@ -11,8 +12,16 @@ export class Equip extends ItemBase {
 
   }
 
+  get itemLv(): number {
+    return this.props.itemLv
+  }
+
   isSpecialItem(): boolean {
     return this.props.especial;
+  }
+
+  changeItemLv(itemLv: number): void {
+    this.props.itemLv = Math.min(EQUIP_RULES.MAX_ITEM_LV,itemLv)
   }
 
   isLegendaryItem(): boolean {
@@ -58,7 +67,7 @@ export class Equip extends ItemBase {
 
   cleanBrokenStones(): void {
     this.props.piedras = this.props.piedras.filter(
-      (piedra) => piedra[0] !== PIEDRA_ROTA.idItem,
+      (piedra) => piedra[0] !== PiedraIdItem.PIEDRA_ROTA,
     );
   }
 

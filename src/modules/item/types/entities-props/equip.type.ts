@@ -12,6 +12,7 @@ import { PiedrasInItem } from './piedra.type';
  *
  * @extends ItemBase
  * @property {number} lvReq - Nivel mínimo requerido del personaje para poder equipar el ítem.
+ * @property {number} itemLv - Nivel interno del item, cuanto mas alto sea, mejor sera el cap de bonus que puede tener
  * @property {number} upgradeLv - Nivel actual de mejora del equipamiento. Normalmente va desde 0 hasta `upgradeMax`.
  * @property {number} upgradeMax - Nivel máximo de mejora permitido para este equipamiento.
  * @property {TypeWeapon} [type_weapon] - Tipo específico de arma en caso de que el equipamiento sea un arma
@@ -41,6 +42,7 @@ import { PiedrasInItem } from './piedra.type';
  */
 export interface EquipType extends ItemBaseType {
   lvReq: number;
+  itemLv: number;
   upgradeLv: number;
   type: 'equip';
   upgradeMax: number;

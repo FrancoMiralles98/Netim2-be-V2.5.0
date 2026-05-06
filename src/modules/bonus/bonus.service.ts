@@ -1,24 +1,29 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable } from "@nestjs/common";
+import { BonusWeightService } from "./services/bonus-weight.service";
+import { GenerateBonusService } from "./services/generate-bonus.service";
+import { LimitBonusService } from "./services/limit-bonus.service";
+import { BonusInItem } from "./types/bonus-in-item.type";
+import { BonusCategory } from "./types/bonusListHelper/bonus.type";
+import { CharacterStats } from "../character/types/baseCharacterProps/character-stats.type";
 
 @Injectable()
 export class BonusService {
-  create(createBonusDto: any) {
-    return 'This action adds a new bonus';
-  }
+    constructor(
+        private bonusWeightService: BonusWeightService,
+        private generateBonusService: GenerateBonusService,
+        private limitBonusService: LimitBonusService,
+    ) { }
 
-  findAll() {
-    return `This action returns all bonus`;
-  }
+    generateBonus(category: BonusCategory, bonusUsed: BonusInItem[], itemLv: number): BonusInItem[] {
+        return this.generateBonusService.generateBonus(category, bonusUsed, itemLv)
+    }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bonus`;
-  }
+    limitStatsBonus (stats:CharacterStats): CharacterStats {
+        return this.limitBonusService.applyBonusLimitsToStats(stats)
+    }
 
-  update(id: number, updateBonusDto: any) {
-    return `This action updates a #${id} bonus`;
-  }
+    getTotalBonusWeight (bonus: BonusInItem[]): number {
+        return this.bonusWeightService.getBonusWeight(bonus)
+    }
 
-  remove(id: number) {
-    return `This action removes a #${id} bonus`;
-  }
 }
