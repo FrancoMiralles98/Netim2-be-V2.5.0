@@ -5,6 +5,7 @@ import { MEDIA_HABILIDAD_ROLL_CONFIG } from "../config/media-habilidad-roll.conf
 import { SpecialBonus, TierConfigs } from "../types/media-habilidad-roll-config.type";
 import { randomNumberInRange } from "src/modules/shared/functions/random-number-in-range.function";
 import { BONUS_LIST } from "../const/bonus-list.cons";
+import { ItemLevelScalingService } from "./item-level-scaling.service";
 
 /**
  * Servicio encargado de gestionar la generación de bonus especiales.
@@ -21,32 +22,36 @@ import { BONUS_LIST } from "../const/bonus-list.cons";
 @Injectable()
 export class SpecialBonusService {
 
+    constructor(
+        private itemLevelScalingService: ItemLevelScalingService
+    ){}
+
     isSpecialBonus(bonus: BonusType): boolean {
         return bonus.name.bonus_ref_name === 'media' || bonus.name.bonus_ref_name === 'habilidad'
     }
 
     /**
      * Genera un bonus especial junto con su contra bonus.
-     * 
-     * Flujo:
-     * 1. Valida que el bonus sea especial.
-     * 2. Determina el tier según probabilidades.
-     * 3. Genera el bonus principal con valor positivo.
-     * 4. Genera el counter bonus con el mismo tier pero valor negativo.
+     *
+     * - Genera el bonus principal con valor positivo.
+     * - Genera el counter bonus con el mismo tier pero valor negativo.
      * 
      * @param {BonusType} bonus - Bonus base desde el cual generar los valores.
      * @returns {BonusInItem[]} Array con:
      *   - [0]: bonus principal
      *   - [1]: counter bonus
      */
-    generateSpecialBonuses(bonus: BonusType): BonusInItem[] {
+    generateSpecialBonuses(bonus: BonusType,itemLv: number): BonusInItem[] {
         if (!this.isSpecialBonus(bonus)) {
             throw new Error('No se un bonus especial')
         }
 
+        // determina el tier según probabilidades
         const tierBonus = this.getTierOfBonus(bonus.name.bonus_ref_name as SpecialBonus)
 
-        const bonusValue = randomNumberInRange(tierBonus.minValue, tierBonus.maxValue)
+        const bonusValue = this.itemLevelScalingService.applyItemLevelScalingToBonus(
+            tierBonus.minValue, tierBonus.maxValue,itemLv)
+            
         const mainBonus = {
             bonusFullName: bonus.name.full_name,
             bonusRef: bonus.name.bonus_ref_name,
@@ -85,8 +90,6 @@ export class SpecialBonusService {
 
     /**
      * Genera el counter bonus (bonus inverso) al bonus principal.
-     * 
-     * Reglas:
      * - Usa el mismo tier que el bonus principal.
      * - Invierte el tipo de bonus:
      *   media → habilidad

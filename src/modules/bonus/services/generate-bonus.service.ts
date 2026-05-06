@@ -5,8 +5,7 @@ import { TIER_BONUS_PROBABILITIES } from '../config/tier-bonus-probabilites.conf
 import { randomNumberInRange } from '../../shared/functions/random-number-in-range.function';
 import { BonusInItem } from '../types/bonus-in-item.type';
 import { SpecialBonusService } from './special-bonus.service';
-import { MAX_MULTIPLIER, MIN_MULTIPLIER, SCALING_PER_ITEM_LV } from '../config/item-lv-bonus-scaling.config';
-import { EQUIP_RULES } from 'src/modules/item/config/items-rule.const';
+import { ItemLevelScalingService } from './item-level-scaling.service';
 
 /**
  * Servicio encargado de la generación de bonus para ítems.
@@ -15,7 +14,8 @@ import { EQUIP_RULES } from 'src/modules/item/config/items-rule.const';
 export class GenerateBonusService {
 
     constructor(
-        private specialBonusService: SpecialBonusService
+        private specialBonusService: SpecialBonusService,
+        private itemLevelScalingService: ItemLevelScalingService
     ) { }
 
     /**
@@ -37,40 +37,21 @@ export class GenerateBonusService {
             throw new Error('No hay suficientes bonus disponibles')
         }
 
-        const bonus = this.selectRandomBonusOfList(filterList)
+        const bonusToUse = this.selectRandomBonusOfList(filterList)
 
-        if (this.specialBonusService.isSpecialBonus(bonus)) {
-            return this.specialBonusService.generateSpecialBonuses(bonus)
+        if (this.specialBonusService.isSpecialBonus(bonusToUse)) {
+            return this.specialBonusService.generateSpecialBonuses(bonusToUse,itemLv)
         }
 
         const genericBonus: BonusInItem = {
-            bonusFullName: bonus.name.full_name,
-            bonusRef: bonus.name.bonus_ref_name,
-            bonusValueType: bonus.name.type_value,
-            bonusValue: this.applyItemLevelScalingToBonus(bonus.values.min, bonus.values.max, itemLv)
+            bonusFullName: bonusToUse.name.full_name,
+            bonusRef: bonusToUse.name.bonus_ref_name,
+            bonusValueType: bonusToUse.name.type_value,
+            bonusValue: this.itemLevelScalingService.applyItemLevelScalingToBonus(
+                bonusToUse.values.min, bonusToUse.values.max, itemLv)
         }
 
         return [genericBonus]
-    }
-
-    /**
-    * Aplica escalado al valor de un bonus en segun el itemLevel
-    * 
-    * - A mayor nivel de ítem → mayor rango efectivo del bonus.
-    * - El valor máximo se ajusta con un multiplicador.
-    * 
-    * @param {number} min - Valor mínimo del bonus.
-    * @param {number} max - Valor máximo del bonus.
-    * @param {number} itemLv - Nivel del ítem interno.
-    * 
-    */
-    applyItemLevelScalingToBonus(min: number, max: number, itemLv: number): number {
-        const multiplayer = this.getItemLvBonusMultiplier(itemLv)
-
-        //se ajusta el valor maximo que puede tener un bonus segun el itemLevel
-        const scaledMax = min + Math.floor((max - min) * multiplayer);
-
-        return Number(randomNumberInRange(min, scaledMax, true).toFixed(1))
     }
 
     /**
@@ -123,21 +104,4 @@ export class GenerateBonusService {
         }
         return bonusToUse
     }
-
-    /**
-     * Calcula el multiplicador de escalado según el nivel del ítem.
-     * 
-     * @example - si itemLv es 100 su multiplicador sera de 1
-     * es decir que podra obtener el valor maximo de cualquier bonus
-     * 
-     * @param {number} itemLv - Nivel del ítem.
-     * 
-     * @returns {number} Multiplicador de escalado.
-     */
-    private getItemLvBonusMultiplier(itemLv: number): number {
-        const limitItemLv = Math.min(Math.max(itemLv, EQUIP_RULES.MIN_ITEM_LV), EQUIP_RULES.MAX_ITEM_LV);
-
-        return Math.min(MAX_MULTIPLIER, MIN_MULTIPLIER + limitItemLv * SCALING_PER_ITEM_LV)
-    }
-
 }
