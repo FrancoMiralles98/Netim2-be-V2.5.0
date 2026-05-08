@@ -16,9 +16,9 @@ export const LUZ_SKILLS:SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Evoca un relámpago del cielo.',
       escalado: {},
@@ -38,9 +38,9 @@ export const LUZ_SKILLS:SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Canaliza tu arma para generar un ataque con relámpagos.',
       escalado: {},
@@ -59,10 +59,9 @@ export const LUZ_SKILLS:SkillType[] = [
         retardo: 0,
         veneno: 0,
         sangrado: 0
-      },
-      bonus_damage: 0,
+      },   
       idPosition: 2,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Convocas un relampago para dividirlo y lanzarlo al objetivo.',
@@ -83,9 +82,9 @@ export const LUZ_SKILLS:SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 5,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Cura las heridas con la ayuda de la luz.',
       escalado: {},
@@ -99,7 +98,7 @@ export const LUZ_SKILLS:SkillType[] = [
         vh: 0,
       },
       idPosition: 3,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Obten el poder del viento e incrementa tu velocidad de movimiento y de hechizo.',
@@ -113,7 +112,7 @@ export const LUZ_SKILLS:SkillType[] = [
         ad: 0,
       },
       idPosition: 6,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion: 'Obten AD gracias al poder de la Luz.',
       escalado: {},

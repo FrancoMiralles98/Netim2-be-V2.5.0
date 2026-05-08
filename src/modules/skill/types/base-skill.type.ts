@@ -1,4 +1,6 @@
 import { MasteryLvRank } from "./skill-lv-rank.types";
+import { SkillAuraEscalado, SkillDamageEscalado } from "./skill-scaling.type";
+import { UNIQUE_ID_SKILLS } from "./unique-id-skill.enum";
 
 /**
  * Estructura base que representa una skill del juego,
@@ -12,7 +14,6 @@ import { MasteryLvRank } from "./skill-lv-rank.types";
  *
  * @property {number} idPosition
  * Posición fija de la skill dentro del listado de habilidades de la clase.
- *
  * @description
  * Se utiliza principalmente para determinar la ubicación del icono
  * dentro del spritesheet en el cliente.
@@ -28,21 +29,20 @@ import { MasteryLvRank } from "./skill-lv-rank.types";
  * @property {string} descripcion
  * Descripción breve de la habilidad.
  *
- * @property {number} idSkill
+ * @property {UNIQUE_ID_SKILLS} idSkill
  * Identificador único de la skill dentro del sistema.
  *
- * @property {unknown} escalado
+ * @property {SkillAuraEscalado | SkillDamageEscalado} escalado
  * Configuración de escalado de la skill.
  */
 export interface BaseSkill {
     nombre: string,
     lv: number | MasteryLvRank,
     idPosition: number,
-    tipo: 'Daño' | 'Aura',
     icon: IconPisition,
     descripcion: string,
-    idSkill: number,
-    escalado: any
+    idSkill: UNIQUE_ID_SKILLS,
+    escalado?: SkillAuraEscalado | SkillDamageEscalado
 }
 
 export interface IconPisition {

@@ -6,7 +6,7 @@ import { SkillEntity } from "../types/skill-entity.type";
 
 export class SkillFactory {
     static create(skill: DamageSkillType | AuraSkillType): SkillEntity {
-        switch (skill.tipo) {
+        switch (skill.type) {
             case 'Aura':
                 return new AuraSkillEntity(skill as AuraSkillType)
             case 'Daño': 

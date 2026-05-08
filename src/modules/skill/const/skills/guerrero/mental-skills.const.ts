@@ -16,9 +16,9 @@ export const MENTAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+     
       idPosition: 2,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Genera una onda expansiva con tu pisada, probabilidad de desmayo. ',
@@ -39,9 +39,9 @@ export const MENTAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+     
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Canaliza tu espiritu y haz un poderoso ataque.',
       escalado: {},
@@ -61,9 +61,9 @@ export const MENTAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+     
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Golpea contra el suelo y genera ondas de choque',
       escalado: {},
@@ -83,9 +83,9 @@ export const MENTAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+     
       idPosition: 3,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Lanza un onda magica que provoca desmayo al enemigo',
       escalado: {},
@@ -101,7 +101,7 @@ export const MENTAL_SKILLS: SkillType[] = [
         regen_hp: 0
       },
       idPosition: 5,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Generas un grito para ganar valor en batalla, aumenta tu defensa, y resistencia a desmayo, pero reduce tu velocidad de movimiento.',

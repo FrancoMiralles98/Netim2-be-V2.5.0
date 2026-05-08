@@ -16,9 +16,9 @@ export const DRAGON_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Dispara una figura de dragón para atacar frontalmente a tus enemigos.',
@@ -39,9 +39,9 @@ export const DRAGON_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Usa el talismán para herir a tus enemigos.',
       escalado: {},
@@ -61,9 +61,9 @@ export const DRAGON_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 2,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Ataca a tus enemigos con la figura de un dragón.',
       escalado: {},
@@ -76,7 +76,7 @@ export const DRAGON_SKILLS: SkillType[] = [
         critico: 0,
       },
       idPosition: 6,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Obten posibilidades de generar golpes criticos con el poder del dragón.',
@@ -90,7 +90,7 @@ export const DRAGON_SKILLS: SkillType[] = [
         def_media: 0,
       },
       idPosition: 5,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Ganas resistencia a ataques fisicos mediante un círculo de protección.',
@@ -104,7 +104,7 @@ export const DRAGON_SKILLS: SkillType[] = [
         reflectar: 0,
       },
       idPosition: 3,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Ganas probabilidad de reflectar ataques fisicos mediante un círculo reflectante.',

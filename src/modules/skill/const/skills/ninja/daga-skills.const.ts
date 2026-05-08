@@ -16,9 +16,12 @@ export const DAGA_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado:0
       },
-      bonus_damage: 10,
+      bonus_damage: {
+        type: 'chance',
+        value: 0,
+      },
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Haz un ataque preciso y genera mucho daño, probabilidad de generar golpe mortal (+40% de daño)',
@@ -39,9 +42,13 @@ export const DAGA_SKILLS: SkillType[] = [
         veneno: 1,
         sangrado:0
       },
-      bonus_damage: 1,
+      bonus_damage: {
+        
+        type: 'tier',
+        value: {}
+      },
       idPosition: 2,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Girar alrededor del enemigo con una daga y ten probabilidades de generar múltiples daños y causar veneno.',
@@ -62,9 +69,8 @@ export const DAGA_SKILLS: SkillType[] = [
         veneno: 1,
         sangrado:0
       },
-      bonus_damage: 0,
       idPosition: 3,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Realiza nubes venenosas alrededor del enemigo para intoxicarlo.',
@@ -85,9 +91,8 @@ export const DAGA_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado:0
       },
-      bonus_damage: 0,
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Aproximación rápida al enemigo y realizando un ataque sin que el enemigo se de cuenta.',
@@ -109,9 +114,8 @@ export const DAGA_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado:0
       },
-      bonus_damage: 0,
       idPosition: 5,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Camufalte para que el enemigo no te vea y aumenta tu daño en tu siguiente habilidad.',

@@ -178,7 +178,6 @@ export class CharacterEntity {
             this.props.puntos_habilidad -= 1
         }
         skill.upgradeRankLv()
-
         return skill
     }
 

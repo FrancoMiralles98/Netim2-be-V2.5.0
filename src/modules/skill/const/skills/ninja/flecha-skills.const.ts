@@ -16,9 +16,8 @@ export const FLECHA_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Dispara varias flechas a un enemigo.',
       escalado: {},
@@ -38,9 +37,8 @@ export const FLECHA_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
       idPosition: 2,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Lanza un flecha ardiente contra un objetivo. Al impactar sobre él, esta estalla causando daño. y con posibilidades de incendiarlo.',
@@ -61,9 +59,8 @@ export const FLECHA_SKILLS: SkillType[] = [
         veneno: 3,
         sangrado:0
       },
-      bonus_damage: 0,
       idPosition: 3,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Dispara una flecha que puede envenenar al objetivo a la vez que le causa daño por impacto y por veneno. Además,deja apagado al objetivo.',
@@ -84,9 +81,12 @@ export const FLECHA_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 2,
+      bonus_damage: {
+        type: 'tier',
+        value: {}
+      },
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Con un solo disparo, lanzará varias flechas que impactaran al objetivo,con posbilidades de multiplicar el daño dependiendo de las flechas lanzadas. ',
@@ -100,7 +100,7 @@ export const FLECHA_SKILLS: SkillType[] = [
         vm: 0,
       },
       idPosition: 5,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Aligera el cuerpo para aumentar la velocidad de movimiento.',

@@ -16,9 +16,9 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Lanza fuerza oscura para herir a los enemigos.',
       escalado: {},
@@ -38,10 +38,10 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 2,
       escalado: {},
-      tipo: 'Daño',
+      type: 'Daño',
       descripcion: 'Crea un espíritu de la llama que ataca a los enemigos.',
       icon: { x: 0, y: 35 },
       idSkill: UNIQUE_ID_SKILLS.ESPIRITU_DE_LA_LLAMA,
@@ -60,9 +60,9 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 3,
-      tipo: 'Daño',
+      type: 'Daño',
       descripcion:
         'Lanza espíritus oscuros para herir a los enemigos y poder relantizarlos.',
       icon: { x: 0, y: 0 },
@@ -83,9 +83,9 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       descripcion: 'Quema a tus enemigos con una explosión.',
       icon: { x: 112, y: 0 },
       escalado: {},
@@ -105,9 +105,9 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 6,
-      tipo: 'Daño',
+      type: 'Daño',
       descripcion: 'Lanza un globo oscuro para herir a tus enemigos.',
       icon: { x: 112, y: 71 },
       escalado: {},
@@ -120,7 +120,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
         def_hab: 0,
       },
       idPosition: 5,
-      tipo: 'Aura',
+      type: 'Aura',
       descripcion: 'Protégete con el señor oscuro de ataques.',
       icon: { x: 112, y: 36 },
       escalado: {},

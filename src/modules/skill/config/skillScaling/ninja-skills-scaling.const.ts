@@ -1,57 +1,18 @@
 import { StructureCharacterSkillScaling } from "../../types/skill-scaling.type";
 
-export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
-    Corporal: {
-        13: {
-            escaladoMain: { min: 0.85, max: 0.85 },
+export const NINJA_SKILLS_SCALING:StructureCharacterSkillScaling = {
+    Daga: {
+        23: { //emboscada
+            type: "damage",
+            escaladoMain: { min: 0.82, max: 0.86 },
             escaladoLv: {
                 perLv: 1.5,
                 basicMulti: 2,
                 masterMulti: 4,
-                granMasterMulti: 6,
+                granMasterMulti:6,
                 perfectMulti: 8
             },
-            escaladoAtributos: { STR: 3, DEX: 2 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 7.5, perLv: 1.5 }
-            },
-            escaladoBonusDamage: false
-        },
-        14: {
-            escaladoMain: { min: 1.0, max: 1.0 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
-            },
-            escaladoAtributos: { STR: 1, DEX: 3 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 100, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            escaladoBonusDamage: false
-        },
-        15: {
-            escaladoMain: { min: 1.20, max: 1.33 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
-            },
-            escaladoAtributos: { STR: 3, DEX: 1 },
+            escaladoAtributos: { DEX: 3, STR: 2 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
                 desmayo: { base: 0, perLv: 0 },
@@ -60,54 +21,97 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
+            escaladoBonusDamage: true
+        },
+        24: { //daga rodante
+            type: "damage",
+            escaladoMain: { min: 0.75, max: 0.75 },
+            escaladoLv: {
+                perLv: 1.5,
+                basicMulti: 2,
+                masterMulti: 4,
+                granMasterMulti: 6,
+                perfectMulti: 8
+            },
+            escaladoAtributos: { DEX: 2, STR: 1 },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 1, perLv: 0.4 },
+                incendio: { base: 0, perLv: 0 },
+                retardo: { base: 0, perLv: 0 },
+                sangrado: { base: 0, perLv: 0 }
+            },
+            escaladoBonusDamage: true
+        },
+        25: { //nube toxica
+            type: "damage",
+            escaladoMain: { min: 1.0, max: 1.13 },
+            escaladoLv: {
+                perLv: 1.5,
+                basicMulti: 2,
+                masterMulti: 4,
+                granMasterMulti: 6,
+                perfectMulti: 8
+            },
+            escaladoAtributos: { DEX: 3, INT: 8 },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 30, perLv: 1.5 },
+                incendio: { base: 0, perLv: 0 },
+                retardo: { base: 0, perLv: 0 },
+                sangrado: { base: 0, perLv: 0 }
+            },
             escaladoBonusDamage: false
         },
-        17: {
-            escaladoAtributos: { STR: 1.5 },
-            escaladoBuffos: {
-                media: {
-                    perLv: 1.05,
-                    basicMulti: 1,
-                    masterMulti: 1.1,
-                    granMasterMulti: 1.2,
-                    perfectMulti: 1.3,
-                    scaleWithAtribute: true
-                },
+        26: { // ataque rapido
+            type: "damage",
+            escaladoMain: { min: 1.05, max: 1.27 },
+            escaladoLv: {
+                perLv: 1.5,
+                basicMulti: 2,
+                masterMulti: 4,
+                granMasterMulti: 6,
+                perfectMulti: 8
             },
+            escaladoAtributos: { DEX: 3, STR: 2 },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 0, perLv: 0 },
+                incendio: { base: 0, perLv: 0 },
+                retardo: { base: 0, perLv: 0 },
+                sangrado: { base: 0, perLv: 0 }
+            },
+            escaladoBonusDamage: false
         },
-        16: {
-            escaladoAtributos: {},
-            escaladoBuffos: {
-                va: {
-                    perLv: 1,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
-                    scaleWithAtribute: false
-                },
-                vm: {
-                    perLv: 1,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
-                    scaleWithAtribute: false
-                },
-                damage_taken: {
-                    perLv: 0.54,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
-                    scaleWithAtribute: false
-                },
+        27: { //camuflaje
+            type: "damage",
+            escaladoMain: { min: 0.0, max: 0.0 },
+            escaladoLv: {
+                perLv: 1,
+                basicMulti: 1.4,
+                masterMulti: 1.8,
+                granMasterMulti: 2.2,
+                perfectMulti: 2.6
             },
+            escaladoAtributos: { },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 0, perLv: 0 },
+                incendio: { base: 0, perLv: 0 },
+                retardo: { base: 0, perLv: 0 },
+                sangrado: { base: 0, perLv: 0 }
+            },
+            escaladoBonusDamage: false
         },
     },
-    Mental: {
-        18: {
-            escaladoMain: { min: 1.04, max: 1.16 },
+    Flecha: {
+        28: { //disparo repetido
+            type: "damage",
+            escaladoMain: { min: 0.8, max: 0.84 },
             escaladoLv: {
                 perLv: 1.5,
                 basicMulti: 2,
@@ -115,7 +119,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 granMasterMulti: 6,
                 perfectMulti: 8
             },
-            escaladoAtributos: { STR: 2, VIT: 6 },
+            escaladoAtributos: { DEX: 3, STR: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
                 desmayo: { base: 0, perLv: 0 },
@@ -126,8 +130,9 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        19: {
-            escaladoMain: { min: 0.83, max: 1.03 },
+        29: { // flecha de fuego
+            type: "damage",
+            escaladoMain: { min: 1.0, max: 1.06 },
             escaladoLv: {
                 perLv: 1.5,
                 basicMulti: 2,
@@ -135,19 +140,20 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 granMasterMulti: 6,
                 perfectMulti: 8
             },
-            escaladoAtributos: { STR: 4, VIT: 2 },
+            escaladoAtributos: { DEX: 3, STR: 1, INT:1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
+                incendio: { base: 5, perLv: 2 },
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
             escaladoBonusDamage: false
         },
-        20: {
-            escaladoMain: { min: 0.83, max: 0.87 },
+        30: { //flecha venenosa
+            type: "damage",
+            escaladoMain: { min: 0.61, max: 0.67 },
             escaladoLv: {
                 perLv: 1.5,
                 basicMulti: 2,
@@ -155,71 +161,49 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 granMasterMulti: 6,
                 perfectMulti: 8
             },
-            escaladoAtributos: { STR: 2, VIT: 2, DEX: 2 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 15, perLv: 1 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            escaladoBonusDamage: false
-        },
-        21: {
-            escaladoMain: { min: 0.70, max: 0.80 },
-            escaladoLv: {
-                perLv: 1.50,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
-            },
-            escaladoAtributos: { STR: 2, DEX: 2, INT: 4 },
+            escaladoAtributos: { DEX: 4, STR: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
                 desmayo: { base: 100, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
+                veneno: { base: 7.5, perLv: 2.5 },
                 incendio: { base: 0, perLv: 0 },
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
             escaladoBonusDamage: false
         },
-        22: {
-            escaladoAtributos: { VIT: 1.5, STR: 0.5 },
+        31: { //lluvia de flechas
+            type: "damage",
+            escaladoMain: { min: 0.50, max: 0.50 },
+            escaladoLv: {
+                perLv: 1.5,
+                basicMulti: 2,
+                masterMulti: 4,
+                granMasterMulti: 6,
+                perfectMulti: 8
+            },
+            escaladoAtributos: { DEX: 2, STR: 2 },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 0, perLv: 0 },
+                incendio: { base: 0, perLv: 0 },
+                retardo: { base: 0, perLv: 0 },
+                sangrado: { base: 0, perLv: 0 }
+            },
+            escaladoBonusDamage: true
+        },
+        32: { //camino pluma
+            type: "aura",
+            escaladoAtributos: { },
             escaladoBuffos: {
-                def_veneno: {
-                    perLv: 1,
+                vm: {
+                    perLv: 2.5,
                     basicMulti: 1,
                     masterMulti: 1,
                     granMasterMulti: 1,
                     perfectMulti: 1,
                     scaleWithAtribute: false
-                },
-                def_sangrado: {
-                    perLv: 1,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
-                    scaleWithAtribute: false
-                },
-                def_incendio: {
-                    perLv: 1,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
-                    scaleWithAtribute: false
-                },
-                regen_hp: {
-                    perLv: 0.2,
-                    basicMulti: 1.5,
-                    masterMulti: 3,
-                    granMasterMulti: 4.5,
-                    perfectMulti: 6,
-                    scaleWithAtribute: true
                 },
             },
         },

@@ -16,9 +16,9 @@ export const CORPORAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Realiza un ataque frontal tres veces.',
       escalado: {},
@@ -38,9 +38,9 @@ export const CORPORAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 3,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Ataca rapidamente con tu cuerpo al oponente, causa desmayo.',
       escalado: {},
@@ -60,9 +60,9 @@ export const CORPORAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Gira la espada para atacar al enemigo.',
       escalado: {},
@@ -77,7 +77,7 @@ export const CORPORAL_SKILLS: SkillType[] = [
         va: 0,
         damage_taken: 0,
       },
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Entra en un estado de ira e incrementa tu velocidad de ataque, de movimiento a cambio de recibir más daño.',
@@ -91,7 +91,7 @@ export const CORPORAL_SKILLS: SkillType[] = [
         media: 0,
       },
       idPosition: 5,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion: 'Canaliza tu poder en el arma y aumenta tu AD.',
       escalado: {},

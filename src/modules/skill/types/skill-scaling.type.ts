@@ -48,12 +48,12 @@ import { UNIQUE_ID_SKILLS } from "./unique-id-skill.enum";
  *
  * @property {boolean} escaladoBonusDamage
  * Indica si la skill posee un bonus especial de daño adicional.
- *
  * @description
  * Este valor no define el cálculo en sí, sino si la skill aplica lógica extra
  * de daño (por ejemplo, habilidades con daño crítico adicional o multiplicadores especiales).
  */
 export interface SkillDamageEscalado {
+    type: 'damage';
     escaladoMain: {min: number,max: number}; 
     escaladoLv: SkillScalingLv 
     escaladoAtributos: Partial<Record<CharacterAttribute,number>>;
@@ -163,6 +163,7 @@ export interface SkillScalingEffect {
  */
 
 export interface SkillAuraEscalado {
+    type: 'aura';
     escaladoAtributos: Partial<Record<CharacterAttribute,number>>; //es el % del atributo, es poco porque despues se usa como multiplicativo
     escaladoBuffos: Partial<Record<BonusRefKeys,EscaladoBuffos>>
 }
@@ -189,5 +190,8 @@ export type EscaladoBuffos =  SkillScalingLv & {
 /**
  * Estrucutura de las (const) listas de escalados de las skills para las clases 
  */
-export type StructureCharacterSkillScaling =
-Partial<Record<CharacterSpeciality,Partial<Record<UNIQUE_ID_SKILLS,SkillDamageEscalado|SkillAuraEscalado>>>>
+export type StructureCharacterSkillScaling = SpecialitySkillsScaling
+
+export type SpecialitySkillsScaling = Partial<Record<CharacterSpeciality,DescriptionScaling>>
+
+export type DescriptionScaling = Partial<Record<UNIQUE_ID_SKILLS,SkillDamageEscalado|SkillAuraEscalado>>

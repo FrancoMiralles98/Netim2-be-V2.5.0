@@ -1,29 +1,10 @@
 import { StructureCharacterSkillScaling } from "../../types/skill-scaling.type";
 
-export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
-    Luz: {
-        36: {
-            escaladoMain: { min: 0.66, max: 0.80 },
-            escaladoLv: {
-                perLv: 2,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
-            },
-            escaladoAtributos: { INT: 4, VIT: 4 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            escaladoBonusDamage: false
-        },
-        33: {
-            escaladoMain: { min: 0.65, max: 1.1 },
+export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
+    MagiaNegra: {
+        1: { //golpe oscuro
+            type: "damage",
+            escaladoMain: { min: 0.60, max: 0.70 },
             escaladoLv: {
                 perLv: 1.5,
                 basicMulti: 2,
@@ -31,27 +12,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 granMasterMulti: 6,
                 perfectMulti: 8
             },
-            escaladoAtributos: { INT: 5, DEX: 1 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 20, perLv: 1.50 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            escaladoBonusDamage: false
-        },
-        34: {
-            escaladoMain: { min: 0.62, max: 0.70 },
-            escaladoLv: {
-                perLv: 1.50,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
-            },
-            escaladoAtributos: { INT: 4, DEX: 4 },
+            escaladoAtributos: { INT: 3, DEX: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
                 desmayo: { base: 0, perLv: 0 },
@@ -62,16 +23,80 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        35: {
-            escaladoMain: { min: 0.73, max: 0.82 },
+        2: { //espiritu de la llama
+            type: "damage",
+            escaladoMain: { min: 0.20, max: 0.20 },
             escaladoLv: {
-                perLv: 1.50,
+                perLv: 1.5,
                 basicMulti: 2,
                 masterMulti: 4,
                 granMasterMulti: 6,
                 perfectMulti: 8
             },
-            escaladoAtributos: { INT: 4, STR: 4 },
+            escaladoAtributos: { DEX: 1, INT: 3 },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 0, perLv: 0 },
+                incendio: { base: 1, perLv: 0.4 },
+                retardo: { base: 0, perLv: 0 },
+                sangrado: { base: 0, perLv: 0 }
+            },
+            escaladoBonusDamage: false
+        },
+        3: { //golpe espiritual
+            type: "damage",
+            escaladoMain: { min: 0.74, max: 0.74 },
+            escaladoLv: {
+                perLv: 1.5,
+                basicMulti: 2,
+                masterMulti: 4,
+                granMasterMulti: 6,
+                perfectMulti: 8
+            },
+            escaladoAtributos: { INT: 2, DEX: 1 },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 0, perLv: 0 },
+                incendio: { base: 0, perLv: 0 },
+                retardo: { base: 34.8, perLv: 1.89 },
+                sangrado: { base: 0, perLv: 0 }
+            },
+            escaladoBonusDamage: false
+        },
+        4: { //golpe de llama
+            type: "damage",
+            escaladoMain: { min: 0.80, max: 0.80 },
+            escaladoLv: {
+                perLv: 1.5,
+                basicMulti: 2,
+                masterMulti: 4,
+                granMasterMulti: 6,
+                perfectMulti: 8
+            },
+            escaladoAtributos: { INT: 2, DEX: 2, STR: 1, VIT: 1 },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 0, perLv: 0 },
+                incendio: { base: 5, perLv: 0.5 },
+                retardo: { base: 0, perLv: 0 },
+                sangrado: { base: 0, perLv: 0 }
+            },
+            escaladoBonusDamage: false
+        },
+        5: { //orbe oscuro
+            type: "damage",
+            escaladoMain: { min: 1.0, max: 1.0 },
+            escaladoLv: {
+                perLv: 1.5,
+                basicMulti: 2,
+                masterMulti: 4,
+                granMasterMulti: 6,
+                perfectMulti: 8
+            },
+            escaladoAtributos: { INT: 4, VIT: 4, DEX: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
                 desmayo: { base: 0, perLv: 0 },
@@ -82,64 +107,25 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        38: {
-            escaladoAtributos: { INT: 0.5, STR: 2.5 },
+        6: { //proteccion oscura
+            type: "aura",
+            escaladoAtributos: {},
             escaladoBuffos: {
-                ad: {
-                    perLv: 1,
+                def_hab: {
+                    perLv: 0.27,
                     basicMulti: 1,
-                    masterMulti: 2,
-                    granMasterMulti: 3,
-                    perfectMulti: 4,
-                    scaleWithAtribute: true
-                },
-            },
-        },
-        37: {
-            escaladoAtributos: { INT: 0.5, DEX: 1.5 },
-            escaladoBuffos: {
-                vm: {
-                    perLv: 0.3,
-                    basicMulti: 1.2,
-                    masterMulti: 1.4,
-                    granMasterMulti: 1.6,
-                    perfectMulti: 1.8,
-                    scaleWithAtribute: true
-                },
-                vh: {
-                    perLv: 0.3,
-                    basicMulti: 1.2,
-                    masterMulti: 1.4,
-                    granMasterMulti: 1.6,
-                    perfectMulti: 1.8,
-                    scaleWithAtribute: true
+                    masterMulti: 1,
+                    granMasterMulti: 1,
+                    perfectMulti: 1,
+                    scaleWithAtribute: false
                 },
             },
         },
     },
-    Dragon: {
-        39: {
-            escaladoMain: { min: 0.70, max: 0.70 },
-            escaladoLv: {
-                perLv: 1.50,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
-            },
-            escaladoAtributos: { INT: 4, DEX: 2 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 1, perLv: 1 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            escaladoBonusDamage: false
-        },
-        41: {
-            escaladoMain: { min: 0.80, max: 1.10 },
+    Espejo: {
+        7: { //golpe de dedo
+            type: "damage",
+            escaladoMain: { min: 0.7, max: 0.75 },
             escaladoLv: {
                 perLv: 1.5,
                 basicMulti: 2,
@@ -147,27 +133,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 granMasterMulti: 6,
                 perfectMulti: 8
             },
-            escaladoAtributos: { INT: 4, VIT: 3, DEX: 1 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 5, perLv: 1.50 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            escaladoBonusDamage: false
-        },
-        40: {
-            escaladoMain: { min: 0.66, max: 0.74 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
-            },
-            escaladoAtributos: { INT: 4, DEX: 2 },
+            escaladoAtributos: { INT: 3, STR: 3 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
                 desmayo: { base: 0, perLv: 0 },
@@ -178,42 +144,111 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        42: {
-            escaladoAtributos: { INT: 1, STR: 1 },
-            escaladoBuffos: {
-                critico: {
-                    perLv: 0.2,
-                    basicMulti: 1.1,
-                    masterMulti: 1.2,
-                    granMasterMulti: 1.3,
-                    perfectMulti: 1.4,
-                    scaleWithAtribute: true
-                },
+        8: { //remolino dragon
+            type: "damage",
+            escaladoMain: { min: 1, max: 1.12 },
+            escaladoLv: {
+                perLv: 1.75,
+                basicMulti: 2,
+                masterMulti: 4,
+                granMasterMulti: 6,
+                perfectMulti: 8
             },
-        },
-        43: {
-            escaladoAtributos: { INT: 0.5, VIT: 0.5 },
-            escaladoBuffos: {
-                def_media: {
-                    perLv: 0.2,
-                    basicMulti: 0.9,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
-                    scaleWithAtribute: true
-                },
+            escaladoAtributos: { INT: 3, STR: 3, DEX: 3 },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 0, perLv: 0 },
+                incendio: { base: 0, perLv: 0 },
+                retardo: { base: 0, perLv: 0 },
+                sangrado: { base: 0, perLv: 0 }
             },
+            escaladoBonusDamage: false
         },
-        44: {
-            escaladoAtributos: { INT: 1, DEX: 1 },
+        9: { //anular magia
+            type: "damage",
+            escaladoMain: { min: 0.75, max: 0.75 },
+            escaladoLv: {
+                perLv: 1.5,
+                basicMulti: 2,
+                masterMulti: 4,
+                granMasterMulti: 6,
+                perfectMulti: 8
+            },
+            escaladoAtributos: { INT: 5, DEX: 2 },
+            escaladoEfecto: {
+                penetracion_habilidad: { base: 0, perLv: 0 },
+                desmayo: { base: 0, perLv: 0 },
+                veneno: { base: 0, perLv: 0 },
+                incendio: { base: 0, perLv: 0 },
+                retardo: { base: 0, perLv: 0 },
+                sangrado: { base: 0, perLv: 0 }
+            },
+            escaladoBonusDamage: false
+        },
+        10: { //hoja encantada
+            type: "aura",
+            escaladoAtributos: { INT: 1.5, VIT: 0.5 },
             escaladoBuffos: {
-                reflectar: {
-                    perLv: 0.4,
+                media: {
+                    perLv: 0.7,
                     basicMulti: 1,
                     masterMulti: 1.05,
                     granMasterMulti: 1.1,
-                    perfectMulti: 1.2,
+                    perfectMulti: 1.15,
                     scaleWithAtribute: true
+                },
+                daño_absorbido_hp: {
+                    perLv: 0.27,
+                    basicMulti: 1,
+                    masterMulti: 1,
+                    granMasterMulti: 1,
+                    perfectMulti: 1,
+                    scaleWithAtribute: false
+                },
+            },
+        },
+        11: { //armadura encantada
+            type: "aura",
+            escaladoAtributos: {},
+            escaladoBuffos: {
+                def_media: {
+                    perLv: 0.22,
+                    basicMulti: 1,
+                    masterMulti: 1,
+                    granMasterMulti: 1,
+                    perfectMulti: 1,
+                    scaleWithAtribute: false
+                },
+                reflectar: {
+                    perLv: 0.55,
+                    basicMulti: 1,
+                    masterMulti: 1,
+                    granMasterMulti: 1,
+                    perfectMulti: 1,
+                    scaleWithAtribute: false
+                },
+            },
+        },
+        12: { //miedo
+            type: "aura",
+            escaladoAtributos: {},
+            escaladoBuffos: {
+                bloquear_ataques: {
+                    perLv: 0.4,
+                    basicMulti: 1,
+                    masterMulti: 1,
+                    granMasterMulti: 1,
+                    perfectMulti: 1,
+                    scaleWithAtribute: false
+                },
+                esquivar_ataques: {
+                    perLv: 0.4,
+                    basicMulti: 1,
+                    masterMulti: 1,
+                    granMasterMulti: 1,
+                    perfectMulti: 1,
+                    scaleWithAtribute: false
                 },
             },
         },

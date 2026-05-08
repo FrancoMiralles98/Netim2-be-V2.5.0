@@ -1,9 +1,7 @@
-import { CHANGE_MASTERY_RANK_LV_VALUES } from "../const/change-rank-values.const";
-import { ICON_POSITION_X, ICON_POSITION_Y } from "../const/icon-position.const";
+import { CHANGE_MASTERY_RANK_LV_VALUES } from "../config/change-rank-values.const";
+import { ICON_POSITION_X, ICON_POSITION_Y } from "../config/icon-position.const";
 import { BaseSkill, IconPisition } from "../types/base-skill.type";
 import { MasteryLvRank } from "../types/skill-lv-rank.types";
-import { AuraSkillEntity } from "./aura-skill.entity";
-import { DamageSkillEntity } from "./damage-skill.entity";
 
 export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
     protected  props: T
@@ -18,14 +16,6 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
 
     get lv(): number | MasteryLvRank {
         return this.props.lv
-    }
-
-    isDamageSkill(): this is DamageSkillEntity {
-        return this.props.tipo === 'Daño'
-    }
-
-    isAuraSkill(): this is AuraSkillEntity {
-        return this.props.tipo === 'Aura'
     }
 
     upgradeRankLv(): void {
