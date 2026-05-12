@@ -6,6 +6,7 @@ export const BONUS_DAMAGE_CONFIG: BonusDamageConfigType = {
         type: 'chance',
         baseChance: 10,
         chancePerLv: 1,
+        multi: 1.40
     },
     [UNIQUE_ID_SKILLS.DAGA_RODANTE]: {
         type: 'tier',

@@ -57,7 +57,8 @@ export class BonusDamageService {
 
         return {
             type: 'chance',
-            value: totalChance
+            value: totalChance,
+            multi: config.multi
         }
     }
 

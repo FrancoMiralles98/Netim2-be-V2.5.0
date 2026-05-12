@@ -96,4 +96,5 @@ export interface TierBonusDamage {
 export interface ChanceBonusDamage {
    type: 'chance'
    value: number;
+   multi: number;
 }

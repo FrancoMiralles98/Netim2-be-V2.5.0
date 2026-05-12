@@ -22,4 +22,5 @@ export interface ChanceDescription {
     type: 'chance';
     baseChance: number;
     chancePerLv: number;
+    multi: number;
 }
