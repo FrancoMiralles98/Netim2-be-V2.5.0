@@ -1,8 +1,9 @@
 import { StructureCharacterSkillScaling } from "../../types/skill-scaling.type";
+import { UNIQUE_ID_SKILLS } from "../../types/unique-id-skill.enum";
 
 export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Luz: {
-        36: { //curacion
+        [UNIQUE_ID_SKILLS.CURACION]: {
             type: "damage",
             escaladoMain: { min: 0.66, max: 0.80 },
             escaladoLv: {
@@ -23,7 +24,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        33: { //llamada relampago
+        [UNIQUE_ID_SKILLS.LLAMADA_RELAMPAGO]: {
             type: "damage",
             escaladoMain: { min: 0.65, max: 1.1 },
             escaladoLv: {
@@ -44,7 +45,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        34: { //tiro relampago
+        [UNIQUE_ID_SKILLS.TIRO_RELAMPAGO]: {
             type: "damage",
             escaladoMain: { min: 0.62, max: 0.70 },
             escaladoLv: {
@@ -65,7 +66,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        35: { //garra relampago
+        [UNIQUE_ID_SKILLS.GARRA_RELAMPAGO]: {
             type: "damage",
             escaladoMain: { min: 0.73, max: 0.82 },
             escaladoLv: {
@@ -86,45 +87,51 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        38: { //ataque
+        [UNIQUE_ID_SKILLS.ATAQUE]: {
             type: "aura",
             escaladoAtributos: { INT: 0.5, STR: 2.5 },
             escaladoBuffos: {
                 ad: {
-                    perLv: 1,
-                    basicMulti: 1,
-                    masterMulti: 2,
-                    granMasterMulti: 3,
-                    perfectMulti: 4,
+                    escaladoLv: {
+                        perLv: 1,
+                        basicMulti: 1,
+                        masterMulti: 2,
+                        granMasterMulti: 3,
+                        perfectMulti: 4,
+                    },
                     scaleWithAtribute: true
                 },
             },
         },
-        37: { //remolinos
+        [UNIQUE_ID_SKILLS.REMOLINOS]: {
             type: "aura",
             escaladoAtributos: { INT: 0.5, DEX: 1.5 },
             escaladoBuffos: {
                 vm: {
-                    perLv: 0.3,
-                    basicMulti: 1.2,
-                    masterMulti: 1.4,
-                    granMasterMulti: 1.6,
-                    perfectMulti: 1.8,
+                    escaladoLv: {
+                        perLv: 0.3,
+                        basicMulti: 1.2,
+                        masterMulti: 1.4,
+                        granMasterMulti: 1.6,
+                        perfectMulti: 1.8,
+                    },
                     scaleWithAtribute: true
                 },
                 vh: {
-                    perLv: 0.3,
-                    basicMulti: 1.2,
-                    masterMulti: 1.4,
-                    granMasterMulti: 1.6,
-                    perfectMulti: 1.8,
+                    escaladoLv: {
+                        perLv: 0.3,
+                        basicMulti: 1.2,
+                        masterMulti: 1.4,
+                        granMasterMulti: 1.6,
+                        perfectMulti: 1.8,
+                    },
                     scaleWithAtribute: true
                 },
             },
         },
     },
     Dragon: {
-        39: { //disparo del relampago
+        [UNIQUE_ID_SKILLS.DISPARO_DEL_DRAGON]: {
             type: "damage",
             escaladoMain: { min: 0.70, max: 0.70 },
             escaladoLv: {
@@ -145,7 +152,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        41: { //rugido del dragon
+        [UNIQUE_ID_SKILLS.RUGIDO_DEL_DRAGON]: {
             type: "damage",
             escaladoMain: { min: 0.80, max: 1.10 },
             escaladoLv: {
@@ -166,7 +173,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        40: { //talisman volador
+        [UNIQUE_ID_SKILLS.TALISMAN_VOLADOR]: {
             type: "damage",
             escaladoMain: { min: 0.66, max: 0.74 },
             escaladoLv: {
@@ -187,44 +194,50 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
             },
             escaladoBonusDamage: false
         },
-        42: { //fuerza del dragon
+        [UNIQUE_ID_SKILLS.FUERZA_DEL_DRAGON]: {
             type: "aura",
             escaladoAtributos: { INT: 1, STR: 1 },
             escaladoBuffos: {
                 critico: {
-                    perLv: 0.2,
-                    basicMulti: 1.1,
-                    masterMulti: 1.2,
-                    granMasterMulti: 1.3,
-                    perfectMulti: 1.4,
+                    escaladoLv: {
+                        perLv: 0.2,
+                        basicMulti: 1.1,
+                        masterMulti: 1.2,
+                        granMasterMulti: 1.3,
+                        perfectMulti: 1.4,
+                    },
                     scaleWithAtribute: true
                 },
             },
         },
-        43: { //bendicion
+        [UNIQUE_ID_SKILLS.BENDICION]: {
             type: "aura",
             escaladoAtributos: { INT: 0.5, VIT: 0.5 },
             escaladoBuffos: {
                 def_media: {
-                    perLv: 0.2,
-                    basicMulti: 0.9,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
+                    escaladoLv: {
+                        perLv: 0.2,
+                        basicMulti: 0.9,
+                        masterMulti: 1,
+                        granMasterMulti: 1,
+                        perfectMulti: 1,
+                    },
                     scaleWithAtribute: true
                 },
             },
         },
-        44: { //reflectar
+        [UNIQUE_ID_SKILLS.REFLECTAR]: {
             type: "aura",
             escaladoAtributos: { INT: 1, DEX: 1 },
             escaladoBuffos: {
                 reflectar: {
-                    perLv: 0.4,
-                    basicMulti: 1,
-                    masterMulti: 1.05,
-                    granMasterMulti: 1.1,
-                    perfectMulti: 1.2,
+                    escaladoLv: {
+                        perLv: 0.4,
+                        basicMulti: 1,
+                        masterMulti: 1.05,
+                        granMasterMulti: 1.1,
+                        perfectMulti: 1.2,
+                    },
                     scaleWithAtribute: true
                 },
             },

@@ -6,12 +6,14 @@ import { SKILL_SCALING_BY_RACE_CONFIG } from './config/skillScaling/skill-scalin
 import { CharacterRace, CharacterSpeciality, CharacterStats } from '../character/types/baseCharacterProps/character-stats.type';
 import { UNIQUE_ID_SKILLS } from './types/unique-id-skill.enum';
 import { DamageSkillService } from './services/damage-skill.service';
+import { AuraSkillService } from './services/aura-skill.service';
 
 @Injectable()
 export class SkillService {
 
     constructor(
-        private damageSkill: DamageSkillService
+        private damageSkillService: DamageSkillService,
+        private auraSkillService: AuraSkillService
     ) { }
 
     calculateSkillEffect(
@@ -27,14 +29,14 @@ export class SkillService {
             if (!this.isAuraScaling(skillScaling)) {
                 throw new Error(`El scaling de la skill ${skill.idSkill} no corresponde a una skill aura`);
             }
-            return this.calculateAuraEffect(skill, skillScaling, statsGeneral);
+            return this.auraSkillService.updateAuraEffects(skill, skillScaling, statsGeneral);
         }
 
         if (!this.isDamageScaling(skillScaling)) {
             throw new Error(`El scaling de la skill ${skill.idSkill} no corresponde a una skill de daño`);
         }
 
-        return this.damageSkill.updateDamageSkillStats(skill, skillScaling, statsGeneral)
+        return this.damageSkillService.updateDamageSkillStats(skill, skillScaling, statsGeneral)
     }
 
     private getScalingSkill(

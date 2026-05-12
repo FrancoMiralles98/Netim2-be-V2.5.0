@@ -183,7 +183,8 @@ export interface SkillAuraEscalado {
  * - false → el buffo escala únicamente con el nivel de la skill
  *
  */
-export type EscaladoBuffos =  SkillScalingLv & {
+export type EscaladoBuffos =  {
+    escaladoLv: SkillScalingLv
     scaleWithAtribute: boolean;
 }
 

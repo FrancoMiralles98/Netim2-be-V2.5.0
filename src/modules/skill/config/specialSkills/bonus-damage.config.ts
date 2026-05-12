@@ -1,14 +1,13 @@
 import { BonusDamageConfigType } from "../../types/bonus-damage-config.type";
+import { UNIQUE_ID_SKILLS } from "../../types/unique-id-skill.enum";
 
 export const BONUS_DAMAGE_CONFIG: BonusDamageConfigType = {
-    23: {
-        // emboscada
+    [UNIQUE_ID_SKILLS.EMBOSCADA]: {
         type: 'chance',
         baseChance: 10,
         chancePerLv: 1,
     },
-    24: {
-        // daga rodante
+    [UNIQUE_ID_SKILLS.DAGA_RODANTE]: {
         type: 'tier',
         tiers: [
             {
@@ -41,8 +40,7 @@ export const BONUS_DAMAGE_CONFIG: BonusDamageConfigType = {
             },
         ],
     },
-    31: {
-        // lluvia de flechas
+    [UNIQUE_ID_SKILLS.LLUVIA_DE_FLECHAS]: {
         type: 'tier',
         tiers: [
             {

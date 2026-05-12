@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { DamageSkillType } from "../types/damage-skill.type";
 import { SkillDamageEscalado } from "../types/skill-scaling.type";
-import { CharacterAttribute, CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
+import { CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { SharedSkillService } from "./shared-skill.service";
 import { BonusDamageService } from "./bonus-damage.service";
 
@@ -46,7 +46,7 @@ export class DamageSkillService {
     ): DamageSkillType["daño"] {
 
         const basicDmg = this.getBasicDmg(statsGeneral, skill, scaling)
-        const attributeBonification = this.getAttributeBonification(statsGeneral, scaling)
+        const attributeBonification = this.sharedSkillService.getAttributeBonification(statsGeneral, scaling.escaladoAtributos)
         const skillLvBonification = this.getSkillLvBonification(skill, scaling)
 
         return {
@@ -110,43 +110,6 @@ export class DamageSkillService {
     }
 
     /**
-     * Calcula el multiplicador total generado por los atributos
-     * escalables de la habilidad.
-     *
-     * Cada atributo agrega una bonificación porcentual basada en:
-     * la suma de los LvPoints y bonusPoints de del atributo en que escala la hab
-     *
-     * El escalado el es siguiente:
-     * @example
-     * si escaladoAtributos es : {VIT: 20}
-     *  - Se tomara ese valor (20) como porcentaje de dicho atributo que tiene en total el personje
-     *  - se sumara al acc (por si tiene mas de un escalado de atributo)
-     *  - luego este valor se usara como multiplicador de daño final 
-     * Ejemplo:
-     * - 1 = sin bonificación
-     * - 1.25 = +25% de daño
-     *
-     * @param statsGeneral Estadísticas generales del personaje.
-     * @param scaling Configuración de escalado de atributos.
-     * @returns Multiplicador final de atributos.
-     */
-    private getAttributeBonification(
-        statsGeneral: CharacterStats['general'],
-        scaling: SkillDamageEscalado
-    ): number {
-        let bonification = 0
-        for (const [attribute, value] of Object.entries(scaling.escaladoAtributos) as [CharacterAttribute, number][]) {
-
-            const attributeCharacter = statsGeneral[attribute]
-            const totalAttributeValue = attributeCharacter.bonusPoints + attributeCharacter.lvPoints
-
-            bonification += totalAttributeValue * (value / 100)
-        }
-
-        return 1 + bonification / 100
-    }
-
-    /**
      * Calcula la bonificación de daño otorgada
      * por el nivel actual de la habilidad.
      *
@@ -162,8 +125,7 @@ export class DamageSkillService {
 
         const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
         
-        
-        const multi = this.sharedSkillService.getMultiMasteryLvBonification(skill.lv, scaling)
+        const multi = this.sharedSkillService.getMultiMasteryLvBonification(skill.lv, scaling.escaladoLv)
 
         return (lvPoints * scaling.escaladoLv.perLv) * multi
     }
