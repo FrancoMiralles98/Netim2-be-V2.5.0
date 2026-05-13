@@ -1,5 +1,6 @@
+import { SkillAuraEscalado } from "../config/skill-aura-escalado.type";
+import { SkillDamageEscalado } from "../config/skill-damage-escalado.type";
 import { MasteryLvRank } from "./skill-lv-rank.types";
-import { SkillAuraEscalado, SkillDamageEscalado } from "./skill-scaling.type";
 import { UNIQUE_ID_SKILLS } from "./unique-id-skill.enum";
 
 /**

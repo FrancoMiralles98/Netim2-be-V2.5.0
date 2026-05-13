@@ -1,5 +1,5 @@
-import { StructureCharacterSkillScaling } from "../../types/skill-scaling.type";
-import { UNIQUE_ID_SKILLS } from "../../types/unique-id-skill.enum";
+import { StructureCharacterSkillScaling } from "../../types/config/skill-scaling.type";
+import { UNIQUE_ID_SKILLS } from "../../types/props/unique-id-skill.enum";
 
 export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Luz: {
@@ -22,7 +22,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.LLAMADA_RELAMPAGO]: {
             type: "damage",
@@ -43,7 +43,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.TIRO_RELAMPAGO]: {
             type: "damage",
@@ -64,7 +64,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.GARRA_RELAMPAGO]: {
             type: "damage",
@@ -85,7 +85,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.ATAQUE]: {
             type: "aura",
@@ -150,7 +150,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.RUGIDO_DEL_DRAGON]: {
             type: "damage",
@@ -171,7 +171,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.TALISMAN_VOLADOR]: {
             type: "damage",
@@ -192,7 +192,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.FUERZA_DEL_DRAGON]: {
             type: "aura",

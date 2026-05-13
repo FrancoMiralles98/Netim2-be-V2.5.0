@@ -1,4 +1,4 @@
-import { UNIQUE_ID_SKILLS } from "./unique-id-skill.enum"
+import { UNIQUE_ID_SKILLS } from "../props/unique-id-skill.enum"
 
 export type BonusDamageConfigType = Partial<Record<UNIQUE_ID_SKILLS, ChanceDescription | TierBonusDamageDescription>>
 

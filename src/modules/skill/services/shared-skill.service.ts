@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { MasteryLvRank } from "../types/skill-lv-rank.types";
-import {  SkillDamageEscalado, SkillScalingLv } from "../types/skill-scaling.type";
+import { MasteryLvRank } from "../types/props/skill-lv-rank.types";
 import { TOTAL_LV_POINTS_PER_MASTERY_CONFIG } from "../config/total-lv-points-per-mastery.config";
-import { LetterMasteryLv } from "../types/letter-mastery-lv.type";
+import { LetterMasteryLv } from "../types/config/letter-mastery-lv.type";
 import { CharacterAttribute, CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
+import { SkillScalingLv } from "../types/config/skill-base-escalado.type";
 
 @Injectable()
 export class SharedSkillService {

@@ -1,5 +1,5 @@
-import { StructureCharacterSkillScaling } from "../../types/skill-scaling.type";
-import { UNIQUE_ID_SKILLS } from "../../types/unique-id-skill.enum";
+import { StructureCharacterSkillScaling } from "../../types/config/skill-scaling.type";
+import { UNIQUE_ID_SKILLS } from "../../types/props/unique-id-skill.enum";
 
 export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Daga: {
@@ -22,7 +22,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: true
+            
         },
         [UNIQUE_ID_SKILLS.DAGA_RODANTE]: {
             type: "damage",
@@ -43,7 +43,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: true
+            
         },
         [UNIQUE_ID_SKILLS.NUBE_TOXICA]: {
             type: "damage",
@@ -64,7 +64,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.ATAQUE_RAPIDO]: {
             type: "damage",
@@ -85,7 +85,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.CAMUFLAJE]: {
             type: "damage",
@@ -106,7 +106,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
     },
     Flecha: {
@@ -129,7 +129,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.FLECHA_DE_FUEGO]: {
             type: "damage",
@@ -150,7 +150,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.FLECHA_VENENOSA]: {
             type: "damage",
@@ -171,7 +171,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.LLUVIA_DE_FLECHAS]: {
             type: "damage",
@@ -192,7 +192,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: true
+            
         },
         [UNIQUE_ID_SKILLS.CAMINO_PLUMA]: {
             type: "aura",

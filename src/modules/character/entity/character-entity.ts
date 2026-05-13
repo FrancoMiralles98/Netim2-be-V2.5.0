@@ -5,7 +5,7 @@ import { ItemsToConsumeType } from "src/modules/inventory/types/items-to-consume
 import { InventoryChangeResult } from "src/modules/inventory/types/item-to-update.types";
 import { Position } from "src/modules/item/types/entities-props/item-base.type";
 import { CharacterAttribute, CharacterRace, CharacterSpeciality } from "../types/baseCharacterProps/character-stats.type";
-import { MasteryLvRank } from "src/modules/skill/types/skill-lv-rank.types";
+import { MasteryLvRank } from "src/modules/skill/types/props/skill-lv-rank.types";
 import { ATTRIBUTE_SPECIALITY_CAPS } from "../const/statsProgress/attribute-speciality-caps.const";
 import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.const";
 import { AddItemResult } from "src/modules/inventory/types/inventory-result.types";

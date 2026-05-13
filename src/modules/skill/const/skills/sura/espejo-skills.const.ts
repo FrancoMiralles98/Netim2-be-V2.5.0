@@ -1,5 +1,5 @@
-import { SkillType } from "src/modules/skill/types/skill.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
 
 export const ESPEJO_SKILLS: SkillType[] = [
     {
@@ -20,7 +20,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Realiza una gran explosión con la yema de tus dedos.',
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.GOLPE_DE_DEDO,
     },
     {
@@ -41,7 +41,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       type: 'Daño',
       descripcion:'Provoca un poderoso tornado para derrotar a varios enemigos.',
       icon: { x: 112, y: 0 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.REMOLINO_DRAGON,
     },
     {
@@ -62,7 +62,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       type: 'Daño',
       descripcion: 'Lanza un orbe de anti-magia a tu enemigo.',
       icon: { x: 112, y: 36 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.ANULAR_MAGIA,
     },
     {
@@ -77,7 +77,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       descripcion:
         'Encanta tu espada con magia oscura,incrementa tu valor de ataque y absorberas HP del daño realizado.',
       icon: { x: 0, y: 35 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.HOJA_ENCANTADA,
     },
     {
@@ -91,7 +91,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       type: 'Aura',
       descripcion: 'Proteje tu cuerpo con una armadura oscura.',
       icon: { x: 0, y: 0 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.ARMADURA_ENCANTADA,
     },
     {
@@ -106,7 +106,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       descripcion:
         'Rodeate de una aura maldita y debilita las habilidades de los enemigos que te atacan.',
       icon: { x: 112, y: 71 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.MIEDO,
     },
   ]

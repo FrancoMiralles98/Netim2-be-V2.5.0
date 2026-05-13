@@ -1,6 +1,6 @@
 import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
 import { BaseSkill } from "./base-skill.type";
-import { TierDescription } from "./bonus-damage-config.type";
+import { TierDescription } from "../config/bonus-damage-config.type";
 
 /**
  * Representa una skill de tipo Daño.

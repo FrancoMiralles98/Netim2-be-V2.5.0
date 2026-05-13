@@ -13,7 +13,7 @@ import { MissionOption } from "./mission-option.type";
 import { DungeonInProgressType } from "./dungeon-in-progress.type";
 import { PvpDataType } from "./pvp-data.type";
 import { HistorialInUser } from "./historial-in-user.type";
-import { Skill } from "src/modules/skill/types/skill.type";
+import { Skill } from "src/modules/skill/types/const/skill.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 
 /**

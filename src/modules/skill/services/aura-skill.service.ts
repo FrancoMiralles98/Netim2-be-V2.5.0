@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { AuraSkillType } from "../types/aura-skill.type";
-import { EscaladoBuffos, SkillAuraEscalado } from "../types/skill-scaling.type";
+import { AuraSkillType } from "../types/props/aura-skill.type";
 import { CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { SharedSkillService } from "./shared-skill.service";
+import { EscaladoBuffos, SkillAuraEscalado } from "../types/config/skill-aura-escalado.type";
 
 @Injectable()
 export class AuraSkillService {
@@ -33,9 +33,12 @@ export class AuraSkillService {
             if (!scaling.escaladoBuffos[bonusRefKey] || !updatedSkill.buffos[bonusRefKey]) {
                 throw new Error('No se encuentra el escalado del buffo seleccionado')
             }
+            //Se obtiene los escalados de dicho bonus del aura
             const buffScaling = scaling.escaladoBuffos[bonusRefKey]
 
+            //Se chequea si ese  bonus escala con atributos
             const scaleWithAttribute = buffScaling.scaleWithAtribute
+            
             const totalLvPoints = this.sharedSkillService.getPointsLvBonification(updatedSkill.lv)
             const multi = this.sharedSkillService.getMultiMasteryLvBonification(
                 skill.lv, buffScaling.escaladoLv)

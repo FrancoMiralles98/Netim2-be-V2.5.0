@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { DamageSkillType } from "../types/damage-skill.type";
-import { SkillDamageEscalado } from "../types/skill-scaling.type";
+import { DamageSkillType } from "../types/props/damage-skill.type";
 import { CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { SharedSkillService } from "./shared-skill.service";
 import { BonusDamageService } from "./bonus-damage.service";
+import { SkillDamageEscalado } from "../types/config/skill-damage-escalado.type";
 
 @Injectable()
 export class DamageSkillService {
@@ -11,20 +11,20 @@ export class DamageSkillService {
     constructor(
         private sharedSkillService: SharedSkillService,
         private bonusDamageService: BonusDamageService
-    ){}
+    ) { }
 
     updateDamageSkillStats(
-        skill:DamageSkillType,
-        scaling:SkillDamageEscalado,
-        statsGeneral:CharacterStats['general']
-    ):DamageSkillType {
+        skill: DamageSkillType,
+        scaling: SkillDamageEscalado,
+        statsGeneral: CharacterStats['general']
+    ): DamageSkillType {
 
-        const updatedSkill = {...skill}
+        const updatedSkill = { ...skill }
 
-        updatedSkill.daño = this.calculateDmg(updatedSkill,scaling,statsGeneral)
-        updatedSkill.bonus_efecto = this.calculateBonusEffect(updatedSkill,scaling)
+        updatedSkill.daño = this.calculateDmg(updatedSkill, scaling, statsGeneral)
+        updatedSkill.bonus_efecto = this.calculateBonusEffect(updatedSkill, scaling)
 
-        if (updatedSkill.bonus_damage) {
+        if (this.bonusDamageService.hasBonusDamage(updatedSkill.idSkill)) {
             updatedSkill.bonus_damage = this.bonusDamageService.calculateBonusDamage(updatedSkill)
         }
 
@@ -124,7 +124,7 @@ export class DamageSkillService {
     private getSkillLvBonification(skill: DamageSkillType, scaling: SkillDamageEscalado): number {
 
         const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
-        
+
         const multi = this.sharedSkillService.getMultiMasteryLvBonification(skill.lv, scaling.escaladoLv)
 
         return (lvPoints * scaling.escaladoLv.perLv) * multi

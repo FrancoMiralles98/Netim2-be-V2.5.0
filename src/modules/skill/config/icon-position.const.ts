@@ -15,6 +15,8 @@
  * Estas constantes contienen esos desplazamientos fijos.
  */
 
+import { LetterMasteryLv } from "../types/config/letter-mastery-lv.type"
+
 /**
  * Coordenada en el eje Y para cada skill según su `idPosition`.
  *
@@ -49,7 +51,7 @@ export const ICON_POSITION_Y = {
  * - 'M' → Master
  * - 'G' → Grand Master
  */
-export const ICON_POSITION_X = {
+export const ICON_POSITION_X:Record<3|6,Record<LetterMasteryLv | 'number',number>> = {
     3: { // idPosition con id <=  3
         'number': 0,
         'M': 37,

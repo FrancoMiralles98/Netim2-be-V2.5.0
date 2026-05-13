@@ -1,5 +1,5 @@
-import { StructureCharacterSkillScaling } from "../../types/skill-scaling.type";
-import { UNIQUE_ID_SKILLS } from "../../types/unique-id-skill.enum";
+import { StructureCharacterSkillScaling } from "../../types/config/skill-scaling.type";
+import { UNIQUE_ID_SKILLS } from "../../types/props/unique-id-skill.enum";
 
 export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
     MagiaNegra: {
@@ -22,7 +22,6 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
         [UNIQUE_ID_SKILLS.ESPIRITU_DE_LA_LLAMA]: {
             type: "damage",
@@ -43,7 +42,6 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
         [UNIQUE_ID_SKILLS.GOLPE_ESPIRITUAL]: {
             type: "damage",
@@ -64,7 +62,6 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 34.8, perLv: 1.89 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
         [UNIQUE_ID_SKILLS.GOLPE_DE_LLAMA]: {
             type: "damage",
@@ -85,7 +82,6 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
         [UNIQUE_ID_SKILLS.ORBE_OSCURO]: {
             type: "damage",
@@ -106,7 +102,6 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
         [UNIQUE_ID_SKILLS.PROTECCION_OSCURA]: {
             type: "aura",
@@ -145,7 +140,6 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
         [UNIQUE_ID_SKILLS.REMOLINO_DRAGON]: {
             type: "damage",
@@ -166,7 +160,6 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
         [UNIQUE_ID_SKILLS.ANULAR_MAGIA]: {
             type: "damage",
@@ -187,7 +180,6 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
         [UNIQUE_ID_SKILLS.HOJA_ENCANTADA]: {
             type: "aura",

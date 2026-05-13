@@ -1,5 +1,5 @@
 import { CharacterRace } from "src/modules/character/types/baseCharacterProps/character-stats.type"
-import { StructureCharacterSkillScaling } from "../../types/skill-scaling.type"
+import { StructureCharacterSkillScaling } from "../../types/config/skill-scaling.type"
 import { CHAMAN_SKILLS_SCALING } from "./chaman-skills-scaling.const"
 import { GUERRERO_SKILLS_SCALING } from "./guerrero-skills-scaling.const"
 import { NINJA_SKILLS_SCALING } from "./ninja-skills-scaling.const"

@@ -1,5 +1,5 @@
-import { BonusDamageConfigType } from "../../types/bonus-damage-config.type";
-import { UNIQUE_ID_SKILLS } from "../../types/unique-id-skill.enum";
+import { BonusDamageConfigType } from "../../types/config/bonus-damage-config.type";
+import { UNIQUE_ID_SKILLS } from "../../types/props/unique-id-skill.enum";
 
 export const BONUS_DAMAGE_CONFIG: BonusDamageConfigType = {
     [UNIQUE_ID_SKILLS.EMBOSCADA]: {

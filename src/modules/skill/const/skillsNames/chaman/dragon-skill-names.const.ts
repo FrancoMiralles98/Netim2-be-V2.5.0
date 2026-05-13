@@ -1,7 +1,7 @@
-import { SkillsNamesType } from "src/modules/skill/types/skills-names.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+import { SkillsNamesType } from "src/modules/skill/types/const/skills-names.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
 
-export const dragonSpecialityNames: SkillsNamesType = {
+export const DRAGON_SKILLS_NAMES: SkillsNamesType = {
     [UNIQUE_ID_SKILLS.DISPARO_DEL_DRAGON]: {
         'N': 'Disparo del Dragón',
         'M': 'Ataque del Dragón',

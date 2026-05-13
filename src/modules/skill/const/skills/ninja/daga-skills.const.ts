@@ -1,5 +1,5 @@
-import { SkillType } from "src/modules/skill/types/skill.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
 
 export const DAGA_SKILLS: SkillType[] = [
     {
@@ -19,13 +19,14 @@ export const DAGA_SKILLS: SkillType[] = [
       bonus_damage: {
         type: 'chance',
         value: 0,
+        multi: 0
       },
       idPosition: 1,
       type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Haz un ataque preciso y genera mucho daño, probabilidad de generar golpe mortal (+40% de daño)',
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.EMBOSCADA,
     },
     {
@@ -52,7 +53,7 @@ export const DAGA_SKILLS: SkillType[] = [
       icon: { x: 0, y: 0 },
       descripcion:
         'Girar alrededor del enemigo con una daga y ten probabilidades de generar múltiples daños y causar veneno.',
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.DAGA_RODANTE,
     },
     {
@@ -74,7 +75,7 @@ export const DAGA_SKILLS: SkillType[] = [
       icon: { x: 0, y: 0 },
       descripcion:
         'Realiza nubes venenosas alrededor del enemigo para intoxicarlo.',
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.NUBE_TOXICA,
     },
     {
@@ -96,7 +97,7 @@ export const DAGA_SKILLS: SkillType[] = [
       icon: { x: 0, y: 0 },
       descripcion:
         'Aproximación rápida al enemigo y realizando un ataque sin que el enemigo se de cuenta.',
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.ATAQUE_RAPIDO,
     },
 
@@ -119,7 +120,7 @@ export const DAGA_SKILLS: SkillType[] = [
       icon: { x: 0, y: 0 },
       descripcion:
         'Camufalte para que el enemigo no te vea y aumenta tu daño en tu siguiente habilidad.',
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.CAMUFLAJE,
     },
   ]

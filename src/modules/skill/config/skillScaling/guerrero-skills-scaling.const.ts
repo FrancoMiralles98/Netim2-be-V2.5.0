@@ -1,5 +1,5 @@
-import { StructureCharacterSkillScaling } from "../../types/skill-scaling.type";
-import { UNIQUE_ID_SKILLS } from "../../types/unique-id-skill.enum";
+import { StructureCharacterSkillScaling } from "../../types/config/skill-scaling.type";
+import { UNIQUE_ID_SKILLS } from "../../types/props/unique-id-skill.enum";
 
 export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Corporal: {
@@ -22,7 +22,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 7.5, perLv: 1.5 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.ROCIADA]: {
             type: "damage",
@@ -43,7 +43,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.GIRO_DE_ESPADA]: {
             type: "damage",
@@ -64,7 +64,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.AURA_DE_ESPADA]: {
             type: "aura",
@@ -139,7 +139,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.GOLPE]: {
             type: "damage",
@@ -160,7 +160,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.TOCON]: {
             type: "damage",
@@ -181,7 +181,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.GOLPE_DE_ESPADA]: {
             type: "damage",
@@ -202,7 +202,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
+            
         },
         [UNIQUE_ID_SKILLS.CUERPO_FUERTE]: {
             type: "aura",

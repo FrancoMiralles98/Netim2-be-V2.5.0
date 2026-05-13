@@ -1,5 +1,5 @@
-import { SkillType } from "src/modules/skill/types/skill.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
 
 export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
     {
@@ -21,7 +21,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Lanza fuerza oscura para herir a los enemigos.',
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.GOLPE_OSCURO,
     },
     {
@@ -40,7 +40,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       },
       
       idPosition: 2,
-      escalado: {},
+      
       type: 'Daño',
       descripcion: 'Crea un espíritu de la llama que ataca a los enemigos.',
       icon: { x: 0, y: 35 },
@@ -66,7 +66,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       descripcion:
         'Lanza espíritus oscuros para herir a los enemigos y poder relantizarlos.',
       icon: { x: 0, y: 0 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.GOLPE_ESPIRITUAL,
     },
     {
@@ -88,7 +88,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       type: 'Daño',
       descripcion: 'Quema a tus enemigos con una explosión.',
       icon: { x: 112, y: 0 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.GOLPE_DE_LLAMA,
     },
     {
@@ -110,7 +110,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       type: 'Daño',
       descripcion: 'Lanza un globo oscuro para herir a tus enemigos.',
       icon: { x: 112, y: 71 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.ORBE_OSCURO,
     },
     {
@@ -123,7 +123,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       type: 'Aura',
       descripcion: 'Protégete con el señor oscuro de ataques.',
       icon: { x: 112, y: 36 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.PROTECCION_OSCURA,
     },
   ]

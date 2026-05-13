@@ -1,3 +1,5 @@
+import { LetterMasteryLv } from "../types/config/letter-mastery-lv.type";
+
 /**
  * Cantidad total de puntos efectivos que representa
  * cada rango de maestría de una habilidad.
@@ -11,7 +13,7 @@
  * - `G5` = 31 puntos efectivos
  * - `P` = 37 puntos efectivos
  */
-export const TOTAL_LV_POINTS_PER_MASTERY_CONFIG = {
+export const TOTAL_LV_POINTS_PER_MASTERY_CONFIG:Record<LetterMasteryLv,number> = {
     'M': 16,
     'G': 26,
     'P': 37,

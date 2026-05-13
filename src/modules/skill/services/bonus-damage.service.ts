@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { UNIQUE_ID_SKILLS } from "../types/unique-id-skill.enum";
+import { UNIQUE_ID_SKILLS } from "../types/props/unique-id-skill.enum";
 import { BONUS_DAMAGE_CONFIG } from "../config/specialSkills/bonus-damage.config";
-import { ChanceBonusDamage, DamageSkillType, SkillBonusDamage, TierBonusDamage } from "../types/damage-skill.type";
-import { ChanceDescription, TierBonusDamageDescription } from "../types/bonus-damage-config.type";
-import { MasteryLvRank } from "../types/skill-lv-rank.types";
+import { ChanceBonusDamage, DamageSkillType, SkillBonusDamage, TierBonusDamage } from "../types/props/damage-skill.type";
+import { ChanceDescription, TierBonusDamageDescription } from "../types/config/bonus-damage-config.type";
+import { MasteryLvRank } from "../types/props/skill-lv-rank.types";
 import { SharedSkillService } from "./shared-skill.service";
 import { TIER_X_MASTERY_LV } from "../config/specialSkills/tier-x-master-lv.config";
 

@@ -2,7 +2,7 @@ import { UbicationNames } from "src/modules/gameData/types/ubication-names.type"
 import { SpawnConfig } from "./spawn-config.type";
 import { MobStats } from "./mob-stats.type";
 import { IdMobList } from "../id-mob-list.enum";
-import { SkillType } from "src/modules/skill/types/skill.type";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { MobRace } from "./mob-race.type";

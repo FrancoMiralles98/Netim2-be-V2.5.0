@@ -1,4 +1,4 @@
-import { DamageSkillType } from "../types/damage-skill.type";
+import { DamageSkillType } from "../types/props/damage-skill.type";
 import { BaseSkillEntity } from "./skill-base.entity";
 
 export class DamageSkillEntity extends BaseSkillEntity<DamageSkillType> {

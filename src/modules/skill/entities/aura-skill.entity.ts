@@ -1,4 +1,4 @@
-import { AuraSkillType } from "../types/aura-skill.type";
+import { AuraSkillType } from "../types/props/aura-skill.type";
 import { BaseSkillEntity } from "./skill-base.entity";
 
 export class AuraSkillEntity extends BaseSkillEntity<AuraSkillType> {

@@ -1,4 +1,4 @@
-import { SkillType } from "src/modules/skill/types/skill.type";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { BaseCharacterProps } from "./baseCharacterProps/base-character-props.type";
 import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
 
