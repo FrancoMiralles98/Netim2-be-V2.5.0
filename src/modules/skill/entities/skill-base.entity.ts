@@ -1,16 +1,18 @@
-import { CHANGE_MASTERY_RANK_LV_VALUES } from "../const/change-rank-values.const";
-import { ICON_POSITION_X, ICON_POSITION_Y } from "../const/icon-position.const";
-import { BaseSkill, IconPisition } from "../types/base-skill.type";
-import { MasteryLvRank } from "../types/skill-lv-rank.types";
-import { AuraSkillEntity } from "./aura-skill.entity";
-import { DamageSkillEntity } from "./damage-skill.entity";
+import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
+import { CHANGE_MASTERY_RANK_LV_VALUES } from "../config/change-rank-values.const";
+import { ICON_POSITION_X, ICON_POSITION_Y } from "../config/icon-position.const";
+import { BaseSkill } from "../types/props/base-skill.type";
+import { MasteryLvRank } from "../types/props/skill-lv-rank.types";
+import { ALL_SKILLS_NAMES } from "../const/skillsNames";
+import { NamesByTierMasteryLv } from "../types/const/skills-names.type";
+import { LetterMasteryLv } from "../types/config/letter-mastery-lv.type";
 
 export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
-    protected  props: T
+    protected props: T
 
     constructor(props: T) {
         this.props = props
-     }
+    }
 
     get idSkill(): number {
         return this.props.idSkill
@@ -20,17 +22,8 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
         return this.props.lv
     }
 
-    isDamageSkill(): this is DamageSkillEntity {
-        return this.props.tipo === 'Daño'
-    }
-
-    isAuraSkill(): this is AuraSkillEntity {
-        return this.props.tipo === 'Aura'
-    }
-
     upgradeRankLv(): void {
         this.props.lv = this.getNextLv(this.props.lv)
-        this.props.icon = this.getIconPosition()
     }
 
     /**
@@ -39,17 +32,42 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
      * @note - para saber mas el porque de calcular las posiciones del icono de las skills
      * {@link ICON_POSITION_Y} {@link ICON_POSITION_X}
      */
-    getIconPosition(): IconPisition {
+    updatedIconPosition(): void {
         const ejeY = ICON_POSITION_Y[this.props.idPosition] ?? 0
         const groupOfPosition = this.props.idPosition <= 3 ? 3 : 6
+
         /*en el eje X, para saber su coordenada solo necesitamos si es un numero o la primera letra 
         si la habilidad esta masterizada */
-        const categoryOfLvToUse = typeof this.props.lv === "number" ?
-            'number'
-            : this.props.lv.charAt(0)
+        const categoryOfLvToUse: LetterMasteryLv | 'N' = typeof this.props.lv === "number"
+            ? 'N'
+            : this.props.lv.charAt(0) as LetterMasteryLv
+
         const ejeX = ICON_POSITION_X[groupOfPosition][categoryOfLvToUse] ?? 0
-        return { x: ejeX, y: ejeY }
+
+        this.props.icon = { x: ejeX, y: ejeY }
     }
+
+    /**
+* Actualiza el nombre de la skill segun el nivel de maestría actual de la skill
+*
+* Busca la lista de nombres disponibles para la especialidad indicada
+* y selecciona el nombre correspondiente al tier de maestría actual
+*
+* @param {CharacterSpeciality} speciality - Especialidad del personaje
+* utilizada para obtener la configuración de nombres de habilidades
+*/
+    updateSkillName(speciality: CharacterSpeciality) {
+        const specialitySkillsNames = ALL_SKILLS_NAMES[speciality]
+
+        const skillNames = specialitySkillsNames[this.props.idSkill]
+
+        if (!skillNames) {
+            throw new Error(`No se encuentra el la lista de nombres de la skill idSkill: ${this.props.idSkill}`)
+        }
+
+        this.props.nombre = this.getSkillNameByMasteryTier(skillNames)
+    }
+
 
     /**
      * Incrementa el nivel o rango de una skill según las reglas de progresión:
@@ -71,15 +89,28 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
         if (skillLv === 'P') {
             return skillLv
         }
+
         let newLv: number | MasteryLvRank = 0
+
         if (typeof skillLv === 'number') {
-            newLv = skillLv < 16 ? skillLv + 1 : 'M1'
-        } else {
-            const { letterLv, numberLv } = this.getLetterAndNumberOfMasteryLvRank(skillLv)
-            newLv = numberLv < 10 ?
-                `${letterLv}${numberLv + 1}` as MasteryLvRank
-                : CHANGE_MASTERY_RANK_LV_VALUES[skillLv]
+            return newLv = skillLv < 16 ? skillLv + 1 : 'M1'
         }
+
+        const { letterLv, numberLv } = this.getLetterAndNumberOfMasteryLvRank(skillLv)
+
+        if (numberLv < 10) {
+            newLv  = `${letterLv}${numberLv + 1}` as MasteryLvRank
+        } else {
+
+            const changeMasteryRank = CHANGE_MASTERY_RANK_LV_VALUES[skillLv]
+
+            if (!changeMasteryRank) {
+                throw new Error ('No se encuentra el Cambio de rango de la skill')
+            }
+
+            newLv = changeMasteryRank
+        }
+
         return newLv
     }
 
@@ -93,7 +124,30 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
     private getLetterAndNumberOfMasteryLvRank(skillLv: MasteryLvRank) {
         return {
             numberLv: Number(skillLv.slice(1)),
-            letterLv: skillLv.charAt(0)
+            letterLv: skillLv.charAt(0) as LetterMasteryLv
         }
+    }
+
+
+    /**
+    * Obtiene el nombre correspondiente al tier de maestría actual de la skill.
+    *
+    * - Si la skill aún no está masterizada (lv numérico de 1 a 16),
+    *   se utiliza el tier N.
+    * - Si la skill posee un rango de maestría (`MasteryLvRank`),
+    *   se obtiene automáticamente la letra correspondiente (M, G, P).
+    * 
+    * @param {NamesByTierMasteryLv} namesByTier - Objeto que contiene
+    * los nombres de la skill organizados por tier de maestría.
+    *
+    * @returns {string} Nombre correspondiente al tier actual de la skill.
+    */
+    private getSkillNameByMasteryTier(namesByTier: NamesByTierMasteryLv) {
+
+        const tierOfSkill: LetterMasteryLv | 'N' = typeof this.props === 'number'
+            ? 'N'
+            : this.getLetterAndNumberOfMasteryLvRank(this.props.lv as MasteryLvRank).letterLv
+
+        return namesByTier[tierOfSkill]
     }
 }

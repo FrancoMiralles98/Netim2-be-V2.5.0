@@ -15,6 +15,8 @@
  * Estas constantes contienen esos desplazamientos fijos.
  */
 
+import { LetterMasteryLv } from "../types/config/letter-mastery-lv.type"
+
 /**
  * Coordenada en el eje Y para cada skill según su `idPosition`.
  *
@@ -23,14 +25,14 @@
  * Este valor indica cuánto debe desplazarse verticalmente la imagen
  * para ubicar el icono correcto.
  */
-export const ICON_POSITION_Y = {
+export const ICON_POSITION_Y: Record<number,number> = {
     1: 0,
     2: 35,
     3: 72,
     4: 0,
     5: 36,
     6: 71
-} as const
+} 
 
 /**
  * Coordenadas en el eje X para los iconos según el grupo de skills
@@ -49,17 +51,17 @@ export const ICON_POSITION_Y = {
  * - 'M' → Master
  * - 'G' → Grand Master
  */
-export const ICON_POSITION_X = {
+export const ICON_POSITION_X:Record<3|6,Record<LetterMasteryLv | 'N',number>> = {
     3: { // idPosition con id <=  3
-        'number': 0,
+        'N': 0,
         'M': 37,
         'G': 74,
         'P': 74
     },
     6: { // idPosition > 3 y <= 6
-        'number': 112,
+        'N': 112,
         'M': 149,
         'G': 187,
         'P': 187
     },
-} as const
+}

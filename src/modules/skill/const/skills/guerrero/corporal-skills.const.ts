@@ -1,5 +1,5 @@
-import { SkillType } from "src/modules/skill/types/skill.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
 
 export const CORPORAL_SKILLS: SkillType[] = [
     {
@@ -16,12 +16,11 @@ export const CORPORAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Realiza un ataque frontal tres veces.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.CORTE_DE_TRES_MANERAS,
     },
     {
@@ -38,12 +37,11 @@ export const CORPORAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 3,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Ataca rapidamente con tu cuerpo al oponente, causa desmayo.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.ROCIADA,
     },
     {
@@ -60,12 +58,11 @@ export const CORPORAL_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Gira la espada para atacar al enemigo.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.GIRO_DE_ESPADA,
     },
     {
@@ -77,11 +74,10 @@ export const CORPORAL_SKILLS: SkillType[] = [
         va: 0,
         damage_taken: 0,
       },
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Entra en un estado de ira e incrementa tu velocidad de ataque, de movimiento a cambio de recibir más daño.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.BERSEK,
     },
     {
@@ -91,10 +87,9 @@ export const CORPORAL_SKILLS: SkillType[] = [
         media: 0,
       },
       idPosition: 5,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion: 'Canaliza tu poder en el arma y aumenta tu AD.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.AURA_DE_ESPADA,
     },
   ]

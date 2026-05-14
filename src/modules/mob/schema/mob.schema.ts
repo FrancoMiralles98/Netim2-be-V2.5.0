@@ -6,7 +6,7 @@ import { HydratedDocument } from "mongoose";
 import { IdMobList } from "../types/id-mob-list.enum";
 import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
-import { SkillType } from "src/modules/skill/types/skill.type";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { MobRace } from "../types/mobProps/mob-race.type";
 import { DropConfig } from "../types/mobProps/drop-config.type";
 

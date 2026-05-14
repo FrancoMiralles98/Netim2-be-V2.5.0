@@ -1,5 +1,6 @@
 import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
 import { BaseSkill } from "./base-skill.type";
+import { TierDescription } from "../config/bonus-damage-config.type";
 
 /**
  * Representa una skill de tipo Daño.
@@ -53,15 +54,16 @@ import { BaseSkill } from "./base-skill.type";
  * - índice 1 → daño máximo
  */
 export interface DamageSkillType extends BaseSkill {
-    tipo_daño: 'ad' | 'ap';
-    cd: number;
-    bonus_efecto: SkillBonusEffectList;
-    bonus_damage: number;
-    daño: {min:number, max: number};
+   type: 'Daño';
+   tipo_daño: 'ad' | 'ap';
+   cd: number;
+   bonus_efecto: SkillBonusEffectList;
+   bonus_damage?: SkillBonusDamage;
+   daño: { min: number, max: number };
 }
 
 
-export type SkillBonusEffectList = Record<SkillBonusEffectKeys,number>
+export type SkillBonusEffectList = Record<SkillBonusEffectKeys, number>
 
 /**
  * Los posibles efectos que pueden causar las habilidades
@@ -80,4 +82,19 @@ export type SkillBonusEffectList = Record<SkillBonusEffectKeys,number>
  * el porcentaje de reduccion de defensas al adversario para ese ataque en especifico que tiene la skill
  */
 export type SkillBonusEffectKeys = Extract<BonusRefKeys,
- 'desmayo' | 'incendio' | 'retardo' | 'veneno' | 'sangrado' | 'penetracion_habilidad'>
+   'desmayo' | 'incendio' | 'retardo' | 'veneno' | 'sangrado' | 'penetracion_habilidad'>
+
+   
+export type SkillBonusDamage = TierBonusDamage | ChanceBonusDamage
+
+
+export interface TierBonusDamage {
+   type: 'tier',
+   value: TierDescription["damageConfig"]
+}
+
+export interface ChanceBonusDamage {
+   type: 'chance'
+   value: number;
+   multi: number;
+}

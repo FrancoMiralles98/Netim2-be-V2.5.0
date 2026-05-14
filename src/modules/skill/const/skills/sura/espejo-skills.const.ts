@@ -1,5 +1,5 @@
-import { SkillType } from "src/modules/skill/types/skill.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
 
 export const ESPEJO_SKILLS: SkillType[] = [
     {
@@ -16,12 +16,11 @@ export const ESPEJO_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Realiza una gran explosión con la yema de tus dedos.',
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.GOLPE_DE_DEDO,
     },
     {
@@ -38,12 +37,11 @@ export const ESPEJO_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       descripcion:'Provoca un poderoso tornado para derrotar a varios enemigos.',
       icon: { x: 112, y: 0 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.REMOLINO_DRAGON,
     },
     {
@@ -61,11 +59,10 @@ export const ESPEJO_SKILLS: SkillType[] = [
         sangrado: 0
       },
       idPosition: 6,
-      tipo: 'Daño',
-      bonus_damage: 0,
+      type: 'Daño',
       descripcion: 'Lanza un orbe de anti-magia a tu enemigo.',
       icon: { x: 112, y: 36 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.ANULAR_MAGIA,
     },
     {
@@ -76,11 +73,11 @@ export const ESPEJO_SKILLS: SkillType[] = [
         daño_absorbido_hp: 0,
       },
       idPosition: 2,
-      tipo: 'Aura',
+      type: 'Aura',
       descripcion:
         'Encanta tu espada con magia oscura,incrementa tu valor de ataque y absorberas HP del daño realizado.',
       icon: { x: 0, y: 35 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.HOJA_ENCANTADA,
     },
     {
@@ -91,10 +88,10 @@ export const ESPEJO_SKILLS: SkillType[] = [
         reflectar: 0,
       },
       idPosition: 3,
-      tipo: 'Aura',
+      type: 'Aura',
       descripcion: 'Proteje tu cuerpo con una armadura oscura.',
       icon: { x: 0, y: 0 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.ARMADURA_ENCANTADA,
     },
     {
@@ -105,11 +102,11 @@ export const ESPEJO_SKILLS: SkillType[] = [
         esquivar_ataques: 0,
       },
       idPosition: 5,
-      tipo: 'Aura',
+      type: 'Aura',
       descripcion:
         'Rodeate de una aura maldita y debilita las habilidades de los enemigos que te atacan.',
       icon: { x: 112, y: 71 },
-      escalado: {},
+      
       idSkill: UNIQUE_ID_SKILLS.MIEDO,
     },
   ]

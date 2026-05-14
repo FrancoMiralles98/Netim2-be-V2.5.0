@@ -1,5 +1,5 @@
-import { SkillType } from "src/modules/skill/types/skill.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/unique-id-skill.enum";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
+import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
 
 export const DRAGON_SKILLS: SkillType[] = [
     {
@@ -16,13 +16,12 @@ export const DRAGON_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 4,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion:
         'Dispara una figura de dragón para atacar frontalmente a tus enemigos.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.DISPARO_DEL_DRAGON,
     },
     {
@@ -39,12 +38,11 @@ export const DRAGON_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 1,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Usa el talismán para herir a tus enemigos.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.TALISMAN_VOLADOR,
     },
     {
@@ -61,12 +59,11 @@ export const DRAGON_SKILLS: SkillType[] = [
         veneno: 0,
         sangrado: 0
       },
-      bonus_damage: 0,
+      
       idPosition: 2,
-      tipo: 'Daño',
+      type: 'Daño',
       icon: { x: 0, y: 0 },
       descripcion: 'Ataca a tus enemigos con la figura de un dragón.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.RUGIDO_DEL_DRAGON,
     },
     {
@@ -76,11 +73,10 @@ export const DRAGON_SKILLS: SkillType[] = [
         critico: 0,
       },
       idPosition: 6,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Obten posibilidades de generar golpes criticos con el poder del dragón.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.FUERZA_DEL_DRAGON,
     },
     {
@@ -90,11 +86,10 @@ export const DRAGON_SKILLS: SkillType[] = [
         def_media: 0,
       },
       idPosition: 5,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Ganas resistencia a ataques fisicos mediante un círculo de protección.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.BENDICION,
     },
     {
@@ -104,11 +99,10 @@ export const DRAGON_SKILLS: SkillType[] = [
         reflectar: 0,
       },
       idPosition: 3,
-      tipo: 'Aura',
+      type: 'Aura',
       icon: { x: 0, y: 0 },
       descripcion:
         'Ganas probabilidad de reflectar ataques fisicos mediante un círculo reflectante.',
-      escalado: {},
       idSkill: UNIQUE_ID_SKILLS.REFLECTAR,
     },
   ]

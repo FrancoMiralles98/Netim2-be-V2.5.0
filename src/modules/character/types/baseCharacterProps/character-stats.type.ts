@@ -11,8 +11,7 @@ export type CharacterSpeciality =
   'Daga' |
   'Flecha' |
   'Luz' |
-  'Dragon' |
-  ''
+  'Dragon' 
 
 /**
 * Razas jugables del juego.

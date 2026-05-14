@@ -1,8 +1,11 @@
-import { StructureCharacterSkillScaling } from "../../types/skill-scaling.type";
+import { StructureCharacterSkillScaling } from "../../types/config/skill-scaling.type";
+import { UNIQUE_ID_SKILLS } from "../../types/props/unique-id-skill.enum";
 
 export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
     MagiaNegra: {
-        1: {
+        [UNIQUE_ID_SKILLS.GOLPE_OSCURO]: {
+            type: "damage",
+            cd: 7,
             escaladoMain: { min: 0.60, max: 0.70 },
             escaladoLv: {
                 perLv: 1.5,
@@ -20,9 +23,10 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
-        2: {
+        [UNIQUE_ID_SKILLS.ESPIRITU_DE_LA_LLAMA]: {
+            type: "damage",
+            cd: 3,
             escaladoMain: { min: 0.20, max: 0.20 },
             escaladoLv: {
                 perLv: 1.5,
@@ -40,9 +44,10 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
-        3: {
+        [UNIQUE_ID_SKILLS.GOLPE_ESPIRITUAL]: {
+            type: "damage",
+            cd: 12,
             escaladoMain: { min: 0.74, max: 0.74 },
             escaladoLv: {
                 perLv: 1.5,
@@ -60,9 +65,10 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 34.8, perLv: 1.89 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
-        4: {
+        [UNIQUE_ID_SKILLS.GOLPE_DE_LLAMA]: {
+            type: "damage",
+            cd: 12,
             escaladoMain: { min: 0.80, max: 0.80 },
             escaladoLv: {
                 perLv: 1.5,
@@ -80,9 +86,10 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
-        5: {
+        [UNIQUE_ID_SKILLS.ORBE_OSCURO]: {
+            type: "damage",
+            cd: 24,
             escaladoMain: { min: 1.0, max: 1.0 },
             escaladoLv: {
                 perLv: 1.5,
@@ -100,24 +107,28 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
-        6: {
+        [UNIQUE_ID_SKILLS.PROTECCION_OSCURA]: {
+            type: "aura",
             escaladoAtributos: {},
             escaladoBuffos: {
                 def_hab: {
-                    perLv: 0.27,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
+                    escaladoLv: {
+                        perLv: 0.27,
+                        basicMulti: 1,
+                        masterMulti: 1,
+                        granMasterMulti: 1,
+                        perfectMulti: 1,
+                    },
                     scaleWithAtribute: false
                 },
             },
         },
     },
     Espejo: {
-        7: {
+        [UNIQUE_ID_SKILLS.GOLPE_DE_DEDO]: {
+            type: "damage",
+            cd: 10,
             escaladoMain: { min: 0.7, max: 0.75 },
             escaladoLv: {
                 perLv: 1.5,
@@ -135,9 +146,10 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
-        8: {
+        [UNIQUE_ID_SKILLS.REMOLINO_DRAGON]: {
+            type: "damage",
+            cd: 15,
             escaladoMain: { min: 1, max: 1.12 },
             escaladoLv: {
                 perLv: 1.75,
@@ -155,9 +167,10 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
-        9: {
+        [UNIQUE_ID_SKILLS.ANULAR_MAGIA]: {
+            type: "damage",
+            cd: 12,
             escaladoMain: { min: 0.75, max: 0.75 },
             escaladoLv: {
                 perLv: 1.5,
@@ -175,67 +188,81 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 retardo: { base: 0, perLv: 0 },
                 sangrado: { base: 0, perLv: 0 }
             },
-            escaladoBonusDamage: false
         },
-        10: {
+        [UNIQUE_ID_SKILLS.HOJA_ENCANTADA]: {
+            type: "aura",
             escaladoAtributos: { INT: 1.5, VIT: 0.5 },
             escaladoBuffos: {
                 media: {
-                    perLv: 0.7,
-                    basicMulti: 1,
-                    masterMulti: 1.05,
-                    granMasterMulti: 1.1,
-                    perfectMulti: 1.15,
+                    escaladoLv: {
+                        perLv: 0.7,
+                        basicMulti: 1,
+                        masterMulti: 1.05,
+                        granMasterMulti: 1.1,
+                        perfectMulti: 1.15,
+                    },
                     scaleWithAtribute: true
                 },
                 daño_absorbido_hp: {
-                    perLv: 0.27,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
+                    escaladoLv: {
+                        perLv: 0.27,
+                        basicMulti: 1,
+                        masterMulti: 1,
+                        granMasterMulti: 1,
+                        perfectMulti: 1,
+                    },
                     scaleWithAtribute: false
                 },
             },
         },
-        11: {
+        [UNIQUE_ID_SKILLS.ARMADURA_ENCANTADA]: {
+            type: "aura",
             escaladoAtributos: {},
             escaladoBuffos: {
                 def_media: {
-                    perLv: 0.22,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
+                    escaladoLv: {
+                        perLv: 0.22,
+                        basicMulti: 1,
+                        masterMulti: 1,
+                        granMasterMulti: 1,
+                        perfectMulti: 1,
+                    },
                     scaleWithAtribute: false
                 },
                 reflectar: {
-                    perLv: 0.55,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
+                    escaladoLv: {
+                        perLv: 0.55,
+                        basicMulti: 1,
+                        masterMulti: 1,
+                        granMasterMulti: 1,
+                        perfectMulti: 1,
+                    },
                     scaleWithAtribute: false
                 },
             },
         },
-        12: {
+        [UNIQUE_ID_SKILLS.MIEDO]: {
+            type: "aura",
             escaladoAtributos: {},
             escaladoBuffos: {
                 bloquear_ataques: {
-                    perLv: 0.4,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
+                    escaladoLv: {
+                        perLv: 0.4,
+                        basicMulti: 1,
+                        masterMulti: 1,
+                        granMasterMulti: 1,
+                        perfectMulti: 1,
+                    },
                     scaleWithAtribute: false
                 },
                 esquivar_ataques: {
-                    perLv: 0.4,
-                    basicMulti: 1,
-                    masterMulti: 1,
-                    granMasterMulti: 1,
-                    perfectMulti: 1,
+                    escaladoLv: {
+                        perLv: 0.4,
+                        basicMulti: 1,
+                        masterMulti: 1,
+                        granMasterMulti: 1,
+                        perfectMulti: 1,
+                    },
                     scaleWithAtribute: false
                 },
             },

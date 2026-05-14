@@ -20,7 +20,7 @@ import { BASE_PVP_DATA } from "../const/characterProps/base-pvp-data-default.con
 import { BASE_DUNGEON_IN_PROGRESS } from "../const/characterProps/base-dungeon-in-progress.const";
 import { BASE_MISSION_IN_PROGRESS } from "../const/characterProps/base-mission-in-progress.const";
 import { HydratedDocument } from "mongoose";
-import { SkillType } from "src/modules/skill/types/skill.type";
+import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 
 @Schema({ timestamps: true })
