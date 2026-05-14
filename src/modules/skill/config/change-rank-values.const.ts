@@ -1,3 +1,4 @@
+import { MasteryLvRank } from "../types/props/skill-lv-rank.types";
 
 /**
  * Define la transición automática entre rangos de mastery de una skill.
@@ -21,7 +22,7 @@
  * Solo se incluyen los niveles que generan un cambio de rango,
  * no los incrementos internos (ej: M1 → M2).
  */
-export const CHANGE_MASTERY_RANK_LV_VALUES = {
+export const CHANGE_MASTERY_RANK_LV_VALUES: Partial<Record<MasteryLvRank,MasteryLvRank>> = {
     'M10':'G1',
     'G10':'P'
-} as const
+} 

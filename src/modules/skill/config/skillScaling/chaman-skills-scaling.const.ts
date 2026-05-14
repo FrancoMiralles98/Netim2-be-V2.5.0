@@ -5,6 +5,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Luz: {
         [UNIQUE_ID_SKILLS.CURACION]: {
             type: "damage",
+            cd: 10,
             escaladoMain: { min: 0.66, max: 0.80 },
             escaladoLv: {
                 perLv: 2,
@@ -26,6 +27,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.LLAMADA_RELAMPAGO]: {
             type: "damage",
+            cd: 15,
             escaladoMain: { min: 0.65, max: 1.1 },
             escaladoLv: {
                 perLv: 1.5,
@@ -47,6 +49,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.TIRO_RELAMPAGO]: {
             type: "damage",
+            cd: 7,
             escaladoMain: { min: 0.62, max: 0.70 },
             escaladoLv: {
                 perLv: 1.50,
@@ -68,6 +71,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.GARRA_RELAMPAGO]: {
             type: "damage",
+            cd: 10,
             escaladoMain: { min: 0.73, max: 0.82 },
             escaladoLv: {
                 perLv: 1.50,
@@ -133,6 +137,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Dragon: {
         [UNIQUE_ID_SKILLS.DISPARO_DEL_DRAGON]: {
             type: "damage",
+            cd: 8,
             escaladoMain: { min: 0.70, max: 0.70 },
             escaladoLv: {
                 perLv: 1.50,
@@ -154,6 +159,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.RUGIDO_DEL_DRAGON]: {
             type: "damage",
+            cd: 20,
             escaladoMain: { min: 0.80, max: 1.10 },
             escaladoLv: {
                 perLv: 1.5,
@@ -175,6 +181,7 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.TALISMAN_VOLADOR]: {
             type: "damage",
+            cd: 7,
             escaladoMain: { min: 0.66, max: 0.74 },
             escaladoLv: {
                 perLv: 1.5,

@@ -23,6 +23,7 @@ export class DamageSkillService {
 
         updatedSkill.daño = this.calculateDmg(updatedSkill, scaling, statsGeneral)
         updatedSkill.bonus_efecto = this.calculateBonusEffect(updatedSkill, scaling)
+        updatedSkill.cd = scaling.cd
 
         if (this.bonusDamageService.hasBonusDamage(updatedSkill.idSkill)) {
             updatedSkill.bonus_damage = this.bonusDamageService.calculateBonusDamage(updatedSkill)

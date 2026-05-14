@@ -8,9 +8,9 @@ export class SkillFactory {
     static create(skill: DamageSkillType | AuraSkillType): SkillEntity {
         switch (skill.type) {
             case 'Aura':
-                return new AuraSkillEntity(skill as AuraSkillType)
+                return new AuraSkillEntity(skill)
             case 'Daño': 
-                return new DamageSkillEntity(skill as DamageSkillType)
+                return new DamageSkillEntity(skill)
             default:
                 throw new Error('No se pudo identificar el tipo de skill')
         }

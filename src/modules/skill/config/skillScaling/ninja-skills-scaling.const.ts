@@ -5,6 +5,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Daga: {
         [UNIQUE_ID_SKILLS.EMBOSCADA]: {
             type: "damage",
+            cd: 12,
             escaladoMain: { min: 0.82, max: 0.86 },
             escaladoLv: {
                 perLv: 1.5,
@@ -26,6 +27,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.DAGA_RODANTE]: {
             type: "damage",
+            cd: 18,
             escaladoMain: { min: 0.75, max: 0.75 },
             escaladoLv: {
                 perLv: 1.5,
@@ -47,6 +49,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.NUBE_TOXICA]: {
             type: "damage",
+            cd: 18,
             escaladoMain: { min: 1.0, max: 1.13 },
             escaladoLv: {
                 perLv: 1.5,
@@ -68,6 +71,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.ATAQUE_RAPIDO]: {
             type: "damage",
+            cd: 16,
             escaladoMain: { min: 1.05, max: 1.27 },
             escaladoLv: {
                 perLv: 1.5,
@@ -89,6 +93,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.CAMUFLAJE]: {
             type: "damage",
+            cd: 20,
             escaladoMain: { min: 0.0, max: 0.0 },
             escaladoLv: {
                 perLv: 1,
@@ -112,6 +117,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Flecha: {
         [UNIQUE_ID_SKILLS.DISPARO_REPETIDO]: {
             type: "damage",
+            cd: 14,
             escaladoMain: { min: 0.8, max: 0.84 },
             escaladoLv: {
                 perLv: 1.5,
@@ -133,6 +139,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.FLECHA_DE_FUEGO]: {
             type: "damage",
+            cd: 17,
             escaladoMain: { min: 1.0, max: 1.06 },
             escaladoLv: {
                 perLv: 1.5,
@@ -154,6 +161,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.FLECHA_VENENOSA]: {
             type: "damage",
+            cd: 20,
             escaladoMain: { min: 0.61, max: 0.67 },
             escaladoLv: {
                 perLv: 1.5,
@@ -175,6 +183,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.LLUVIA_DE_FLECHAS]: {
             type: "damage",
+            cd: 14,
             escaladoMain: { min: 0.50, max: 0.50 },
             escaladoLv: {
                 perLv: 1.5,

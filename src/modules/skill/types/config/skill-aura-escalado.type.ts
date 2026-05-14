@@ -1,6 +1,5 @@
 import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
-import { SkillBaseEscalado } from "./skill-base-escalado.type";
-import { SkillScalingLv } from "./skill-scaling.type";
+import { SkillBaseEscalado, SkillScalingLv } from "./skill-base-escalado.type";
 
 /**
  * Define los escalados aplicados a las skills de tipo Aura.

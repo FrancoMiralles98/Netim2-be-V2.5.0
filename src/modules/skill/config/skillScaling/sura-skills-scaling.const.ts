@@ -5,6 +5,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
     MagiaNegra: {
         [UNIQUE_ID_SKILLS.GOLPE_OSCURO]: {
             type: "damage",
+            cd: 7,
             escaladoMain: { min: 0.60, max: 0.70 },
             escaladoLv: {
                 perLv: 1.5,
@@ -25,6 +26,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.ESPIRITU_DE_LA_LLAMA]: {
             type: "damage",
+            cd: 3,
             escaladoMain: { min: 0.20, max: 0.20 },
             escaladoLv: {
                 perLv: 1.5,
@@ -45,6 +47,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.GOLPE_ESPIRITUAL]: {
             type: "damage",
+            cd: 12,
             escaladoMain: { min: 0.74, max: 0.74 },
             escaladoLv: {
                 perLv: 1.5,
@@ -65,6 +68,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.GOLPE_DE_LLAMA]: {
             type: "damage",
+            cd: 12,
             escaladoMain: { min: 0.80, max: 0.80 },
             escaladoLv: {
                 perLv: 1.5,
@@ -85,6 +89,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.ORBE_OSCURO]: {
             type: "damage",
+            cd: 24,
             escaladoMain: { min: 1.0, max: 1.0 },
             escaladoLv: {
                 perLv: 1.5,
@@ -123,6 +128,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Espejo: {
         [UNIQUE_ID_SKILLS.GOLPE_DE_DEDO]: {
             type: "damage",
+            cd: 10,
             escaladoMain: { min: 0.7, max: 0.75 },
             escaladoLv: {
                 perLv: 1.5,
@@ -143,6 +149,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.REMOLINO_DRAGON]: {
             type: "damage",
+            cd: 15,
             escaladoMain: { min: 1, max: 1.12 },
             escaladoLv: {
                 perLv: 1.75,
@@ -163,6 +170,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.ANULAR_MAGIA]: {
             type: "damage",
+            cd: 12,
             escaladoMain: { min: 0.75, max: 0.75 },
             escaladoLv: {
                 perLv: 1.5,

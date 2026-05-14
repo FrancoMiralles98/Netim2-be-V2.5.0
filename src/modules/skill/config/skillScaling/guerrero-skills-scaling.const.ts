@@ -5,6 +5,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Corporal: {
         [UNIQUE_ID_SKILLS.CORTE_DE_TRES_MANERAS]: {
             type: "damage",
+            cd: 12,
             escaladoMain: { min: 0.85, max: 0.85 },
             escaladoLv: {
                 perLv: 1.5,
@@ -26,6 +27,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.ROCIADA]: {
             type: "damage",
+            cd: 16,
             escaladoMain: { min: 1.0, max: 1.0 },
             escaladoLv: {
                 perLv: 1.5,
@@ -47,6 +49,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.GIRO_DE_ESPADA]: {
             type: "damage",
+            cd: 15,
             escaladoMain: { min: 1.20, max: 1.33 },
             escaladoLv: {
                 perLv: 1.5,
@@ -122,6 +125,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
     Mental: {
         [UNIQUE_ID_SKILLS.PULSO_ESPIRITUAL]: {
             type: "damage",
+            cd: 17,
             escaladoMain: { min: 1.04, max: 1.16 },
             escaladoLv: {
                 perLv: 1.5,
@@ -143,6 +147,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.GOLPE]: {
             type: "damage",
+            cd: 13,
             escaladoMain: { min: 0.83, max: 1.03 },
             escaladoLv: {
                 perLv: 1.5,
@@ -164,6 +169,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.TOCON]: {
             type: "damage",
+            cd: 18,
             escaladoMain: { min: 0.83, max: 0.87 },
             escaladoLv: {
                 perLv: 1.5,
@@ -185,6 +191,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.GOLPE_DE_ESPADA]: {
             type: "damage",
+            cd: 14,
             escaladoMain: { min: 0.70, max: 0.80 },
             escaladoLv: {
                 perLv: 1.50,

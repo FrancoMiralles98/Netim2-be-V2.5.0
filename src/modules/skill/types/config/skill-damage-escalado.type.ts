@@ -22,6 +22,9 @@ import { SkillBaseEscalado, SkillScalingLv } from "./skill-base-escalado.type";
  * Si el personaje tiene 100 de daño y escaladoMain = { min: 0.8, max: 1.2 }:
  * - daño mínimo → 100 * 0.8 = 80
  * - daño máximo → 100 * 1.2 = 120
+ * 
+ *  @property {number} cd
+ *  El cd de la habilidad
  *
  * @property {@link SkillScalingLv} escaladoLv
  * Escalado del daño en función del nivel y rango de la skill.
@@ -47,6 +50,7 @@ import { SkillBaseEscalado, SkillScalingLv } from "./skill-base-escalado.type";
 export interface SkillDamageEscalado extends SkillBaseEscalado {
     type: 'damage';
     escaladoMain: { min: number, max: number };
+    cd: number;
     escaladoLv: SkillScalingLv
     escaladoEfecto: Record<SkillBonusEffectKeys, SkillScalingEffect>
 }
@@ -85,5 +89,5 @@ export interface SkillDamageEscalado extends SkillBaseEscalado {
  * → valor final = 20 + (1 * 15) = 35%
  */
 export interface SkillScalingEffect {
-    base:number,perLv:number
+    base: number, perLv: number
 }

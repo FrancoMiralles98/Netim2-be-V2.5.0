@@ -1,7 +1,7 @@
 import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { CHANGE_MASTERY_RANK_LV_VALUES } from "../config/change-rank-values.const";
 import { ICON_POSITION_X, ICON_POSITION_Y } from "../config/icon-position.const";
-import { BaseSkill, IconPisition } from "../types/props/base-skill.type";
+import { BaseSkill } from "../types/props/base-skill.type";
 import { MasteryLvRank } from "../types/props/skill-lv-rank.types";
 import { ALL_SKILLS_NAMES } from "../const/skillsNames";
 import { NamesByTierMasteryLv } from "../types/const/skills-names.type";
@@ -38,13 +38,36 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
 
         /*en el eje X, para saber su coordenada solo necesitamos si es un numero o la primera letra 
         si la habilidad esta masterizada */
-        const categoryOfLvToUse = typeof this.props.lv === "number" ?
-            'number'
-            : this.props.lv.charAt(0)
+        const categoryOfLvToUse: LetterMasteryLv | 'N' = typeof this.props.lv === "number"
+            ? 'N'
+            : this.props.lv.charAt(0) as LetterMasteryLv
+
         const ejeX = ICON_POSITION_X[groupOfPosition][categoryOfLvToUse] ?? 0
 
-        this.props.icon =  { x: ejeX, y: ejeY }
+        this.props.icon = { x: ejeX, y: ejeY }
     }
+
+    /**
+* Actualiza el nombre de la skill segun el nivel de maestría actual de la skill
+*
+* Busca la lista de nombres disponibles para la especialidad indicada
+* y selecciona el nombre correspondiente al tier de maestría actual
+*
+* @param {CharacterSpeciality} speciality - Especialidad del personaje
+* utilizada para obtener la configuración de nombres de habilidades
+*/
+    updateSkillName(speciality: CharacterSpeciality) {
+        const specialitySkillsNames = ALL_SKILLS_NAMES[speciality]
+
+        const skillNames = specialitySkillsNames[this.props.idSkill]
+
+        if (!skillNames) {
+            throw new Error(`No se encuentra el la lista de nombres de la skill idSkill: ${this.props.idSkill}`)
+        }
+
+        this.props.nombre = this.getSkillNameByMasteryTier(skillNames)
+    }
+
 
     /**
      * Incrementa el nivel o rango de una skill según las reglas de progresión:
@@ -66,15 +89,28 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
         if (skillLv === 'P') {
             return skillLv
         }
+
         let newLv: number | MasteryLvRank = 0
+
         if (typeof skillLv === 'number') {
-            newLv = skillLv < 16 ? skillLv + 1 : 'M1'
-        } else {
-            const { letterLv, numberLv } = this.getLetterAndNumberOfMasteryLvRank(skillLv)
-            newLv = numberLv < 10 ?
-                `${letterLv}${numberLv + 1}` as MasteryLvRank
-                : CHANGE_MASTERY_RANK_LV_VALUES[skillLv]
+            return newLv = skillLv < 16 ? skillLv + 1 : 'M1'
         }
+
+        const { letterLv, numberLv } = this.getLetterAndNumberOfMasteryLvRank(skillLv)
+
+        if (numberLv < 10) {
+            newLv  = `${letterLv}${numberLv + 1}` as MasteryLvRank
+        } else {
+
+            const changeMasteryRank = CHANGE_MASTERY_RANK_LV_VALUES[skillLv]
+
+            if (!changeMasteryRank) {
+                throw new Error ('No se encuentra el Cambio de rango de la skill')
+            }
+
+            newLv = changeMasteryRank
+        }
+
         return newLv
     }
 
@@ -92,26 +128,6 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
         }
     }
 
-    /**
-    * Actualiza el nombre de la skill segun el nivel de maestría actual de la skill
-    *
-    * Busca la lista de nombres disponibles para la especialidad indicada
-    * y selecciona el nombre correspondiente al tier de maestría actual
-    *
-    * @param {CharacterSpeciality} speciality - Especialidad del personaje
-    * utilizada para obtener la configuración de nombres de habilidades
-    */
-    updateSkillName(speciality: CharacterSpeciality) {
-        const specialitySkillsNames = ALL_SKILLS_NAMES[speciality]
-
-        const skillNames = specialitySkillsNames[this.props.idSkill]
-
-        if (!skillNames) {
-            throw new Error(`No se encuentra el la lista de nombres de la skill idSkill: ${this.props.idSkill}`)
-        }
-
-        this.props.nombre = this.getSkillNameByMasteryTier(skillNames)
-    }
 
     /**
     * Obtiene el nombre correspondiente al tier de maestría actual de la skill.
@@ -127,7 +143,8 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
     * @returns {string} Nombre correspondiente al tier actual de la skill.
     */
     private getSkillNameByMasteryTier(namesByTier: NamesByTierMasteryLv) {
-        let tierOfSkill: LetterMasteryLv | 'N' = typeof this.props === 'number'
+
+        const tierOfSkill: LetterMasteryLv | 'N' = typeof this.props === 'number'
             ? 'N'
             : this.getLetterAndNumberOfMasteryLvRank(this.props.lv as MasteryLvRank).letterLv
 

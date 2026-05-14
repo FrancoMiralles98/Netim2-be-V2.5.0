@@ -9,6 +9,7 @@ import { AuraSkillService } from './services/aura-skill.service';
 import { SkillFactory } from './factories/skill.factory';
 import { SkillAuraEscalado } from './types/config/skill-aura-escalado.type';
 import { SkillDamageEscalado } from './types/config/skill-damage-escalado.type';
+import { ALL_SKILLS } from './const/skills';
 
 @Injectable()
 export class SkillService {
@@ -19,18 +20,34 @@ export class SkillService {
     ) { }
 
     /**
-     * Obtiene una skill completa actualizada
+    * Obtiene el listado de skills disponibles
+    * para una especialidad específica.
+    *
+    * @param {CharacterSpeciality} speciality - Especialidad del personaje.
+    *
+    * @returns {SkillType[]} Array de skills pertenecientes
+    * a la especialidad indicada.
+    */
+    getSpecialitySkillPool(speciality: CharacterSpeciality): SkillType[] {
+        return ALL_SKILLS[speciality]
+    }
+
+    /**
+     * Obtiene una skill completa actualizada con opcion de aumentar de nivel
      *
      * - Se Crea la entidad de la skill
      * - Actualiza el nombre según el mastery tier
      * - Actualiza la posición del ícono segun el la masterizacion de la skill
      * - Calcula los efectos y daños de las skill de daño y auras
      *
+     * - Y se tiene la opcion de aumentar el nivel de la habilidad
+     * 
      * @param {SkillType} skill - Skill base a actualizar
      * @param {CharacterRace} race - Raza del personaje
      * @param {CharacterSpeciality} speciality - Especialidad del personaje
      * @param {CharacterStats['general']} statsGeneral - Estadísticas generales
      * utilizadas para calcular los escalados
+     * @param {boolean} lvUp - Opcion de aumentar de nivel la habilidad
      *
      * @returns {SkillType} Skill completamente actualizada.
      */
@@ -38,9 +55,14 @@ export class SkillService {
         skill: SkillType,
         race: CharacterRace,
         speciality: CharacterSpeciality,
-        statsGeneral: CharacterStats['general']
+        statsGeneral: CharacterStats['general'],
+        lvUp: boolean = false
     ): SkillType {
         const skillEntity = SkillFactory.create(skill)
+
+        if (lvUp) {
+            skillEntity.upgradeRankLv()
+        }
 
         skillEntity.updateSkillName(speciality)
         skillEntity.updatedIconPosition()
@@ -48,7 +70,7 @@ export class SkillService {
         const skillUpdated = skillEntity.toPrimitives()
 
         return this.calculateSkillEffect(skillUpdated, race, speciality, statsGeneral)
-    } 
+    }
 
 
     /**
