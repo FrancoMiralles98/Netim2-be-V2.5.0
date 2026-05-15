@@ -9,6 +9,7 @@ import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { MobRace } from "../types/mobProps/mob-race.type";
 import { DropConfig } from "../types/mobProps/drop-config.type";
+import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 
 @Schema()
 export class MobModel {
@@ -53,6 +54,9 @@ export class MobModel {
 
     @Prop({ type: String, required: true })
     target_type!: AllTargetType;
+
+     @Prop({ type: String, required: true })
+    type_weapon!: TypeWeapon;
 
     @Prop({ type: Object, required: true })
     drop_config!: DropConfig;

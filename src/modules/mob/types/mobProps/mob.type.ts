@@ -7,6 +7,7 @@ import { CharacterSpeciality } from "src/modules/character/types/baseCharacterPr
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { MobRace } from "./mob-race.type";
 import { DropConfig } from "./drop-config.type";
+import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 
 /**
  * Representa la estructura completa de un mob
@@ -74,6 +75,7 @@ export interface MobType {
     raza: MobRace;
     target_type: AllTargetType;
     especialidad: CharacterSpeciality;
+    type_weapon: TypeWeapon;
     drop_config: DropConfig;
     discovery: number;
 }

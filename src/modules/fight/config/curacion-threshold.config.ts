@@ -1,0 +1,1 @@
+export const CURACION_THRESHLOD = 60

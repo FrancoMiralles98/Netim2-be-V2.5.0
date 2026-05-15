@@ -5,8 +5,9 @@ import { CharacterRace } from "src/modules/character/types/baseCharacterProps/ch
 import { MobRace } from "src/modules/mob/types/mobProps/mob-race.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
+import { SpawnConfig } from "src/modules/mob/types/mobProps/spawn-config.type";
 
-export interface FightEntityType {
+export interface FighterType {
     stats: FightStats,
     hab: SkillType[],
     fight_details: FightDetails,
@@ -14,4 +15,5 @@ export interface FightEntityType {
     raza: CharacterRace | MobRace
     target_type: AllTargetType
     type_weapon: TypeWeapon | ''
+    spawnConfig?: SpawnConfig
 }
