@@ -1,6 +1,6 @@
 import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
 
-export interface MobStats {
+export interface FightStats {
   general: {
     hp: {actual:number, max: number};
     regen_hp: number;

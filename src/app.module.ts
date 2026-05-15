@@ -14,6 +14,7 @@ import { InventoryModule } from './modules/inventory/inventory.module';
 import { SkillModule } from './modules/skill/skill.module';
 import { CharacterModule } from './modules/character/character.module';
 import { MobModule } from './modules/mob/mob.module';
+import { FightModule } from './modules/fight/fight.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { MobModule } from './modules/mob/mob.module';
     InventoryModule,
     SkillModule,
     CharacterModule,
-    MobModule
+    MobModule,
+    FightModule
   ],
   controllers: [AppController],
   providers: [AppService],
