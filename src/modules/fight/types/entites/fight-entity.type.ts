@@ -16,4 +16,29 @@ export interface FighterType {
     target_type: AllTargetType
     type_weapon: TypeWeapon | ''
     spawnConfig?: SpawnConfig
+    effects: FighterEffectDescription
+}
+
+
+export interface FighterEffectDescription {
+    veneno: DmgEffectDescription;
+    incendio: DmgEffectDescription;
+    sangrado: DmgEffectDescription;
+    desmayo: CcEffectDescription;
+    retardo: CcEffectDescription;
+    doble_golpe: boolean;
+}
+
+export interface DmgEffectDescription extends BasicEffectDescription {
+    dmgOfEffect: number;
+    type: 'damage'
+}
+
+export interface CcEffectDescription extends BasicEffectDescription {
+    type: 'cc'
+}
+
+export interface BasicEffectDescription {
+    isActive: boolean;
+    turnsRemaining: number;
 }

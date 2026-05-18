@@ -10,5 +10,6 @@ export class FightTurnService {
         defender: FighterType
     ): FightDetails {
         
+        
     }
 }

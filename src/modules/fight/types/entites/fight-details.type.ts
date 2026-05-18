@@ -33,7 +33,7 @@ export interface FightDetails {
   flecha_esquivado: number;
   ataque_anulado: number;
   turno_anulado: number;
-  skills_used: SkillDamageInFightStats[];
+  skills_used: SkillDamageInFight[];
 }
 
 /**
@@ -57,7 +57,7 @@ export interface FightDetails {
  * @property {number} idSkill
  * ID único de la skill.
  */
-export interface SkillDamageInFightStats {
+export interface SkillDamageInFight {
   isLearned: boolean;
   cdSkill: number;
   maxDmg: number;
