@@ -13,16 +13,19 @@ export interface SkillDmgDescriptionType {
     bonus_damage?: SkillBonusDamage;
     dmg: number;
     effectsChances: {
-        veneno: number;
-        incendio: number;
-        sangrado: number;
-        desmayo: number;
-        retardo: number;
+        veneno: boolean;
+        incendio: boolean;
+        sangrado: boolean;
+        critico: boolean;
+        desmayo: boolean;
+        retardo: boolean;
         penetracion_habilidad: number
     },
     potentialSkill?: {
         idSkill: number;
+        cd: number;
         dmgBonificated: number;
+        bonusToAdd: number;
     }
 }
 
@@ -30,12 +33,14 @@ export interface BasicAttackDescriptionType {
     type_action: 'basic_attack'
     dmg: number;
     effectsChances: {
-        veneno: number;
-        incendio: number;
-        sangrado: number;
-        desmayo: number;
-        retardo: number;
-        doble_golpe: number;
+        veneno: boolean;
+        incendio: boolean;
+        sangrado: boolean;
+        critico: boolean;
+        desmayo: boolean;
+        penetracion: boolean;
+        retardo: boolean;
+        doble_golpe: boolean;
     }
 }
 
