@@ -2,17 +2,20 @@ import { Injectable } from "@nestjs/common";
 import { BasicAttackDescriptionType } from "../../types/services/damage-description.type";
 import { FightStats } from "../../types/entites/fight-stats.type";
 import { RngService } from "src/modules/shared/services/rng.service";
-import { FighterType } from "../../types/entites/fight-entity.type";
+import { FighterEffectDescription, FighterType } from "../../types/entites/fight-entity.type";
+import { EffectsService } from "../effect.service";
 
 @Injectable()
 export class FightBasicAttackService {
 
     constructor(
-        private rngService: RngService
+        private rngService: RngService,
+        private effectService: EffectsService
     ) { }
 
     useBasicAttack(
-        stats: FightStats
+        stats: FightStats,
+        attackerEffect: FighterEffectDescription
     ): BasicAttackDescriptionType {
         return {
             dmg: this.rngService.randomNumberInRange(stats.general.ad.min, stats.general.ad.max),
@@ -25,7 +28,8 @@ export class FightBasicAttackService {
                 veneno: this.rngService.rollChance(stats.bonus.daño.veneno),
                 sangrado: this.rngService.rollChance(stats.bonus.daño.sangrado),
                 penetracion: this.rngService.rollChance(stats.bonus.daño.penetracion),
-                doble_golpe: this.rngService.rollChance(stats.general.va)
+                doble_golpe: this.rngService.rollChance(
+                    this.effectService.calculateRetardoEffect(attackerEffect,'va',stats.general.va))
             }
         }
     }

@@ -22,7 +22,7 @@ export class AttackerService {
                 attacker.hab,
                 attacker.stats
             )
-            || this.fightBasicAttackService.useBasicAttack(attacker.stats)
+            || this.fightBasicAttackService.useBasicAttack(attacker.stats,attacker.effects)
 
         if (action.type_action === 'healing') {
             return action

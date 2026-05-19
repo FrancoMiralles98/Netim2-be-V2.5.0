@@ -9,6 +9,8 @@ Cambios estructurales de las props de character
 - ahora la prop de "hab" , "especialidad","raza","type_weapon","target_type" esta en un orden superior y ya no se encuentra dentro de la prop de "stats"
 - Se ha reestructurado el "BonusInItem" y "PiedraInItem"
 - Se saco el bonus "esquivar_flechas"
+- Se cambio el sistema de VH, ahora la vh es la cantidad de CDR que se tiene , no se hace un calculo
+- Se cambio el sistema de VM, ahora la vm es la cantidad porcentual de esquivar ataques, no se hace un calculo
 
 MODULO    
     - bonus:

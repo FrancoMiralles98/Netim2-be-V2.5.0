@@ -9,6 +9,7 @@ export type ActionAttackerType =
 export interface SkillDmgDescriptionType {
     type_action: 'skill',
     idSkill: number;
+    type_damage: 'ad' | 'ap'
     cd: number;
     bonus_damage?: SkillBonusDamage;
     dmg: number;

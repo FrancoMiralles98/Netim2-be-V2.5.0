@@ -143,6 +143,7 @@ export class FightSkillService {
                 sangrado: this.rngService.rollChance(skillInfo.bonus_efecto.sangrado),
                 penetracion_habilidad: skillInfo.bonus_efecto.penetracion_habilidad,
             },
+            type_damage: skillInfo.tipo_daño,
             cd: skillInfo.cd,
             bonus_damage: skillInfo.bonus_damage ? skillInfo.bonus_damage : undefined,
             idSkill: skillInfo.idSkill,
