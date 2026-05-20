@@ -27,11 +27,10 @@ export interface FightDetails {
   ad_mitigado: number;
   ap_mitigado: number;
   vida_curada: number;
-  ataque_bloqueado: number;
-  ataque_esquivado: number;
+  ataques_bloqueados: number;
+  ataques_esquivados: number;
   retardo_aplicado: number;
-  flecha_esquivado: number;
-  ataque_anulado: number;
+  ataques_errados: number;
   turno_anulado: number;
   skills_used: SkillDamageInFight[];
 }

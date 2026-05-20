@@ -2,7 +2,7 @@ import { CharacterPersistence } from "src/modules/character/types/character-pers
 import { MobType } from "src/modules/mob/types/mobProps/mob.type";
 import { FighterType } from "../types/entites/fight-entity.type";
 import { FightEntity } from "../entities/fight-entity";
-import { DEFAULT_FIGHT_DETAILS } from "../const/fight-details.const";
+import { DEFAULT_FIGHT_DETAILS } from "../const/entity/fight-details.const";
 import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { FightDetails } from "../types/entites/fight-details.type";
 

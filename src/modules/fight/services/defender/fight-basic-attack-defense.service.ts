@@ -18,8 +18,19 @@ export class FightBasicAttackDefenseService {
         attacker: FighterType,
         defender: FighterType
     ): BasicAttackDefenseDescriptionType {
-        const basicPorcentReduction = this.getBasicPorcentReduction(attacker, defender, attackerDmg)
-        const defensiveChance = this.calculatedefensiveChance(attacker,defender)
+        const defensiveChance = this.calculatedefensiveChance(attacker, defender, attackerDmg)
+
+        if (attackerDmg.missHit) {
+            return {
+                dmgToReceive: 0,
+                defensiveChance
+            }
+        }
+
+        let basicPorcentReduction = this.getBasicPorcentReduction(attacker, defender)
+
+        basicPorcentReduction = this.effectService.calculatePenetracionEffect(
+            attackerDmg.effectsChances.penetracion, "bonus_def", basicPorcentReduction)
 
         let dmgAfterReductions = attackerDmg.dmg * (1 - basicPorcentReduction / 100)
 
@@ -36,7 +47,7 @@ export class FightBasicAttackDefenseService {
         dmgAfterReductions = Math.max(0, dmgAfterReductions - general_def)
 
         return {
-            dmgToReduce: attackerDmg.dmg - dmgAfterReductions,
+            dmgToReceive: dmgAfterReductions,
             defensiveChance
         }
     }
@@ -45,15 +56,13 @@ export class FightBasicAttackDefenseService {
     private getBasicPorcentReduction(
         attacker: FighterType,
         defender: FighterType,
-        attackerDmg: BasicAttackDescriptionType
     ): number {
         let totalBonus = 0
 
         totalBonus += defender.stats.bonus.defensa[attacker.type_weapon] || 0
         totalBonus += defender.stats.bonus.defensa.def_media || 0
 
-        return this.effectService.calculatePenetracionEffect(
-            attackerDmg.effectsChances.penetracion, "bonus_def", totalBonus)
+        return totalBonus
     }
 
     private getSpecificPorcentReduction(attacker: FighterType, defender: FighterType): number {
@@ -68,13 +77,14 @@ export class FightBasicAttackDefenseService {
 
     private calculatedefensiveChance(
         defender: FighterType,
-        attacker: FighterType
+        attacker: FighterType,
+        attackerDmg: BasicAttackDescriptionType,
     ): defensiveChance {
         return {
-            bloquear_ataques: this.rngService.rollChance(defender.stats.bonus.defensa.bloquear_ataques),
-            esquivar_ataques: this.calculateEsquivarAtaques(attacker,defender),
-            corta_curacion: this.rngService.rollChance(defender.stats.bonus.defensa.corta_curacion),
-            reflectar: this.rngService.rollChance(defender.stats.bonus.defensa.reflectar)
+            bloquear_ataques: attackerDmg.missHit ? false : this.rngService.rollChance(defender.stats.bonus.defensa.bloquear_ataques),
+            esquivar_ataques: attackerDmg.missHit ? false : this.calculateEsquivarAtaques(attacker, defender),
+            corta_curacion: attackerDmg.missHit ? false : this.rngService.rollChance(defender.stats.bonus.defensa.corta_curacion),
+            reflectar: attackerDmg.missHit ? false : this.rngService.rollChance(defender.stats.bonus.defensa.reflectar)
         }
     }
 

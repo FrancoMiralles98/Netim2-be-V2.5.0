@@ -1,7 +1,9 @@
 import { BonusDefensaRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
 
+export type ActionDefenderType = BasicAttackDefenseDescriptionType | SkillDefenseDescriptionType
+
 export interface BasicAttackDefenseDescriptionType {
-    dmgToReduce: number;
+    dmgToReceive: number;
     defensiveChance: defensiveChance
 }
 
@@ -11,7 +13,7 @@ boolean>
 
 
 export interface SkillDefenseDescriptionType {
-    dmgToReduce: number;
+    dmgToReceive: number;
     defensiveChance: {
         corta_curacion: boolean
     }

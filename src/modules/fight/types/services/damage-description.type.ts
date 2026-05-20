@@ -33,6 +33,8 @@ export interface SkillDmgDescriptionType {
 export interface BasicAttackDescriptionType {
     type_action: 'basic_attack'
     dmg: number;
+    missHit: boolean;
+    doble_golpe: boolean;
     effectsChances: {
         veneno: boolean;
         incendio: boolean;
@@ -41,7 +43,7 @@ export interface BasicAttackDescriptionType {
         desmayo: boolean;
         penetracion: boolean;
         retardo: boolean;
-        doble_golpe: boolean;
+        
     }
 }
 

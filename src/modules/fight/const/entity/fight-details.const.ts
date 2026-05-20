@@ -1,19 +1,18 @@
-import { FightDetails } from "../types/entites/fight-details.type";
+import { FightDetails } from "../../types/entites/fight-details.type";
 
 export const DEFAULT_FIGHT_DETAILS: FightDetails = {
     ad_ataque_basico: 0,
     ad_mitigado: 0,
     ad_realizado: 0,
     ap_mitigado: 0,
+    ataques_errados: 0,
     ap_realizado: 0,
-    ataque_anulado: 0,
     ataque_basico_realizado: 0,
-    ataque_bloqueado: 0,
-    ataque_esquivado: 0,
+    ataques_bloqueados: 0,
+    ataques_esquivados: 0,
     critico_realizado: 0,
     curacion_cortada: 0,
     doble_golpe_realizado: 0,
-    flecha_esquivado: 0,
     incendio_aplicado: 0,
     incendio_realizado: 0,
     penetracion_realizado: 0,

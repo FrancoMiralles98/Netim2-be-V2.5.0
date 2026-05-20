@@ -17,19 +17,23 @@ export class FightBasicAttackService {
         stats: FightStats,
         attackerEffect: FighterEffectDescription
     ): BasicAttackDescriptionType {
+
+        const missHit = this.calculateIfMissHit(stats, attackerEffect)
+
         return {
-            dmg: this.rngService.randomNumberInRange(stats.general.ad.min, stats.general.ad.max),
+            dmg: missHit ? 0 : this.rngService.randomNumberInRange(stats.general.ad.min, stats.general.ad.max),
             type_action: 'basic_attack',
+            missHit,
+            doble_golpe: missHit ? false : this.rngService.rollChance(
+                this.effectService.calculateRetardoEffect(attackerEffect, 'va', stats.general.va)),
             effectsChances: {
-                desmayo: this.rngService.rollChance(stats.bonus.cc.desmayo),
-                retardo: this.rngService.rollChance(stats.bonus.cc.retardo),
-                incendio: this.rngService.rollChance(stats.bonus.daño.incendio),
-                critico: this.rngService.rollChance(stats.bonus.daño.critico),
-                veneno: this.rngService.rollChance(stats.bonus.daño.veneno),
-                sangrado: this.rngService.rollChance(stats.bonus.daño.sangrado),
-                penetracion: this.rngService.rollChance(stats.bonus.daño.penetracion),
-                doble_golpe: this.rngService.rollChance(
-                    this.effectService.calculateRetardoEffect(attackerEffect,'va',stats.general.va))
+                desmayo: missHit ? false : this.rngService.rollChance(stats.bonus.cc.desmayo),
+                retardo: missHit ? false : this.rngService.rollChance(stats.bonus.cc.retardo),
+                incendio: missHit ? false : this.rngService.rollChance(stats.bonus.daño.incendio),
+                critico: missHit ? false : this.rngService.rollChance(stats.bonus.daño.critico),
+                veneno: missHit ? false : this.rngService.rollChance(stats.bonus.daño.veneno),
+                sangrado: missHit ? false : this.rngService.rollChance(stats.bonus.daño.sangrado),
+                penetracion: missHit ? false : this.rngService.rollChance(stats.bonus.daño.penetracion),
             }
         }
     }
@@ -51,10 +55,28 @@ export class FightBasicAttackService {
 
         if (updatedBasicAttack.effectsChances.critico) {
             //En las stats de los personajes el daño critico esta puesto de esta manera : 200%
-            updatedBasicAttack.dmg *= attacker.stats.bonus.daño.daño_critico / 100
+            updatedBasicAttack.dmg *= 1 + attacker.stats.bonus.daño.daño_critico / 100
         }
 
         return updatedBasicAttack
+    }
 
+    private getEffectsChance () {
+        
+    }
+
+    private calculateIfMissHit(
+        stats: FightStats,
+        attackerEffect: FighterEffectDescription
+    ): boolean {
+        const actualVa = this.effectService.calculateRetardoEffect(attackerEffect, 'va', stats.general.va)
+
+        if (actualVa >= 0) {
+            return false
+        }
+
+        /*Cuando el valor de "VA" es negativo , ese valor absoluto es la chance que tiene de errar el ataque
+        Ejemplo : si tiene -5% de "va", tiene un 5% de chances de errar el ataque*/
+        return this.rngService.rollChance(Math.abs(actualVa))
     }
 }
