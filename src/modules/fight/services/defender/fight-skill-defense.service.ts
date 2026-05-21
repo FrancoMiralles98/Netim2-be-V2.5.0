@@ -41,7 +41,7 @@ export class FightSkillDefenseService {
         dmgAfterReductions *= 1 - specificReductions / 100
 
         return {
-            dmgToReceive: dmgAfterReductions,
+            dmgToReceive: Math.max(0,dmgAfterReductions),
             defensiveChance: {
                 corta_curacion: this.rngService.rollChance(defender.stats.bonus.defensa.corta_curacion)
             }

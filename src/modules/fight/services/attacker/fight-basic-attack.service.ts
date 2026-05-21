@@ -3,7 +3,7 @@ import { BasicAttackDescriptionType } from "../../types/services/damage-descript
 import { FightStats } from "../../types/entites/fight-stats.type";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { FighterEffectDescription, FighterType } from "../../types/entites/fight-entity.type";
-import { EffectsService } from "../effect.service";
+import { EffectsService } from "../effects/effect.service";
 
 @Injectable()
 export class FightBasicAttackService {
@@ -55,7 +55,7 @@ export class FightBasicAttackService {
 
         if (updatedBasicAttack.effectsChances.critico) {
             //En las stats de los personajes el daño critico esta puesto de esta manera : 200%
-            updatedBasicAttack.dmg *= 1 + attacker.stats.bonus.daño.daño_critico / 100
+            updatedBasicAttack.dmg *=  attacker.stats.bonus.daño.daño_critico / 100
         }
 
         return updatedBasicAttack

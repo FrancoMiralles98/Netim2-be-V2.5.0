@@ -14,7 +14,7 @@ export class FightSkillService {
 
     constructor(
         private rngService: RngService
-    ){}
+    ) { }
 
     tryToSelectSkill(
         skillsCanUse: SkillDamageInFight[],
@@ -51,24 +51,34 @@ export class FightSkillService {
         }
 
         if (availableSkill.idSkill === UNIQUE_ID_SKILLS.CURACION) {
+            const isCritico = this.rngService.rollChance(stats.bonus.daño.critico)
+            const basicHealing = this.rngService.randomNumberInRange(skillInfo.daño.min, skillInfo.daño.max)
+
+            const totalHealing = isCritico
+            ? basicHealing * stats.bonus.daño.daño_critico / 100
+            : basicHealing
+
             return {
                 type_action: 'healing',
-                healing: 0,
+                healing: totalHealing,
+                effectsChances: {
+                    critico: isCritico,
+                },
                 idSkill: availableSkill.idSkill,
                 cd: skillInfo.cd
             }
         }
 
-        return this.getSkillInfoToUse(skillInfo, skillsCanUse,skillsStats,stats)
+        return this.getSkillInfoToUse(skillInfo, skillsCanUse, skillsStats, stats)
     }
 
     applyBonus(
-        skillToUse:SkillDmgDescriptionType,
+        skillToUse: SkillDmgDescriptionType,
         attacker: FighterType,
         defender: FighterType
-    ):SkillDmgDescriptionType {
+    ): SkillDmgDescriptionType {
 
-        const skillUpdated = {...skillToUse}
+        const skillUpdated = { ...skillToUse }
 
         let totalBonus = 0
 
@@ -93,15 +103,15 @@ export class FightSkillService {
         return skillUpdated
     }
 
-    private getBonusDamage(bonusDamage: SkillBonusDamage ): number {
+    private getBonusDamage(bonusDamage: SkillBonusDamage): number {
         return bonusDamage.type === 'chance'
-        ? this.calculateChanceBonusDamage(bonusDamage)
-        : this.calculateTierBonusDamage(bonusDamage)
+            ? this.calculateChanceBonusDamage(bonusDamage)
+            : this.calculateTierBonusDamage(bonusDamage)
     }
 
-    private calculateTierBonusDamage(tierBonusDamage: TierBonusDamage ): number {
+    private calculateTierBonusDamage(tierBonusDamage: TierBonusDamage): number {
         const randomNumber = this.rngService.randomNumberInRange()
-        
+
         let acc = 0
         let bonification = 1
 
@@ -142,13 +152,14 @@ export class FightSkillService {
                 critico: this.rngService.rollChance(stats.bonus.daño.critico),
                 sangrado: this.rngService.rollChance(skillInfo.bonus_efecto.sangrado),
                 penetracion_habilidad: skillInfo.bonus_efecto.penetracion_habilidad,
+                vampirismo_hechizo: skillInfo.bonus_efecto.vampirismo_hechizo
             },
             type_damage: skillInfo.tipo_daño,
             cd: skillInfo.cd,
             bonus_damage: skillInfo.bonus_damage ? skillInfo.bonus_damage : undefined,
             idSkill: skillInfo.idSkill,
             type_action: 'skill',
-            potentialSkill: this.canUsePotencialSkills(skillsCanUse,allSkills)
+            potentialSkill: this.canUsePotencialSkills(skillsCanUse, allSkills)
         }
     }
 
@@ -181,7 +192,7 @@ export class FightSkillService {
             const dataOfSkill = skillsInfo.find(skill => skill.idSkill === availableSkill.idSkill) as DamageSkillType
 
             if (!dataOfSkill) {
-                throw new Error (`No se encuentra el idSkill ${availableSkill.idSkill} en el pool de habs`)
+                throw new Error(`No se encuentra el idSkill ${availableSkill.idSkill} en el pool de habs`)
             }
 
             return {

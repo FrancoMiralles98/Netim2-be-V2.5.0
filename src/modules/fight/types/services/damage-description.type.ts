@@ -18,6 +18,7 @@ export interface SkillDmgDescriptionType {
         incendio: boolean;
         sangrado: boolean;
         critico: boolean;
+        vampirismo_hechizo: number;
         desmayo: boolean;
         retardo: boolean;
         penetracion_habilidad: number
@@ -43,13 +44,15 @@ export interface BasicAttackDescriptionType {
         desmayo: boolean;
         penetracion: boolean;
         retardo: boolean;
-        
     }
 }
 
 
 export interface HealingDescriptionType {
     type_action: 'healing'
+    effectsChances: {
+        critico: boolean;
+    }
     healing: number;
     idSkill: number;
     cd: number

@@ -17,6 +17,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { STR: 3, DEX: 2 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -39,6 +40,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { STR: 1, DEX: 3 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 100, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -61,6 +63,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { STR: 3, DEX: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -137,6 +140,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { STR: 2, VIT: 6 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -159,6 +163,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { STR: 4, VIT: 2 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -181,6 +186,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { STR: 2, VIT: 2, DEX: 2 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 15, perLv: 1 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -203,6 +209,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { STR: 2, DEX: 2, INT: 4 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 100, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },

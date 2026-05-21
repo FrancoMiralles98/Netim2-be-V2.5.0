@@ -1,7 +1,7 @@
 export const DAMAGE_EFFECTS_CONFIG = {
     veneno: {
         porcent_base_damage: 13,
-        corta_cura: 30,
+        corta_cura_porcent: 30,
         turns: 10
     },
     incendio: {
@@ -32,5 +32,8 @@ export const BONUS_EEFECTS_CONFIG = {
     penetracion: {
         reduction_bonus_def: 50,
         reduction_flat_def: 50
+    },
+    corta_curacion: {
+        porcent: 50
     }
 }

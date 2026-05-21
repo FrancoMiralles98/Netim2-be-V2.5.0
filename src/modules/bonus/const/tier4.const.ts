@@ -24,7 +24,18 @@ export const tier4BonusList: BonusType[] = [
       type_value: ValueBonusType.PORCENTAGE,
     },
     values: { min: 5, max: 50 },
-    valid: ['escudo', 'collar'],
+    valid: ['escudo'],
+  },
+  {
+    tier: 4,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.REGENERACION_DE_HP,
+      bonus_ref_name: 'regen_hp',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 5, max: 50 },
+    valid: ['brazalete'],
   },
   {
     tier: 4,
@@ -41,8 +52,8 @@ export const tier4BonusList: BonusType[] = [
     tier: 4,
     category: "generic",
     name: {
-      full_name: allFullNameBonusList.DAÑO_ABSORBIDO_POR_HP,
-      bonus_ref_name: 'daño_absorbido_hp',
+      full_name: allFullNameBonusList.ROBO_DE_VIDA,
+      bonus_ref_name: 'robo_vida',
       type_value: ValueBonusType.PORCENTAGE,
     },
     values: { min: 1, max: 3 },
@@ -74,22 +85,11 @@ export const tier4BonusList: BonusType[] = [
     tier: 4,
     category: "generic",
     name: {
-      full_name: allFullNameBonusList.OPCION_DE_SANGRADO,
-      bonus_ref_name: 'sangrado',
+      full_name: allFullNameBonusList.VAMPIRISMO_DE_HECHIZO,
+      bonus_ref_name: 'vampirismo_hechizo',
       type_value: ValueBonusType.PORCENTAGE,
     },
-    values: { min: 1, max: 15 },
-    valid: ['botas', 'brazalete'],
-  },
-  {
-    tier: 4,
-    category: "generic",
-    name: {
-      full_name: allFullNameBonusList.OPCION_DE_INCENDIO,
-      bonus_ref_name: 'incendio',
-      type_value: ValueBonusType.PORCENTAGE,
-    },
-    values: { min: 1, max: 15 },
-    valid: ['pendiente', 'collar'],
+    values: { min: 1, max: 5 },
+    valid: ['botas'],
   },
 ];

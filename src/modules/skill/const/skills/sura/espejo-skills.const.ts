@@ -10,6 +10,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       cd: 10,
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
@@ -31,6 +32,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       cd: 15,
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
@@ -52,6 +54,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       tipo_daño: 'ap',
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
@@ -70,7 +73,7 @@ export const ESPEJO_SKILLS: SkillType[] = [
       lv: 0,
       buffos: {
         media: 0,
-        daño_absorbido_hp: 0,
+        robo_vida: 0,
       },
       idPosition: 2,
       type: 'Aura',

@@ -17,6 +17,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { DEX: 3, STR: 2 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -39,6 +40,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { DEX: 2, STR: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 1, perLv: 0.4 },
                 incendio: { base: 0, perLv: 0 },
@@ -61,6 +63,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { DEX: 3, INT: 8 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 30, perLv: 1.5 },
                 incendio: { base: 0, perLv: 0 },
@@ -83,6 +86,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { DEX: 3, STR: 2 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -105,6 +109,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: {},
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -129,6 +134,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { DEX: 3, STR: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -151,6 +157,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { DEX: 3, STR: 1, INT: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 5, perLv: 2 },
@@ -173,6 +180,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { DEX: 4, STR: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 100, perLv: 0 },
                 veneno: { base: 7.5, perLv: 2.5 },
                 incendio: { base: 0, perLv: 0 },
@@ -195,6 +203,7 @@ export const NINJA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { DEX: 2, STR: 2 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },

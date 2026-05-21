@@ -17,6 +17,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { INT: 3, DEX: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -38,6 +39,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { DEX: 1, INT: 3 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 1, perLv: 0.4 },
@@ -59,6 +61,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { INT: 2, DEX: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -80,6 +83,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { INT: 2, DEX: 2, STR: 1, VIT: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 5, perLv: 0.5 },
@@ -101,6 +105,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { INT: 4, VIT: 4, DEX: 1 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -140,6 +145,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { INT: 3, STR: 3 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -161,6 +167,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { INT: 3, STR: 3, DEX: 3 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -182,6 +189,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
             escaladoAtributos: { INT: 5, DEX: 2 },
             escaladoEfecto: {
                 penetracion_habilidad: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0},
                 desmayo: { base: 0, perLv: 0 },
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
@@ -203,7 +211,7 @@ export const SURA_SKILLS_SCALING: StructureCharacterSkillScaling = {
                     },
                     scaleWithAtribute: true
                 },
-                daño_absorbido_hp: {
+                robo_vida: {
                     escaladoLv: {
                         perLv: 0.27,
                         basicMulti: 1,

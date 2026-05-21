@@ -41,7 +41,8 @@ export type BonusDañoRefKeys =
   | 'chaman';
 
 export type BonusDefensaRefKeys =
-  | 'daño_absorbido_hp'
+  | 'robo_vida'
+  | 'vampirismo_hechizo'
   | 'bloquear_ataques'
   | 'esquivar_ataques'
   | 'reflectar'
@@ -105,6 +106,7 @@ export type Tier2RefBonusName = Extract<BonusRefKeys,
   | 'def_magia'
   | 'critico'
   | 'retardo'
+  | 'desmayo'
   | 'penetracion'
   | 'chances_objetos'
   | 'chances_raros'
@@ -121,7 +123,8 @@ export type Tier3RefBonusName = Extract<BonusRefKeys,
   | 'INT'
   | 'DEX'
   | 'VIT'
-  | 'desmayo'
+  | 'incendio'
+  | 'sangrado'
   | 'monstruos'
   | 'medio_humanos'>
 
@@ -129,7 +132,8 @@ export type Tier4RefBonusName = Extract<BonusRefKeys,
   | 'media'
   | 'regen_hp'
   | 'habilidad'
-  | 'daño_absorbido_hp'
+  | 'robo_vida'
+  | 'vampirismo_hechizo'
   | 'def_hab'
   | 'def_media'>
 
@@ -149,7 +153,7 @@ export type Bonus6_7RefBonusName = Extract<BonusRefKeys,
   | 'INT'
   | 'DEX'
   | 'VIT'
-  | 'daño_absorbido_hp'
+  | 'robo_vida'
   | 'bloquear_ataques'
   | 'vm'
   | 'regen_hp'>

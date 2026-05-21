@@ -10,6 +10,7 @@ export const DRAGON_SKILLS: SkillType[] = [
       cd: 8,
       bonus_efecto: {
         penetracion_habilidad: 0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 1,
         retardo: 0,
@@ -32,6 +33,7 @@ export const DRAGON_SKILLS: SkillType[] = [
       cd: 7,
       bonus_efecto: {
         penetracion_habilidad: 0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
@@ -53,6 +55,7 @@ export const DRAGON_SKILLS: SkillType[] = [
       cd: 20,
       bonus_efecto: {
         penetracion_habilidad: 0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 5,
         retardo: 0,

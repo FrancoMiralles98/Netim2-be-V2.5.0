@@ -51,6 +51,8 @@ export type BonusTierLv = 1 | 2 | 3 | 4
  * @property {subTypeEquip[]} valid - Tipos de items que pueden tener este bonus (arma, amadura, botas).
  *
  */
+
+
 export interface BonusType {
   name: {
     full_name: allFullNameBonusList;

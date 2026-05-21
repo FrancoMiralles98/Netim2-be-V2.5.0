@@ -5,7 +5,7 @@ import { BonusType } from "../types/bonusListHelper/bonus.type";
 
 export const tier3BonusList: BonusType[] = [
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.VELOCIDAD_DE_ATAQUE,
@@ -16,7 +16,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['botas', 'casco'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.MAX_HP,
@@ -27,7 +27,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['brazalete', 'collar', 'armadura', 'botas'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.VALOR_DE_ATAQUE,
@@ -38,7 +38,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['armadura'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.OPCION_DE_ENVENENAMIENTO,
@@ -49,7 +49,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['arma', 'casco'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.STR,
@@ -60,7 +60,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.INT,
@@ -71,7 +71,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEX,
@@ -82,7 +82,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.VIT,
@@ -93,18 +93,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
-    tier:3,
-    category: "generic",
-    name: {
-      full_name: allFullNameBonusList.OPCION_DE_DESMAYO,
-      bonus_ref_name: 'desmayo',
-      type_value: ValueBonusType.PORCENTAGE,
-    },
-    values: { min: 1, max: 10 },
-    valid: ['arma', 'collar', 'botas'],
-  },
-  {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.FUERZA_CONTRA_MONSTRUOS,
@@ -115,7 +104,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['pendiente', 'collar', 'escudo'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.FUERZA_CONTRA_MEDIO_HUMANOS,
@@ -126,7 +115,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['escudo', 'brazalete', 'pendiente'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DAÑO_CRITICO,
@@ -137,7 +126,7 @@ export const tier3BonusList: BonusType[] = [
     valid: ['casco', 'armadura', 'collar'],
   },
   {
-    tier:3,
+    tier: 3,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.CORTA_CURACION,
@@ -146,5 +135,27 @@ export const tier3BonusList: BonusType[] = [
     },
     values: { min: 1, max: 50 },
     valid: ['armadura', 'escudo'],
+  },
+  {
+    tier: 3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.OPCION_DE_SANGRADO,
+      bonus_ref_name: 'sangrado',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 15 },
+    valid: ['botas', 'brazalete'],
+  },
+  {
+    tier: 3,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.OPCION_DE_INCENDIO,
+      bonus_ref_name: 'incendio',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 15 },
+    valid: ['pendiente', 'collar'],
   },
 ];

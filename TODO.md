@@ -12,9 +12,10 @@ Cambios estructurales de las props de character
 - Se cambio el sistema de VH, ahora la vh es la cantidad de CDR que se tiene , no se hace un calculo
 - Se cambio el sistema de VM, ahora la vm es la cantidad porcentual de esquivar ataques, no se hace un calculo
 - Ahora las armas restan velocidad de ataque y la velocidad de ataque empieza en 0 no con 100, ahora se pueden errar basicos
-- Daño critico comienza en 100%
+- Daño critico comienza en 200%
 - ahora la penetracion reduce el 50% de la armadura y el 50% de la resistencia de la defensa a dicha arma, ya no es que reduce un valor de 35 fijo , es decir que no tendra bonificacion si la defensa es 0
 - cambio en el sistema de daños de los efectos de tipo "daño" (veneno,sangrado, incendio)
+- ahora hay robo de vida que es para ataques basico "Robo de vida" y otro para habilidades "Vampirismo de Hechizo"
 
 MODULO    
     - bonus:

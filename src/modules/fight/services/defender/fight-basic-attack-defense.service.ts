@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { EffectsService } from "../effect.service";
+import { EffectsService } from "../effects/effect.service";
 import { BasicAttackDefenseDescriptionType, defensiveChance } from "../../types/services/defense-description.type";
 import { BasicAttackDescriptionType } from "../../types/services/damage-description.type";
 import { FighterType } from "../../types/entites/fight-entity.type";

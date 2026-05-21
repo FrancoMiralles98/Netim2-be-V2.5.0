@@ -1,6 +1,7 @@
 export enum allFullNameBonusList {
   AUMENTO_DE_OBJETOS_RAROS = 'Aumento de Objetos Raros',
-  DAÑO_ABSORBIDO_POR_HP = 'Daño Absorbido por HP',
+  ROBO_DE_VIDA = 'Robo de Vida',
+  VAMPIRISMO_DE_HECHIZO = 'Vampirismo de Hechizo',
   DAÑO_DE_HABILIDAD = 'Daño de Habilidad',
   DAÑO_DE_MEDIA = 'Daño de Media',
   DEFENSA = 'Defensa',
