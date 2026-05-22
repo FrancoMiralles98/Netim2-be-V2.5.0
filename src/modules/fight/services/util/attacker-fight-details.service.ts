@@ -2,11 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { ActionAttackerType } from "../../types/services/damage-description.type";
 import { ActionDefenderType } from "../../types/services/defense-description.type";
 import { FightDetails } from "../../types/entites/fight-details.type";
+import { FighterEffectDescription } from "../../types/entites/fight-entity.type";
+import { DamageEffectKeys } from "../../types/config/effect-key.types";
 
 @Injectable()
-export class AttackerFightDetails {
+export class AttackerFightDetailsService {
 
-    registerAttackerDmgActions(
+    registerAttackerActions(
         attackerAction: ActionAttackerType,
         defenderAction: ActionDefenderType,
         attackerFightDetails: FightDetails,
@@ -28,7 +30,24 @@ export class AttackerFightDetails {
                 attackerFightDetails.ap_realizado += defenderAction.dmgToReceive
             }
         }
-
         attackerFightDetails.critico_realizado += attackerAction.effectsChances.critico ? 1 : 0
+    }
+
+    registerTurnEffects(
+        attackerFightDetails: FightDetails,
+        defenderEffects: FighterEffectDescription
+    ) {
+        attackerFightDetails.incendio_aplicado += defenderEffects.incendio.isActive ? 1 : 0
+        attackerFightDetails.veneno_aplicado += defenderEffects.veneno.isActive ? 1 : 0
+        attackerFightDetails.sangrado_aplicado += defenderEffects.sangrado.isActive ? 1 : 0
+
+        attackerFightDetails.incendio_realizado +=
+            defenderEffects.incendio.isActive ?  defenderEffects.incendio.dmgOfEffect : 0
+        attackerFightDetails.veneno_realizado +=
+            defenderEffects.veneno.isActive ? defenderEffects.veneno.dmgOfEffect : 0
+        attackerFightDetails.sangrado_realizado +=
+            defenderEffects.sangrado.isActive ? defenderEffects.sangrado.dmgOfEffect : 0
+        
+        attackerFightDetails.retardo_aplicado += defenderEffects.retardo.isActive ? 1 : 0
     }
 }

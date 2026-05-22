@@ -4,6 +4,7 @@ import { BasicAttackDefenseDescriptionType, defensiveChance } from "../../types/
 import { BasicAttackDescriptionType } from "../../types/services/damage-description.type";
 import { FighterType } from "../../types/entites/fight-entity.type";
 import { RngService } from "src/modules/shared/services/rng.service";
+import { BONUS_EEFECTS_CONFIG } from "../../config/effects.config";
 
 @Injectable()
 export class FightBasicAttackDefenseService {
@@ -22,6 +23,8 @@ export class FightBasicAttackDefenseService {
 
         if (attackerDmg.missHit) {
             return {
+                reflectar_dmg: 0,
+                type_action: 'def_basic_attack',
                 dmgToReceive: 0,
                 defensiveChance
             }
@@ -46,7 +49,14 @@ export class FightBasicAttackDefenseService {
 
         dmgAfterReductions = Math.max(0, dmgAfterReductions - general_def)
 
+        const reflectar_dmg = defensiveChance.reflectar 
+        ? Math.trunc(attackerDmg.dmg * (BONUS_EEFECTS_CONFIG.reclectar.porcent_dmg_to_reflect / 100))
+        : 0
+     
+
         return {
+            reflectar_dmg,
+            type_action: 'def_basic_attack',
             dmgToReceive: dmgAfterReductions,
             defensiveChance
         }

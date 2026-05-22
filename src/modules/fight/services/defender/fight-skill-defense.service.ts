@@ -4,6 +4,7 @@ import { SkillDmgDescriptionType } from "../../types/services/damage-description
 import { SkillDefenseDescriptionType } from "../../types/services/defense-description.type";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { DEFENSE_BY_WEAPON } from "../../config/bonus.defense-by-weapon.config";
+import { BONUS_EEFECTS_CONFIG } from "../../config/effects.config";
 
 @Injectable()
 export class FightSkillDefenseService {
@@ -16,11 +17,13 @@ export class FightSkillDefenseService {
 
     reduceHealing(
         defender: FighterType
-    ):SkillDefenseDescriptionType {
+    ): SkillDefenseDescriptionType {
         return {
+            reflectar_dmg: 0,
             dmgToReceive: 0,
+            type_action: 'def_skill',
             defensiveChance: {
-                corta_curacion:this.rngService.rollChance(defender.stats.bonus.defensa.corta_curacion)
+                corta_curacion: this.rngService.rollChance(defender.stats.bonus.defensa.corta_curacion)
             }
         }
     }
@@ -40,8 +43,14 @@ export class FightSkillDefenseService {
 
         dmgAfterReductions *= 1 - specificReductions / 100
 
+        const reflectar_dmg = this.rngService.rollChance(defender.stats.bonus.defensa.reflectar)
+            ? Math.trunc(attackerDmg.dmg * (BONUS_EEFECTS_CONFIG.reclectar.porcent_dmg_to_reflect / 100))
+            : 0
+
         return {
-            dmgToReceive: Math.max(0,dmgAfterReductions),
+            dmgToReceive: Math.max(0, dmgAfterReductions),
+            reflectar_dmg,
+            type_action: 'def_skill',
             defensiveChance: {
                 corta_curacion: this.rngService.rollChance(defender.stats.bonus.defensa.corta_curacion)
             }

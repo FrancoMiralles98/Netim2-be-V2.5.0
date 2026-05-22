@@ -35,5 +35,8 @@ export const BONUS_EEFECTS_CONFIG = {
     },
     corta_curacion: {
         porcent: 50
+    },
+    reclectar: {
+        porcent_dmg_to_reflect: 15
     }
 }
