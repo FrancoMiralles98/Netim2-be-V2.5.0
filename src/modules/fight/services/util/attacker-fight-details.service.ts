@@ -3,12 +3,24 @@ import { ActionAttackerType } from "../../types/services/damage-description.type
 import { ActionDefenderType } from "../../types/services/defense-description.type";
 import { FightDetails } from "../../types/entites/fight-details.type";
 import { FighterEffectDescription } from "../../types/entites/fight-entity.type";
-import { DamageEffectKeys } from "../../types/config/effect-key.types";
 
 @Injectable()
 export class AttackerFightDetailsService {
 
-    registerAttackerActions(
+
+    registerAttackerTurn(
+        attackerAction: ActionAttackerType,
+        defenderAction: ActionDefenderType,
+        defenderEffects: FighterEffectDescription,
+        attackerFightDetails: FightDetails,
+    ): void {
+        
+        this.registerAttackerActions(attackerAction,defenderAction,attackerFightDetails)
+        this.registerTurnEffects(attackerFightDetails,defenderEffects)
+    }
+
+
+    private registerAttackerActions(
         attackerAction: ActionAttackerType,
         defenderAction: ActionDefenderType,
         attackerFightDetails: FightDetails,
@@ -33,7 +45,7 @@ export class AttackerFightDetailsService {
         attackerFightDetails.critico_realizado += attackerAction.effectsChances.critico ? 1 : 0
     }
 
-    registerTurnEffects(
+    private registerTurnEffects(
         attackerFightDetails: FightDetails,
         defenderEffects: FighterEffectDescription
     ) {
@@ -42,12 +54,13 @@ export class AttackerFightDetailsService {
         attackerFightDetails.sangrado_aplicado += defenderEffects.sangrado.isActive ? 1 : 0
 
         attackerFightDetails.incendio_realizado +=
-            defenderEffects.incendio.isActive ?  defenderEffects.incendio.dmgOfEffect : 0
+            defenderEffects.incendio.isActive ? defenderEffects.incendio.dmgOfEffect : 0
         attackerFightDetails.veneno_realizado +=
             defenderEffects.veneno.isActive ? defenderEffects.veneno.dmgOfEffect : 0
         attackerFightDetails.sangrado_realizado +=
             defenderEffects.sangrado.isActive ? defenderEffects.sangrado.dmgOfEffect : 0
-        
+
         attackerFightDetails.retardo_aplicado += defenderEffects.retardo.isActive ? 1 : 0
     }
+
 }

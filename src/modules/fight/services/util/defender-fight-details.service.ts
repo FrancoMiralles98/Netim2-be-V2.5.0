@@ -4,9 +4,22 @@ import { ActionDefenderType } from "../../types/services/defense-description.typ
 import { ActionAttackerType } from "../../types/services/damage-description.type";
 import { FighterEffectDescription } from "../../types/entites/fight-entity.type";
 
+
 @Injectable()
 export class DefenderFightDetailsService {
-    registerDefenderActions(
+
+    registerDefenderTurn(
+        attackerAction: ActionAttackerType,
+        defenderAction: ActionDefenderType,
+        defenderEffects: FighterEffectDescription,
+        defenderFightDetails: FightDetails,
+    ) {
+        this.registerDefenderActions(attackerAction,defenderAction,defenderFightDetails)
+        this.registerTurnEffects(defenderFightDetails,defenderEffects,defenderAction)
+    }
+
+
+    private registerDefenderActions(
         attackerAction: ActionAttackerType,
         defenderAction: ActionDefenderType,
         defenderFightDetails: FightDetails,
@@ -32,7 +45,7 @@ export class DefenderFightDetailsService {
         }
     }
 
-    registerTurnEffects(
+    private registerTurnEffects(
         defenderFightDetails: FightDetails,
         defenderEffects: FighterEffectDescription,
         defenderAction: ActionDefenderType
@@ -41,4 +54,5 @@ export class DefenderFightDetailsService {
         defenderFightDetails.reflejo_aplicado += defenderAction.reflectar_dmg > 0 ? 1 : 0
         defenderFightDetails.reflejo_realizado += defenderAction.reflectar_dmg
     }
+
 }

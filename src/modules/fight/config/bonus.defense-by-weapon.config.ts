@@ -1,4 +1,4 @@
-import { BonusDefensaRefKeys, BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
+import { BonusDefensaRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
 import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 
 export const DEFENSE_BY_WEAPON: Record<TypeWeapon,BonusDefensaRefKeys> = {

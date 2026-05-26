@@ -15,7 +15,8 @@ export class FightBasicAttackService {
 
     useBasicAttack(
         stats: FightStats,
-        attackerEffect: FighterEffectDescription
+        attackerEffect: FighterEffectDescription,
+        isDobleGolpe: boolean
     ): BasicAttackDescriptionType {
 
         const missHit = this.calculateIfMissHit(stats, attackerEffect)
@@ -24,7 +25,7 @@ export class FightBasicAttackService {
             dmg: missHit ? 0 : this.rngService.randomNumberInRange(stats.general.ad.min, stats.general.ad.max),
             type_action: 'basic_attack',
             missHit,
-            doble_golpe: missHit ? false : this.rngService.rollChance(
+            doble_golpe: isDobleGolpe ? false : this.rngService.rollChance(
                 this.effectService.calculateRetardoEffect(attackerEffect, 'va', stats.general.va)),
             effectsChances: {
                 desmayo: missHit ? false : this.rngService.rollChance(stats.bonus.cc.desmayo),

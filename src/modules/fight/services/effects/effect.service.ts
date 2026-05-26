@@ -1,10 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { CcEffectDescription, DmgEffectDescription, FighterEffectDescription, FighterType } from "../../types/entites/fight-entity.type";
-import { BONUS_EEFECTS_CONFIG, CC_EFFECTS_CONFIG, DAMAGE_EFFECTS_CONFIG } from "../../config/effects.config";
+import { FighterEffectDescription, FighterType } from "../../types/entites/fight-entity.type";
+import { BONUS_EEFECTS_CONFIG, CC_EFFECTS_CONFIG } from "../../config/effects.config";
 import { ActionAttackerType } from "../../types/services/damage-description.type";
-import { CCffectKeys, DamageEffectKeys } from "../../types/config/effect-key.types";
-import { BonusCCRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
-import { RngService } from "src/modules/shared/services/rng.service";
 import { DamageEffectService } from "./damage-effect.service";
 import { CcEffectService } from "./cc-effect.service";
 

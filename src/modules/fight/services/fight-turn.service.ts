@@ -12,20 +12,22 @@ export class FightTurnService {
         private attackerService: AttackerService,
         private defenderServivice: DefenderService,
         private effectService: EffectsService,
-    ) {}
+    ) { }
 
     executeTurn(
         attacker: FighterType,
-        defender: FighterType
+        defender: FighterType,
+        isDobleGolpe: boolean
     ): FightDetails {
 
-        const attackerAction = this.attackerService.executeCombatAction(attacker,defender)
-        const defenderAction = this.defenderServivice.executeDefenseAction(attackerAction,attacker,defender)
-        
+        const attackerAction = this.attackerService.executeCombatAction(attacker, defender,isDobleGolpe)
+        const defenderAction = this.defenderServivice.executeDefenseAction(attackerAction, attacker, defender)
 
-        const updatedDefenderEffects = this.effectService.calculateEffectPlayer(attackerAction,attacker,defender)
+        const updatedDefenderEffects = this.effectService.calculateEffectPlayer(attackerAction, attacker, defender)
+
+
+
 
     }
-
 
 }

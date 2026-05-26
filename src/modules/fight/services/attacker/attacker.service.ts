@@ -14,7 +14,23 @@ export class AttackerService {
     executeCombatAction(
         attacker: FighterType,
         defender: FighterType,
+        isDobleGolpe: boolean
     ): ActionAttackerType {
+
+        if (isDobleGolpe) {
+            const basicAttack =
+                this.fightBasicAttackService.useBasicAttack(
+                    attacker.stats,
+                    attacker.effects,
+                    isDobleGolpe
+                )
+
+            return this.fightBasicAttackService.applyBonus(
+                basicAttack,
+                attacker,
+                defender
+            )
+        }
 
         const action =
             this.fightSkillService.tryToSelectSkill(
@@ -22,15 +38,15 @@ export class AttackerService {
                 attacker.hab,
                 attacker.stats
             )
-            || this.fightBasicAttackService.useBasicAttack(attacker.stats,attacker.effects)
+            || this.fightBasicAttackService.useBasicAttack(attacker.stats, attacker.effects,isDobleGolpe)
 
         if (action.type_action === 'healing') {
             return action
         }
 
         return action.type_action === 'skill'
-        ? this.fightSkillService.applyBonus(action,attacker,defender)
-        : this.fightBasicAttackService.applyBonus(action,attacker,defender)
+            ? this.fightSkillService.applyBonus(action, attacker, defender)
+            : this.fightBasicAttackService.applyBonus(action, attacker, defender)
     }
 
 

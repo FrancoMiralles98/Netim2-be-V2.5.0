@@ -19,7 +19,7 @@ export class FightBasicAttackDefenseService {
         attacker: FighterType,
         defender: FighterType
     ): BasicAttackDefenseDescriptionType {
-        const defensiveChance = this.calculatedefensiveChance(attacker, defender, attackerDmg)
+        const defensiveChance = this.calculateDefensiveChance(attacker, defender, attackerDmg)
 
         if (attackerDmg.missHit) {
             return {
@@ -49,10 +49,10 @@ export class FightBasicAttackDefenseService {
 
         dmgAfterReductions = Math.max(0, dmgAfterReductions - general_def)
 
-        const reflectar_dmg = defensiveChance.reflectar 
-        ? Math.trunc(attackerDmg.dmg * (BONUS_EEFECTS_CONFIG.reclectar.porcent_dmg_to_reflect / 100))
-        : 0
-     
+        const reflectar_dmg = defensiveChance.reflectar
+            ? Math.trunc(attackerDmg.dmg * (BONUS_EEFECTS_CONFIG.reclectar.porcent_dmg_to_reflect / 100))
+            : 0
+
 
         return {
             reflectar_dmg,
@@ -85,17 +85,48 @@ export class FightBasicAttackDefenseService {
     }
 
 
-    private calculatedefensiveChance(
+    private calculateDefensiveChance(
         defender: FighterType,
         attacker: FighterType,
         attackerDmg: BasicAttackDescriptionType,
     ): defensiveChance {
-        return {
-            bloquear_ataques: attackerDmg.missHit ? false : this.rngService.rollChance(defender.stats.bonus.defensa.bloquear_ataques),
-            esquivar_ataques: attackerDmg.missHit ? false : this.calculateEsquivarAtaques(attacker, defender),
-            corta_curacion: attackerDmg.missHit ? false : this.rngService.rollChance(defender.stats.bonus.defensa.corta_curacion),
-            reflectar: attackerDmg.missHit ? false : this.rngService.rollChance(defender.stats.bonus.defensa.reflectar)
+        const defensiveChance: defensiveChance = {
+            bloquear_ataques: false,
+            esquivar_ataques: false,
+            corta_curacion: false,
+            reflectar: false,
         }
+
+        if (attackerDmg.missHit) {
+            return defensiveChance
+        }
+
+        defensiveChance.bloquear_ataques = this.rngService.rollChance(
+            defender.stats.bonus.defensa.bloquear_ataques,
+        )
+
+        if (defensiveChance.bloquear_ataques) {
+            return defensiveChance
+        }
+
+        defensiveChance.esquivar_ataques = this.calculateEsquivarAtaques(
+            attacker,
+            defender,
+        )
+
+        if (defensiveChance.esquivar_ataques) {
+            return defensiveChance
+        }
+
+        defensiveChance.corta_curacion = this.rngService.rollChance(
+            defender.stats.bonus.defensa.corta_curacion,
+        )
+
+        defensiveChance.reflectar = this.rngService.rollChance(
+            defender.stats.bonus.defensa.reflectar,
+        )
+
+        return defensiveChance
     }
 
     private calculateEsquivarAtaques(attacker: FighterType, defender: FighterType): boolean {
