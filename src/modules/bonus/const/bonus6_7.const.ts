@@ -352,8 +352,8 @@ export const bonus6_7BonusList: BonusType[] = [
   {
     category: 'bonus6_7',
     name: {
-      full_name: allFullNameBonusList.DAÑO_ABSORBIDO_POR_HP,
-      bonus_ref_name: 'daño_absorbido_hp',
+      full_name: allFullNameBonusList.ROBO_DE_VIDA,
+      bonus_ref_name: 'robo_vida',
       type_value: ValueBonusType.PORCENTAGE,
     },
     values: { min: 1, max: 5 },

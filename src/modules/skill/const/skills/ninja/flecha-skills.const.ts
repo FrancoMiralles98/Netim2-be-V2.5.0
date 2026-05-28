@@ -10,6 +10,7 @@ export const FLECHA_SKILLS: SkillType[] = [
     cd: 14,
     bonus_efecto: {
       penetracion_habilidad: 0,
+      vampirismo_hechizo: 0,
       desmayo: 0,
       incendio: 0,
       retardo: 0,
@@ -31,6 +32,7 @@ export const FLECHA_SKILLS: SkillType[] = [
     cd: 17,
     bonus_efecto: {
       penetracion_habilidad: 0,
+      vampirismo_hechizo: 0,
       desmayo: 0,
       incendio: 10,
       retardo: 0,
@@ -53,6 +55,7 @@ export const FLECHA_SKILLS: SkillType[] = [
     cd: 20,
     bonus_efecto: {
       penetracion_habilidad: 0,
+      vampirismo_hechizo: 0,
       desmayo: 100,
       incendio: 0,
       retardo: 0,
@@ -75,6 +78,7 @@ export const FLECHA_SKILLS: SkillType[] = [
     cd: 14,
     bonus_efecto: {
       penetracion_habilidad: 0,
+      vampirismo_hechizo: 0,
       desmayo: 0,
       incendio: 0,
       retardo: 0,

@@ -82,9 +82,15 @@ export type SkillBonusEffectList = Record<SkillBonusEffectKeys, number>
  * el porcentaje de reduccion de defensas al adversario para ese ataque en especifico que tiene la skill
  */
 export type SkillBonusEffectKeys = Extract<BonusRefKeys,
-   'desmayo' | 'incendio' | 'retardo' | 'veneno' | 'sangrado' | 'penetracion_habilidad'>
+   'desmayo' |
+   'incendio' |
+   'retardo' |
+   'veneno' |
+   'sangrado' |
+   'penetracion_habilidad' |
+   'vampirismo_hechizo'>
 
-   
+
 export type SkillBonusDamage = TierBonusDamage | ChanceBonusDamage
 
 

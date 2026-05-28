@@ -1,5 +1,4 @@
 import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
-import { CharacterFightProps } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 
 export interface MobStats {
   general: {
@@ -17,6 +16,5 @@ export interface MobStats {
     defensa: Record<BonusDefensaRefKeys, number>
     cc: Record<BonusCCRefKeys, number>;
     miscs: Record<BonusMiscsRefKeys, number>
-  };
-  fight: CharacterFightProps
+  }
 }

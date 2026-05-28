@@ -10,6 +10,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       cd: 7,
       bonus_efecto: {
         penetracion_habilidad: 0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
@@ -32,6 +33,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       cd: 3,
       bonus_efecto: {
         penetracion_habilidad: 0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
@@ -54,6 +56,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       cd: 12,
       bonus_efecto: {
         penetracion_habilidad: 0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 34.8,
@@ -77,6 +80,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       cd: 12,
       bonus_efecto: {
         penetracion_habilidad: 0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 5,
         retardo: 0,
@@ -99,6 +103,7 @@ export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
       cd: 24,
       bonus_efecto: {
         penetracion_habilidad: 0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,

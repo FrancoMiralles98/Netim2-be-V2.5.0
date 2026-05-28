@@ -1,4 +1,3 @@
-import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
 import { EquipType, TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 import { CharacterRace, CharacterSpeciality, CharacterStats } from "./character-stats.type";
 import { MonturaType } from "src/modules/item/types/entities-props/montura.type";
@@ -13,7 +12,6 @@ import { MissionOption } from "./mission-option.type";
 import { DungeonInProgressType } from "./dungeon-in-progress.type";
 import { PvpDataType } from "./pvp-data.type";
 import { HistorialInUser } from "./historial-in-user.type";
-import { Skill } from "src/modules/skill/types/const/skill.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 
 /**

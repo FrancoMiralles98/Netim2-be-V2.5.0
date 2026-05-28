@@ -5,7 +5,7 @@ import { BonusType } from "../types/bonusListHelper/bonus.type";
 
 export const tier2BonusList: BonusType[] = [
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_ESPADA,
@@ -16,7 +16,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_DOS_MANOS,
@@ -27,7 +27,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_DAGA,
@@ -38,7 +38,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_FAN,
@@ -49,7 +49,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_CAMPANA,
@@ -60,7 +60,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.RESISTENCIA_A_FLECHAS,
@@ -71,7 +71,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.RESISTENCIA_MAGIA,
@@ -82,7 +82,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.PROB_DE_GOLPES_CRITICOS,
@@ -93,7 +93,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['arma', 'botas', 'collar'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.PROB_DE_RETARDO,
@@ -104,7 +104,18 @@ export const tier2BonusList: BonusType[] = [
     valid: ['arma', 'casco'],
   },
   {
-    tier:2,
+    tier: 2,
+    category: "generic",
+    name: {
+      full_name: allFullNameBonusList.OPCION_DE_DESMAYO,
+      bonus_ref_name: 'desmayo',
+      type_value: ValueBonusType.PORCENTAGE,
+    },
+    values: { min: 1, max: 10 },
+    valid: ['arma', 'collar', 'botas'],
+  },
+  {
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.PROB_DE_GOLPES_DE_PENETRACION,
@@ -115,7 +126,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['arma', 'brazalete', 'collar'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.PROB_DE_CAER_MAS_OBJETOS,
@@ -126,7 +137,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['brazalete', 'pendiente', 'botas'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.AUMENTO_DE_OBJETOS_RAROS,
@@ -137,7 +148,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['brazalete', 'pendiente', 'botas'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.PROB_DE_CAER_EL_DOBLE_DE_YANG,
@@ -148,7 +159,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['collar', 'escudo', 'botas'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.PROB_DE_OBTENER_BONUS_DE_EXP,
@@ -159,7 +170,7 @@ export const tier2BonusList: BonusType[] = [
     valid: ['collar', 'botas', 'escudo'],
   },
   {
-    tier:2,
+    tier: 2,
     category: "generic",
     name: {
       full_name: allFullNameBonusList.DEFENSA_CONTRA_DESMAYO,

@@ -10,6 +10,7 @@ export const LUZ_SKILLS:SkillType[] = [
       cd: 15,
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 10,
         incendio: 0,
         retardo: 0,
@@ -31,6 +32,7 @@ export const LUZ_SKILLS:SkillType[] = [
       cd: 7,
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
@@ -52,6 +54,7 @@ export const LUZ_SKILLS:SkillType[] = [
       cd: 10,
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
@@ -73,6 +76,7 @@ export const LUZ_SKILLS:SkillType[] = [
       cd: 10,
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,

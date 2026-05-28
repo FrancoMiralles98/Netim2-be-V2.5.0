@@ -21,7 +21,8 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
                 retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
+                sangrado: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0}
             },
             
         },
@@ -43,7 +44,8 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
                 retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
+                sangrado: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0}
             },
             
         },
@@ -65,7 +67,8 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
                 retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
+                sangrado: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0}
             },
             
         },
@@ -87,7 +90,8 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
                 retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
+                sangrado: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0}
             },
             
         },
@@ -153,7 +157,8 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 1, perLv: 1 },
                 retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
+                sangrado: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0}
             },
             
         },
@@ -175,7 +180,8 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 5, perLv: 1.50 },
                 retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
+                sangrado: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0}
             },
             
         },
@@ -197,7 +203,8 @@ export const CHAMAN_SKILLS_SCALING: StructureCharacterSkillScaling = {
                 veneno: { base: 0, perLv: 0 },
                 incendio: { base: 0, perLv: 0 },
                 retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
+                sangrado: { base: 0, perLv: 0 },
+                vampirismo_hechizo: {base: 0, perLv: 0}
             },
             
         },

@@ -10,6 +10,7 @@ export const CORPORAL_SKILLS: SkillType[] = [
       cd: 12,
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
@@ -31,6 +32,7 @@ export const CORPORAL_SKILLS: SkillType[] = [
       cd: 16,
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 100,
         incendio: 0,
         retardo: 0,
@@ -52,6 +54,7 @@ export const CORPORAL_SKILLS: SkillType[] = [
       cd: 15,
       bonus_efecto: {
         penetracion_habilidad:0,
+        vampirismo_hechizo: 0,
         desmayo: 0,
         incendio: 0,
         retardo: 0,
