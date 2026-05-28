@@ -13,6 +13,17 @@ export class DefenderService {
         private fightSkillDefense: FightSkillDefenseService
     ){}
     
+    /**
+     * Ejecuta la acción defensiva correspondiente según
+     * el tipo de acción realizada por el atacante.
+     *
+     * @param attackerDmg Acción generada por el atacante.
+     * @param attacker Peleador atacante.
+     * @param defender Peleador defensor.
+     * @returns Resultado defensivo de la acción recibida.
+     *
+     * @throws Error si el tipo de acción recibida no es válido.
+     */
     executeDefenseAction (
         attackerDmg: ActionAttackerType,
         attacker: FighterType,
@@ -31,9 +42,6 @@ export class DefenderService {
             return this.fightSkillDefense.reduceSkillDamage(attackerDmg,attacker,defender)
         }
 
-
         throw new Error('El defensor no puede accionar ante el ataque recibido: type_action invalido')
-
-
     }
 }

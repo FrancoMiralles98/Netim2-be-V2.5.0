@@ -5,33 +5,63 @@ import { FightEntity } from "../entities/fight-entity";
 import { DEFAULT_FIGHT_DETAILS } from "../const/entity/fight-details.const";
 import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { FightDetails } from "../types/entites/fight-details.type";
+import { DEFAULT_FIGHTER_EFFECT_DESCRIPTION } from "../const/entity/fighter-effect-description.const";
+import { Injectable } from "@nestjs/common";
 
+/**
+ * Factory encargada de construir una entidad de fight
+ * a partir de dos participantes.
+ *
+ */
+@Injectable()
 export class FightFactory {
+
     createFight(
-        fighterA: MobType | CharacterPersistence,
-        fighterB: MobType | CharacterPersistence
+        fighterA: FighterType| MobType | CharacterPersistence,
+        fighterB: FighterType| MobType | CharacterPersistence
     ): FightEntity {
+
+
+
         return new FightEntity(
             this.asignFighters(fighterA),
             this.asignFighters(fighterB)
         )
     }
 
+    /**
+     * Adapta un mob o personaje al formato interno `FighterType`.
+     *
+     * @param fighter Participante original.
+     * @returns Participante adaptado para combate.
+     */
+     asignFighters(fighter: FighterType | MobType | CharacterPersistence): FighterType {
 
-    private asignFighters(fighter: MobType | CharacterPersistence): FighterType {
+        if (this.isFighter(fighter)) {
+            return structuredClone(fighter)
+        }
+
         return {
             fight_details: this.getDefaultDetailsWithSkills(fighter.hab),
-            hab: this.applyCDRToSkills(fighter.hab,fighter.stats.general.vh),
+            hab: fighter.hab,
             nombre: fighter.nombre,
             raza: fighter.raza,
             stats: structuredClone(fighter.stats),
             target_type: fighter.target_type,
             type_weapon: fighter.type_weapon,
-            spawnConfig: this.isMob(fighter) ? fighter.spawnConfig : undefined
+            spawnConfig: this.isMob(fighter) ? fighter.spawnConfig : undefined,
+            effects: { ...DEFAULT_FIGHTER_EFFECT_DESCRIPTION }
         }
     }
 
 
+    /**
+     * Genera el  fight_details de pelea e inicializa
+     * el seguimiento de uso para las habilidades de daño aprendidas
+     *
+     * @param habPool Pool de habilidades.
+     * @returns fight_details inicializada.
+     */
     private getDefaultDetailsWithSkills(habPool: SkillType[]): FightDetails {
         const fightDetails = structuredClone(DEFAULT_FIGHT_DETAILS)
 
@@ -51,21 +81,11 @@ export class FightFactory {
         return fightDetails
     }
 
-    private applyCDRToSkills(hab:SkillType[],vh:number): SkillType[] {
-        const updatedSkills = structuredClone(hab)
-
-        for (const skill of updatedSkills) {
-            if (skill.type === 'Daño') {
-                skill.cd = vh !== 0 
-                ? Math.round(Math.max(0,skill.cd - skill.cd * (vh / 100) ))
-                : skill.cd
-            }
-        }
-
-        return updatedSkills
-    }
-
     private isMob(fighter: MobType | CharacterPersistence): fighter is MobType {
         return 'idMob' in fighter
+    }
+
+    private isFighter(fighter: FighterType | MobType | CharacterPersistence): fighter is FighterType {
+        return 'effects' in fighter && 'fight_details' in fighter
     }
 }

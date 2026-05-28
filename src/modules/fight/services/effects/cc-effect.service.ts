@@ -4,15 +4,24 @@ import { CCffectKeys } from "../../types/config/effect-key.types"
 import { CcEffectDescription, FighterType } from "../../types/entites/fight-entity.type"
 import { ActionAttackerType } from "../../types/services/damage-description.type"
 import { RngService } from "src/modules/shared/services/rng.service"
+import { Injectable } from "@nestjs/common"
 
+@Injectable()
 export class CcEffectService {
 
     constructor(
         private rngService: RngService
-    ){
+    ) { }
 
-    }
-
+    /**
+     * Calcula el estado final de un efecto de control sobre el defensor.
+     *
+     * @param effectKey Tipo de efecto de control a calcular.
+     * @param attackerDmg Acción ejecutada por el atacante.
+     * @param defender Peleador que puede recibir el efecto.
+     * @param attacker Peleador que intenta aplicar el efecto.
+     * @returns Estado actualizado del efecto.
+     */
     getCcPlayerEffect(
         effectKey: BonusCCRefKeys,
         attackerDmg: ActionAttackerType,
@@ -21,12 +30,6 @@ export class CcEffectService {
     ): CcEffectDescription {
         const updatedEffect = { ...defender.effects[effectKey] }
 
-        const effectResistance = this.getCcEffectBonus(effectKey, defender)
-
-        if (this.rngService.rollChance(effectResistance)) {
-            return updatedEffect
-        }
-
         if (attackerDmg.type_action === 'healing') {
             return updatedEffect
         }
@@ -34,6 +37,15 @@ export class CcEffectService {
         if (!attackerDmg.effectsChances[effectKey]) {
             return updatedEffect
         }
+
+        const effectResistance = this.getCcEffectBonus(effectKey, defender)
+
+        //si pudo defenderse del cc no se aplica el efecto
+        if (this.rngService.rollChance(effectResistance)) {
+            return updatedEffect
+        }
+
+
 
         const totalTurns =
             Math.round(CC_EFFECTS_CONFIG[effectKey].turns * (1 + attacker.stats.bonus.daño.duracion_estado / 100))
@@ -45,8 +57,14 @@ export class CcEffectService {
         }
     }
 
-
-
+    /**
+     * Obtiene la resistencia defensiva correspondiente
+     * a un efecto de control.
+     *
+     * @param effectKey Efecto de control consultado.
+     * @param defender Peleador defensor.
+     * @returns Porcentaje de resistencia contra ese efecto.
+     */
     private getCcEffectBonus(
         effectKey: CCffectKeys,
         defender: FighterType

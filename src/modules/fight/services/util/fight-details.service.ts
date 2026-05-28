@@ -8,6 +8,16 @@ import { AttackerFightDetailsService } from "./attacker-fight-details.service";
 import { DefenderFightDetailsService } from "./defender-fight-details.service";
 import { HpService } from "./hp.service";
 
+/**
+ * Servicio encargado de construir el resultado estadístico
+ * de un turno de combate.
+ *
+ * Orquesta:
+ * - registro ofensivo del atacante
+ * - registro defensivo del defensor
+ * - cálculo de curación realizada
+ * - cálculo de daño recibido
+ */
 @Injectable()
 export class FightDetailsService {
 
@@ -17,20 +27,52 @@ export class FightDetailsService {
         private hpService: HpService
     ) { }
 
+     /**
+     * Calcula el resultado completo de un turno.
+     *
+     * Genera nuevos detalles de pelea para atacante y defensor,
+     * registra sus acciones y calcula los cambios finales de HP.
+     *
+     * @param attackerAction Acción realizada por el atacante.
+     * @param defenderAction Respuesta defensiva del defensor.
+     * @param defenderEffect Efectos actualizados del defensor.
+     * @param attacker Peleador atacante.
+     * @param isDobleGolpe Indica si el turno corresponde a un golpe extra.
+     * @returns Resultado estadístico y cambios de HP del turno.
+     */
     getTurnResult(
         attackerAction: ActionAttackerType,
         defenderAction: ActionDefenderType,
         defenderEffect: FighterEffectDescription,
         attacker: FighterType,
+        defender: FighterType,
+        isDobleGolpe: boolean
     ): { attackerResult: FightDetails, defenderResult: FightDetails, attackerHealedReceived: number, defenderDmgReceived: number } {
 
-        const attackerFightDetails = structuredClone(DEFAULT_FIGHT_DETAILS)
-        const defenderFightDetails = structuredClone(DEFAULT_FIGHT_DETAILS)
+        const attackerFightDetails = structuredClone(attacker.fight_details)
+        const defenderFightDetails = structuredClone(defender.fight_details)
 
-        this.attackerFightDetails.registerAttackerTurn(attackerAction, defenderAction, defenderEffect, attackerFightDetails)
-        this.defenderFightDetails.registerDefenderTurn(attackerAction, defenderAction, defenderEffect, defenderFightDetails)
+        this.attackerFightDetails.registerAttackerTurn(
+            attackerAction,
+            defenderAction,
+            defenderEffect,
+            attacker.effects,
+            attackerFightDetails,
+            isDobleGolpe
+        )
 
-        const { attackerHealing, defenderCortaCura } = this.hpService.getHealingResult(attacker, attackerAction, defenderAction)
+        this.defenderFightDetails.registerDefenderTurn(
+            attackerAction, 
+            defenderAction, 
+            defenderFightDetails
+        )
+
+        const { attackerHealing, defenderCortaCura } = this.hpService.getHealingResult(
+            attacker, 
+            attackerAction, 
+            defenderAction
+        
+        )
 
         attackerFightDetails.vida_curada += attackerHealing
         defenderFightDetails.curacion_cortada += defenderCortaCura
@@ -38,7 +80,11 @@ export class FightDetailsService {
 
         const attackerHealedReceived = this.hpService.calculateAttackerHealedReceived(attackerHealing, defenderAction)
 
-        const defenderDmgReceived = this.hpService.calculateDefenderDamageReceived(defenderAction.dmgToReceive, defenderEffect)
+        const defenderDmgReceived = this.hpService.calculateDefenderDamageReceived(
+            defenderAction.dmgToReceive,
+             defenderEffect,
+             isDobleGolpe
+            )
 
         return {
             attackerResult: attackerFightDetails,

@@ -2,23 +2,47 @@ import { Injectable } from "@nestjs/common";
 import { FightDetails } from "../../types/entites/fight-details.type";
 import { ActionDefenderType } from "../../types/services/defense-description.type";
 import { ActionAttackerType } from "../../types/services/damage-description.type";
-import { FighterEffectDescription } from "../../types/entites/fight-entity.type";
 
-
+/**
+ * Servicio encargado de registrar las estadísticas defensivas
+ * generadas por un peleador durante un turno de combate.
+ *
+ * Responsabilidades:
+ * - Registrar bloqueos.
+ * - Registrar esquivas.
+ * - Registrar daño reflejado.
+ * - Registrar daño mitigado.
+ */
 @Injectable()
 export class DefenderFightDetailsService {
 
+    /**
+    * Registra toda la actividad defensiva realizada durante un turno.
+    *
+    * @param attackerAction Acción ejecutada por el atacante.
+    * @param defenderAction Respuesta defensiva del defensor.
+    * @param defenderFightDetails Estadísticas acumuladas del defensor.
+    */
     registerDefenderTurn(
         attackerAction: ActionAttackerType,
         defenderAction: ActionDefenderType,
-        defenderEffects: FighterEffectDescription,
         defenderFightDetails: FightDetails,
     ) {
-        this.registerDefenderActions(attackerAction,defenderAction,defenderFightDetails)
-        this.registerTurnEffects(defenderFightDetails,defenderEffects,defenderAction)
+        this.registerDefenderActions(attackerAction, defenderAction, defenderFightDetails)
+        this.registerTurnEffects(defenderFightDetails, defenderAction)
     }
 
 
+    /**
+     * Registra estadísticas defensivas según la acción recibida.
+     *
+     * No registra mitigación cuando el ataque básico falla,
+     * ya que el daño no fue evitado por el defensor.
+     *
+     * @param attackerAction Acción ejecutada por el atacante.
+     * @param defenderAction Respuesta defensiva del defensor.
+     * @param defenderFightDetails Estadísticas acumuladas del defensor.
+     */
     private registerDefenderActions(
         attackerAction: ActionAttackerType,
         defenderAction: ActionDefenderType,
@@ -28,11 +52,13 @@ export class DefenderFightDetailsService {
         if (defenderAction.type_action === 'def_basic_attack') {
             defenderFightDetails.ataques_bloqueados += defenderAction.defensiveChance.bloquear_ataques ? 1 : 0
             defenderFightDetails.ataques_esquivados += defenderAction.defensiveChance.esquivar_ataques ? 1 : 0
-            defenderFightDetails.reflejo_realizado += defenderAction.defensiveChance.reflectar ? 1 : 0
+            defenderFightDetails.reflejo_aplicado += defenderAction.defensiveChance.reflectar ? 1 : 0
         }
 
         if (attackerAction.type_action === 'basic_attack') {
-            defenderFightDetails.ad_mitigado += attackerAction.dmg - defenderAction.dmgToReceive
+            if (!attackerAction.missHit) {
+                defenderFightDetails.ad_mitigado += attackerAction.dmg - defenderAction.dmgToReceive
+            }
         }
 
         if (attackerAction.type_action === 'skill') {
@@ -45,13 +71,19 @@ export class DefenderFightDetailsService {
         }
     }
 
+      /**
+     * Registra estadísticas defensivas relacionadas con efectos
+     * resultantes de la acción defensiva.
+     *
+     * Actualmente registra el daño reflejado realizado.
+     *
+     * @param defenderFightDetails Estadísticas acumuladas del defensor.
+     * @param defenderAction Respuesta defensiva del defensor.
+     */
     private registerTurnEffects(
         defenderFightDetails: FightDetails,
-        defenderEffects: FighterEffectDescription,
         defenderAction: ActionDefenderType
     ) {
-        defenderFightDetails.turno_anulado += defenderEffects.desmayo.isActive ? 1 : 0
-        defenderFightDetails.reflejo_aplicado += defenderAction.reflectar_dmg > 0 ? 1 : 0
         defenderFightDetails.reflejo_realizado += defenderAction.reflectar_dmg
     }
 

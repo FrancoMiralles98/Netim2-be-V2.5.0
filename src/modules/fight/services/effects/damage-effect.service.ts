@@ -1,10 +1,34 @@
+import { Injectable } from "@nestjs/common"
 import { DAMAGE_EFFECTS_CONFIG } from "../../config/effects.config"
 import { DamageEffectKeys } from "../../types/config/effect-key.types"
 import { DmgEffectDescription, FighterType } from "../../types/entites/fight-entity.type"
 import { ActionAttackerType } from "../../types/services/damage-description.type"
+import { BonusEffectService } from "./bonus-effect.service"
 
+@Injectable()
 export class DamageEffectService {
 
+    constructor(
+        private bonusEffectService: BonusEffectService
+    ) { }
+
+    /**
+     * Calcula el estado final de un efecto de daño sobre el defensor.
+     *
+     * Flujo:
+     * - Ignora efectos si la acción recibida es curación.
+     * - Verifica si el efecto fue activado por el atacante.
+     * - Calcula el daño base del efecto.
+     * - Aplica bonus ofensivos del atacante.
+     * - Aplica defensas del defensor.
+     * - Mantiene el daño más fuerte si el efecto ya estaba activo.
+     *
+     * @param effectKey Tipo de efecto de daño a calcular.
+     * @param attackerDmg Acción ejecutada por el atacante.
+     * @param attacker Peleador que aplica el efecto.
+     * @param defender Peleador que puede recibir el efecto.
+     * @returns Estado actualizado del efecto.
+     */
     getDamagePlayerEffect(
         effectKey: DamageEffectKeys,
         attackerDmg: ActionAttackerType,
@@ -34,7 +58,7 @@ export class DamageEffectService {
         effectDmg *= 1 + totalBonus / 100
 
         //Al final se le aplica las reduccion de daño del defensor
-        const defenseBonus = this.getDefenseEffectBonus(effectKey, defender)
+        const defenseBonus = Math.min(this.getDefenseEffectBonus(effectKey, defender), 100)
         effectDmg *= 1 - defenseBonus / 100
 
         const totalTurns =
@@ -45,14 +69,31 @@ export class DamageEffectService {
             updatedEffect.dmgOfEffect,
         )
 
+        /*Si ya estaba activo se deja el daño mas alto y si no lo tenia activo se deja el daño que lo 
+        ocasiono*/
+        const finalDmg = updatedEffect.isActive
+            ? strongerDamage
+            : effectDmg
+
         return {
-            dmgOfEffect: Math.trunc(strongerDamage),
+            dmgOfEffect: Math.trunc(finalDmg),
             isActive: true,
             turnsRemaining: totalTurns,
             type: 'damage',
         }
     }
 
+    /**
+     * Obtiene el bonus ofensivo del atacante para un efecto de daño.
+     *
+     * Incluye:
+     * - bonus específico del efecto
+     * - bonus general de estados
+     *
+     * @param effectKey Tipo de efecto de daño.
+     * @param attacker Peleador atacante.
+     * @returns Porcentaje total de bonus ofensivo.
+     */
     private getDamageEffectBonus(
         effectKey: DamageEffectKeys,
         attacker: FighterType,
@@ -65,6 +106,13 @@ export class DamageEffectService {
         return bonusByEffect[effectKey] + attacker.stats.bonus.daño.bonus_estado
     }
 
+    /**
+     * Obtiene la defensa del defensor contra un efecto de daño.
+     *
+     * @param effectKey Tipo de efecto de daño.
+     * @param defender Peleador defensor.
+     * @returns Porcentaje de defensa contra ese efecto.
+     */
     private getDefenseEffectBonus(
         effectKey: DamageEffectKeys,
         defender: FighterType
@@ -78,6 +126,17 @@ export class DamageEffectService {
         return defenseByEffect[effectKey]
     }
 
+    /**
+    * Obtiene daño porcentual extra para efectos especiales.
+    *
+    * Reglas:
+    * - Incendio gana daño extra si el objetivo ya está incendiado.
+    * - Sangrado escala con la VM del defensor.
+    *
+    * @param effectKey Tipo de efecto de daño.
+    * @param defender Peleador defensor.
+    * @returns Porcentaje extra de daño base.
+    */
     private getExtraPorcentBonusDamage(
         effectKey: DamageEffectKeys,
         defender: FighterType
@@ -88,7 +147,8 @@ export class DamageEffectService {
         }
 
         if (effectKey === 'sangrado') {
-            return defender.stats.general.vm * DAMAGE_EFFECTS_CONFIG[effectKey].extra_porcent_base_dmg_per_vm
+            const defenderVm = this.bonusEffectService.calculateRetardoEffect(defender.effects, 'vm', defender.stats.general.vm)
+            return defenderVm * DAMAGE_EFFECTS_CONFIG[effectKey].extra_porcent_base_dmg_per_vm
         }
 
         return 0

@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { FighterEffectDescription, FighterType } from "../../types/entites/fight-entity.type";
-import { BONUS_EEFECTS_CONFIG, CC_EFFECTS_CONFIG } from "../../config/effects.config";
 import { ActionAttackerType } from "../../types/services/damage-description.type";
 import { DamageEffectService } from "./damage-effect.service";
 import { CcEffectService } from "./cc-effect.service";
@@ -11,10 +10,17 @@ export class EffectsService {
     constructor(
         private damageEffectService: DamageEffectService,
         private ccEffectService: CcEffectService,
-    ) {
+    ) {}
 
-    }
-
+    /**
+     * Calcula los efectos finales del defensor luego de recibir
+     * una acción del atacante.
+     *
+     * @param attackerAction Acción ejecutada por el atacante.
+     * @param attacker Peleador que aplica los efectos.
+     * @param defender Peleador que puede recibir los efectos.
+     * @returns Efectos actualizados del defensor.
+     */
     calculateEffectPlayer(
         attackerAction: ActionAttackerType,
         attacker: FighterType,
@@ -36,42 +42,18 @@ export class EffectsService {
         return updatedEffectPlayer
     }
 
-    calculateRetardoEffect(
-        fighterEffect: FighterEffectDescription,
-        propToApllyEffect: 'vm' | 'va' | 'vh',
-        propValueToReduce: number
-    ): number {
-        const reductionValue = CC_EFFECTS_CONFIG.retardo[propToApllyEffect]
-        if (!reductionValue) {
-            throw new Error('No se encuentra la prop a reducir del retardo')
-        }
-
-        return fighterEffect.retardo.isActive
-            ? propValueToReduce - reductionValue
-            : propValueToReduce
-    }
-
-    calculatePenetracionEffect(
-        isPenetracion: boolean,
-        propToApllyEffect: 'bonus_def' | 'flat_def',
-        propValueToReduce: number
-    ): number {
-
-        if (!isPenetracion) {
-            return propValueToReduce
-        }
-
-        const penetratcionConfig = propToApllyEffect === 'bonus_def'
-            ? BONUS_EEFECTS_CONFIG.penetracion.reduction_bonus_def
-            : BONUS_EEFECTS_CONFIG.penetracion.reduction_flat_def
-
-        return propValueToReduce * (1 - (penetratcionConfig / 100))
-    }
-
-
-    calcuateCdOfEffects(effects: FighterEffectDescription): FighterEffectDescription {
-        const updatedEffect = { ...effects }
-        for (const keyEffect of Object.values(effects) as Array<keyof FighterEffectDescription>) {
+   
+    /**
+     * Reduce en 1 turno la duración restante de todos los efectos activos.
+     *
+     * Si un efecto llega a 0 turnos restantes, se desactiva.
+     *
+     * @param effects Efectos actuales del peleador.
+     * @returns Efectos actualizados.
+     */
+    reduceDurationOfEffects(effects: FighterEffectDescription): FighterEffectDescription {
+        const updatedEffect = structuredClone(effects)
+        for (const keyEffect of Object.keys(effects) as Array<keyof FighterEffectDescription>) {
             const effect = updatedEffect[keyEffect]
 
             if (typeof effect !== 'object') {

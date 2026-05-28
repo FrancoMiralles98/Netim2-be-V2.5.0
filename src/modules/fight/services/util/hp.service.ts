@@ -2,11 +2,31 @@ import { Injectable } from "@nestjs/common";
 import { FighterEffectDescription, FighterType } from "../../types/entites/fight-entity.type";
 import { ActionAttackerType } from "../../types/services/damage-description.type";
 import { ActionDefenderType } from "../../types/services/defense-description.type";
-import { BONUS_EEFECTS_CONFIG, DAMAGE_EFFECTS_CONFIG } from "../../config/effects.config";
+import { BONUS_EFFECTS_CONFIG, DAMAGE_EFFECTS_CONFIG } from "../../config/effects.config";
 
+/**
+ * Servicio encargado de calcular los cambios de HP
+ * generados durante un turno de combate.
+ *
+ * Responsabilidades:
+ * - Calcular curación recibida por el atacante.
+ * - Calcular reducción de curación por corta curación.
+ * - Calcular daño recibido por el defensor.
+ * - Aplicar daño de efectos activos.
+ * - Aplicar daño reflejado sobre el atacante.
+ */
 @Injectable()
 export class HpService {
 
+    /**
+     * Calcula la curación final del atacante y cuánto fue reducido
+     * por efectos defensivos como corta curación.
+     *
+     * @param attacker Peleador que recibe la curación.
+     * @param attackerAction Acción realizada por el atacante.
+     * @param defenderAction Respuesta defensiva del defensor.
+     * @returns Curación final y cantidad de curación cortada.
+     */
     getHealingResult(
         attacker: FighterType,
         attackerAction: ActionAttackerType,
@@ -21,6 +41,14 @@ export class HpService {
         return { attackerHealing, defenderCortaCura }
     }
 
+    /**
+     * Calcula la vida final que recupera el atacante,
+     * descontando el daño reflejado recibido.
+     *
+     * @param healing Curación calculada.
+     * @param defenderAction Respuesta defensiva del defensor.
+     * @returns HP neto recuperado por el atacante.
+     */
     calculateAttackerHealedReceived(
         healing: number,
         defenderAction: ActionDefenderType
@@ -28,24 +56,57 @@ export class HpService {
         return healing - defenderAction.reflectar_dmg
     }
 
+    /**
+     * Calcula el daño total recibido por el defensor.
+     *
+     * Incluye:
+     * - daño directo recibido
+     * - daño por efectos activos
+     *
+     * Los efectos no se aplican durante doble golpe.
+     *
+     * @param dmg Daño directo recibido.
+     * @param defenderEffects Efectos activos del defensor.
+     * @param isDobleGolpe Indica si la acción es un golpe extra.
+     * @returns Daño total recibido.
+     */
     calculateDefenderDamageReceived(
         dmg: number,
-        defenderEffects: FighterEffectDescription
+        defenderEffects: FighterEffectDescription,
+        isDobleGolpe: boolean
     ): number {
         let totalDmg = 0
-        for (const key of Object.keys(defenderEffects) as Array<keyof typeof defenderEffects>) {
-            const effect = defenderEffects[key]
-            if (typeof effect !== 'object' || effect.type !== 'damage') {
-                continue;
-            }
-            totalDmg += effect.isActive ? effect.dmgOfEffect : 0
-        }
         
+        if (!isDobleGolpe) {
+            for (const key of Object.keys(defenderEffects) as Array<keyof typeof defenderEffects>) {
+                const effect = defenderEffects[key]
+                if (typeof effect !== 'object' || effect.type !== 'damage') {
+                    continue;
+                }
+                totalDmg += effect.isActive ? effect.dmgOfEffect : 0
+            }
+
+        }
+
         return totalDmg + dmg
 
     }
 
 
+     /**
+     * Calcula la curación base generada por el atacante.
+     *
+     * La curación puede provenir de:
+     * - habilidad de curación
+     * - robo de vida por ataque básico
+     * - vampirismo de hechizo por skill
+     * - regeneración natural de HP
+     *
+     * @param attacker Peleador atacante.
+     * @param attackerAction Acción realizada.
+     * @param defenderAction Respuesta defensiva.
+     * @returns Curación base truncada.
+     */
     private calculateAttackerHealing(
         attacker: FighterType,
         attackerAction: ActionAttackerType,
@@ -77,6 +138,17 @@ export class HpService {
     }
 
 
+    /**
+     * Calcula cuánta curación es reducida por corta curación.
+     *
+     * También aumenta la reducción si el atacante está afectado
+     * por veneno.
+     *
+     * @param attackerHealing Curación base del atacante.
+     * @param attacker Peleador que intenta curarse.
+     * @param defenderAction Respuesta defensiva del defensor.
+     * @returns Cantidad de curación reducida.
+     */
     private calculateCortaCura(
         attackerHealing: number,
         attacker: FighterType,
@@ -86,7 +158,7 @@ export class HpService {
             return 0
         }
 
-        let cortaCuraBonusValue = BONUS_EEFECTS_CONFIG.corta_curacion.porcent
+        let cortaCuraBonusValue = BONUS_EFFECTS_CONFIG.corta_curacion.porcent
 
         cortaCuraBonusValue += attacker.effects.veneno.isActive
             ? DAMAGE_EFFECTS_CONFIG.veneno.corta_cura_porcent
