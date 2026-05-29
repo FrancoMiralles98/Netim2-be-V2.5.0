@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { BonusCategory, BonusTierLv, BonusType } from '../types/bonusListHelper/bonus.type';
 import { BONUS_LIST } from '../const/bonus-list.cons';
-import { TIER_BONUS_PROBABILITIES } from '../config/tier-bonus-probabilites.config';
-import { randomNumberInRange } from '../../shared/functions/random-number-in-range.function';
+import { TIER_BONUS_PROBABILITIES_X_QUALITY } from '../config/tier-bonus-probabilites.config';
 import { BonusInItem } from '../types/bonus-in-item.type';
 import { SpecialBonusService } from './special-bonus.service';
 import { ItemLevelScalingService } from './item-level-scaling.service';
+import { RngService } from 'src/modules/shared/services/rng.service';
+import { ItemDropQuality } from 'src/modules/drop/types/item-drop-quaility.type';
 
 /**
  * Servicio encargado de la generación de bonus para ítems.
@@ -13,9 +14,11 @@ import { ItemLevelScalingService } from './item-level-scaling.service';
 @Injectable()
 export class GenerateBonusService {
 
+
     constructor(
         private specialBonusService: SpecialBonusService,
-        private itemLevelScalingService: ItemLevelScalingService
+        private itemLevelScalingService: ItemLevelScalingService,
+        private rngService: RngService
     ) { }
 
     /**
@@ -24,13 +27,19 @@ export class GenerateBonusService {
      * @param {BonusCategory} category - Categoría de bonus a generar
      * @param {BonusInItem[]} [bonusUsed=[]] - Lista de bonus ya aplicados al ítem, para evita duplicados.
      * @param {number} itemLv - Nivel del ítem interno, usado para escalar el valor del bonus.
+     * @param {ItemDropQuality} quality - calidad de las chances de que salga un buen bonus
      * 
      * @returns {BonusInItem[]} Array de bonus generados:
      *  - Bonus genérico → retorna 1 elemento.
      *  - Bonus especial → retorna 2 elementos (bonus + counter bonus).
      */
-    generateBonus(category: BonusCategory, bonusUsed: BonusInItem[] = [], itemLv: number): BonusInItem[] {
-        const tierToUse = this.pickBonusTier()
+    generateBonus(
+        category: BonusCategory,
+        bonusUsed: BonusInItem[] = [],
+        itemLv: number,
+        quaility: ItemDropQuality = 'normal'
+    ): BonusInItem[] {
+        const tierToUse = this.pickBonusTier(quaility)
         const filterList = this.getBonusListByCategory(category, bonusUsed).filter(b => b.tier === tierToUse)
 
         if (filterList.length === 0) {
@@ -40,7 +49,7 @@ export class GenerateBonusService {
         const bonusToUse = this.selectRandomBonusOfList(filterList)
 
         if (this.specialBonusService.isSpecialBonus(bonusToUse)) {
-            return this.specialBonusService.generateSpecialBonuses(bonusToUse,itemLv)
+            return this.specialBonusService.generateSpecialBonuses(bonusToUse, itemLv)
         }
 
         const genericBonus: BonusInItem = {
@@ -59,8 +68,8 @@ export class GenerateBonusService {
      * 
      * @returns {BonusTierLv} Tier seleccionado.
      */
-    private pickBonusTier(): BonusTierLv {
-        const allTiers = Object.entries(TIER_BONUS_PROBABILITIES).map(
+    private pickBonusTier(quaility: ItemDropQuality = 'normal'): BonusTierLv {
+        const allTiers = Object.entries(TIER_BONUS_PROBABILITIES_X_QUALITY[quaility]).map(
             ([key, value]) => [Number(key) as BonusTierLv, value] as [BonusTierLv, number]
         );
         const random = Math.random() * 100
@@ -97,7 +106,7 @@ export class GenerateBonusService {
 
     private selectRandomBonusOfList(list: BonusType[]): BonusType {
         //se resta 1 del total porque se busca un index de la lista
-        const randomIndex = randomNumberInRange(0, list.length - 1)
+        const randomIndex = this.rngService.randomNumberInRange(0, list.length - 1)
         const bonusToUse = list[randomIndex]
         if (!bonusToUse) {
             throw new Error('No se encuentra un bonus para usar')

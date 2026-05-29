@@ -1,0 +1,1 @@
+export type ItemDropQuality = 'normal' | 'magic' | 'rare' | 'epic' | 'unique'
