@@ -1,6 +1,6 @@
 import { ItemDTO, UtilityItemDTO } from "src/modules/item/types/item-dto";
 import { InventoryItem, Position } from "../types/inventory-item.type";
-import { isUtilityItem } from "src/modules/shared/types/type-guard";
+import { isUtilityItem } from "src/modules/item/types/item-type-guard.type";
 import { InventoryChangeResult } from "../types/item-to-update.types";
 import { InventoryItemFactory } from "../factories/inventory-item.factory";
 import { AddItemResult } from "../types/inventory-result.types";

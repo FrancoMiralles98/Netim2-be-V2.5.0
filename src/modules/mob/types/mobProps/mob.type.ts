@@ -8,6 +8,8 @@ import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { MobRace } from "./mob-race.type";
 import { SpecificDrop } from "./drop-config.type";
 import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
+import { MobDifficulty } from "./mob-difficult.type";
+import { EnemyType } from "./enemie-type.type";
 
 /**
  * Representa la estructura completa de un mob
@@ -65,7 +67,7 @@ export interface MobType {
   lv: number;
   img: string;
   ubication: UbicationNames;
-  dificultad: 1 | 2 | 3 | 4;
+  dificultad: MobDifficulty;
   spawnConfig: SpawnConfig
   idMob: IdMobList;
   yang: { min: number, max: number };
@@ -74,6 +76,7 @@ export interface MobType {
   hab: SkillType[];
   raza: MobRace;
   target_type: AllTargetType;
+  enemie_type: EnemyType;
   especialidad: CharacterSpeciality;
   type_weapon: TypeWeapon;
   specific_drop: SpecificDrop[];

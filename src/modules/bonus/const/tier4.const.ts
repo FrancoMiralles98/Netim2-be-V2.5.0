@@ -30,11 +30,11 @@ export const tier4BonusList: BonusType[] = [
     tier: 4,
     category: "generic",
     name: {
-      full_name: allFullNameBonusList.REGENERACION_DE_HP,
-      bonus_ref_name: 'regen_hp',
+      full_name: allFullNameBonusList.PENETRACION_HABILIDAD,
+      bonus_ref_name: 'penetracion_habilidad',
       type_value: ValueBonusType.PORCENTAGE,
     },
-    values: { min: 5, max: 50 },
+    values: { min: 1, max: 7 },
     valid: ['brazalete'],
   },
   {

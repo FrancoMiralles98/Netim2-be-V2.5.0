@@ -1,0 +1,1 @@
+export type ItemBonusQuality = 'normal' | 'magic' | 'rare' | 'epic' | 'unique'

@@ -1,4 +1,4 @@
-import { ItemDropQuality } from "src/modules/drop/types/item-drop-quaility.type";
+import { ItemBonusQuality } from "src/modules/bonus/types/item-drop-quaility.type";
 import { BonusTierLv } from "../types/bonusListHelper/bonus.type";
 
 /**
@@ -15,26 +15,25 @@ import { BonusTierLv } from "../types/bonusListHelper/bonus.type";
  * - Se utilizan en sistemas de roll acumulativo asi que las probabilidades deben sumar 100.
  *
  */
-export const TIER_BONUS_PROBABILITIES_X_QUALITY: Record<ItemDropQuality, Record<BonusTierLv, number>> = {
+export const TIER_BONUS_PROBABILITIES_X_QUALITY: Record<ItemBonusQuality, Record<BonusTierLv, number>> = {
     normal: {
-        1: 75,
-        2: 20,
-        3: 4.5,
+        1: 55,
+        2: 37,
+        3: 7.5,
         4: 0.5
     },
     magic: {
-        1: 60,
-        2: 28,
-        3: 10,
-        4: 2
+        1: 45,
+        2: 34,
+        3: 20,
+        4: 1
     },
     rare: {
-        1: 40,
+        1: 35,
         2: 35,
-        3: 20,
+        3: 25,
         4: 5
     },
-
     epic: {
         1: 20,
         2: 40,
