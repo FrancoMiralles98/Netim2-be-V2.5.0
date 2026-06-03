@@ -1,22 +1,26 @@
 import { Injectable } from "@nestjs/common";
-import { EquipmentItemDropService } from "./equipment-item-drop.service";
+import { EquipItemDropService } from "./equipment-item-drop.service";
 import { ItemDTO } from "src/modules/item/types/item-dto";
 import { MobModel } from "src/modules/mob/schema/mob.schema";
 import { CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
-import { DROP_TAG_CHANCES_BY_DIFFICULTY } from "../config/drop-tag-chance-by-difficulty.config";
+import { DROP_TAG_CHANCES_BY_DIFFICULTY } from "../config/drop/drop-tag-chance-by-difficulty.config";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { MicsBonusService } from "./miscs-bonus.service";
 import { DropTag, ItemSource } from "src/modules/item/types/entities-props/item-drop.config.type";
 import { itemsList } from "src/modules/item/const/items.const";
 import { EnemyType } from "src/modules/mob/types/mobProps/enemie-type.type";
 import { UtilityItemDropService } from "./utility-item-drop.service";
-import { DROP_WEIGHT } from "../config/drop-weight.config";
+import { DROP_WEIGHT } from "../config/drop/drop-weight.config";
 import { DropWeightType } from "../types/drop-weight.type";
+import { RARE_DROP_MULTIPLIER } from "../config/drop/rare-drop-bonus-multiplier.config";
+import { isEquipItem } from "src/modules/item/types/item-type-guard.type";
+import { EQUIP_DROP_LV_WEIGHT_CONFIG } from "../config/equip/equip-drop-lv.config";
+import { EquipType } from "src/modules/item/types/entities-props/equip.type";
 
 @Injectable()
 export class ItemDropService {
     constructor(
-        private equipmentItemDropService: EquipmentItemDropService,
+        private equipItemDropService: EquipItemDropService,
         private utilityItemDropService: UtilityItemDropService,
         private rngService: RngService,
         private miscsBonusService: MicsBonusService,
@@ -28,16 +32,17 @@ export class ItemDropService {
     ): ItemDTO {
         let mobDropTags = structuredClone(DROP_TAG_CHANCES_BY_DIFFICULTY[mob.enemie_type])
 
-        const applyBonus = this.rngService.rollChance(bonus.chances_raros)
-
-        if (applyBonus) {
-            mobDropTags = this.miscsBonusService.applyRareDropTagBonus(mobDropTags)
-        }
+        mobDropTags = this.miscsBonusService.applyRareDropTagBonus(mobDropTags, bonus.chances_raros)
 
         const tagSelected = this.rngService.pickWeightedResult(mobDropTags)
 
-        const item = this.getItem(tagSelected,mob)
+        const baseItem = this.getBaseItem(tagSelected, mob, bonus.chances_raros)
 
+        if (isEquipItem(baseItem)) {
+            return this.equipItemDropService.generateFinalItem(baseItem, mob, bonus.chances_raros)
+        }
+
+        return this.utilityItemDropService.generateFinalItem(baseItem, mob, bonus.chances_raros)
     }
 
     /**
@@ -55,9 +60,10 @@ export class ItemDropService {
     *
     * @returns Copia del ítem seleccionado.
     */
-    private getItem(
+    private getBaseItem(
         tag: DropTag,
         mob: MobModel,
+        rareBonusValue: number
     ): ItemDTO {
         const filterList = this.getFilterList(tag, mob)
 
@@ -68,7 +74,7 @@ export class ItemDropService {
         const weightedItems = Object.fromEntries(
             filterList.map(item => [
                 String(item.idItem),
-                this.resolveDropWeight(item.itemDropConfig!.weight),
+                this.resolveDropWeight(item.itemDropConfig!.weight, rareBonusValue, item, mob),
             ])
         )
 
@@ -128,18 +134,34 @@ export class ItemDropService {
         const source = this.getDropSource(mob.enemie_type)
 
         const filterList = itemsList.filter(item => {
+            //No puede dropear si el item no tiene la configuracion de drop
             if (!item.itemDropConfig) {
                 return false
             }
 
+            if (isEquipItem(item)) {
+                // No puede dropear equipamiento de nivel superior al mob
+                if (item.lvReq > mob.lv) {
+                    return false
+                }
+
+                // No puede dropear equipamiento demasiado inferior
+                if (item.lvReq < mob.lv - EQUIP_DROP_LV_WEIGHT_CONFIG.maxLevelDifference) {
+                    return false
+                }
+            }
+
+            //No puede dropear los items que no tengan el mismo tag
             if (!item.itemDropConfig.drop_tag.includes(tag)) {
                 return false
             }
 
+            //no puede dropear si no esta en la franja de niveles que el item puede dropearse
             if (mob.lv < item.itemDropConfig.mobLv.min || mob.lv > item.itemDropConfig.mobLv.max) {
                 return false
             }
 
+            //no puede dropearse si la fuente en donde aparece no coincide
             if (!item.itemDropConfig.source.includes(source)) {
                 return false
             }
@@ -177,22 +199,39 @@ export class ItemDropService {
         return sourceByType[type]
     }
 
-    /**
-    * Resuelve el weight real de un ítem para ser utilizado
-    * en las selecciones ponderadas de drop
-    *
-    * Ejemplos:
-    * - 150 -> 150
-    * - 'COMMON' -> DROP_WEIGHT.COMMON
-    * - 'RARE' -> DROP_WEIGHT.RARE
-    *
-    * @param weight Weight configurado en el ítem.
-    *
-    * @returns Valor numérico final del weight.
-    */
-    private resolveDropWeight(weight: number | DropWeightType): number {
-        return typeof weight === 'number'
-            ? weight
-            : DROP_WEIGHT[weight]
+
+    private resolveDropWeight(
+        weight: DropWeightType,
+        rareBonusValue: number,
+        item: ItemDTO,
+        mob: MobModel,
+    ): number {
+        let baseWeight = DROP_WEIGHT[weight]
+
+        if (RARE_DROP_MULTIPLIER[weight]) {
+            const targetMultiplier = RARE_DROP_MULTIPLIER[weight]
+
+            baseWeight *= 1 + ((targetMultiplier - 1) * rareBonusValue / 100)
+        }
+
+        if (isEquipItem(item)) {
+            baseWeight *= this.getEquipLvWeightMultiplier(item, mob)
+        }
+
+        return Math.round(baseWeight)
+    }
+
+    private getEquipLvWeightMultiplier(item: EquipType, mob: MobModel): number {
+        const levelDifference = Math.max(0, mob.lv - item.lvReq)
+
+        const cappedDifference = Math.min(
+            levelDifference,
+            EQUIP_DROP_LV_WEIGHT_CONFIG.maxLevelDifference,
+        )
+
+        const progress =
+            cappedDifference / EQUIP_DROP_LV_WEIGHT_CONFIG.maxLevelDifference
+
+        return 1 + progress * (EQUIP_DROP_LV_WEIGHT_CONFIG.maxMultiplier - 1)
     }
 }

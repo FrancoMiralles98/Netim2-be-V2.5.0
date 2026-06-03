@@ -6,7 +6,7 @@ import { BonusInItem } from '../types/bonus-in-item.type';
 import { SpecialBonusService } from './special-bonus.service';
 import { ItemLevelScalingService } from './item-level-scaling.service';
 import { RngService } from 'src/modules/shared/services/rng.service';
-import { ItemBonusQuality } from 'src/modules/bonus/types/item-drop-quaility.type';
+import { ItemBonusQuality } from 'src/modules/bonus/types/item-bonus-quaility.type';
 
 /**
  * Servicio encargado de la generación de bonus para ítems.

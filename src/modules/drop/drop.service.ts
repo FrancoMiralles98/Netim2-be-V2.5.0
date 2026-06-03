@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MobModel } from '../mob/schema/mob.schema';
 import { RngService } from '../shared/services/rng.service';
-import { DROP_DIFFICULTY_CONFIG } from './config/drop-difficulty.config';
+import { DROP_DIFFICULTY_CONFIG } from './config/drop/drop-difficulty.config';
 import { CharacterStats } from '../character/types/baseCharacterProps/character-stats.type';
 import { MicsBonusService } from './service/miscs-bonus.service';
 import { DropResult } from './types/drop-result.type';

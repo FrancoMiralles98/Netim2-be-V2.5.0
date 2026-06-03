@@ -1,4 +1,4 @@
-import { ItemBonusQuality } from "src/modules/bonus/types/item-drop-quaility.type";
+import { ItemBonusQuality } from "src/modules/bonus/types/item-bonus-quaility.type";
 import { BonusTierLv } from "../types/bonusListHelper/bonus.type";
 
 /**

@@ -1,4 +1,4 @@
-import { DropWeightType } from "../types/drop-weight.type";
+import { DropWeightType } from "../../types/drop-weight.type";
 
 /**
  * Todos estos valores suman actualmente: 1701, y en porcentaje representa cada uno

@@ -5,6 +5,7 @@ import { LimitBonusService } from "./services/limit-bonus.service";
 import { BonusInItem } from "./types/bonus-in-item.type";
 import { BonusCategory } from "./types/bonusListHelper/bonus.type";
 import { CharacterStats } from "../character/types/baseCharacterProps/character-stats.type";
+import { ItemBonusQuality } from "./types/item-bonus-quaility.type";
 
 @Injectable()
 export class BonusService {
@@ -14,8 +15,13 @@ export class BonusService {
         private limitBonusService: LimitBonusService,
     ) { }
 
-    generateBonus(category: BonusCategory, bonusUsed: BonusInItem[], itemLv: number): BonusInItem[] {
-        return this.generateBonusService.generateBonus(category, bonusUsed, itemLv)
+    generatorBonus(
+        category: BonusCategory, 
+        bonusUsed: BonusInItem[], 
+        itemLv: number,
+        quality: ItemBonusQuality =  'normal'
+    ): BonusInItem[] {
+        return this.generateBonusService.generateBonus(category, bonusUsed, itemLv,quality)
     }
 
     limitStatsBonus (stats:CharacterStats): CharacterStats {

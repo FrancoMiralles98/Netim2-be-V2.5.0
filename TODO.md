@@ -18,6 +18,7 @@ Cambios estructurales de las props de character
 - ahora hay robo de vida que es para ataques basico "Robo de vida" y otro para habilidades "Vampirismo de Hechizo"
 - se añadio sistem de itemLevel, ahora el item dentro tendra su propio nivel, y lo que hace este itemLevel funciona como "calidad" de arma, esta calidad mejora el limite maximo que pueden tener los bonus explicitos
 - se hizo un cambio en el tema de los implicitos de las armas, ahora tendran 3 (o 2 dependiendo del arma) de implicitos fijos que seran sus repectivos daños de ad y ap y la velocidad de ataque, y el siguiente sera alatorio (ya sea critico penetracion velocidad de hechizo ) 
+- Cambiado el bonus "chance_raro" ahora es "frecuencia_raro"
 MODULO    
     - bonus:
         - types:

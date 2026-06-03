@@ -4,7 +4,7 @@ import { DropDifficultyConfig } from "../types/drop.dificult.type"
 import { RngService } from "src/modules/shared/services/rng.service"
 import { Injectable } from "@nestjs/common"
 import { DropTag } from "src/modules/item/types/entities-props/item-drop.config.type"
-import { RARE_DROP_TAGS } from "../config/rare-drop-tags.config"
+import { RARE_DROP_TAGS } from "../config/drop/rare-drop-tags.config"
 
 @Injectable()
 export class MicsBonusService {
@@ -14,6 +14,7 @@ export class MicsBonusService {
 
     applyRareDropTagBonus(
         tagWeights: Partial<Record<DropTag, number>>,
+        bonusValue: number
     ): Partial<Record<DropTag, number>> {
 
         const updated = { ...tagWeights }
@@ -22,7 +23,7 @@ export class MicsBonusService {
             if (!updated[tag]) {
                 continue
             }
-            updated[tag] = Math.round(updated[tag] * MISCS_BONUS_CONFIG.chances_raros)
+            updated[tag] = Math.round(updated[tag] * (1 + bonusValue / 100))
         }
 
         return updated

@@ -1,5 +1,5 @@
 import { MobDifficulty } from "src/modules/mob/types/mobProps/mob-difficult.type";
-import { DropDifficultyConfig } from "../types/drop.dificult.type";
+import { DropDifficultyConfig } from "../../types/drop.dificult.type";
 import { EnemyType } from "src/modules/mob/types/mobProps/enemie-type.type";
 
 export const DROP_CONFIG_BY_ENEMY_TYPE: Record<
