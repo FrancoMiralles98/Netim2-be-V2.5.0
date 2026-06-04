@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import { Buff } from '../entities/buff.entity';
 import { Caña } from '../entities/caña.entity';
 import { Cebo } from '../entities/cebo.entity';
@@ -9,8 +10,9 @@ import { Pocion } from '../entities/pocion.entity';
 import { Utility } from '../entities/utility.entity';
 import { ItemDTO } from '../types/item-dto';
 
+@Injectable()
 export class ItemFactory {
-  static create(data: ItemDTO): ItemBase {
+  create(data: ItemDTO): ItemBase {
     switch (data.type) {
       case 'utility':
         return this.createUtility(data);
@@ -23,7 +25,7 @@ export class ItemFactory {
     }
   }
 
-  private static createUtility(
+  private createUtility(
     data: Extract<ItemDTO, { type: 'utility' }>,
   ): ItemBase {
     switch (data.type_utility) {

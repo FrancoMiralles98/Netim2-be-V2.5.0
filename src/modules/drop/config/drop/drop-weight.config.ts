@@ -1,13 +1,17 @@
 import { DropWeightType } from "../../types/drop-weight.type";
 
 /**
- * Todos estos valores suman actualmente: 1701, y en porcentaje representa cada uno
- * VERY_COMMON => 58.8%
- * COMMON => 29.4%
- * UNCOMMON => 8.8%
- * RARE => 2.3%
- * VERY_RARE => 0.6%
- * ULTRA_RARE => 0.05%
+ * Pesos utilizados por el sistema de selección de drops.
+ *
+ * Cada valor representa la frecuencia relativa con la que un ítem
+ * puede ser seleccionado dentro de un pool de drops.
+ *
+ * Estos valores no representan porcentajes directos, sino pesos
+ * comparativos entre los distintos ítems candidatos.
+ *
+ * Esta configuración es utilizada por el sistema de drops para
+ * seleccionar un ítem concreto una vez determinado el pool de
+ * candidatos disponibles.
  */
 export const DROP_WEIGHT:Record<DropWeightType,number> = {
     VERY_COMMON: 1000,

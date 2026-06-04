@@ -7,11 +7,7 @@ import { RngService } from '../shared/services/rng.service';
 @Injectable()
 export class ItemService {
 
-    constructor(
-        private rngService: RngService
-    ) {
-
-    }
+    constructor(private rngService: RngService,) {}
 
     rollItemLv(lvReq: number): number {
         const distanceToMax = EQUIP_RULES.MAX_ITEM_LV - lvReq;

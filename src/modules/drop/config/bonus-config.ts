@@ -1,6 +1,31 @@
 
+/**
+ * Configuración global de los bonus misc relacionados con
+ * la obtención de recompensas tras derrotar enemigos.
+ *
+ *
+ * Propiedades:
+ *
+ * - `chances_objetos`
+ *   Incremento porcentual aplicado a las probabilidades de obtener
+ *   categorías de drops consideradas raras.
+ 
+ *
+ * - `chances_exp`
+ *   Multiplicador adicional de experiencia obtenido cuando se activa
+ *   el bonus de experiencia.
+ *
+ *   Ejemplo:
+ *   0.30 = +30% EXP
+ *
+ * - `chances_yang`
+ *   Multiplicador adicional de yang obtenido cuando se activa
+ *   el bonus de yang.
+ *
+ *   El valor se encuentra expresado en formato decimal.
+ */
 export const MISCS_BONUS_CONFIG = {
-    'chances_objetos': 20, //añade un 20% al valor de obtencion de Objetos 
-    'chances_exp': 0.30, //aumento del (30%) de exp
-    'chances_yang': 1, //chances de aumentar un 100% el Yang
+    'chances_objetos': 20, 
+    'chances_exp': 0.30, 
+    'chances_yang': 1, 
 }

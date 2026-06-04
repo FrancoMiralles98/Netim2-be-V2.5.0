@@ -37,11 +37,11 @@ export class GenerateBonusService {
         category: BonusCategory,
         bonusUsed: BonusInItem[] = [],
         itemLv: number,
-        quaility: ItemBonusQuality = 'normal'
+        quaility: ItemBonusQuality = 'normal',
     ): BonusInItem[] {
         const tierToUse = this.pickBonusTier(quaility)
-        
-        const filterList = this.getNewBonusList(category,tierToUse,bonusUsed,)
+
+        const filterList = this.getNewBonusList(category, tierToUse, bonusUsed,)
 
         const bonusToUse = this.selectRandomBonusOfList(filterList)
 
@@ -173,6 +173,18 @@ export class GenerateBonusService {
             throw new Error('No hay bonus disponibles para esta categoría')
         }
 
+        if (category === 'generic' && selectedTier) {
+            return this.selectTierBonusList(selectedTier,availableBonuses)
+        }
+
+        return availableBonuses
+    }
+
+
+    private selectTierBonusList(
+        selectedTier: BonusTierLv,
+        availableBonuses: BonusType[],
+    ): BonusType[] {
         for (let tier = selectedTier; tier <= 4; tier++) {
             const listByTier = availableBonuses.filter(
                 bonus => bonus.tier === tier as BonusTierLv
@@ -192,7 +204,6 @@ export class GenerateBonusService {
                 return listByTier
             }
         }
-
         throw new Error('No se encontró ningún bonus disponible')
     }
 }

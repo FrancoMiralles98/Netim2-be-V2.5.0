@@ -1,6 +1,19 @@
 import { DropTag } from "src/modules/item/types/entities-props/item-drop.config.type";
 import { EnemyType } from "src/modules/mob/types/mobProps/enemie-type.type";
 
+/**
+ * Configuración de probabilidades para las categorías de ítems
+ * que pueden ser seleccionadas cuando un intento de drop resulta
+ * en la obtención de un item.
+ *
+ * Cada tipo de enemigo posee su propia distribución de categorías,
+ * permitiendo que determinados contenidos tengan acceso a pools
+ * de drops exclusivos o más especializados.
+ *
+ * Las probabilidades se utilizan como pesos relativos durante la
+ * selección de la categoría de drop y no es obligatorio que la suma
+ * de los valores sea exactamente 100.
+ */
 export const DROP_TAG_CHANCES_BY_DIFFICULTY: Record<EnemyType, Partial<Record<DropTag, number>>> = {
     'mob': { 
         equipment: 40,

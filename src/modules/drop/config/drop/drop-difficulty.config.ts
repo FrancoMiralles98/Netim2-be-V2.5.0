@@ -2,6 +2,33 @@ import { MobDifficulty } from "src/modules/mob/types/mobProps/mob-difficult.type
 import { DropDifficultyConfig } from "../../types/drop.dificult.type";
 import { EnemyType } from "src/modules/mob/types/mobProps/enemie-type.type";
 
+/**
+ * Configuración global de drops según el tipo de enemigo
+ * y su nivel de dificultad.
+ *
+ * Esta tabla define cómo se comporta el sistema de drops
+ * para cada combinación de:
+ *
+ * - Tipo de enemigo (`mob`, `netim`, `boss`, `raid`)
+ * - Dificultad del enemigo (`1`, `2`, `3`)
+ *
+ * Cada configuración controla:
+ *
+ * - `attempts`
+ *   Cantidad de intentos de drop que realiza el enemigo
+ *   al ser derrotado. Cada intento puede resultar en:
+ *   nada, yang o un ítem.
+ *
+ * - `resultChances`
+ *   Probabilidades ponderadas utilizadas para determinar
+ *   el resultado de cada intento de drop
+ *
+ * - `bonusItemLv`
+ *   Bonificación aleatoria aplicada al nivel del ítem
+ *   generado. Permite que enemigos más peligrosos tengan
+ *   acceso a equipamiento de mayor nivel que el esperado
+ *   para su nivel base.
+ */
 export const DROP_CONFIG_BY_ENEMY_TYPE: Record<
     EnemyType,
     Record<MobDifficulty, DropDifficultyConfig>

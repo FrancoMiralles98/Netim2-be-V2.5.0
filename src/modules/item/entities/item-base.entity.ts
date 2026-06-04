@@ -2,9 +2,10 @@ import {
   ItemBaseType,
   Size,
 } from '../types/entities-props/item-base.type';
+import { IdItemList } from '../types/iditems/id-item-list.type';
 
 export abstract class ItemBase {
-  protected readonly idItem: number;
+  protected readonly idItem: IdItemList;
   protected readonly name: string;
   protected readonly size: Size;
   protected readonly img: string;

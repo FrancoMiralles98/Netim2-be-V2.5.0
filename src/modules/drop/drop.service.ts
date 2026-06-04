@@ -1,16 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { MobModel } from '../mob/schema/mob.schema';
 import { RngService } from '../shared/services/rng.service';
-import { DROP_DIFFICULTY_CONFIG } from './config/drop/drop-difficulty.config';
+import { DROP_CONFIG_BY_ENEMY_TYPE } from './config/drop/drop-difficulty.config';
 import { CharacterStats } from '../character/types/baseCharacterProps/character-stats.type';
 import { MicsBonusService } from './service/miscs-bonus.service';
 import { DropResult } from './types/drop-result.type';
+import { ItemDropService } from './service/item-drop.service';
 
 @Injectable()
 export class DropService {
     constructor(
         private rngService: RngService,
-        private miscsBonusService: MicsBonusService
+        private miscsBonusService: MicsBonusService,
+        private itemDropService: ItemDropService
     ) { }
 
 
@@ -18,10 +20,10 @@ export class DropService {
         mob: MobModel,
         bonus: CharacterStats['bonus']['miscs']
     ): DropResult {
-        const dropConfig = structuredClone(DROP_DIFFICULTY_CONFIG[mob.dificultad])
+        const dropConfig = structuredClone(DROP_CONFIG_BY_ENEMY_TYPE[mob.enemie_type][mob.dificultad])
 
         const dropResult:DropResult = {
-            drop: [],
+            items: [],
             exp: 0,
             yang: 0
         }
@@ -44,7 +46,7 @@ export class DropService {
             }
 
             if (result === 'item') {
-
+                dropResult.items.push(this.itemDropService.dropItem(mob,bonus)) 
             }
             
         }

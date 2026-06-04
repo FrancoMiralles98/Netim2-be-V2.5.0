@@ -45,3 +45,5 @@ MODULO
             - Falta hacer el metodo para pelear contra mobs
             - Falta tambien cuando se pelea en una party
                         - En Fight-turn hay que mover el metodo que reduce el tiempo de los efectos al final de cada turno, ahora mismo esta puesto al pirincipio, ya que hace que se redusca el efecto antes de aplicarse lo que puede ocasinar que por ejemplo el efecto de de desmayo en vez de durar 2 turnos dure 1
+        drop:
+            - Falta terminar el retorno del item en 'equipment-item-drop" todavia en el modulo de item no esta listo o no hay un metodo que retorne el item actualizado, con sus respectios daños segun el upgradeLv
