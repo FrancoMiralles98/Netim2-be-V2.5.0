@@ -151,7 +151,7 @@ export const tier2BonusList: BonusType[] = [
     tier: 2,
     category: "generic",
     name: {
-      full_name: allFullNameBonusList.PROB_DE_CAER_EL_DOBLE_DE_YANG,
+      full_name: allFullNameBonusList.FRECUENCIA_DE_YANG,
       bonus_ref_name: 'chances_yang',
       type_value: ValueBonusType.PORCENTAGE,
     },

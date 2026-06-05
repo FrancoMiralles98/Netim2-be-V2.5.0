@@ -9,12 +9,12 @@ import { MasteryLvRank } from "src/modules/skill/types/props/skill-lv-rank.types
 import { ATTRIBUTE_SPECIALITY_CAPS } from "../const/statsProgress/attribute-speciality-caps.const";
 import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.const";
 import { AddItemResult } from "src/modules/inventory/types/inventory-result.types";
-import { isUtilityItem } from "src/modules/shared/types/type-guard";
 import { AttributePointProgression } from "../types/attribute-point-progression.enum";
 import { EXP_PER_LV } from "../const/exp-per-lv.const";
 import { CharacterPersistence } from "../types/character-persistence.type";
 import { AuraSkillEntity } from "src/modules/skill/entities/aura-skill.entity";
 import { DamageSkillEntity } from "src/modules/skill/entities/damage-skill.entity";
+import { isUtilityItem } from "src/modules/item/types/item-type-guard.type";
 
 export class CharacterEntity {
     private readonly MAX_LV = 125 //nivel maximo del personaje 

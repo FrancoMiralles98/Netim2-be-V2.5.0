@@ -15,6 +15,5 @@ export interface FightStats {
     daño: Record<BonusDañoRefKeys, number>
     defensa: Record<BonusDefensaRefKeys, number>
     cc: Record<BonusCCRefKeys, number>;
-    miscs: Record<BonusMiscsRefKeys, number>
   }
 }

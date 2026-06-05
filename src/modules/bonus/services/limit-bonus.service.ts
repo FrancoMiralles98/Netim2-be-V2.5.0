@@ -14,6 +14,7 @@ import { LIMIT_BONUS_CONFIG } from "../config/limit-bonus.config";
 export class LimitBonusService {
     applyBonusLimitsToStats (stats:CharacterStats): CharacterStats {
         return {
+            atributos: {...stats.atributos},
             general: this.limitToGeneralStats(stats.general),
             bonus: this.limitToBonusStats(stats.bonus),
         }

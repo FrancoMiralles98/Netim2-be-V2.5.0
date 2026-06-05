@@ -21,6 +21,7 @@ Cambios estructurales de las props de character
 - Cambiado el bonus "chance_raro" ahora se toma mas como frecuencia de objetos raros
 - Cambiado el bonus "chance_objetos" ahora se toma mas como frecuencia de que aparezca objetos
 - Cambiado el bonus "yang" ahora se toma mas como frecuencia de que aparezca más yang
+- los atributos se movieron a un orden superior de las stats
 MODULO    
     - bonus:
         - types:
@@ -49,3 +50,4 @@ MODULO
                         - En Fight-turn hay que mover el metodo que reduce el tiempo de los efectos al final de cada turno, ahora mismo esta puesto al pirincipio, ya que hace que se redusca el efecto antes de aplicarse lo que puede ocasinar que por ejemplo el efecto de de desmayo en vez de durar 2 turnos dure 1
         drop:
             - Falta terminar el retorno del item en 'equipment-item-drop" todavia en el modulo de item no esta listo o no hay un metodo que retorne el item actualizado, con sus respectios daños segun el upgradeLv y agregado de bonus
+        mob: falta hacer el mergeStats para la craacion de los mobs, y asignarle los sstas que progresan segun lv o tipo de enemigo en 'mob-factory'
