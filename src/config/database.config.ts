@@ -4,7 +4,7 @@ import { NodeEnv } from "./types/node-env.enum";
 
 export const databaseConfig = registerAs("db",(): AppConfigType["db"]=>{
     const nodeEnv = process.env.NODE_ENV
-    const uriToUse = nodeEnv === NodeEnv.DEVELOPMENT 
+    const uriToUse = nodeEnv === NodeEnv.PRODUCTION 
     ? process.env.DB_URI_PROD
     : process.env.DB_URI_DEV
 

@@ -4,15 +4,17 @@ import { CharacterStats } from "../../types/baseCharacterProps/character-stats.t
  * Estructura general de la propiedad `Stats` del character
  */
 export const GENERAL_CHARACTER_STATS: CharacterStats = {
+    atributos: {
+        VIT: { lvPoints: 0, bonusPoints: 0 },
+        DEX: { lvPoints: 0, bonusPoints: 0 },
+        INT: { lvPoints: 0, bonusPoints: 0 },
+        STR: { lvPoints: 0, bonusPoints: 0 },
+    },
     general: {
-        VIT: {lvPoints:0,bonusPoints:0},
-        DEX: {lvPoints:0,bonusPoints:0},
-        INT: {lvPoints:0,bonusPoints:0},
-        STR: {lvPoints:0,bonusPoints:0},
-        ad: {min:0, max: 0},
-        ap: {min:0, max: 0},
+        ad: { min: 0, max: 0 },
+        ap: { min: 0, max: 0 },
         def: 0,
-        hp: {actual:0, max: 0},
+        hp: { actual: 0, max: 0 },
         regen_hp: 0,
         va: 0,
         vh: 0,

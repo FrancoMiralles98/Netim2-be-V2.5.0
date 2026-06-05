@@ -7,6 +7,9 @@ import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { FightDetails } from "../types/entites/fight-details.type";
 import { DEFAULT_FIGHTER_EFFECT_DESCRIPTION } from "../const/entity/fighter-effect-description.const";
 import { Injectable } from "@nestjs/common";
+import { MobStats } from "src/modules/mob/types/mobProps/mob-stats.type";
+import { CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
+import { FightStats } from "../types/entites/fight-stats.type";
 
 /**
  * Factory encargada de construir una entidad de fight
@@ -53,6 +56,20 @@ export class FightFactory {
             effects: { ...DEFAULT_FIGHTER_EFFECT_DESCRIPTION }
         }
     }
+
+    private createStatsFight (stats: MobStats | CharacterStats): FightStats {
+        const newStats: FightStats = {
+            general: {
+                ...stats.general
+            },
+            bonus: {
+                cc: stats.bonus.cc,
+                daño: stats.bonus.daño,
+                defensa: stats.bonus.defensa,
+            }
+        }
+        return structuredClone(newStats)
+    }   
 
 
     /**

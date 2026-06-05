@@ -1,4 +1,4 @@
-import Joi from "joi";
+import * as Joi from "joi";
 import { NodeEnv } from "./types/node-env.enum";
 
 export const envValidationSchema = Joi.object({

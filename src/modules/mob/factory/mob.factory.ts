@@ -1,4 +1,3 @@
-import { mergeStats } from "src/modules/shared/functions/marge-stats.function";
 import { MOB_BASE_STATS } from "../const/mobProps/mob-base-stats.const";
 import { MobCoreData } from "../types/mobProps/mob-core-data.type";
 import { MobStats } from "../types/mobProps/mob-stats.type";
@@ -22,7 +21,7 @@ export class MobFactory {
         if (!statsCore) {
             return MOB_BASE_STATS
         } else {
-            return mergeStats(MOB_BASE_STATS, statsCore)
+            return MOB_BASE_STATS //falta el mergeStats
         }
     }
 

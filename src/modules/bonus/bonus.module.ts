@@ -22,5 +22,8 @@ import { GenerateItemBonusService } from './services/generate-item-bonus.service
     BonusWeightService,
     GenerateItemBonusService
   ],
+  exports:[
+    BonusService
+  ]
 })
 export class BonusModule {}

@@ -11,7 +11,7 @@ export type CharacterSpeciality =
   'Daga' |
   'Flecha' |
   'Luz' |
-  'Dragon' 
+  'Dragon'
 
 /**
 * Razas jugables del juego.
@@ -52,12 +52,15 @@ export interface CharacterAttributeValue {
  * - estadísticas acumuladas de combate
  */
 export interface CharacterStats {
-  general: {
+  atributos: {
     VIT: CharacterAttributeValue;
     INT: CharacterAttributeValue;
     STR: CharacterAttributeValue;
     DEX: CharacterAttributeValue;
-    hp: {actual:number, max: number};
+  },
+  general: {
+
+    hp: { actual: number, max: number };
     regen_hp: number;
     def: number;
     vh: number;

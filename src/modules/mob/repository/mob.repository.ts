@@ -40,7 +40,7 @@ export class MobRepository {
     }
 
     //Estructura base, despues se tiene que mejorar para mayor seguridad
-    async updateOneMob(idMob:number,data: MobType): Promise<MobType> {
+    async updateOneMob(idMob:number,data: MobType): Promise<MobModel> {
         const result = await this.mobModel.findOneAndUpdate({idMob},{$set:data})
         if (!result) {
             throw new InternalServerErrorException('Error al crear los mobs')
