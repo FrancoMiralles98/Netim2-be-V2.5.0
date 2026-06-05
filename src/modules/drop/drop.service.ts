@@ -22,7 +22,7 @@ export class DropService {
     ): DropResult {
         const dropConfig = structuredClone(DROP_CONFIG_BY_ENEMY_TYPE[mob.enemie_type][mob.dificultad])
 
-        const dropResult:DropResult = {
+        const dropResult: DropResult = {
             items: [],
             exp: 0,
             yang: 0
@@ -30,25 +30,23 @@ export class DropService {
 
         let totalAttempts = this.rngService.randomNumberInRange(dropConfig.attempts.min, dropConfig.attempts.max)
 
-        if (this.rngService.rollChance(bonus.chances_objetos)) {
-            dropConfig.resultChances = this.miscsBonusService.applyItemDropChanceBonus(dropConfig.resultChances)
-        }
+        dropConfig.resultChances = this.miscsBonusService.applyItemDropAndYangChanceBonus(dropConfig.resultChances,bonus)
 
         for (let index = 0; index < totalAttempts; index++) {
             const result = this.rngService.pickWeightedResult(dropConfig.resultChances)
-            
+
             if (result === 'nothing') {
                 continue;
             }
 
             if (result === 'yang') {
-                dropResult.yang += this.miscsBonusService.calculateYang(bonus,mob.yang)
+                dropResult.yang += this.miscsBonusService.calculateYang(bonus, mob.yang)
             }
 
             if (result === 'item') {
-                dropResult.items.push(this.itemDropService.dropItem(mob,bonus)) 
+                dropResult.items.push(this.itemDropService.dropItem(mob, bonus))
             }
-            
+
         }
 
         return dropResult

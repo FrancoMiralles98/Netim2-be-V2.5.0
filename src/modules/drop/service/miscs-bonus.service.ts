@@ -12,6 +12,24 @@ export class MicsBonusService {
         private rngService: RngService
     ) { }
 
+    /**
+    * Aplica el bonus de frecuencia de objetos raros sobre las categorías
+    * de drop consideradas especiales.
+    *
+    * Incrementa el peso de selección de todos los tags definidos en
+    * `RARE_DROP_TAGS`, aumentando así la probabilidad relativa de que
+    * dichas categorías sean seleccionadas durante la generación de drops.
+    *
+    * El incremento es proporcional al valor del bonus recibido.
+    * Ejemplo:
+    *
+    * Peso base: 20
+    * Bonus rareza: 50%
+    * Resultado: 30
+    *
+    * @param tagWeights Pesos actuales de cada categoría de drop.
+    * @param bonusValue Valor de frecuencia de objetos raros.
+    */
     applyRareDropTagBonus(
         tagWeights: Partial<Record<DropTag, number>>,
         bonusValue: number
@@ -29,6 +47,18 @@ export class MicsBonusService {
         return updated
     }
 
+    /**
+    * Calcula la cantidad final de yang obtenida por el jugador.
+    *
+    * El cálculo tiene en cuenta:
+    * - El rango base de yang del enemigo.
+    * - El bonus permanente de obtención de yang.
+    *
+    * @param bonus Bonus misceláneos del personaje.
+    * @param yang Rango de yang base otorgado por el enemigo.
+    *
+    * @returns Cantidad final de yang obtenida.
+    */
     calculateYang(
         bonus: CharacterStats['bonus']['miscs'],
         yang: { min: number, max: number }
@@ -36,11 +66,22 @@ export class MicsBonusService {
         return this.calculateReward(
             yang,
             bonus.bonus_yang,
-            bonus.chances_yang,
-            MISCS_BONUS_CONFIG.chances_yang
         )
     }
 
+    /**
+    * Calcula la cantidad final de experiencia obtenida por el jugador.
+    *
+    * El cálculo tiene en cuenta:
+    * - El rango base de experiencia del enemigo.
+    * - El bonus permanente de experiencia.
+    * - La probabilidad de activar un bonus adicional de experiencia.
+    *
+    * @param bonus Bonus misceláneos del personaje.
+    * @param exp Rango de experiencia base otorgado por el enemigo.
+    *
+    * @returns Cantidad final de experiencia obtenida.
+    */
     calculateExp(
         bonus: CharacterStats['bonus']['miscs'],
         exp: { min: number, max: number }
@@ -53,16 +94,45 @@ export class MicsBonusService {
         )
     }
 
-    applyItemDropChanceBonus(
+    /**
+    * Aplica los bonus de frecuencia de obtención de objetos y yang
+    * sobre los pesos base utilizados por el sistema de drops.
+    *
+    * Ejemplo:
+    *
+    * Chances base:
+    * nothing: 60
+    * yang:    25
+    * item:    15
+    *
+    * Bonus:
+    * chances_objetos: 20
+    * chances_yang: 50
+    *
+    * Resultado:
+    * nothing: 60
+    * yang:    38
+    * item:    18
+    *
+    * @note
+    * La suma de los pesos resultantes puede superar 100 ya que
+    * son utilizados como pesos relativos para una selección
+    * ponderada y no como probabilidades porcentuales directas.
+    *
+    * @param chances Pesos base de los posibles resultados de un intento de drop.
+    * @param bonus Bonus misceláneos del personaje.
+    *
+    * @returns Nueva tabla de pesos con los modificadores aplicados.
+    */
+    applyItemDropAndYangChanceBonus(
         chances: DropDifficultyConfig['resultChances'],
+        bonus: CharacterStats['bonus']['miscs'],
     ): DropDifficultyConfig['resultChances'] {
 
-        const itemBonus = Math.min(chances.nothing, MISCS_BONUS_CONFIG.chances_objetos)
-
         return {
-            nothing: chances.nothing - itemBonus,
-            yang: chances.yang,
-            item: chances.item + itemBonus,
+            ...chances,
+            yang: Math.round(chances.item * (1 + bonus.chances_yang / 100)),
+            item: Math.round(chances.item * (1 + bonus.chances_objetos / 100)),
         }
     }
 
@@ -87,8 +157,8 @@ export class MicsBonusService {
     private calculateReward(
         baseRange: { min: number; max: number },
         flatBonus: number,
-        chanceBonus: number,
-        chanceValue: number
+        chanceBonus?: number,
+        chanceValue?: number
     ): number {
         const baseValue = this.rngService.randomNumberInRange(baseRange.min, baseRange.max)
 
@@ -96,7 +166,7 @@ export class MicsBonusService {
 
         totalMultiplier += flatBonus / 100
 
-        if (this.rngService.rollChance(chanceBonus)) {
+        if (chanceBonus !== undefined && chanceValue && this.rngService.rollChance(chanceBonus)) {
             totalMultiplier += chanceValue
         }
 

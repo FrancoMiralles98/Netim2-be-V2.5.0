@@ -70,7 +70,7 @@ export class UtilityItemDropService {
             min: number
             max: number
             scaleWithMobLv: boolean
-        },
+        } | undefined,
         levelScaling: {
             startLv: number
             maxBonusLv: number
@@ -79,6 +79,9 @@ export class UtilityItemDropService {
         mob: MobModel,
         rareBonusValue: number,
     ): number {
+        if (!quantityConfig || quantityConfig.max === 1) {
+            return 1
+        }
 
         let minQuantity = quantityConfig.min
         let maxQuantity = quantityConfig.max

@@ -200,6 +200,24 @@ export class ItemDropService {
     }
 
 
+    /**
+    * Resuelve el weight final de un ítem dentro del pool de drops.
+    *
+    * Aplica:
+    * - Weight base configurado por rareza.
+    * - Bonus de frecuencia de objetos raros.
+    * - Multiplicador por diferencia de nivel en equipamiento.
+    *
+    * El bonus de rareza aumenta progresivamente el peso de los drops
+    * afectados según `RARE_DROP_MULTIPLIER`.
+    *
+    * @param weight Rareza base usada para obtener el weight inicial.
+    * @param rareBonusValue Valor de frecuencia de objetos raros del personaje.
+    * @param item Ítem candidato del pool de drops.
+    * @param mob Mob que genera el drop.
+    *
+    * @returns Weight final redondeado para la selección ponderada.
+    */
     private resolveDropWeight(
         weight: DropWeightType,
         rareBonusValue: number,
@@ -221,6 +239,23 @@ export class ItemDropService {
         return Math.round(baseWeight)
     }
 
+    /**
+    * Calcula el multiplicador de weight para equipamiento según la
+    * diferencia entre el nivel del mob y el nivel requerido del ítem.
+    *
+    * Cuanto mayor sea la diferencia a favor del mob, mayor será el
+    * multiplicador aplicado, hasta el límite configurado.
+    *
+    * Ejemplo:
+    * - Mob lv 40 / Item lv 40 -> x1
+    * - Mob lv 40 / Item lv 35 -> bonus parcial
+    * - Mob lv 40 / Item lv 30 -> multiplicador máximo
+    *
+    * @param item Ítem de equipamiento candidato.
+    * @param mob Mob que genera el drop.
+    *
+    * @returns Multiplicador aplicado al weight del equipamiento.
+    */
     private getEquipLvWeightMultiplier(item: EquipType, mob: MobModel): number {
         const levelDifference = Math.max(0, mob.lv - item.lvReq)
 

@@ -18,7 +18,9 @@ Cambios estructurales de las props de character
 - ahora hay robo de vida que es para ataques basico "Robo de vida" y otro para habilidades "Vampirismo de Hechizo"
 - se añadio sistem de itemLevel, ahora el item dentro tendra su propio nivel, y lo que hace este itemLevel funciona como "calidad" de arma, esta calidad mejora el limite maximo que pueden tener los bonus explicitos
 - se hizo un cambio en el tema de los implicitos de las armas, ahora tendran 3 (o 2 dependiendo del arma) de implicitos fijos que seran sus repectivos daños de ad y ap y la velocidad de ataque, y el siguiente sera alatorio (ya sea critico penetracion velocidad de hechizo ) 
-- Cambiado el bonus "chance_raro" ahora es "frecuencia_raro"
+- Cambiado el bonus "chance_raro" ahora se toma mas como frecuencia de objetos raros
+- Cambiado el bonus "chance_objetos" ahora se toma mas como frecuencia de que aparezca objetos
+- Cambiado el bonus "yang" ahora se toma mas como frecuencia de que aparezca más yang
 MODULO    
     - bonus:
         - types:
@@ -46,4 +48,4 @@ MODULO
             - Falta tambien cuando se pelea en una party
                         - En Fight-turn hay que mover el metodo que reduce el tiempo de los efectos al final de cada turno, ahora mismo esta puesto al pirincipio, ya que hace que se redusca el efecto antes de aplicarse lo que puede ocasinar que por ejemplo el efecto de de desmayo en vez de durar 2 turnos dure 1
         drop:
-            - Falta terminar el retorno del item en 'equipment-item-drop" todavia en el modulo de item no esta listo o no hay un metodo que retorne el item actualizado, con sus respectios daños segun el upgradeLv
+            - Falta terminar el retorno del item en 'equipment-item-drop" todavia en el modulo de item no esta listo o no hay un metodo que retorne el item actualizado, con sus respectios daños segun el upgradeLv y agregado de bonus

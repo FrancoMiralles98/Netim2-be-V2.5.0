@@ -41,8 +41,35 @@ export class EquipItemDropService {
             quantityBonus
         )
 
+        return baseItem
+
     }
 
+    /**
+    * Aplica un bonus de frecuencia sobre una tabla de pesos ponderados.
+    *
+    * Permite aumentar progresivamente la frecuencia de aparición de
+    * determinados resultados según una configuración de multiplicadores
+    * y el valor de frecuencia rara proporcionado.
+    *
+    * El método es genérico y puede utilizarse para:
+    * - Calidad de equipamiento (`normal`, `magic`, `rare`, etc.).
+    * - Cantidad de bonus explícitos.
+    *
+    * Funcionamiento:
+    *
+    * - Si `rareBonusValue` es 0, los pesos permanecen sin cambios.
+    * - Si `rareBonusValue` es 100, se aplica el multiplicador completo
+    *   definido en `multiplierConfig`.
+    * 
+    * @typeParam T Tipo de clave utilizada por la tabla de pesos.
+    *
+    * @param weights Tabla de pesos original.
+    * @param multiplierConfig Multiplicadores aplicables a cada resultado.
+    * @param rareBonusValue Valor de frecuencia rara expresado en porcentaje.
+    *
+    * @returns Nueva tabla de pesos con los modificadores aplicados.
+    */
     private applyRareFrequencyBonus<T extends string | number>(
         weights: Partial<Record<T, number>>,
         multiplierConfig: Partial<Record<T, number>>,
