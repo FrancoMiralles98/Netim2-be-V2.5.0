@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { BASE_EQUIPO_OPTIONS } from '../character/const/characterProps/base-equipo-options.const';
 import { EQUIP_RULES } from './config/items-rule.const';
 import { ITEM_LV_REROLL_CONFIG } from './config/item-lv-reroll.config';
 import { TierReroll } from './types/item-lv-reroll.type';
-import { randomNumberInRange } from '../shared/functions/random-number-in-range.function';
+import { RngService } from '../shared/services/rng.service';
 
 @Injectable()
 export class ItemService {
 
+    constructor(private rngService: RngService,) {}
 
     rollItemLv(lvReq: number): number {
         const distanceToMax = EQUIP_RULES.MAX_ITEM_LV - lvReq;
@@ -25,7 +25,7 @@ export class ItemService {
 
         const maxAllowedBonus = Math.min(tier.maxBonusLv, distanceToMax);
 
-        const bonusLv = randomNumberInRange(
+        const bonusLv = this.rngService.randomNumberInRange(
             tier.minBonusLv,
             maxAllowedBonus
         );

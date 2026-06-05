@@ -14,5 +14,8 @@ import { DamageSkillService } from './services/damage-skill.service';
     SharedSkillService,
     DamageSkillService
   ],
+  exports: [
+    SkillService
+  ]
 })
 export class SkillModule {}

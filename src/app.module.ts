@@ -16,6 +16,7 @@ import { CharacterModule } from './modules/character/character.module';
 import { MobModule } from './modules/mob/mob.module';
 import { FightModule } from './modules/fight/fight.module';
 import { SharedModule } from './modules/shared/shared.module';
+import { DropModule } from './modules/drop/drop.module';
 
 @Module({
   imports: [
@@ -37,7 +38,8 @@ import { SharedModule } from './modules/shared/shared.module';
     CharacterModule,
     MobModule,
     FightModule,
-    SharedModule
+    SharedModule,
+    DropModule
   ],
   controllers: [AppController],
   providers: [AppService],

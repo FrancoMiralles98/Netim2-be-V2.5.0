@@ -5,8 +5,13 @@ import { LimitBonusService } from './services/limit-bonus.service';
 import { SpecialBonusService } from './services/special-bonus.service';
 import { ItemLevelScalingService } from './services/item-level-scaling.service';
 import { BonusWeightService } from './services/bonus-weight.service';
+import { SharedModule } from '../shared/shared.module';
+import { GenerateItemBonusService } from './services/generate-item-bonus.service';
 
 @Module({
+  imports: [
+    SharedModule
+  ],  
   controllers: [],
   providers: [
     GenerateBonusService,
@@ -14,7 +19,8 @@ import { BonusWeightService } from './services/bonus-weight.service';
     LimitBonusService,
     SpecialBonusService,
     ItemLevelScalingService,
-    BonusWeightService
+    BonusWeightService,
+    GenerateItemBonusService
   ],
 })
 export class BonusModule {}

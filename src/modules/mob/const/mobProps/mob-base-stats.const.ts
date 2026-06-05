@@ -69,15 +69,6 @@ export const MOB_BASE_STATS: MobStats = {
         cc: {
             desmayo: 0,
             retardo: 0
-        },
-        miscs: {
-            chances_exp: 0,
-            chances_objetos: 0,
-            chances_raros: 0,
-            chances_yang: 0,
-            bonus_exp: 0,
-            bonus_yang: 0,
-            time_reduction: 0,
         }
     },
 }

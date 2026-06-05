@@ -6,8 +6,10 @@ import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { MobRace } from "./mob-race.type";
-import { DropConfig } from "./drop-config.type";
+import { SpecificDrop } from "./drop-config.type";
 import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
+import { MobDifficulty } from "./mob-difficult.type";
+import { EnemyType } from "./enemie-type.type";
 
 /**
  * Representa la estructura completa de un mob
@@ -24,8 +26,8 @@ import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
  * @property ubication - Ubicación donde aparece el mob.
  *
  * @property dificultad - Nivel de dificultad del mob (1 a 4).
- * nivel 1 y 2: mobs normales, lo unico que varia es son la stats y los drops
-   nivel 3: son los netims
+ * nivel 1 y 2: mobs normales, lo unico que varia es son que uno es mas fuerte que el otro
+   nivel 3: son los netims, estos spawnean otros mobs
    nivel 4: jefes de zona
  *
  * @property spawnConfig - Configuración de spawn de otros mobs.
@@ -61,22 +63,23 @@ import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
  * @see SpawnConfig
  */
 export interface MobType {
-    nombre: string;
-    lv: number;
-    img: string;
-    ubication: UbicationNames;
-    dificultad: 1 | 2 | 3 | 4;
-    spawnConfig: SpawnConfig
-    idMob: IdMobList;
-    yang: {min: number, max: number};
-    exp: {min: number, max: number};
-    stats: MobStats;
-    hab: SkillType[];
-    raza: MobRace;
-    target_type: AllTargetType;
-    especialidad: CharacterSpeciality;
-    type_weapon: TypeWeapon;
-    drop_config: DropConfig;
-    discovery: number;
+  nombre: string;
+  lv: number;
+  img: string;
+  ubication: UbicationNames;
+  dificultad: MobDifficulty;
+  spawnConfig: SpawnConfig
+  idMob: IdMobList;
+  yang: { min: number, max: number };
+  exp: { min: number, max: number };
+  stats: MobStats;
+  hab: SkillType[];
+  raza: MobRace;
+  target_type: AllTargetType;
+  enemie_type: EnemyType;
+  especialidad: CharacterSpeciality;
+  type_weapon: TypeWeapon;
+  specific_drop: SpecificDrop[];
+  discovery: number;
 }
 

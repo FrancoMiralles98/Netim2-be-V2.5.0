@@ -1,10 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { EQUIP_RULES } from "src/modules/item/config/items-rule.const";
-import { randomNumberInRange } from "src/modules/shared/functions/random-number-in-range.function";
 import { MAX_MULTIPLIER, MIN_MULTIPLIER, SCALING_PER_ITEM_LV } from "../config/item-lv-bonus-scaling.config";
+import { RngService } from "src/modules/shared/services/rng.service";
 
 @Injectable()
 export class ItemLevelScalingService {
+    constructor(
+        private rngService: RngService
+    ) {}
+
     /**
       * Aplica escalado al valor de un bonus en segun el itemLevel
       * 
@@ -22,7 +26,7 @@ export class ItemLevelScalingService {
         //se ajusta el valor maximo que puede tener un bonus segun el itemLevel
         const scaledMax = min + Math.floor((max - min) * multiplayer);
 
-        return Number(randomNumberInRange(min, scaledMax, true).toFixed(1))
+        return Number(this.rngService.randomNumberInRange(min, scaledMax, true).toFixed(1))
     }
 
 

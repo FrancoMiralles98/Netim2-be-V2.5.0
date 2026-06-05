@@ -1,0 +1,1 @@
+export type MobDifficulty = 1 | 2 | 3

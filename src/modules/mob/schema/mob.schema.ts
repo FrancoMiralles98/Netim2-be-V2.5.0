@@ -8,8 +8,10 @@ import { CharacterSpeciality } from "src/modules/character/types/baseCharacterPr
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { MobRace } from "../types/mobProps/mob-race.type";
-import { DropConfig } from "../types/mobProps/drop-config.type";
 import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
+import { MobDifficulty } from "../types/mobProps/mob-difficult.type";
+import { EnemyType } from "../types/mobProps/enemie-type.type";
+import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type";
 
 @Schema()
 export class MobModel {
@@ -26,7 +28,7 @@ export class MobModel {
     ubication!: UbicationNames;
 
     @Prop({ type: Number, required: true })
-    dificultad!: 1 | 2 | 3 | 4;
+    dificultad!: MobDifficulty;
 
     @Prop({ type: Object, required: true })
     spawnConfig!: SpawnConfig;
@@ -49,17 +51,20 @@ export class MobModel {
     @Prop({ type: Array, default: [] })
     hab!: SkillType[];
 
+    @Prop({ type: String, required: true })
+    enemie_type!: EnemyType;
+
     @Prop({ type: String, default: "" })
     especialidad!: CharacterSpeciality;
 
     @Prop({ type: String, required: true })
     target_type!: AllTargetType;
 
-     @Prop({ type: String, required: true })
+    @Prop({ type: String, required: true })
     type_weapon!: TypeWeapon;
 
-    @Prop({ type: Object, required: true })
-    drop_config!: DropConfig;
+    @Prop({ type: Array, default: [] })
+    specific_drop!: IdItemList[];
 
     @Prop({ type: Number, required: true })
     discovery!: number;

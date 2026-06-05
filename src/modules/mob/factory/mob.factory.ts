@@ -13,7 +13,7 @@ export class MobFactory {
         }
     }
 
-    createMany(data: MobCoreData[]): any {
+    createMany(data: MobCoreData[]): MobType[] {
         return data.map(d=> this.create(d))
     }
 

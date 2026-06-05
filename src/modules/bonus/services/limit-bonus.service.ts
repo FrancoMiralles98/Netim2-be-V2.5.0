@@ -16,7 +16,6 @@ export class LimitBonusService {
         return {
             general: this.limitToGeneralStats(stats.general),
             bonus: this.limitToBonusStats(stats.bonus),
-            fight: stats.fight,
         }
     }
 

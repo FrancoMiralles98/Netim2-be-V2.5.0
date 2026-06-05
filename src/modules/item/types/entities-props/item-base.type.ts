@@ -1,4 +1,5 @@
 import { IdItemList } from "../iditems/id-item-list.type";
+import { ItemDropConfig } from "./item-drop.config.type";
 
 /**
  * @description - Hace referencia a las caracteristicas base de todo item del juego
@@ -10,6 +11,7 @@ export interface ItemBaseType {
   size: Size;
   img: string;
   acc: boolean;
+  itemDropConfig?: ItemDropConfig
   corrupt?: boolean;
   leyenda?: string;
   type: GenericType;
