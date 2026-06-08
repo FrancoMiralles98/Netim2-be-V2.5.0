@@ -1,7 +1,7 @@
 import { ArmorDamageScalingConfig } from "../../types/config/equip-base-stats.type";
 import { subTypeEquip } from "../../types/entities-props/equip.type";
 
-export const WEAPON_BASE_STAT_CONFIG: Record<
+export const ARMOR_BASE_STAT_CONFIG: Record<
     Extract<subTypeEquip, 'armadura' | 'casco' | 'escudo' | 'botas'>, ArmorDamageScalingConfig>
     = {
     armadura: {

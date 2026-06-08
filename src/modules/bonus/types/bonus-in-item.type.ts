@@ -1,3 +1,4 @@
+import { PatternScaleType } from "src/modules/item/types/config/general-implicit.type";
 import { allFullNameBonusList } from "./bonusListHelper/bonus-list-full-name.enum";
 import { BonusRefKeys } from "./bonusListHelper/ref-bonus-name.type";
 
@@ -16,6 +17,7 @@ import { BonusRefKeys } from "./bonusListHelper/ref-bonus-name.type";
  * @property bonusValueType Tipo de valor del bonus:
  *  - 'flat' → valor plano
  *  - 'porcentage' → valor porcentual
+ * 
  *
  * @example
  * // Bonus plano
@@ -25,13 +27,20 @@ import { BonusRefKeys } from "./bonusListHelper/ref-bonus-name.type";
  *   bonusValue: 500,
  *   bonusValueType: "flat"
  * }
+ * 
+ *  @property "origin" De donde viene el bonus,
+ *  random => si es algo alatorio
+ *  configured => o es algo implicito del item
  */
 export interface BonusInItem {
   bonusFullName: allFullNameBonusList;
   bonusRef: BonusRefKeys;
   bonusValue: number | { min: number; max: number };
   bonusValueType: ValueBonusType;
+  origin: BonusOrigin
 }
+
+export type BonusOrigin = 'configured' | 'random'
 
 /**
  * Representa un bonus especial corrupto.

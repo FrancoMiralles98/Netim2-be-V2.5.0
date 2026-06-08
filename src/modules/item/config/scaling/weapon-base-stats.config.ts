@@ -2,10 +2,10 @@ import { WeaponDamageScalingConfig } from "../../types/config/equip-base-stats.t
 import { TypeWeapon } from "../../types/entities-props/equip.type";
 
 export const WEAPON_BASE_STAT_CONFIG: Record<TypeWeapon, WeaponDamageScalingConfig> = {
-    flecha: {
+    flecha: { //Ya balanceado
         ad: {
-            min: { base: 7, perLv: 2.05, power: 1.05 },
-            max: { base: 29, perLv: 2.75, power: 1.04 },
+            min: { base: 7, perLv: 1.55, power: 1.05 },
+            max: { base: 29, perLv: 2.05, power: 1.04 },
         },
     },
 
