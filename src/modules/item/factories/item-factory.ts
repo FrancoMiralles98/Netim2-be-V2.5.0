@@ -12,6 +12,7 @@ import { ItemDTO } from '../types/item-dto';
 
 @Injectable()
 export class ItemFactory {
+
   create(data: ItemDTO): ItemBase {
     switch (data.type) {
       case 'utility':

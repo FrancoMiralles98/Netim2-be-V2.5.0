@@ -4,9 +4,16 @@ export type GeneralPatternScale = Record<PatternScaleType, Record<UpgradeLv, num
  * Patrones de progresión utilizados para calcular el valor de los
  * bonus implícitos de un equipamiento según su nivel de mejora.
  *
- * Cada patrón define una curva de crecimiento que parte de un valor
- * base y progresa hasta alcanzar aproximadamente el valor indicado
- * en su nombre al llegar a +9.
+ * Existen dos tipos de patrones:
+ *
+ * - Ascendentes (`scale_to_X`)
+ * - Descendentes (`descending_scale_from_X`)
+ *
+ * Los patrones ascendentes aumentan progresivamente su valor a medida
+ * que el equipamiento mejora, alcanzando aproximadamente el valor
+ * indicado en su nombre al llegar a +9.
+ *
+ * Ejemplos:
  *
  * scale_to_7
  * → progresión que alcanza 7 en +9
@@ -14,6 +21,18 @@ export type GeneralPatternScale = Record<PatternScaleType, Record<UpgradeLv, num
  * scale_to_100
  * → progresión que alcanza 100 en +9
  *
+ * Los patrones descendentes funcionan de forma inversa:
+ * comienzan con un valor negativo indicado en el nombre en +0 y aumentan progresivamente
+ * en este caso en la configuracion 
+
+ * Ejemplos:
+ *
+ * descending_scale_from_50
+ * progresion que comienza (+0) en 50 y en +9 (por ejemplo) termina en 10
+ *
+ * Los niveles +10 y +11 corresponden a mejoras especiales por
+ * corrupción y continúan la progresión más allá de los límites
+ * normales del equipamiento.
  */
 export type PatternScaleType =
     'scale_to_7' |
@@ -32,7 +51,15 @@ export type PatternScaleType =
     'scale_to_80' |
     'scale_to_100' |
     'scale_to_125' |
-    'scale_to_150'
+    'scale_to_150' |
+    'descending_scale_from_5' |
+    'descending_scale_from_7' |
+    'descending_scale_from_10' |
+    'descending_scale_from_12' |
+    'descending_scale_from_15' |
+    'descending_scale_from_20' |
+    'descending_scale_from_25' |
+    'descending_scale_from_30' 
 
 
 /**

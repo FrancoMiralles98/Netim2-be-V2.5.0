@@ -1,20 +1,29 @@
 import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type"
-import { IMPLICIT_BONUS_TIER_BY_LV_REQ, RANDOM_IMPLICIT_BONUS_CONFIG } from "../config/equip-implicit-bonus.config"
-import { ImplicitBonusTierType } from "../types/config/implicit-bonus-tier.type"
-import { PatternScaleType, UpgradeLv } from "../types/config/general-implicit.type"
-import { PATTERN_SCALE_CONFIG } from "../config/scaling/general-pattern-scale.config"
+import { IMPLICIT_BONUS_TIER_BY_LV_REQ, RANDOM_IMPLICIT_BONUS_CONFIG } from "../../config/equip-implicit-bonus.config"
+import { ImplicitBonusTierType } from "../../types/config/implicit-bonus-tier.type"
+import { PatternScaleType, UpgradeLv } from "../../types/config/general-implicit.type"
+import { PATTERN_SCALE_CONFIG } from "../../config/scaling/general-pattern-scale.config"
+import { Injectable } from "@nestjs/common"
+import { BonusInItem } from "src/modules/bonus/types/bonus-in-item.type"
 
+@Injectable()
 export class RandomImplicitBonusService {
 
     getRandomImplicitBonusValue(
         lvReq: number,
-        bonusRefKey: BonusRefKeys,
+        bonuses: BonusInItem[],
         upgradeLv: UpgradeLv
-    ): number {
+    ): BonusInItem[] {
+        
+        const updatedBonus: BonusInItem[] = []
         const tierBonus = this.getTierByLvReq(lvReq)
-        const pattern = this.getBonusValuePattern(tierBonus,bonusRefKey)
 
-        return PATTERN_SCALE_CONFIG[pattern][upgradeLv]
+        for (const bonus of bonuses) {
+            const pattern = this.getBonusValuePattern(tierBonus, bonus.bonusRef)
+            updatedBonus.push({ ...bonus, bonusValue: PATTERN_SCALE_CONFIG[pattern][upgradeLv] })
+        }
+
+        return updatedBonus
     }
 
 

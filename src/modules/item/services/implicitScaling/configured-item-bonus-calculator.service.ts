@@ -1,37 +1,53 @@
 import { Injectable } from "@nestjs/common";
-import { ImplicitBonusConfig } from "../types/const/core-equip-item.type";
+import { CoreImplicitItem, ImplicitBonusConfig } from "../../types/const/core-equip-item.type";
 import { BonusInItem } from "src/modules/bonus/types/bonus-in-item.type";
 import { DinamicStatsCalculatorService } from "./dinamic-stats-calculator.service";
-import { StaticStatsCalculator } from "./static-stats-calculator.service";
+import { PlaneBonusCalculator } from "./plane-bonus-calculator.service";
 import { BonusSharedService } from "src/modules/shared/services/bonus-shared.service";
-import { UpgradeLv } from "../types/config/general-implicit.type";
+import { UpgradeLv } from "../../types/config/general-implicit.type";
+import { ITEM_SCALING_CONST } from "../../const/scaling/item-scaling.const";
+import { IdItemList } from "../../types/iditems/id-item-list.type";
 
 @Injectable()
 export class ConfiguredItemBonusCalculatorService {
     constructor(
         private dinamicStatsCalculator: DinamicStatsCalculatorService,
-        private staticStatsCalculator: StaticStatsCalculator,
+        private planeBonusCalculator: PlaneBonusCalculator,
         private bonusSharedService: BonusSharedService
     ) { }
 
-    getCoreImplicitStats(
-        implicit: ImplicitBonusConfig[],
-        upgradeLv: UpgradeLv,
-        LvReq: number
+    getConfiguredImplicitStats(
+        idItem: IdItemList,
+        upgradeLv: UpgradeLv = 0,
+        LvReq: number = 1
     ): BonusInItem[] {
-        const bonusList: BonusInItem[] = []
+        const updatedBonusList: BonusInItem[] = []
 
-        for (const config of implicit) {
+        const configImplicts = this.getScalingImplicitBonus(idItem).implicitBonus
+
+
+
+        for (const config of configImplicts) {
 
             const bonusValue = this.getBonusValue(config, LvReq, upgradeLv)
 
-            bonusList.push(this.bonusSharedService.transformToBonusInItem(
-                config.bonusRefKey, 
+            updatedBonusList.push(this.bonusSharedService.transformToBonusInItem(
+                config.bonusRefKey,
                 bonusValue,
                 config.origin
             ))
         }
-        return bonusList
+        return updatedBonusList
+    }
+
+    private getScalingImplicitBonus(idItem: IdItemList): CoreImplicitItem {
+        const scaling = ITEM_SCALING_CONST.find(s => s.idItem === idItem)
+
+        if (!scaling) {
+            throw new Error(`Not found scaling for ${idItem}`)
+        }
+
+        return scaling
     }
 
 
@@ -49,14 +65,18 @@ export class ConfiguredItemBonusCalculatorService {
         }
 
         if (config.type === 'plane') {
-            bonusValue = this.staticStatsCalculator.calculatePlaneStat(upgradeLv, config.patternScale)
+            bonusValue = this.planeBonusCalculator.calculatePlaneBonus(upgradeLv, config.patternScale)
 
             if (config.multiplicateValue) {
                 bonusValue *= config.multiplicateValue
             }
         }
 
-        if (config.sign === 'negative') {
+        if (config.type === 'static') {
+            bonusValue = config.value
+        }
+
+        if (config.sign && config.sign === 'negative') {
             bonusValue = -Number(bonusValue)
         }
 

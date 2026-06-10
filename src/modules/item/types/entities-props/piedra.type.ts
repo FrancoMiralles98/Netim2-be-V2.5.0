@@ -2,6 +2,7 @@ import { BonusInItem, SpecialCorruptBonus, ValueBonusType } from 'src/modules/bo
 import { UtilityBaseType } from './utility-base.type';
 import { BonusRefKeys } from 'src/modules/bonus/types/bonusListHelper/ref-bonus-name.type';
 import { subTypeEquip } from './equip.type';
+import { UpgradeLv } from '../config/general-implicit.type';
 
 /**
  * @description - Hace referencia a los objetos que son de utilidad en este caso las Piedras
@@ -9,13 +10,13 @@ import { subTypeEquip } from './equip.type';
  * y un objeto Equipo, ya que comparte algunas caracteristicas de cada uno 
  */
 export interface PiedraType extends UtilityBaseType {
-  implicitBonus: BonusInItem;
-  upgradeLv: number;
+  implicitBonus: BonusInItem[];
+  upgradeLv: UpgradeLv;
   upgradeMax: number;
   type_utility: 'piedra';
   priceForge: number[];
   itemsForge: UtilityBaseType[];
-  specialCorruptBonus?: SpecialCorruptBonus;
+  specialCorruptBonus?: SpecialCorruptBonus[];
   restricted: subTypeEquip[];
 }
 

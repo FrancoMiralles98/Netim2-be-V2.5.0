@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { WEAPON_BASE_STAT_CONFIG } from "../config/scaling/weapon-base-stats.config";
-import { subTypeEquip, TypeWeapon } from "../types/entities-props/equip.type";
-import { UPGRADE_MULTIPLIER } from "../config/scaling/upgrade-multiplayer.config";
-import { ARMOR_BASE_STAT_CONFIG } from "../config/scaling/armor-base-stats.config";
+import { WEAPON_BASE_STAT_CONFIG } from "../../config/scaling/weapon-base-stats.config";
+import { subTypeEquip, TypeWeapon } from "../../types/entities-props/equip.type";
+import { UPGRADE_MULTIPLIER } from "../../config/scaling/upgrade-multiplayer.config";
+import { ARMOR_BASE_STAT_CONFIG } from "../../config/scaling/armor-base-stats.config";
 import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
-import { UpgradeLv } from "../types/config/general-implicit.type";
+import { UpgradeLv } from "../../types/config/general-implicit.type";
 
 @Injectable()
 export class DinamicStatsCalculatorService {
@@ -14,7 +14,7 @@ export class DinamicStatsCalculatorService {
         upgradeLv: UpgradeLv,
         type_weapon: TypeWeapon,
         bonus_ref: BonusRefKeys
-    ): { min: number; max: number } {
+    ): { min: number, max: number } {
         const baseConfig = WEAPON_BASE_STAT_CONFIG[type_weapon][bonus_ref]
 
         if (!baseConfig) {
@@ -39,6 +39,7 @@ export class DinamicStatsCalculatorService {
             min: Math.round(this.applyUpgradeMultiplier(baseMin, upgradeLv)),
             max: Math.round(this.applyUpgradeMultiplier(baseMax, upgradeLv)),
         }
+
     }
 
     calculateArmorStats(

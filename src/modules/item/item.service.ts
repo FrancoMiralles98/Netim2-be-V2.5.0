@@ -3,11 +3,45 @@ import { EQUIP_RULES } from './config/items-rule.const';
 import { ITEM_LV_REROLL_CONFIG } from './config/item-lv-reroll.config';
 import { TierReroll } from './types/item-lv-reroll.type';
 import { RngService } from '../shared/services/rng.service';
+import { IdItemList } from './types/iditems/id-item-list.type';
+import { ItemDTO } from './types/item-dto';
+import { ITEM_LIST } from './const/items.const';
+import { InventoryItem } from '../inventory/types/inventory-item.type';
+import { ItemImplicitBonusService } from './services/implicitScaling/item-implicit-bonus.service';
+import { ItemHydrationService } from './services/item-hydration.service';
 
 @Injectable()
 export class ItemService {
 
-    constructor(private rngService: RngService,) {}
+    constructor(
+        private rngService: RngService,
+        private itemImplicitBonusService: ItemImplicitBonusService,
+        private itemHydrationService: ItemHydrationService,
+    ) { }
+
+    getCoreItemInfoByIdItem(
+        idItem: IdItemList,
+    ): ItemDTO {
+        const itemBaseInfo = ITEM_LIST.find(item => item.idItem === idItem)
+
+        if (!itemBaseInfo) {
+            throw new Error(`item not found ${idItem}`)
+        }
+
+        this.itemImplicitBonusService.getUpdatedImplicits(itemBaseInfo)
+
+        return structuredClone(itemBaseInfo)
+    }
+
+
+    getUpdatedItem(
+        item: InventoryItem
+    ): InventoryItem {
+        const baseItem = this.getCoreItemInfoByIdItem(item.idItem)
+        
+        return this.itemHydrationService.hydrateInventoryItem(baseItem,item)
+    }
+
 
     rollItemLv(lvReq: number): number {
         const distanceToMax = EQUIP_RULES.MAX_ITEM_LV - lvReq;
@@ -34,7 +68,8 @@ export class ItemService {
     }
 
 
-    private getWeightedTier (tiers:TierReroll[] ) {
+
+    private getWeightedTier(tiers: TierReroll[]) {
         const random = Math.random() * 100;
         let accumulated = 0;
 

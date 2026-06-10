@@ -1,16 +1,16 @@
 import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type"
 import { PatternScaleType } from "../config/general-implicit.type"
-import { EquipType, } from "../entities-props/equip.type";
 import { BonusOrigin } from "src/modules/bonus/types/bonus-in-item.type";
 import { DinamicImplicitConfig, } from "./dinamic-implict.type";
+import { IdItemList } from "../iditems/id-item-list.type";
 
 /**
  * Representa un equipamiento que se utiliza a la hora de guardar la informacion base ne la DB
  */
-export type CoreEquipItem = Omit<EquipType, 'implicitBonus'> & {
-    implicitBonus: ImplicitBonusConfig[];
+export interface CoreImplicitItem {
+    implicitBonus: ImplicitBonusConfig[]
+    idItem: IdItemList
 }
-
 
 export type ImplicitBonusConfig = DinamicImplicitConfig | PlaneImplicitConfig | StaticImplicitConfig
 
@@ -55,7 +55,7 @@ export interface PlaneImplicitConfig extends BaseImplicitConfig {
  * del equipamiento y no de una generación aleatoria.
  */
 export interface BaseImplicitConfig {
-    sign: 'positive' | 'negative';
+    sign?: 'positive' | 'negative';
     bonusRefKey: BonusRefKeys;
     origin: Extract<BonusOrigin, 'configured'>
 }
