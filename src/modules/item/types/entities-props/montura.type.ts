@@ -1,5 +1,7 @@
 import { BonusInItem } from "src/modules/bonus/types/bonus-in-item.type";
 import { UtilityBaseType } from "./utility-base.type";
+import { UpgradeLv } from "../config/general-implicit.type";
+import { IdItemList } from "../iditems/id-item-list.type";
 
 
 /**
@@ -35,16 +37,16 @@ export interface MonturaDescription {
   name: string;
   statusIcon: string;
   img: string;
-  implicitBonus: BonusInItem;
+  implicitBonus: BonusInItem[];
   hp: number;
   maxHp: number;
   exp: number;
   nextExpLv: number;
   maxLv: number;
-  lv: number;
+  lv: UpgradeLv;
   idItemFood?: number;
   idItemRevive?: number;
-  idItemRef: number;
+  idItemRef: IdItemList;
   itemFood?: UtilityBaseType;
   itemRevive?: UtilityBaseType;
   lastUpdate: number;

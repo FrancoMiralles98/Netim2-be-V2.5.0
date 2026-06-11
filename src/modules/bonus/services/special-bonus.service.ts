@@ -53,11 +53,12 @@ export class SpecialBonusService {
         const bonusValue = this.itemLevelScalingService.applyItemLevelScalingToBonus(
             tierBonus.minValue, tierBonus.maxValue,itemLv)
             
-        const mainBonus = {
+        const mainBonus: BonusInItem = {
             bonusFullName: bonus.name.full_name,
             bonusRef: bonus.name.bonus_ref_name,
             bonusValueType: bonus.name.type_value,
-            bonusValue
+            bonusValue,
+            origin: 'random'
         }
 
         const counterBonus = this.getCounterBonus(tierBonus.tier, bonus.name.bonus_ref_name as SpecialBonus)
@@ -126,7 +127,8 @@ export class SpecialBonusService {
             bonusFullName: baseInfoOfBonus.name.full_name,
             bonusRef: counterBonusRef,
             bonusValue: value,
-            bonusValueType: baseInfoOfBonus.name.type_value
+            bonusValueType: baseInfoOfBonus.name.type_value,
+            origin: 'random'
         }
     }
 } 

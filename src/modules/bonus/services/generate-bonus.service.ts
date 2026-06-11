@@ -54,7 +54,8 @@ export class GenerateBonusService {
             bonusRef: bonusToUse.name.bonus_ref_name,
             bonusValueType: bonusToUse.name.type_value,
             bonusValue: this.itemLevelScalingService.applyItemLevelScalingToBonus(
-                bonusToUse.values.min, bonusToUse.values.max, itemLv)
+                bonusToUse.values.min, bonusToUse.values.max, itemLv),
+            origin: 'random'
         }
 
         return [genericBonus]

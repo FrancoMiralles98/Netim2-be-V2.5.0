@@ -1,6 +1,8 @@
 import { BonusInItem, SpecialCorruptBonus } from 'src/modules/bonus/types/bonus-in-item.type';
 import { ItemBaseType } from './item-base.type';
 import { PiedrasInItem } from './piedra.type';
+import { CharacterRace } from 'src/modules/character/types/baseCharacterProps/character-stats.type';
+import { UpgradeLv } from '../config/general-implicit.type';
 
 /**
  * @description Representa un ítem de tipo "Equip" (equipamiento) dentro del sistema.
@@ -43,24 +45,23 @@ import { PiedrasInItem } from './piedra.type';
 export interface EquipType extends ItemBaseType {
   lvReq: number;
   itemLv: number;
-  upgradeLv: number;
+  upgradeLv: UpgradeLv;
   type: 'equip';
   upgradeMax: number;
   type_weapon?: TypeWeapon;
   sub_type_equip: subTypeEquip;
-  priceForge?: number;
   legendary: boolean;
-  itemsForge: [];
-  restricted: string[];
+  restricted: CharacterRace[];
   slot: number;
   weight: number;
   especial: boolean;
-  implicitBonus: BonusInItem;
-  explicitBonus: BonusInItem;
+  implicitBonus: BonusInItem[];
+  randomImplicitBonus: BonusInItem[];
+  explicitBonus: BonusInItem[];
   piedras: PiedrasInItem[];
-  bonus6_7: BonusInItem;
-  corruptExplicitBonus: BonusInItem;
-  corruptImplicitBonus: BonusInItem;
+  bonus6_7: BonusInItem[];
+  corruptExplicitBonus: BonusInItem[];
+  corruptImplicitBonus: BonusInItem[];
   corruptSpecialBonus: SpecialCorruptBonus[];
 }
 
