@@ -9,18 +9,41 @@ import { BonusInItem } from "src/modules/bonus/types/bonus-in-item.type"
 @Injectable()
 export class RandomImplicitBonusService {
 
+     /**
+     * Actualiza los valores de los bonus implícitos aleatorios de un ítem.
+     *
+     * El valor final de cada bonus se calcula según:
+     * - El nivel requerido del ítem.
+     * - El tier implícito correspondiente a ese nivel.
+     * - El tipo de bonus.
+     * - El nivel de mejora del ítem.
+     *
+     * Si no se reciben bonus, devuelve una lista vacía.
+     *
+     * @param lvReq Nivel requerido del ítem.
+     * @param bonuses Lista de bonus implícitos aleatorios a actualizar.
+     * @param upgradeLv Nivel de mejora actual del ítem.
+     *
+     * @returns Lista de bonus con sus valores recalculados.
+     */
     getRandomImplicitBonusValue(
         lvReq: number,
-        bonuses: BonusInItem[],
+        bonuses: BonusInItem[] = [],
         upgradeLv: UpgradeLv
     ): BonusInItem[] {
-        
+
         const updatedBonus: BonusInItem[] = []
         const tierBonus = this.getTierByLvReq(lvReq)
 
         for (const bonus of bonuses) {
             const pattern = this.getBonusValuePattern(tierBonus, bonus.bonusRef)
-            updatedBonus.push({ ...bonus, bonusValue: PATTERN_SCALE_CONFIG[pattern][upgradeLv] })
+            const value = PATTERN_SCALE_CONFIG[pattern][upgradeLv]
+
+            if (value === undefined) {
+                throw new Error(`No se encuentra el valor para pattern ${pattern} y upgrade ${upgradeLv}`)
+            }
+
+            updatedBonus.push({ ...bonus, bonusValue: value })
         }
 
         return updatedBonus

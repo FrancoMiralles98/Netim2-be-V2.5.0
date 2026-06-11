@@ -25,7 +25,7 @@ export const EQUIP_RULES = {
   MAX_NORMAL_UPGRADE_LV: 9,
   MAX_EXPLICIT_BONUS: 5,
   MAX_6_7_BONUS: 2,
-  MAX_ITEM_LV: 100,
+  MAX__NORMAL_ITEM_LV: 100,
   MIN_ITEM_LV: 1
 } as const;
 

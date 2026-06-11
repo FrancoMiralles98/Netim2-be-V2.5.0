@@ -7,9 +7,31 @@ import { PiedraType } from "../types/entities-props/piedra.type";
 import { CañaType } from "../types/entities-props/caña.type";
 import { MonturaType } from "../types/entities-props/montura.type";
 
+/**
+ * Servicio encargado de rehidratar ítems persistidos en inventario
+ * utilizando la información más reciente definida en las configuraciones
+ * base del juego.
+ *
+ * Su objetivo es mantener actualizados los datos estáticos de los ítems
+ * (nombre, imagen, restricciones, slots, etc.) sin perder el estado
+ * dinámico almacenado por el jugador.
+ */
 @Injectable()
 export class ItemHydrationService {
 
+    /**
+     * Rehidrata un ítem persistido utilizando la información base
+     * más reciente disponible en la configuración del juego.
+     *
+     * Dependiendo del tipo de ítem se ejecutará el proceso de merge
+     * correspondiente para conservar únicamente el estado dinámico
+     * que pertenece al jugador.
+     *
+     * @param baseItem Información base actual del ítem.
+     * @param savedItem Ítem almacenado en inventario.
+     *
+     * @returns Ítem actualizado conservando el estado persistente.
+     */
     hydrateInventoryItem(baseItem: ItemDTO, savedItem: InventoryItem): InventoryItem {
         const commonState = {
             id: savedItem.id,
@@ -34,20 +56,8 @@ export class ItemHydrationService {
                     ...commonState
                 }
             case 'buff':
-                return {
-                    ...this.mergeGenericUtilityItem(baseItem, savedItem),
-                    ...commonState
-                }
             case 'cebo':
-                return {
-                    ...this.mergeGenericUtilityItem(baseItem, savedItem),
-                    ...commonState
-                }
             case 'utility':
-                return {
-                    ...this.mergeGenericUtilityItem(baseItem, savedItem),
-                    ...commonState
-                }
             case 'poción':
                 return {
                     ...this.mergeGenericUtilityItem(baseItem, savedItem),

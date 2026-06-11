@@ -44,7 +44,7 @@ export class ItemService {
 
 
     rollItemLv(lvReq: number): number {
-        const distanceToMax = EQUIP_RULES.MAX_ITEM_LV - lvReq;
+        const distanceToMax = EQUIP_RULES.MAX__NORMAL_ITEM_LV - lvReq;
 
         const config = ITEM_LV_REROLL_CONFIG.find(c =>
             distanceToMax >= c.minDistance &&
