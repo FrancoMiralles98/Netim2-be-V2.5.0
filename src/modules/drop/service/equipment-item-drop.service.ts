@@ -6,14 +6,33 @@ import { RngService } from "src/modules/shared/services/rng.service";
 import { EQUIP_ITEM_DROP_GENERATION_CONFIG } from "../config/equip/equip-item-drop-generation.config";
 import { BonusService } from "src/modules/bonus/bonus.service";
 import { EQUIP_RULES } from "src/modules/item/config/items-rule.const";
+import { ItemService } from "src/modules/item/item.service";
 
 @Injectable()
 export class EquipItemDropService {
     constructor(
         private rngService: RngService,
         private bonusService: BonusService,
+        private itemService: ItemService,
     ) { }
 
+    /**
+    * Genera la versión final de un equipo obtenido como drop.
+    *
+    * se determinan la calidad del drop y la cantidad de
+    * bonus explícitos que podrá recibir el ítem, aplicando los modificadores
+    * correspondientes al bonus de rareza proporcionado.
+    *
+    * Posteriormente se generan los bonus implícitos aleatorios del equipo,
+    * se crean los bonus explícitos respetando las reglas de generación
+    * configuradas y se calcula el peso total de los bonus obtenidos
+    *
+    * @param baseItem Equipo base sobre el cual se generarán los bonus finales.
+    * @param mob Enemigo responsable del drop.
+    * @param rareBonusValue Valor total de bonus de rareza aplicado al cálculo.
+    *
+    * @returns Equipo completamente generado con bonus implícitos y explícitos.
+    */
     generateFinalItem(baseItem: EquipType, mob: MobModel, rareBonusValue: number): EquipType {
         const config = EQUIP_ITEM_DROP_GENERATION_CONFIG[mob.enemie_type][mob.dificultad]
 
@@ -32,17 +51,27 @@ export class EquipItemDropService {
         const quality = this.rngService.pickWeightedResult(qualityChance)
         const quantityBonus = Number(this.rngService.pickWeightedResult(quantityBonusChance))
 
+        baseItem.randomImplicitBonus = this.itemService.generateRandomImplicitBonus(
+            baseItem.lvReq,
+            baseItem.upgradeLv,
+            baseItem.sub_type_equip
+        )
+
         const explicitBonus = this.bonusService.generatorBonus(
             'generic',
-            [], baseItem.itemLv,
+            [...baseItem.randomImplicitBonus,...baseItem.implicitBonus],
+            baseItem.itemLv,
             quality,
             EQUIP_RULES.MAX_EXPLICIT_BONUS,
             'random',
+            baseItem.sub_type_equip,
             quantityBonus
         )
 
-        return baseItem
+        baseItem.explicitBonus = explicitBonus
+        baseItem.weight = this.bonusService.getTotalBonusWeight(baseItem.explicitBonus)
 
+        return baseItem
     }
 
     /**

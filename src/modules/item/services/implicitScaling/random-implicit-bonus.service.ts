@@ -5,28 +5,69 @@ import { PatternScaleType, UpgradeLv } from "../../types/config/general-implicit
 import { PATTERN_SCALE_CONFIG } from "../../config/scaling/general-pattern-scale.config"
 import { Injectable } from "@nestjs/common"
 import { BonusInItem } from "src/modules/bonus/types/bonus-in-item.type"
+import { BonusSharedService } from "src/modules/shared/services/bonus-shared.service"
+import { subTypeEquip } from "../../types/entities-props/equip.type"
 
 @Injectable()
 export class RandomImplicitBonusService {
+    constructor(
+        private bonusSharedService: BonusSharedService
+    ) { }
 
-     /**
-     * Actualiza los valores de los bonus implícitos aleatorios de un ítem.
+    /**
+     * Genera una lista de bonus implícitos aleatorios para un ítem.
      *
-     * El valor final de cada bonus se calcula según:
-     * - El nivel requerido del ítem.
-     * - El tier implícito correspondiente a ese nivel.
-     * - El tipo de bonus.
-     * - El nivel de mejora del ítem.
+     * La cantidad de bonus generados depende del tier asociado al nivel
+     * requerido del ítem. Una vez seleccionados los bonus aleatorios,
+     * sus valores son calculados y actualizados según el nivel requerido
+     * y el nivel de mejora actual del ítem.
      *
-     * Si no se reciben bonus, devuelve una lista vacía.
+     * @note
+     * Los bonus generados nunca se repiten dentro de la misma lista.
+     * Y estos bonus (por ahora) unicamente se usan en armas
      *
      * @param lvReq Nivel requerido del ítem.
-     * @param bonuses Lista de bonus implícitos aleatorios a actualizar.
      * @param upgradeLv Nivel de mejora actual del ítem.
      *
-     * @returns Lista de bonus con sus valores recalculados.
+     * @returns Lista de bonus implícitos aleatorios con sus valores finales calculados.
+     *
      */
-    getRandomImplicitBonusValue(
+    generateRandomImplicitBonus(
+        lvReq: number,
+        upgradeLv: UpgradeLv,
+        sub_type_equip: subTypeEquip
+    ): BonusInItem[] {
+        if (sub_type_equip !== 'arma') {
+            return []
+        }
+
+        const tier = this.getTierByLvReq(lvReq)
+        const selectedBonusRefs: BonusRefKeys[] = this.getRandomBonusRefsByTier(tier)
+
+        const randomBonusList = selectedBonusRefs.map(bonusRef =>
+            this.bonusSharedService.transformToBonusInItem(bonusRef, 0, 'random')
+        )
+        return this.getUpdatedRandomImplicitBonus(lvReq, randomBonusList, upgradeLv)
+    }
+
+    /**
+    * Actualiza los valores de los bonus implícitos aleatorios de un ítem.
+    *
+    * El valor final de cada bonus se calcula según:
+    * - El nivel requerido del ítem.
+    * - El tier implícito correspondiente a ese nivel.
+    * - El tipo de bonus.
+    * - El nivel de mejora del ítem.
+    *
+    * Si no se reciben bonus, devuelve una lista vacía.
+    *
+    * @param lvReq Nivel requerido del ítem.
+    * @param bonuses Lista de bonus implícitos aleatorios a actualizar.
+    * @param upgradeLv Nivel de mejora actual del ítem.
+    *
+    * @returns Lista de bonus con sus valores recalculados.
+    */
+    getUpdatedRandomImplicitBonus(
         lvReq: number,
         bonuses: BonusInItem[] = [],
         upgradeLv: UpgradeLv
@@ -79,5 +120,65 @@ export class RandomImplicitBonusService {
         }
 
         return rule.tier
+    }
+
+
+    /**
+    * Obtiene un arreglo de BonusRef según el tier indicado.
+    *
+    * La cantidad de bonus a seleccionar se obtiene desde la configuración
+    * `quantityByTier`. Los bonus son elegidos de forma aleatoria y nunca
+    * se repiten dentro de la misma selección.
+    *
+    * @param tier Tier implícito utilizado para determinar cuántos bonus generar.
+    *
+    * @returns Lista de referencias de bonus aleatorias y únicas.
+    *
+    */
+    private getRandomBonusRefsByTier(tier: ImplicitBonusTierType): BonusRefKeys[] {
+        const quantityConfig = RANDOM_IMPLICIT_BONUS_CONFIG.quantityByTier.find(
+            config => config.tier === tier
+        )
+
+        if (!quantityConfig) {
+            throw new Error(`No existe cantidad configurada para el tier ${tier}`)
+        }
+
+        const possibleBonusRefs = RANDOM_IMPLICIT_BONUS_CONFIG.possibleBonus.map(
+            bonus => bonus.bonusRef
+        )
+
+        if (quantityConfig.quantity > possibleBonusRefs.length) {
+            throw new Error(
+                `No hay suficientes bonus únicos para elegir ${quantityConfig.quantity}`
+            )
+        }
+
+        return this.shuffleBonusRefs(possibleBonusRefs).slice(0, quantityConfig.quantity)
+    }
+
+
+    /**
+     * Mezcla aleatoriamente una lista de bonusRef
+     *
+     * Se crea una copia del arreglo original para evitar modificar la colección
+     * recibida por parámetro.
+     *
+     * @param bonusRefs Lista de referencias de bonus a mezclar.
+     *
+     * @returns Nueva lista con los elementos en orden aleatorio.
+     */
+    private shuffleBonusRefs(bonusRefs: BonusRefKeys[]): BonusRefKeys[] {
+        const shuffled = [...bonusRefs]
+
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const randomIndex = Math.floor(Math.random() * (i + 1))
+
+            const currentValue = shuffled[i]
+            shuffled[i] = shuffled[randomIndex]
+            shuffled[randomIndex] = currentValue
+        }
+
+        return shuffled
     }
 }

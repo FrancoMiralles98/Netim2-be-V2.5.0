@@ -1,2 +1,0 @@
-cambiado estructura de BonusInItem, configuracion de bonus alatorios de Implicitos, y configuracion y metodos para el calculo
-de bonus planos y dinamicos en los implicitos y de los que son de origin "random" 
