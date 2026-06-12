@@ -16,6 +16,34 @@ export class DropService {
     ) { }
 
 
+    /**
+    * Genera las recompensas obtenidas al derrotar un enemigo.
+    *
+    * El proceso de generación de drops utiliza la configuración asociada
+    * al tipo y dificultad del enemigo para determinar la cantidad de intentos
+    * de drop y el resultado de cada uno.
+    *
+    * Cada intento puede producir:
+    * - Nada.
+    * - Yang.
+    * - Un ítem.
+    *
+    * Además, las probabilidades de drop y la cantidad de yang obtenida pueden
+    * verse modificadas por los bonus misceláneos del personaje.
+    *
+    * Finalmente, se calcula la experiencia otorgada aplicando los modificadores
+    * correspondientes.
+    *
+    * @param mob Enemigo derrotado del cual se generarán las recompensas.
+    * @param bonus Bonus misceláneos del personaje que afectan experiencia,
+    * drops y cantidad de yang obtenida.
+    *
+    * @returns Resultado final del drop, incluyendo:
+    * - Lista de ítems obtenidos.
+    * - Cantidad total de yang.
+    * - Experiencia ganada.
+    *
+    */
     generateMobDrop(
         mob: MobModel,
         bonus: CharacterStats['bonus']['miscs']
@@ -46,8 +74,9 @@ export class DropService {
             if (result === 'item') {
                 dropResult.items.push(this.itemDropService.dropItem(mob, bonus))
             }
-
         }
+
+        dropResult.exp = this.miscsBonusService.calculateExp(bonus,mob.exp)
 
         return dropResult
     }

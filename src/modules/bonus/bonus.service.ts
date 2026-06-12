@@ -6,6 +6,7 @@ import { BonusCategory } from "./types/bonusListHelper/bonus.type";
 import { CharacterStats } from "../character/types/baseCharacterProps/character-stats.type";
 import { ItemBonusQuality } from "./types/item-bonus-quaility.type";
 import { GenerateItemBonusService } from "./services/generate-item-bonus.service";
+import { subTypeEquip } from "../item/types/entities-props/equip.type";
 
 @Injectable()
 export class BonusService {
@@ -22,7 +23,8 @@ export class BonusService {
         quality: ItemBonusQuality =  'normal',
         maxQuantity: number,
         action: 'add' | 'change' | 'random',
-        quantity?:number
+        sub_type_equip: subTypeEquip,
+        quantity?:number,
     ): BonusInItem[] {
         return this.generateItemBonusService.buildItemBonus(
             bonusUsed,
@@ -31,6 +33,7 @@ export class BonusService {
             itemLv,
             quality,
             maxQuantity,
+            sub_type_equip,
             quantity
         )
     }

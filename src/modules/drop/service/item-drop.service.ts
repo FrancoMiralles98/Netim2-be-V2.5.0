@@ -7,7 +7,7 @@ import { DROP_TAG_CHANCES_BY_DIFFICULTY } from "../config/drop/drop-tag-chance-b
 import { RngService } from "src/modules/shared/services/rng.service";
 import { MicsBonusService } from "./miscs-bonus.service";
 import { DropTag, ItemSource } from "src/modules/item/types/entities-props/item-drop.config.type";
-import { itemsList } from "src/modules/item/const/items.const";
+import { ITEM_LIST } from "src/modules/item/const/items.const";
 import { EnemyType } from "src/modules/mob/types/mobProps/enemie-type.type";
 import { UtilityItemDropService } from "./utility-item-drop.service";
 import { DROP_WEIGHT } from "../config/drop/drop-weight.config";
@@ -16,6 +16,7 @@ import { RARE_DROP_MULTIPLIER } from "../config/drop/rare-drop-bonus-multiplier.
 import { isEquipItem } from "src/modules/item/types/item-type-guard.type";
 import { EQUIP_DROP_LV_WEIGHT_CONFIG } from "../config/equip/equip-drop-lv.config";
 import { EquipType } from "src/modules/item/types/entities-props/equip.type";
+import { ItemService } from "src/modules/item/item.service";
 
 @Injectable()
 export class ItemDropService {
@@ -24,8 +25,27 @@ export class ItemDropService {
         private utilityItemDropService: UtilityItemDropService,
         private rngService: RngService,
         private miscsBonusService: MicsBonusService,
+        private itemService: ItemService,
     ) { }
 
+    /**
+    * Genera un ítem obtenido mediante el sistema de drops de un enemigo.
+    *
+    * El proceso selecciona primero una categoría de drop (tag) utilizando
+    * las probabilidades configuradas para el tipo de enemigo y aplicando
+    * los modificadores de rareza del personaje.
+    *
+    * Una vez determinada la categoría, se obtiene el ítem base correspondiente
+    * y se ejecuta el proceso de generación específico según el tipo de ítem:
+    * - Equipos: generación de implícitos, explícitos y calidad.
+    * - Utilidades: actualmente la cantidad que se le otorgara.
+    *
+    * @param mob Enemigo responsable del drop.
+    * @param bonus Bonus misceláneos del personaje que afectan la generación
+    * de drops y las probabilidades de rareza.
+    *
+    * @returns Ítem completamente generado y listo para ser entregado al jugador.
+    */
     dropItem(
         mob: MobModel,
         bonus: CharacterStats['bonus']['miscs']
@@ -80,13 +100,13 @@ export class ItemDropService {
 
         const selectedId = Number(this.rngService.pickWeightedResult(weightedItems))
 
-        const selectedItem = filterList.find(item => item.idItem === selectedId)
+        const selectedItem = this.itemService.getCoreItemInfoByIdItem(selectedId)
 
         if (!selectedItem) {
             throw new Error(`No se pudo seleccionar item para el tag ${tag}`)
         }
 
-        return structuredClone(selectedItem)
+        return selectedItem
     }
 
 
@@ -120,7 +140,7 @@ export class ItemDropService {
             const specific_items: ItemDTO[] = []
 
             for (const idItem of mob.specific_drop) {
-                const fullItem = itemsList.find(i => i.idItem === idItem)
+                const fullItem = ITEM_LIST.find(i => i.idItem === idItem)
 
                 if (!fullItem) {
                     throw new Error(`No se encuentra le item idItem: ${idItem}`)
@@ -133,7 +153,7 @@ export class ItemDropService {
 
         const source = this.getDropSource(mob.enemie_type)
 
-        const filterList = itemsList.filter(item => {
+        const filterList = ITEM_LIST.filter(item => {
             //No puede dropear si el item no tiene la configuracion de drop
             if (!item.itemDropConfig) {
                 return false

@@ -29,7 +29,7 @@ export class ItemImplicitBonusService {
     ): ItemDTO | InventoryItem {
         if (isEquipItem(item)) {
             item.implicitBonus = this.configuredItemBonusCalculator.getConfiguredImplicitStats(item.idItem,item.upgradeLv,item.lvReq)
-            item.randomImplicitBonus = this.randomImplicitBonusService.getRandomImplicitBonusValue(item.lvReq,item.randomImplicitBonus,item.upgradeLv)
+            item.randomImplicitBonus = this.randomImplicitBonusService.getUpdatedRandomImplicitBonus(item.lvReq,item.randomImplicitBonus,item.upgradeLv)
             return item
         }
 

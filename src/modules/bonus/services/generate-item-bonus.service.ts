@@ -4,6 +4,7 @@ import { BonusInItem } from "../types/bonus-in-item.type";
 import { ItemBonusQuality } from "../types/item-bonus-quaility.type";
 import { GenerateBonusService } from "./generate-bonus.service";
 import { RngService } from "src/modules/shared/services/rng.service";
+import { subTypeEquip } from "src/modules/item/types/entities-props/equip.type";
 
 @Injectable()
 export class GenerateItemBonusService {
@@ -35,21 +36,22 @@ export class GenerateItemBonusService {
         itemLv: number,
         quaility: ItemBonusQuality = 'normal',
         maxQuantity: number,
+        sub_type_equip: subTypeEquip,
         quantity?:number
     ): BonusInItem[] {
 
         if (type === 'add') {
-            return this.executeAddBonus(bonusUsed, bonusCategory, itemLv, quaility, maxQuantity)
+            return this.executeAddBonus(bonusUsed, bonusCategory, itemLv, quaility, maxQuantity,sub_type_equip)
         }
 
         if (type === 'random') {
             if (!quantity) {
                 throw new Error('No hay una cantidad valida de para ejecutar')
             }
-            this.executeChangeBonus(quantity, bonusCategory, itemLv, quaility, maxQuantity)
+            this.executeChangeBonus(quantity, bonusCategory, itemLv, quaility, maxQuantity,sub_type_equip)
         }
 
-        return this.executeChangeBonus(bonusUsed.length, bonusCategory, itemLv, quaility, maxQuantity)
+        return this.executeChangeBonus(bonusUsed.length, bonusCategory, itemLv, quaility, maxQuantity,sub_type_equip)
     }
 
     /**
@@ -76,12 +78,13 @@ export class GenerateItemBonusService {
         bonusCategory: BonusCategory,
         itemLv: number,
         quaility: ItemBonusQuality,
-        maxQuantity: number
+        maxQuantity: number,
+        sub_type_equip: subTypeEquip
     ) {
         if (bonusUsed.length >= maxQuantity) {
             return bonusUsed
         }
-        const bonus = this.generateBonusService.generateBonus(bonusCategory, bonusUsed, itemLv, quaility)
+        const bonus = this.generateBonusService.generateBonus(bonusCategory, bonusUsed, itemLv, quaility,sub_type_equip)
         bonusUsed.push(...bonus)
         if (bonusUsed.length > maxQuantity) {
             return this.adjustBonusQuantityCap(bonusUsed, maxQuantity)
@@ -109,7 +112,8 @@ export class GenerateItemBonusService {
         bonusCategory: BonusCategory,
         itemLv: number,
         quaility: ItemBonusQuality,
-        maxQuantity: number
+        maxQuantity: number,
+        sub_type_equip: subTypeEquip
     ) {
         const newBonuses: BonusInItem[] = []
 
@@ -117,7 +121,7 @@ export class GenerateItemBonusService {
             if (newBonuses.length >= maxQuantity) {
                 break;
             }
-            const bonus = this.generateBonusService.generateBonus(bonusCategory, newBonuses, itemLv, quaility)
+            const bonus = this.generateBonusService.generateBonus(bonusCategory, newBonuses, itemLv, quaility,sub_type_equip)
             newBonuses.push(...bonus)
         }
         return this.adjustBonusQuantityCap(newBonuses, maxQuantity)

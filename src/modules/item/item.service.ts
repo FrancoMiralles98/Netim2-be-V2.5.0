@@ -9,6 +9,10 @@ import { ITEM_LIST } from './const/items.const';
 import { InventoryItem } from '../inventory/types/inventory-item.type';
 import { ItemImplicitBonusService } from './services/implicitScaling/item-implicit-bonus.service';
 import { ItemHydrationService } from './services/item-hydration.service';
+import { RandomImplicitBonusService } from './services/implicitScaling/random-implicit-bonus.service';
+import { BonusInItem } from '../bonus/types/bonus-in-item.type';
+import { UpgradeLv } from './types/config/general-implicit.type';
+import { subTypeEquip } from './types/entities-props/equip.type';
 
 @Injectable()
 export class ItemService {
@@ -17,12 +21,22 @@ export class ItemService {
         private rngService: RngService,
         private itemImplicitBonusService: ItemImplicitBonusService,
         private itemHydrationService: ItemHydrationService,
+        private randomImplicitBonusService: RandomImplicitBonusService,
     ) { }
+
+    generateRandomImplicitBonus(
+        lvReq: number,
+        upgradeLv: UpgradeLv,
+        sub_type_equip: subTypeEquip
+    ): BonusInItem[] {
+        return this.randomImplicitBonusService.generateRandomImplicitBonus(lvReq,upgradeLv,sub_type_equip)
+    }
+
 
     getCoreItemInfoByIdItem(
         idItem: IdItemList,
     ): ItemDTO {
-        const itemBaseInfo = ITEM_LIST.find(item => item.idItem === idItem)
+        const itemBaseInfo = structuredClone(ITEM_LIST.find(item => item.idItem === idItem))
 
         if (!itemBaseInfo) {
             throw new Error(`item not found ${idItem}`)
@@ -30,7 +44,7 @@ export class ItemService {
 
         this.itemImplicitBonusService.getUpdatedImplicits(itemBaseInfo)
 
-        return structuredClone(itemBaseInfo)
+        return itemBaseInfo
     }
 
 
@@ -38,12 +52,12 @@ export class ItemService {
         item: InventoryItem
     ): InventoryItem {
         const baseItem = this.getCoreItemInfoByIdItem(item.idItem)
-        
-        return this.itemHydrationService.hydrateInventoryItem(baseItem,item)
+
+        return this.itemHydrationService.hydrateInventoryItem(baseItem, item)
     }
 
 
-    rollItemLv(lvReq: number): number {
+    rollItemLv(lvReq: number, bonification?: number): number {
         const distanceToMax = EQUIP_RULES.MAX__NORMAL_ITEM_LV - lvReq;
 
         const config = ITEM_LV_REROLL_CONFIG.find(c =>
@@ -59,10 +73,12 @@ export class ItemService {
 
         const maxAllowedBonus = Math.min(tier.maxBonusLv, distanceToMax);
 
-        const bonusLv = this.rngService.randomNumberInRange(
+        let bonusLv = this.rngService.randomNumberInRange(
             tier.minBonusLv,
             maxAllowedBonus
         );
+
+        bonusLv += bonification || 0
 
         return lvReq + bonusLv;
     }

@@ -7,6 +7,7 @@ import { SpecialBonusService } from './special-bonus.service';
 import { ItemLevelScalingService } from './item-level-scaling.service';
 import { RngService } from 'src/modules/shared/services/rng.service';
 import { ItemBonusQuality } from 'src/modules/bonus/types/item-bonus-quaility.type';
+import { subTypeEquip } from 'src/modules/item/types/entities-props/equip.type';
 
 /**
  * Servicio encargado de la generación de bonus para ítems.
@@ -38,10 +39,11 @@ export class GenerateBonusService {
         bonusUsed: BonusInItem[] = [],
         itemLv: number,
         quaility: ItemBonusQuality = 'normal',
+        sub_type_equip: subTypeEquip
     ): BonusInItem[] {
         const tierToUse = this.pickBonusTier(quaility)
 
-        const filterList = this.getNewBonusList(category, tierToUse, bonusUsed,)
+        const filterList = this.getNewBonusList(category, tierToUse, bonusUsed,sub_type_equip)
 
         const bonusToUse = this.selectRandomBonusOfList(filterList)
 
@@ -93,7 +95,11 @@ export class GenerateBonusService {
      * 
      * @returns {BonusType[]} Lista de bonus filtrados.
      */
-    private getBonusListByCategory(category: BonusCategory, bonusUsed: BonusInItem[] = []): BonusType[] {
+    private getBonusListByCategory(
+        category: BonusCategory, 
+        bonusUsed: BonusInItem[] = [],
+        sub_type_equip: subTypeEquip
+    ): BonusType[] {
         const usedBonusRef = new Set(bonusUsed.map(b => b.bonusRef))
 
         const hasMediaOrHabilidad =
@@ -112,6 +118,10 @@ export class GenerateBonusService {
 
             //Como el daño de media y habilidad van juntos (es decir tiene su contraparte en negativo) se quitan los 2 en caso de tenerlo
             if (hasMediaOrHabilidad && (bonus.name.bonus_ref_name === 'media' || bonus.name.bonus_ref_name === 'habilidad')) {
+                return false
+            }
+
+            if (!bonus.valid.includes(sub_type_equip)) {
                 return false
             }
 
@@ -166,9 +176,10 @@ export class GenerateBonusService {
         category: BonusCategory,
         selectedTier: BonusTierLv,
         bonusUsed: BonusInItem[] = [],
+        sub_type_equip: subTypeEquip
     ): BonusType[] {
 
-        const availableBonuses = this.getBonusListByCategory(category, bonusUsed)
+        const availableBonuses = this.getBonusListByCategory(category, bonusUsed,sub_type_equip)
 
         if (availableBonuses.length === 0) {
             throw new Error('No hay bonus disponibles para esta categoría')
