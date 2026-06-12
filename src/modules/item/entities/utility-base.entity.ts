@@ -1,16 +1,14 @@
 import { GenericType } from '../types/entities-props/item-base.type';
-import { ItemIfContainType, SpecificUtilityType, UtilityBaseType } from '../types/entities-props/utility-base.type';
+import { SpecificUtilityType, UtilityBaseType } from '../types/entities-props/utility-base.type';
 import { ItemBase } from './item-base.entity';
 
 export class UtilityBase extends ItemBase {
   protected readonly lvUtility: number;
   protected readonly description: string;
   protected readonly maxCantidad: number;
-  protected readonly containsItem: boolean;
   protected readonly type_utility?: SpecificUtilityType;
   protected cantidad: number;
   protected type: GenericType;
-  protected itemIfContain: ItemIfContainType[];
 
   constructor(props: UtilityBaseType) {
     super(props);
@@ -20,8 +18,6 @@ export class UtilityBase extends ItemBase {
     this.type = props.type;
     this.type_utility = props.type_utility ?? 'utility';
     this.lvUtility = props.lvUtility;
-    this.containsItem = props.containsItem;
-    this.itemIfContain = props.itemIfContain;
   }
 
   /**
