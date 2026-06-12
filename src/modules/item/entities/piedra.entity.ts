@@ -12,7 +12,7 @@ export class Piedra extends UtilityBase {
     return this.props.upgradeLv === this.props.upgradeMax;
   }
 
-  applyUpgradePiedra(implicitBonus: BonusInItem): void {
+  applyUpgradePiedra(implicitBonus: BonusInItem[]): void {
     if (this.isPiedraMaxLv()) {
       throw new Error('Piedra is max lv');
     }
@@ -20,7 +20,7 @@ export class Piedra extends UtilityBase {
     this.props.implicitBonus = implicitBonus;
   }
 
-  addSpecialCorruptBonus(bonus: SpecialCorruptBonus): void {
+  addSpecialCorruptBonus(bonus: SpecialCorruptBonus[]): void {
     if (this.props.specialCorruptBonus) {
       throw new Error('It already has a bonus inserted');
     }

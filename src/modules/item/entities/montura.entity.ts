@@ -46,7 +46,7 @@ export class Montura extends UtilityBase {
     this.montura.nextExpLv = nextExpLv;
   }
 
-  lvUpMontura(upgradeImplicitBonus: BonusInItem): void {
+  lvUpMontura(upgradeImplicitBonus: BonusInItem[]): void {
     if (this.isMonturaMaxLv()) {
       throw new Error('Montura is max lv');
     }

@@ -26,7 +26,7 @@ export class ItemLevelScalingService {
         //se ajusta el valor maximo que puede tener un bonus segun el itemLevel
         const scaledMax = min + Math.floor((max - min) * multiplayer);
 
-        return Number(this.rngService.randomNumberInRange(min, scaledMax, true).toFixed(1))
+        return this.rngService.randomNumberInRange(min, scaledMax)
     }
 
 
@@ -41,7 +41,7 @@ export class ItemLevelScalingService {
  * @returns {number} Multiplicador de escalado.
  */
     private getItemLvBonusMultiplier(itemLv: number): number {
-        const limitItemLv = Math.min(Math.max(itemLv, EQUIP_RULES.MIN_ITEM_LV), EQUIP_RULES.MAX_ITEM_LV);
+        const limitItemLv = Math.min(Math.max(itemLv, EQUIP_RULES.MIN_ITEM_LV), EQUIP_RULES.MAX__NORMAL_ITEM_LV);
 
         return Math.min(MAX_MULTIPLIER, MIN_MULTIPLIER + limitItemLv * SCALING_PER_ITEM_LV)
     }

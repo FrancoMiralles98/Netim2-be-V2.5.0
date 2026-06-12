@@ -21,14 +21,14 @@ export class Equip extends ItemBase {
   }
 
   changeItemLv(itemLv: number): void {
-    this.props.itemLv = Math.min(EQUIP_RULES.MAX_ITEM_LV,itemLv)
+    this.props.itemLv = Math.min(EQUIP_RULES.MAX__NORMAL_ITEM_LV,itemLv)
   }
 
   isLegendaryItem(): boolean {
     return this.props.legendary;
   }
 
-  applyUpgrade(implicitBonus: BonusInItem): void {
+  applyUpgrade(implicitBonus: BonusInItem[]): void {
     if (!this.canUpgrade()) {
       throw new Error('The item is already at the max level');
     }
@@ -36,7 +36,7 @@ export class Equip extends ItemBase {
     this.props.implicitBonus = implicitBonus;
   }
 
-  applyReduceUpgrade(implicitBonus: BonusInItem): void {
+  applyReduceUpgrade(implicitBonus: BonusInItem[]): void {
     if (this.canReduceUpgrade()) {
       throw new Error('The item cannot be reduced further');
     }
@@ -90,7 +90,7 @@ export class Equip extends ItemBase {
     this.props.corrupt = true;
   }
 
-  insert6_7Bonus(bonus: BonusInItem) {
+  insert6_7Bonus(bonus: BonusInItem[]) {
     if (Object.keys(bonus).length > EQUIP_RULES.MAX_6_7_BONUS) {
       throw new Error(
         `the Max number of bonus is ${EQUIP_RULES.MAX_6_7_BONUS}`,
@@ -99,7 +99,7 @@ export class Equip extends ItemBase {
     this.props.bonus6_7 = bonus;
   }
 
-  insertExplicitBonus(bonus: BonusInItem): void {
+  insertExplicitBonus(bonus: BonusInItem[]): void {
     if (Object.keys(bonus).length > EQUIP_RULES.MAX_EXPLICIT_BONUS) {
       throw new Error(
         `the Max number of bonus is ${EQUIP_RULES.MAX_EXPLICIT_BONUS}`,
@@ -111,14 +111,14 @@ export class Equip extends ItemBase {
     this.props.explicitBonus = bonus;
   }
 
-  insertImplicitCorruptBonus(bonus: BonusInItem): void {
+  insertImplicitCorruptBonus(bonus: BonusInItem[]): void {
     if (!this.isCorrupted()) {
       throw new Error('Item not corrupted');
     }
     this.props.corruptImplicitBonus = bonus;
   }
 
-  insertCorruptExplicitBonus(bonus: BonusInItem): void {
+  insertCorruptExplicitBonus(bonus: BonusInItem[]): void {
     if (!this.isCorrupted()) {
       throw new Error('Item not corrupted');
     }
