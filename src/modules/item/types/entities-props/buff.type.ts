@@ -1,3 +1,4 @@
+import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
 import { UtilityBaseType } from "./utility-base.type";
 
 
@@ -7,9 +8,9 @@ import { UtilityBaseType } from "./utility-base.type";
  * @property {'buff'} type_utility - Tipo fijo que identifica como buff (para sistemas de búsqueda).
  * @property {number} duration - Duración del buff, menciona la cantidad de minutos que dura el buffo
  * @property {string} iconBuff - Ruta/URL del icono visual del buff.
- * @property {'utility'} type - Tipo principal del ítem
- * @property {boolean} containsItem - Si el buff incluye otros ítems como recompensa al usarlo.
- * @property {[number, string]} effect - Efecto principal del buff.
+ * @property {number} idBuff - Ruta/URL del icono visual del buff.
+ * @property {'utility'} type - id del buff, se utiliza para no poder acomular mismo tipo de buffo de diferente items
+ * @property {[number, BonusRefKeys]} effect - Efecto principal del buff.
  *  @exmaple dupla donde: [valorDelBonus, atributoAfectado]. Ejemplo: [15, 'vm'].
  *
  */
@@ -18,6 +19,11 @@ export interface BuffType extends UtilityBaseType {
   duration: number;
   iconBuff: string;
   type: 'utility';
-  idBUff: number;
-  effect: [number, string];
+  idBuff: number;
+  effect: EffecDescription[];
+}
+
+export interface EffecDescription {
+  bonusRef: BonusRefKeys;
+  bonusValue: number
 }
