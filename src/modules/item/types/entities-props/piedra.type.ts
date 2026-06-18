@@ -14,8 +14,6 @@ export interface PiedraType extends UtilityBaseType {
   upgradeLv: UpgradeLv;
   upgradeMax: number;
   type_utility: 'piedra';
-  priceForge: number[];
-  itemsForge: UtilityBaseType[];
   specialCorruptBonus?: SpecialCorruptBonus[];
   restricted: subTypeEquip[];
 }
