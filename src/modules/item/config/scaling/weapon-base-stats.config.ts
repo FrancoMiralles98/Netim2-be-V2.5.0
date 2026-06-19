@@ -14,6 +14,10 @@ export const WEAPON_BASE_STAT_CONFIG: Record<TypeWeapon, WeaponDamageScalingConf
             min: { base: 7, perLv: 2.05, power: 1.05 },
             max: { base: 29, perLv: 2.75, power: 1.04 },
         },
+        ap: {
+            min: { base: 7, perLv: 2.05, power: 1.05 },
+            max: { base: 29, perLv: 2.75, power: 1.04 },
+        },
     },
 
     daga: {
@@ -35,10 +39,18 @@ export const WEAPON_BASE_STAT_CONFIG: Record<TypeWeapon, WeaponDamageScalingConf
             min: { base: 7, perLv: 2.05, power: 1.05 },
             max: { base: 29, perLv: 2.75, power: 1.04 },
         },
+        ap: {
+            min: { base: 7, perLv: 2.05, power: 1.05 },
+            max: { base: 29, perLv: 2.75, power: 1.04 },
+        },
     },
 
     fan: {
         ad: {
+            min: { base: 7, perLv: 2.05, power: 1.05 },
+            max: { base: 29, perLv: 2.75, power: 1.04 },
+        },
+        ap: {
             min: { base: 7, perLv: 2.05, power: 1.05 },
             max: { base: 29, perLv: 2.75, power: 1.04 },
         },

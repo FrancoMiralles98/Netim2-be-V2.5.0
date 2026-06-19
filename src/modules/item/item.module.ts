@@ -9,6 +9,7 @@ import { PlaneBonusCalculator } from './services/implicitScaling/plane-bonus-cal
 import { ItemImplicitBonusService } from './services/implicitScaling/item-implicit-bonus.service';
 import { DinamicStatsCalculatorService } from './services/implicitScaling/dinamic-stats-calculator.service';
 import { ConfiguredItemBonusCalculatorService } from './services/implicitScaling/configured-item-bonus-calculator.service';
+import { SpecificImplicitBonusService } from './services/implicitScaling/specific-implicit-bonus.service';
 
 @Module({
   imports: [
@@ -23,7 +24,8 @@ import { ConfiguredItemBonusCalculatorService } from './services/implicitScaling
     PlaneBonusCalculator,
     ItemImplicitBonusService,
     DinamicStatsCalculatorService,
-    ConfiguredItemBonusCalculatorService
+    ConfiguredItemBonusCalculatorService,
+    SpecificImplicitBonusService
   ],
   exports: [
     ItemFactory,

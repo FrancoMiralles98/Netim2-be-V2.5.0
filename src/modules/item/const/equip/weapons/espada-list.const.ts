@@ -1,5 +1,3 @@
-import { ItemFactory } from "src/modules/item/factories/item-factory";
-import { EQUIP_RULES } from "../../../config/items-rule.const";
 import { EquipType } from "../../../types/entities-props/equip.type";
 import { IdItem } from "../../../types/iditems/id-item-list.type";
 import { createEquipItem } from "src/modules/item/factories/item-builder";

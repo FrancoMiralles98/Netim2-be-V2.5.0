@@ -1,18 +1,37 @@
 import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type"
-import { PatternScaleType } from "../config/general-implicit.type"
+import { PatternScaleType } from "../../config/general-implicit.type"
 import { BonusOrigin } from "src/modules/bonus/types/bonus-in-item.type";
 import { DinamicImplicitConfig, } from "./dinamic-implict.type";
-import { IdItemList } from "../iditems/id-item-list.type";
+import { IdItemList } from "../../iditems/id-item-list.type";
+import { SpecificImplicitConfig } from "./specific-implict.types";
 
 /**
- * Representa un equipamiento que se utiliza a la hora de guardar la informacion base ne la DB
+ * Define una configuración compartida de bonus implícitos para uno o más ítems.
+ *
+ * Esta estructura permite reutilizar la misma configuración de escalado
+ * entre distintos ítems que comparten estadísticas implícitas similares,
+ * evitando duplicar configuraciones.
+ *
+ * Un mismo ítem puede pertenecer a múltiples configuraciones distintas.
+ * Por ejemplo:
+ *
+ * - Una configuración puede contener los bonus de ataque físico (`ad`)
+ *   y ataque mágico (`ap`).
+ * - Otra configuración independiente puede contener velocidad de ataque (`va`).
+ *
+ * Durante el proceso de cálculo, todas las configuraciones asociadas al ítem
+ * son combinadas para obtener la lista completa de bonus implícitos.
  */
 export interface CoreImplicitItem {
     implicitBonus: ImplicitBonusConfig[]
-    idItem: IdItemList
+    idItems: IdItemList[]
 }
 
-export type ImplicitBonusConfig = DinamicImplicitConfig | PlaneImplicitConfig | StaticImplicitConfig
+export type ImplicitBonusConfig =
+    DinamicImplicitConfig |
+    PlaneImplicitConfig |
+    StaticImplicitConfig |
+    SpecificImplicitConfig
 
 
 /**
@@ -23,6 +42,7 @@ export type ImplicitBonusConfig = DinamicImplicitConfig | PlaneImplicitConfig | 
  */
 export interface StaticImplicitConfig extends BaseImplicitConfig {
     type: 'static'
+
     value: number
 }
 
@@ -38,6 +58,7 @@ export interface StaticImplicitConfig extends BaseImplicitConfig {
 export interface PlaneImplicitConfig extends BaseImplicitConfig {
     type: 'plane'
     patternScale: PatternScaleType
+
     multiplicateValue?: number
 }
 

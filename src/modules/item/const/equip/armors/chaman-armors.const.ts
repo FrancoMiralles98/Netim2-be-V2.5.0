@@ -4,7 +4,7 @@ import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
 
 export const CHAMAN_ARMORS: EquipType[] = [
     createEquipItem({
-        idItem: 61,
+        idItem: IdItem.ROPAJE_AZUL,
         restricted: ["chaman"],
         name: 'Ropaje Azul',
         lvReq: 1,
