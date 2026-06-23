@@ -17,6 +17,7 @@ import { MobModule } from './modules/mob/mob.module';
 import { FightModule } from './modules/fight/fight.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { DropModule } from './modules/drop/drop.module';
+import { HistorialModule } from './modules/historial/historial.module';
 
 @Module({
   imports: [
@@ -39,7 +40,8 @@ import { DropModule } from './modules/drop/drop.module';
     MobModule,
     FightModule,
     SharedModule,
-    DropModule
+    DropModule,
+    HistorialModule
   ],
   controllers: [AppController],
   providers: [AppService],
