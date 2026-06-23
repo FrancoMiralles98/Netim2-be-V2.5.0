@@ -18,6 +18,7 @@ import { FightModule } from './modules/fight/fight.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { DropModule } from './modules/drop/drop.module';
 import { HistorialModule } from './modules/historial/historial.module';
+import { MisionesModule } from './modules/misiones/misiones.module';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import { HistorialModule } from './modules/historial/historial.module';
     FightModule,
     SharedModule,
     DropModule,
-    HistorialModule
+    HistorialModule,
+    MisionesModule
   ],
   controllers: [AppController],
   providers: [AppService],
