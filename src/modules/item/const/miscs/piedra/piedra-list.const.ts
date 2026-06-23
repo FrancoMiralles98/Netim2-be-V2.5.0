@@ -13,7 +13,6 @@ export const PIEDRA_LIST: PiedraType[] = [
         upgradeMax: EQUIP_RULES.MAX_SPECIAL_PIEDRAS_UPGRADE_LV,
         description: '',
     }),
-
     createPiedraItem({
         idItem: IdItem.PIEDRA_DE_IRA,
         name: 'Piedra de Ira',

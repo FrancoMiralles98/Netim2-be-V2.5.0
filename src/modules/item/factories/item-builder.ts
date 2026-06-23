@@ -1,14 +1,16 @@
 import { BASE_EQUIP_ITEM } from "../const/equip/base-equip.const";
 import { BASE_LEGENDARIO_ITEM } from "../const/equip/legendarios/base-legendario-item.const";
 import { BASE_BUFF_ITEM } from "../const/miscs/buff/buff-item-base.const";
+import { CAÑA_BASE_ITEM } from "../const/miscs/caña/base-caña-const";
 import { BASE_CHEST_ITEM } from "../const/miscs/chest/base-chest-item.const";
 import { BASE_GENERIC_UTILITY } from "../const/miscs/generic-utility-base.const";
 import { LICENCIA_MONTURA_BASE_ITEM } from "../const/miscs/montura/montura-base-item.const";
 import { MONTURAS_LIST } from "../const/miscs/montura/montura-list.const";
 import { BASE_PIEDRA_ITEM } from "../const/miscs/piedra/piedra-item-base.const";
 import { POCION_BASE_ITEM } from "../const/miscs/pocion/pocion-base.const";
-import { RawBuffItem, RawChestItem, RawEquipItem, RawGenericUtilityItem, RawLegendaryEquipItem, RawMonturaItem, RawPiedraItem, RawPocionItem } from "../types/const/raw-items.type";
+import { RawBuffItem, RawCañaItem, RawChestItem, RawEquipItem, RawGenericUtilityItem, RawLegendaryEquipItem, RawMonturaItem, RawPiedraItem, RawPocionItem } from "../types/const/raw-items.type";
 import { BuffType } from "../types/entities-props/buff.type";
+import { CañaType } from "../types/entities-props/caña.type";
 import { ChestType } from "../types/entities-props/chest.type";
 import { EquipType } from "../types/entities-props/equip.type";
 import { MonturaType } from "../types/entities-props/montura.type";
@@ -74,5 +76,12 @@ export function createMonturaItem(data: RawMonturaItem): MonturaType {
         ...LICENCIA_MONTURA_BASE_ITEM,
         ...data,
         montura: findMontura
+    };
+}
+
+export function createCañaItem(data: RawCañaItem): CañaType {
+    return {
+        ...CAÑA_BASE_ITEM,
+        ...data,
     };
 }

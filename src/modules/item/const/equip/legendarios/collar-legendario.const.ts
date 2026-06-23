@@ -63,16 +63,4 @@ export const COLLAR_LEGENDARIO_LIST: EquipType[] = [
         size: { rows: 1, cols: 1 },
         price: 20000,
     }),
-    createLegendaryEquipItem({
-        idItem: IdItem.COLLAR_DE_CORAL_ARAKU_TIKI,
-        name: 'Collar de Coral Araku Tiki',
-        lvReq: 20,
-        leyenda: "Se dice que te hace invisible cuando el Gran Espíritu viene a llevarte en tu viaje final.",
-        sub_type_equip: 'collar',
-        especial: false,
-        img: '/items/Araku_Tiki_inventory_icon.png',
-        slot: 0,
-        size: { rows: 1, cols: 1 },
-        price: 20000,
-    }),
 ]

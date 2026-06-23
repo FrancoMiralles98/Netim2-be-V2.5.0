@@ -66,7 +66,7 @@ export const ARMADURA_SCALING: CoreImplicitItem[] = [
             {
                 bonusRefKey: 'vm',
                 type: 'static',
-                value: -5,
+                value: 5,
                 sign: 'negative',
                 origin: 'configured'
             }
