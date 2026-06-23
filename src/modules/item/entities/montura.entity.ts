@@ -31,7 +31,7 @@ export class Montura extends UtilityBase {
     const hoursPassed = Math.floor(
       (now - this.montura.lastUpdate) / (1000 * 60 * 60), // lo transformamos a hora
     );
-    return Math.max(0, this.montura.hp - hoursPassed);
+    return Math.max(0, this.montura.hp.actual - hoursPassed);
   }
 
   isMonturaMaxLv(): boolean {
@@ -72,9 +72,9 @@ export class Montura extends UtilityBase {
     }
     let newHp =
       this.getCurrentMonturaHp() +
-      this.montura.maxHp * MONUTRA_RULES.HEALING_PER_ITEM;
+      this.montura.hp.max * MONUTRA_RULES.HEALING_PER_ITEM;
 
-    if (newHp > this.montura.maxHp) newHp = this.montura.maxHp;
+    if (newHp > this.montura.hp.max) newHp = this.montura.hp.max;
 
     /**
      * @description - se le actualiza la ultima actualizacion ya la vida del caballo se determina por el tiempo transcurrido

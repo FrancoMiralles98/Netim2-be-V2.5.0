@@ -110,8 +110,8 @@ export const PATTERN_SCALE_CONFIG: GeneralPatternScale = {
         7: 22,
         8: 28,
         9: 35,
-        10: 37,
-        11: 45,
+        10: 42,
+        11: 48,
     },
     scale_to_40: {
         0: 6,

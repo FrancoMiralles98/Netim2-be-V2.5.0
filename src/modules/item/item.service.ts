@@ -13,6 +13,9 @@ import { RandomImplicitBonusService } from './services/implicitScaling/random-im
 import { BonusInItem } from '../bonus/types/bonus-in-item.type';
 import { UpgradeLv } from './types/config/general-implicit.type';
 import { subTypeEquip } from './types/entities-props/equip.type';
+import { Reward } from './types/entities-props/chest.type';
+import { ItemFactory } from './factories/item-factory';
+import { Chest } from './entities/chest.entity';
 
 @Injectable()
 export class ItemService {
@@ -21,6 +24,7 @@ export class ItemService {
         private rngService: RngService,
         private itemImplicitBonusService: ItemImplicitBonusService,
         private itemHydrationService: ItemHydrationService,
+        private itemFactory: ItemFactory,
         private randomImplicitBonusService: RandomImplicitBonusService,
     ) { }
 
@@ -30,6 +34,15 @@ export class ItemService {
         sub_type_equip: subTypeEquip
     ): BonusInItem[] {
         return this.randomImplicitBonusService.generateRandomImplicitBonus(lvReq,upgradeLv,sub_type_equip)
+    }
+
+    openChest(item: InventoryItem): Reward[] {
+        const chest = this.itemFactory.create(item)
+        if (!(chest instanceof Chest)) {
+            throw new Error ('el item tiene que ser de tipo chest')
+        }
+
+        return chest.open()
     }
 
 

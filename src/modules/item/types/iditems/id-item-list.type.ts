@@ -1,3 +1,7 @@
+import { ArmaduraChamanIdItem } from "./equipo/armaduras/armadura-chaman-id-item.enum";
+import { ArmaduraGuerreroIdItem } from "./equipo/armaduras/armadura-guerrero-id-item.enum";
+import { ArmaduraNinjaIdItem } from "./equipo/armaduras/armadura-ninja-id-item.enum";
+import { ArmaduraSuraIdItem } from "./equipo/armaduras/armadura-sura-id-item.enum";
 import { ArcoIdItem } from "./equipo/armas/arco-id-items.enum";
 import { CampanaIdItems } from "./equipo/armas/campana-id-items.enum";
 import { DagaIdItems } from "./equipo/armas/daga-id-items.enum";
@@ -24,6 +28,14 @@ import { PocionIdItem } from "./miscs/pocion-id-item.enum";
 import { SpecialMiscIdITem } from "./miscs/special-miscs.enum";
 
 export const IdItem = {
+  ...ArmaduraChamanIdItem,
+  ...ArmaduraGuerreroIdItem,
+  ...ArmaduraNinjaIdItem,
+  ...ArmaduraSuraIdItem,
+  ...CascoChamanIdItem,
+  ...CascoGuerreroIdITem,
+  ...CascoNinjaIdItem,
+  ...CascoSuraIdItem,
   ...ArcoIdItem,
   ...CampanaIdItems,
   ...DagaIdItems,

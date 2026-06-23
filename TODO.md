@@ -42,6 +42,14 @@ MODULO
             -character-entity: falta agregar mas metodos principales, como Equipar desequipar, y tambien en la funcion de subir de nivel una skill falta agregar el consumo de libros o piedra alma cuando la skill esta especializada 
         - item
             - Se quito el bonus "esquivar_flechas" por ende se tiene que cambiar de bonus los items que lo tienen y fijar si se cambia el bonus o se quita la piedra re regate
+            buff- cambiado estructura de effects en los items de tipo buffo, para mayor claridad y ahora poder permitir añadir mas buffos del item
+            - falta agregar los drops de los cofres y tambien las cañas
+            - falta agregar los bonus implicitos especiales de cada item del juego que lo tenga
+            - falta el balanceo de los bonus de los implicitos
+            - agergar escalados especificos ( por ahora las armas del sura de lv alto)
+            - cambiar piedra de regate por otro bonus que no sea esquivar_flechas"
+            - implementacion de la piedra rota (como se crea y y se usa)
+
         - character
             -stats.fight: como se quito el bonus esquivar_flechas tambien hay que sacarlo de las estadisticas de pelea "flechas esquivadas" y luego tambien cambiarlo en el modulo de Fight
         fight:

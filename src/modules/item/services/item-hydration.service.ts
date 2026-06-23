@@ -58,6 +58,7 @@ export class ItemHydrationService {
             case 'buff':
             case 'cebo':
             case 'utility':
+            case 'chest':
             case 'poción':
                 return {
                     ...this.mergeGenericUtilityItem(baseItem, savedItem),

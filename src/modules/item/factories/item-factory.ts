@@ -9,6 +9,7 @@ import { Piedra } from '../entities/piedra.entity';
 import { Pocion } from '../entities/pocion.entity';
 import { Utility } from '../entities/utility.entity';
 import { ItemDTO } from '../types/item-dto';
+import { Chest } from '../entities/chest.entity';
 
 @Injectable()
 export class ItemFactory {
@@ -42,10 +43,12 @@ export class ItemFactory {
         return new Piedra(data);
       case 'montura':
         return new Montura(data);
+      case 'chest':
+        return new Chest(data);
       case 'utility':
         return new Utility(data);
       default:
-        throw new Error(`unknow utility type type`);
+        throw new Error(`unknow utility type`);
     }
   }
 }

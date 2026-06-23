@@ -1,0 +1,1 @@
+agregado configuracion specifica para poder hacer escalados determinados para items unicos

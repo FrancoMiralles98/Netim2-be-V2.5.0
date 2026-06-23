@@ -29,8 +29,6 @@ export interface MonturaType extends UtilityBaseType {
  * @argument hpMax - Vida maxima de la montura
  * @argument idItemFood - idItem de la comida compatible con la montura
  * @argument idItemRef - idItem del item que se usa para invocar a la montura
- * @argument itemFood - Estructura del item de la comida
- * @argument itemRevive - Estructura del item que se usa para revivir
  * @argument lastUpdate - Ultima actualizacion que se hizo en la montura
  */
 export interface MonturaDescription {
@@ -38,16 +36,13 @@ export interface MonturaDescription {
   statusIcon: string;
   img: string;
   implicitBonus: BonusInItem[];
-  hp: number;
-  maxHp: number;
+  hp: {actual:number,max: number};
   exp: number;
   nextExpLv: number;
   maxLv: number;
   lv: UpgradeLv;
-  idItemFood?: number;
-  idItemRevive?: number;
+  idItemFood?: IdItemList;
+  idItemRevive?: IdItemList;
   idItemRef: IdItemList;
-  itemFood?: UtilityBaseType;
-  itemRevive?: UtilityBaseType;
   lastUpdate: number;
 }

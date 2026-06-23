@@ -23,7 +23,7 @@ export const tier3BonusList: BonusType[] = [
       bonus_ref_name: 'hp',
       type_value: ValueBonusType.FLAT
     },
-    values: { min: 100, max: 2500 },
+    values: { min: 100, max: 2000 },
     valid: ['brazalete', 'collar', 'armadura', 'botas'],
   },
   {
