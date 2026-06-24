@@ -1,6 +1,13 @@
 import { UpgradeLv } from "src/modules/item/types/config/general-implicit.type";
 import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type";
 import { ItemDTO } from "src/modules/item/types/item-dto";
+import { ActionMission } from "./action-mission.type";
+import { CollectMission } from "./collect-mission.type";
+import { HuntMission } from "./hunt-mission.type";
+import { IdMissionsList } from "./idMissions/id-mission-list.enum";
+
+export type Missions = ActionMission | CollectMission | HuntMission
+
 
 /**
  * Configuración base de una misión disponible en el juego.
@@ -20,7 +27,7 @@ import { ItemDTO } from "src/modules/item/types/item-dto";
  * @property mainMission Indica si la misión pertenece a la línea principal de progreso.
  */
 export interface MissionBase {
-    idMission: number;
+    idMission: IdMissionsList;
     name: string;
     description: string;
     shortDescription: string;
@@ -34,10 +41,10 @@ export interface MissionBase {
  * Tipos de misión disponibles.
  *
  * - `hunt`: misión basada en derrotar enemigos.
- * - `farm`: misión basada en recolectar recursos o ítems.
+ * - `collect`: misión basada en recolectar recursos o ítems.
  * - `action`: misión basada en realizar una acción específica (como mejorar un item, o hacer x cosa).
  */
-export type TypeMission = 'hunt' | 'farm' | 'action'
+export type TypeMission = 'hunt' | 'collect' | 'action'
 
 /**
  * Requisitos necesarios para acceder a una misión.
@@ -54,7 +61,7 @@ export interface MissionReward {
     yang: number;
     exp: number;
     itemsConfig: ItemsConfig[];
-    items: ItemDTO
+    items: ItemDTO[]
 }
 
 /**

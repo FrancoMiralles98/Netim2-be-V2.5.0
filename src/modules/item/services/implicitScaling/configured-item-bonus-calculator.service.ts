@@ -63,9 +63,6 @@ export class ConfiguredItemBonusCalculatorService {
 
                 usedBonusRefs.add(config.bonusRefKey)
 
-                console.log('config a usar',config);
-                
-
                 const bonusValue = this.getBonusValue(config, lvReq, upgradeLv, idItem)
 
                 updatedBonusList.push(

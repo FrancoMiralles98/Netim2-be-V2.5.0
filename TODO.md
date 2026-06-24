@@ -49,7 +49,10 @@ MODULO
             - agergar escalados especificos ( por ahora las armas del sura de lv alto)
             - cambiar piedra de regate por otro bonus que no sea esquivar_flechas"
             - implementacion de la piedra rota (como se crea y y se usa)
-
+        -misiones
+            - Falta hacer el proceso de aceptar una mission
+            - falta el metodo para terminar una mision y recibir recompensas
+            - falta chequear como hago el sistema de entrega de items en misiones de tipo "collect"
         - character
             -stats.fight: como se quito el bonus esquivar_flechas tambien hay que sacarlo de las estadisticas de pelea "flechas esquivadas" y luego tambien cambiarlo en el modulo de Fight
         fight:
