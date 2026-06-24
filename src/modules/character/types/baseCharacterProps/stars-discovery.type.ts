@@ -1,3 +1,5 @@
+import { IdMobList } from "src/modules/mob/types/id-mob-list.enum";
+
 /**
  * Representa el progreso de estrellas desbloqueadas por mob.
  *
@@ -20,7 +22,7 @@
  * @note - que hace cada cosa se especifica en el modulo de "Drop"
  */
 export interface StarDiscovery {
-    id_mob: number;
+    id_mob: IdMobList;
     yang_star_available: boolean;
     exp_star_available: boolean;
     object_rarity_star_available: boolean;

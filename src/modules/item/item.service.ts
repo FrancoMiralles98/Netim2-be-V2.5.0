@@ -33,13 +33,13 @@ export class ItemService {
         upgradeLv: UpgradeLv,
         sub_type_equip: subTypeEquip
     ): BonusInItem[] {
-        return this.randomImplicitBonusService.generateRandomImplicitBonus(lvReq,upgradeLv,sub_type_equip)
+        return this.randomImplicitBonusService.generateRandomImplicitBonus(lvReq, upgradeLv, sub_type_equip)
     }
 
     openChest(item: InventoryItem): Reward[] {
         const chest = this.itemFactory.create(item)
         if (!(chest instanceof Chest)) {
-            throw new Error ('el item tiene que ser de tipo chest')
+            throw new Error('el item tiene que ser de tipo chest')
         }
 
         return chest.open()
@@ -60,8 +60,15 @@ export class ItemService {
         return itemBaseInfo
     }
 
+    getUpdatedImplicitBonus(item: ItemDTO): ItemDTO {
+        this.itemImplicitBonusService.getUpdatedImplicits(item)
+        return item
+    }
 
-    getUpdatedItem(
+    
+
+
+    getUpdatedInventoryItem(
         item: InventoryItem
     ): InventoryItem {
         const baseItem = this.getCoreItemInfoByIdItem(item.idItem)
