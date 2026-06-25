@@ -1,0 +1,38 @@
+import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { UserRole } from "../types/user-roles.enum";
+import { HydratedDocument } from "mongoose";
+import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
+
+@Schema({ timestamps: true })
+export class UserModel {
+    @Prop({ type: String, required: true, unique: true })
+    username!: string;
+
+    @Prop({ type: Number, default: 0 })
+    md!: number;
+
+    @Prop({ type: Number, default: 0 })
+    yang!: number;
+
+    @Prop({ type: Array, default: [] })
+    almacen!: InventoryItem[];
+
+    @Prop({ type: Array, default: [] })
+    almacenItemShop!: InventoryItem[];
+
+    @Prop({ type: String, required: true, unique: true })
+    email!: string;
+
+    @Prop({ type: String, default: UserRole.USER })
+    role!: UserRole;
+
+    @Prop({ type: Number, required: true })
+    codigo!: number;
+
+    @Prop({ type: String, required: true })
+    password!: string;
+}
+
+export type UserDocument = HydratedDocument<UserModel>
+
+export const userSchema = SchemaFactory.createForClass(UserModel)

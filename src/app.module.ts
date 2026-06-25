@@ -19,6 +19,7 @@ import { SharedModule } from './modules/shared/shared.module';
 import { DropModule } from './modules/drop/drop.module';
 import { HistorialModule } from './modules/historial/historial.module';
 import { MisionesModule } from './modules/misiones/misiones.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -43,7 +44,8 @@ import { MisionesModule } from './modules/misiones/misiones.module';
     SharedModule,
     DropModule,
     HistorialModule,
-    MisionesModule
+    MisionesModule,
+    UserModule
   ],
   controllers: [AppController],
   providers: [AppService],

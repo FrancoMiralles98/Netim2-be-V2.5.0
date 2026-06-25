@@ -3,6 +3,7 @@ import { SharedService } from './shared.service';
 import { SharedController } from './shared.controller';
 import { RngService } from './services/rng.service';
 import { BonusSharedService } from './services/bonus-shared.service';
+import { HashSharedService } from './services/hash-shared.service';
 
 @Module({
   controllers: [SharedController],
@@ -13,7 +14,8 @@ import { BonusSharedService } from './services/bonus-shared.service';
   ],
   exports: [
     RngService,
-    BonusSharedService
+    BonusSharedService,
+    HashSharedService
   ]
 })
 export class SharedModule {}
