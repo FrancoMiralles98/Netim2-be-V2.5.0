@@ -1,11 +1,12 @@
 import { ItemDTO, UtilityItemDTO } from "src/modules/item/types/item-dto";
 import { InventoryItem, Position } from "../types/inventory-item.type";
-import { isUtilityItem } from "src/modules/item/types/item-type-guard.type";
+import { isEquipItem, isUtilityItem } from "src/modules/item/types/item-type-guard.type";
 import { InventoryChangeResult } from "../types/item-to-update.types";
 import { InventoryItemFactory } from "../factories/inventory-item.factory";
 import { AddItemResult } from "../types/inventory-result.types";
 import { ItemsToConsumeType } from "../types/items-to-consume.types";
 import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type";
+import { randomUUID } from "crypto";
 
 export class Inventory {
     //espacio total del inventario tanto eje x como y
@@ -30,13 +31,53 @@ export class Inventory {
         return itemToFind
     }
 
-    removeItemById(id: string): InventoryItem {
+    /**
+ * Remueve un ítem del inventario a partir de su ID.
+ *
+ * Si no se especifica una cantidad, el ítem se remueve completamente.
+ * Si el ítem es de tipo equipamiento, también se remueve completamente,
+ * ya que los equipamientos no manejan cantidad acumulable.
+ *
+ * Si se especifica una cantidad y el ítem es acumulable:
+ *
+ * - Si la cantidad solicitada es mayor o igual a la cantidad disponible,
+ *   se remueve el stack completo.
+ * - Si la cantidad solicitada es menor a la cantidad disponible,
+ *   se descuenta esa cantidad del stack original y se devuelve una copia
+ *   del ítem con la cantidad removida.
+ *
+ * @param id ID de la instancia del ítem que se desea remover.
+ * @param quantity Cantidad opcional a remover del ítem acumulable.
+ *
+ * @returns Ítem removido. Puede ser el ítem completo o una copia parcial del stack.
+ */
+    removeItemById(id: string, quantity?: number): InventoryItem {
         const itemIndex = this.items.findIndex(i => i.id === id)
         if (itemIndex === -1) {
             throw new Error('id item not found')
         }
-        const [itemRemoved] = this.items.splice(itemIndex, 1)
-        return itemRemoved
+        const item = this.items[itemIndex]
+        if (quantity === undefined || isEquipItem(item)) {
+            const [itemRemoved] = this.items.splice(itemIndex, 1)
+            return itemRemoved
+        }
+
+        if (quantity <= 0) {
+            throw new Error('la cantidad asignada tiene que ser mayor a 0')
+        }
+
+        if (quantity >= item.cantidad) {
+            const [itemRemoved] = this.items.splice(itemIndex, 1)
+            return itemRemoved
+        }
+
+        item.cantidad -= quantity
+
+        return {
+            ...structuredClone(item),
+            id: randomUUID(),
+            cantidad: quantity,
+        }
     }
 
     /**
@@ -171,11 +212,11 @@ export class Inventory {
         const sameItems = item.id ?
             inventory.filter(i => i.id === item.id)
             : inventory.filter(i => i.idItem === item.idItem)
-            
+
         if (!sameItems) {
-            throw new Error ('No se encuentra items para consumir')
+            throw new Error('No se encuentra items para consumir')
         }
-        
+
         for (const storedItem of sameItems) {
             if (totalQuantity <= 0) break;
             if (!isUtilityItem(storedItem)) {
