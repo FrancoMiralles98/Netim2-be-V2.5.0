@@ -20,13 +20,17 @@ import { DropModule } from './modules/drop/drop.module';
 import { HistorialModule } from './modules/historial/historial.module';
 import { MisionesModule } from './modules/misiones/misiones.module';
 import { UserModule } from './modules/user/user.module';
+import { SessionModule } from './modules/session/session.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { RedisModule } from './modules/redis/redis.module';
+import { redisConfig } from './config/redis.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal:true,
       validationSchema: envValidationSchema,
-      load: [appConfig,authConfig,databaseConfig]
+      load: [appConfig,authConfig,databaseConfig,redisConfig]
     }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
@@ -45,7 +49,10 @@ import { UserModule } from './modules/user/user.module';
     DropModule,
     HistorialModule,
     MisionesModule,
-    UserModule
+    UserModule,
+    SessionModule,
+    AuthModule,
+    RedisModule
   ],
   controllers: [AppController],
   providers: [AppService],
