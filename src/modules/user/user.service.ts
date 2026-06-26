@@ -12,6 +12,22 @@ export class UserService {
         private hashSharedService: HashSharedService,
     ) { }
 
+    /**
+    * Crea un nuevo usuario en el sistema.
+    *
+    * Normaliza los datos principales antes de persistirlos
+    *
+    * La validación de duplicados se apoya en los índices únicos de la base de datos.
+    * Si MongoDB detecta un email o username repetido, se captura el error de clave
+    * duplicada y se transforma en un `ConflictException`.
+    *
+    * @param data Datos necesarios para crear el usuario.
+    *
+    * @returns Usuario creado y persistido.
+    *
+    * @throws ConflictException Si ya existe un usuario con el mismo email o username.
+    * @throws Si ocurre cualquier otro error durante el hasheo o la persistencia.
+    */
     async createUser(data: CreateUserDto): Promise<UserModel> {
         try {
             const email = data.email.trim().toLowerCase()
