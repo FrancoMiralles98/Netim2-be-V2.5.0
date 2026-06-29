@@ -5,6 +5,9 @@ import { AppConfigType } from "src/config/types/app-config.type";
 import { AccessTokenPayload, RefreshTokenPayload } from "../types/token.types";
 import type { StringValue } from 'ms'
 
+/**
+ * Servicio encargado de generar y verificar tokens JWT de autenticación.
+ */
 @Injectable()
 export class TokenService {
     constructor(
@@ -72,8 +75,4 @@ export class TokenService {
 
         return payload;
     }
-
-
-
-
 }

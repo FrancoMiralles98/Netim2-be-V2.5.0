@@ -1,10 +1,11 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { AppConfigType } from 'src/config/types/app-config.type';
 import { NodeEnv } from 'src/config/types/node-env.enum';
 import { Response } from 'express';
 import { CookieNames } from './types/cookie-names.enum';
+import { ReqCookies } from './decorator/cookie.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -13,7 +14,7 @@ export class AuthController {
     private readonly config: ConfigService<AppConfigType>
   ) { }
 
-  @Post()
+  @Post('login')
   @HttpCode(HttpStatus.OK)
   async login(@Body() body: { email: string, password: string }, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken } = await this.authService.login(body.email, body.password)
@@ -22,10 +23,29 @@ export class AuthController {
     return { ok: true }
   }
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  async register() {
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  async refresh(
+    @ReqCookies(CookieNames.REFRESH_TOKEN) refreshToken: string | undefined,
+    @Res({ passthrough: true }) res: Response
+  ) {
+    const newAccessToken = await this.authService.refresh(refreshToken)
+    res.cookie(CookieNames.ACCESS_TOKEN, newAccessToken, this.getAccessCookieOptions())
+    return { ok: true }
+  }
 
+  @Post('logout')
+  @HttpCode(HttpStatus.OK)
+  async logout(@Res({ passthrough: true }) res: Response) {
+    try {
+      await this.authService.logout()
+      return { ok: true }
+    } catch (error) {
+      
+    } finally {
+      res.clearCookie(CookieNames.ACCESS_TOKEN)
+      res.clearCookie(CookieNames.REFRESH_TOKEN)
+    }
   }
 
   private getAccessCookieOptions() {
@@ -36,7 +56,7 @@ export class AuthController {
       secure: isProd,
       sameSite: isProd ? ('none' as const) : ('lax' as const),
       path: '/',
-      maxAge: this.config.getOrThrow('auth',{infer:true}).jwt_access_cookie_max_age,
+      maxAge: this.config.getOrThrow('auth', { infer: true }).jwt_access_cookie_max_age,
     };
   }
 
@@ -48,7 +68,7 @@ export class AuthController {
       secure: isProd,
       sameSite: isProd ? ('none' as const) : ('lax' as const),
       path: '/',
-      maxAge: this.config.getOrThrow('auth',{infer:true}).jwt_refresh_cookie_max_age,
+      maxAge: this.config.getOrThrow('auth', { infer: true }).jwt_refresh_cookie_max_age,
     };
   }
 }

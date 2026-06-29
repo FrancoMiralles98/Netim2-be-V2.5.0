@@ -143,10 +143,13 @@ export class CharacterModel {
     raza!: CharacterRace;
 
     @Prop({ type: String, required: true })
-    target_type!: Extract<AllTargetType,'medio_humanos'>;
+    target_type!: Extract<AllTargetType, 'medio_humanos'>;
 
     @Prop({ type: String, default: '' })
     type_weapon!: TypeWeapon | '';
+
+    @Prop({ type: String, required: true })
+    user_owner!: string;
 }
 
 export type CharacterDocument = HydratedDocument<CharacterModel>
