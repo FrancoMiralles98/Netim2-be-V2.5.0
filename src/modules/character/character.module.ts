@@ -12,5 +12,8 @@ import { CharacterModel, characterSchema } from './schema/character.schema';
   ],
   controllers: [CharacterController],
   providers: [CharacterService],
+  exports: [
+    CharacterService
+  ]
 })
 export class CharacterModule {}

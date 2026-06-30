@@ -26,13 +26,12 @@ export class CharacterRepository {
         return CharacterMapper.toDomain(characterPersistence)
     }
 
-    async getCharacterById(id: string): Promise<CharacterEntity> {
+    async getCharacterById(id: string): Promise<CharacterModel> {
         const character = await this.characterModel.findById(id).lean()
         if (!character) {
             throw new NotFoundException('character not found')
         }
-        const characterPersistence = CharacterMapper.fromDb(character)
-        return CharacterMapper.toDomain(characterPersistence)
+        return character
     }
 
     async deleteCharacterById(id: string): Promise<CharacterModel> {

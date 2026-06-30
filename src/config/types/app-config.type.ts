@@ -10,8 +10,14 @@ export interface AppConfigType {
     jwt_access_expires?: string;
     jwt_refresh_secret?: string;
     jwt_refresh_expires?: string;
+    jwt_access_cookie_max_age: number;
+    jwt_refresh_cookie_max_age: number
   };
   db: {
     uri: string;
   };
+  redis: {
+    url?: string;
+    refresh_ttl: number;
+  }
 }

@@ -1,6 +1,6 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import { ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserRepository } from './repository/user-repository';
-import { UserModel } from './schema/user-schema';
+import { UserDocument, UserModel } from './schema/user-schema';
 import { UserRole } from './types/user-roles.enum';
 import { HashSharedService } from '../shared/services/hash-shared.service';
 import { CreateUserDto } from './dto/create-user-dto';
@@ -11,6 +11,15 @@ export class UserService {
         private userRepository: UserRepository,
         private hashSharedService: HashSharedService,
     ) { }
+
+    async validateCredentials(email:string, password:string): Promise<UserDocument> {
+        const user = await this.userRepository.findUserByEmail(email)
+        const validPassword = this.hashSharedService.compareText(password,user.password)
+        if (!validPassword) {
+            throw new UnauthorizedException('Invalid credentials')
+        }
+        return user
+    }
 
     /**
     * Crea un nuevo usuario en el sistema.

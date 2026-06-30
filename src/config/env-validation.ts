@@ -12,4 +12,6 @@ export const envValidationSchema = Joi.object({
     JWT_REFRESH_EXPIRES: Joi.string().required(),
     DB_URI_DEV: Joi.string().uri().required(),
     DB_URI_PROD: Joi.string().uri().required(),
+    URL_FRONT: Joi.string().uri().required(),
+    REDIS_URL: Joi.string().uri().required()
 })
