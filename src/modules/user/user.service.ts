@@ -14,7 +14,7 @@ export class UserService {
 
     async validateCredentials(email:string, password:string): Promise<UserDocument> {
         const user = await this.userRepository.findUserByEmail(email)
-        const validPassword = this.hashSharedService.compareText(password,user.password)
+        const validPassword = await this.hashSharedService.compareText(password,user.password)
         if (!validPassword) {
             throw new UnauthorizedException('Invalid credentials')
         }

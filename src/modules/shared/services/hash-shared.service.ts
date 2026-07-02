@@ -6,10 +6,10 @@ export class HashSharedService {
     private SALT_ROUNDS = 10
 
     async hashText(text: string): Promise<string> {
-        return bcrypt.hash(text, this.SALT_ROUNDS)
+        return await bcrypt.hash(text, this.SALT_ROUNDS)
     }
 
-    async compareText(plainText: string, hashedText:string): Promise<boolean> {
-        return bcrypt.compare(plainText,hashedText)
+    async compareText(plainText: string, hashedText: string): Promise<boolean> {
+        return await bcrypt.compare(plainText, hashedText)
     }
 }
