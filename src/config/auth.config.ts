@@ -4,8 +4,8 @@ import { AppConfigType } from "./types/app-config.type";
 export const authConfig = registerAs("auth", (): AppConfigType["auth"]=> ({
     jwt_access_expires: process.env.JWT_ACCESS_EXPIRES,
     jwt_access_secret: process.env.JWT_ACCESS_SECRET,
-    jwt_refresh_expires: process.env.REFRESH_EXPIRES,
-    jwt_refresh_secret: process.env.REFRESH_SECRET,
+    jwt_refresh_expires: process.env.JWT_REFRESH_EXPIRES,
+    jwt_refresh_secret: process.env.JWT_REFRESH_SECRET,
     jwt_access_cookie_max_age: 15* 60 * 1000,
     jwt_refresh_cookie_max_age: 7* 24 * 60 * 60 * 1000
 }))

@@ -26,8 +26,8 @@ export class UserModel {
     @Prop({ type: String, default: UserRole.USER })
     role!: UserRole;
 
-    @Prop({ type: Number, required: true })
-    codigo!: number;
+    @Prop({ type: String, required: true })
+    codigo!: string;
 
     @Prop({ type: String, required: true })
     password!: string;

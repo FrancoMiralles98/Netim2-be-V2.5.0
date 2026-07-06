@@ -19,11 +19,11 @@ export class AuthController {
   @Throttle({ default: LOGIN_THROTTLER })
   @Post('login')
   @HttpCode(HttpStatus.OK)
-  async login(@Body() body: { email: string, password: string }, @Res({ passthrough: true }) res: Response) {
-    const { accessToken, refreshToken } = await this.authService.login(body.email, body.password)
+  async login(@Body() body: { username: string, password: string }, @Res({ passthrough: true }) res: Response) {
+    const { accessToken, refreshToken, userData } = await this.authService.login(body.username, body.password)
     res.cookie(CookieNames.ACCESS_TOKEN, accessToken, this.getAccessCookieOptions())
     res.cookie(CookieNames.REFRESH_TOKEN, refreshToken, this.getRefreshCookieOptions())
-    return { message: 'login exitoso' }
+    return { userData }
   }
 
   @Post('refresh')

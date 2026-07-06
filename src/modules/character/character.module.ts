@@ -3,17 +3,20 @@ import { CharacterService } from './character.service';
 import { CharacterController } from './character.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CharacterModel, characterSchema } from './schema/character.schema';
+import { CharacterRepository } from './repository/character-repository';
+import { SharedModule } from '../shared/shared.module';
 
 @Module({
   imports: [
+    SharedModule,
     MongooseModule.forFeature([
-      {name:CharacterModel.name, schema: characterSchema}
+      { name: CharacterModel.name, schema: characterSchema }
     ])
   ],
   controllers: [CharacterController],
-  providers: [CharacterService],
+  providers: [CharacterService, CharacterRepository],
   exports: [
     CharacterService
   ]
 })
-export class CharacterModule {}
+export class CharacterModule { }

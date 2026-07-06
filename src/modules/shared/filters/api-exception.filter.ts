@@ -28,7 +28,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
             ? exception.getResponse()
             : null;
 
-        let message = 'Internal Server Error'
+        let message = 'Ha ocurrido un error interno, intente más tarde.'
         let errors: unknown = null
 
         if (typeof exceptionResponse === 'string') {

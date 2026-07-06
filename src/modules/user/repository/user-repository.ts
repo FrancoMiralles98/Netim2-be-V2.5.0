@@ -26,12 +26,12 @@ export class UserRepository {
         return this.userMapper.toDomain(user)
     }
 
-    async findUserByUsername(username: string): Promise<UserEntity> {
+    async findUserByUsername(username: string): Promise<UserDocument> {
         const user = await this.userModel.findOne({ username })
         if (!user) {
             throw new NotFoundException('User not found')
         }
-        return this.userMapper.toDomain(user)
+        return user
     }
 
     async findUserByEmail(email: string): Promise<UserDocument> {

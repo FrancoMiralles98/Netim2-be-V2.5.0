@@ -18,8 +18,8 @@ export class CreateUserDto {
     @IsEmail()
     email!: string
 
-    @IsNumber()
+    @IsString()
     @MinLength(USER_VALIDATION_CONFIG.codigo.minLength)
     @MaxLength(USER_VALIDATION_CONFIG.codigo.maxLength)
-    codigo!: number
+    codigo!: string
 }
