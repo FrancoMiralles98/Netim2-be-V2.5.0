@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { AppConfigType } from 'src/config/types/app-config.type';
@@ -23,7 +23,7 @@ export class AuthController {
     const { accessToken, refreshToken, userData } = await this.authService.login(body.username, body.password)
     res.cookie(CookieNames.ACCESS_TOKEN, accessToken, this.getAccessCookieOptions())
     res.cookie(CookieNames.REFRESH_TOKEN, refreshToken, this.getRefreshCookieOptions())
-    return { userData }
+    return { data: userData }
   }
 
   @Post('refresh')
@@ -32,9 +32,9 @@ export class AuthController {
     @ReqCookies(CookieNames.REFRESH_TOKEN) refreshToken: string | undefined,
     @Res({ passthrough: true }) res: Response
   ) {
-    const newAccessToken = await this.authService.refresh(refreshToken)
+    const { newAccessToken, user } = await this.authService.refresh(refreshToken)
     res.cookie(CookieNames.ACCESS_TOKEN, newAccessToken, this.getAccessCookieOptions())
-    return { ok: true }
+    return { data: user }
   }
 
   @Post('logout')
@@ -44,7 +44,7 @@ export class AuthController {
       await this.authService.logout()
       return { ok: true }
     } catch (error) {
-
+      return { ok: false }
     } finally {
       res.clearCookie(CookieNames.ACCESS_TOKEN)
       res.clearCookie(CookieNames.REFRESH_TOKEN)

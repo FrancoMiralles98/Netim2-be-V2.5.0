@@ -14,29 +14,22 @@ export class AuthService {
     ) { }
 
     async login(username: string, password: string) {
-        try {
+        const user = await this.userService.validateCredentials(username, password)
+        const authSessionId = randomUUID()
 
-            const user = await this.userService.validateCredentials(username, password)
-            const authSessionId = randomUUID()
-
-            await this.redisService.client.set(
-                this.getRefreshSessionKey(authSessionId),
-                user._id.toString(),
-                'EX',
-                REFRESH_SESSION_TTL_SECONDS
-            )
+        await this.redisService.client.set(
+            this.getRefreshSessionKey(authSessionId),
+            user._id.toString(),
+            'EX',
+            REFRESH_SESSION_TTL_SECONDS
+        )
 
 
-            const accessToken = await this.tokenService.signAccessToken(user.id, authSessionId);
-            const refreshToken = await this.tokenService.signRefreshToken(user.id, authSessionId);
-            const userData = this.userService.transformToEntity(user).toPrimitives()
-            console.log(userData);
-            
-            return { accessToken, refreshToken, userData }
-        } catch (error) {
-            console.log(error);
-            throw new Error('error')
-        }
+        const accessToken = await this.tokenService.signAccessToken(user._id.toString(), authSessionId);
+        const refreshToken = await this.tokenService.signRefreshToken(user._id.toString(), authSessionId);
+        const userData = this.userService.transformToEntity(user).toPrimitives()
+
+        return { accessToken, refreshToken, userData }
     }
 
     async refresh(refreshToken?: string) {
@@ -53,7 +46,9 @@ export class AuthService {
 
         const newAccessToken = this.tokenService.signAccessToken(accountId, payload.authSessionId)
 
-        return newAccessToken
+        const user = (await this.userService.getUserById(accountId)).toPrimitives()
+
+        return { newAccessToken, user }
     }
 
     async logout(refreshToken?: string) {

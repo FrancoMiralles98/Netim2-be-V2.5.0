@@ -28,6 +28,10 @@ export class UserService {
         return user
     }
 
+    async getUserById(id: string): Promise<UserEntity> {
+        return await this.userRepository.findUserById(id)
+    }
+
     /**
     * Crea un nuevo usuario en el sistema.
     *
