@@ -13,8 +13,8 @@ export class AuthService {
         private userService: UserService,
     ) { }
 
-    async login(email: string, password: string) {
-        const user = await this.userService.validateCredentials(email, password)
+    async login(username: string, password: string) {
+        const user = await this.userService.validateCredentials(username, password)
         const authSessionId = randomUUID()
 
         await this.redisService.client.set(
@@ -24,10 +24,12 @@ export class AuthService {
             REFRESH_SESSION_TTL_SECONDS
         )
 
-        const accessToken = await this.tokenService.signAccessToken(user.id, authSessionId);
-        const refreshToken = await this.tokenService.signRefreshToken(user.id, authSessionId);
 
-        return { accessToken, refreshToken }
+        const accessToken = await this.tokenService.signAccessToken(user._id.toString(), authSessionId);
+        const refreshToken = await this.tokenService.signRefreshToken(user._id.toString(), authSessionId);
+        const userData = this.userService.transformToEntity(user).toPrimitives()
+
+        return { accessToken, refreshToken, userData }
     }
 
     async refresh(refreshToken?: string) {
@@ -44,7 +46,9 @@ export class AuthService {
 
         const newAccessToken = this.tokenService.signAccessToken(accountId, payload.authSessionId)
 
-        return newAccessToken
+        const user = (await this.userService.getUserById(accountId)).toPrimitives()
+
+        return { newAccessToken, user }
     }
 
     async logout(refreshToken?: string) {

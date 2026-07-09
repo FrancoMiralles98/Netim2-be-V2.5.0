@@ -24,18 +24,28 @@ import { SessionModule } from './modules/session/session.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { RedisModule } from './modules/redis/redis.module';
 import { redisConfig } from './config/redis.config';
+import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          ttl: seconds(60),
+          limit: 90
+        }
+      ]
+    }),
     ConfigModule.forRoot({
-      isGlobal:true,
+      isGlobal: true,
       validationSchema: envValidationSchema,
-      load: [appConfig,authConfig,databaseConfig,redisConfig]
+      load: [appConfig, authConfig, databaseConfig, redisConfig]
     }),
     MongooseModule.forRootAsync({
       inject: [ConfigService],
-      useFactory: (config:ConfigService<AppConfigType>) => ({
-        uri: config.getOrThrow('db',{infer:true}).uri
+      useFactory: (config: ConfigService<AppConfigType>) => ({
+        uri: config.getOrThrow('db', { infer: true }).uri
       })
     }),
     BonusModule,
@@ -52,9 +62,16 @@ import { redisConfig } from './config/redis.config';
     UserModule,
     SessionModule,
     AuthModule,
-    RedisModule
+    RedisModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard
+    }
+  
+  ],
 })
-export class AppModule {}
+export class AppModule { }

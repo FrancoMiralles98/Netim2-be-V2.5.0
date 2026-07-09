@@ -1,7 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { BonusService } from './modules/bonus/bonus.service';
-import { BonusInItem } from './modules/bonus/types/bonus-in-item.type';
 import { ItemDTO } from './modules/item/types/item-dto';
 import { ItemService } from './modules/item/item.service';
 

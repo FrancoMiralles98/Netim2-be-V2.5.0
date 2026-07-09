@@ -8,7 +8,7 @@ export const USER_VALIDATION_CONFIG = {
         maxLength: 30
     },
     codigo: {
-        minLength: 7,
-        maxLength: 7
+        minLength: 8,
+        maxLength: 8
     }
 } as const

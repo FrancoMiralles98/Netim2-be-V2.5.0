@@ -1,20 +1,25 @@
 import { Inventory } from "src/modules/inventory/entities/inventory.entity";
 import { UserEntity } from "../entity/user-entity";
-import { UserModel } from "../schema/user-schema";
+import { UserDocument } from "../schema/user-schema";
 import { UserPersistence } from "../types/user-persistence.type";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class UserMapper {
-    toDomain(user:UserModel): UserEntity {
+    toDomain(user: UserDocument): UserEntity {
+        const userObject = user.toObject()
         return new UserEntity({
-            ...user,
-            almacen: new Inventory(user.almacen),
-            almacenItemShop: new Inventory(user.almacenItemShop)
+            username: userObject.username,
+            email: userObject.email,
+            role: userObject.role,
+            md: userObject.md,
+            yang: userObject.yang,
+            almacen: new Inventory(userObject.almacen),
+            almacenItemShop: new Inventory(userObject.almacenItemShop),
         })
     }
 
-    toPersistence(userEntity: UserEntity):UserPersistence {
+    toPersistence(userEntity: UserEntity): UserPersistence {
         return userEntity.toPrimitives()
     }
 }

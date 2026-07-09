@@ -4,21 +4,32 @@ import { UserDocument, UserModel } from './schema/user-schema';
 import { UserRole } from './types/user-roles.enum';
 import { HashSharedService } from '../shared/services/hash-shared.service';
 import { CreateUserDto } from './dto/create-user-dto';
+import { UserEntity } from './entity/user-entity';
+import { UserMapper } from './mapper/user-mapper';
 
 @Injectable()
 export class UserService {
     constructor(
         private userRepository: UserRepository,
         private hashSharedService: HashSharedService,
+        private userMapper: UserMapper
     ) { }
 
-    async validateCredentials(email:string, password:string): Promise<UserDocument> {
-        const user = await this.userRepository.findUserByEmail(email)
-        const validPassword = this.hashSharedService.compareText(password,user.password)
+    transformToEntity(user: UserDocument): UserEntity {
+        return this.userMapper.toDomain(user)
+    }
+
+    async validateCredentials(username: string, password: string): Promise<UserDocument> {
+        const user = await this.userRepository.findUserByUsername(username)
+        const validPassword = await this.hashSharedService.compareText(password, user.password)
         if (!validPassword) {
             throw new UnauthorizedException('Invalid credentials')
         }
         return user
+    }
+
+    async getUserById(id: string): Promise<UserEntity> {
+        return await this.userRepository.findUserById(id)
     }
 
     /**

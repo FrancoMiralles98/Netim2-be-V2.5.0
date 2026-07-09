@@ -10,7 +10,8 @@ import { HashSharedService } from './services/hash-shared.service';
   providers: [
     SharedService,
     RngService,
-    BonusSharedService
+    BonusSharedService,
+    HashSharedService
   ],
   exports: [
     RngService,

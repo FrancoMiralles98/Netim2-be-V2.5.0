@@ -3,7 +3,7 @@ import { SessionService } from './session.service';
 import { Injectable } from '@nestjs/common';
 import { CharacterService } from '../character/character.service';
 import { Server } from 'socket.io';
-import { parseCookie } from 'cookie'
+import { parse } from 'cookie'
 import { AuthSocket } from './types/auth-socket.type';
 import { CookieNames } from '../auth/types/cookie-names.enum';
 import { TokenService } from '../auth/services/token.service';
@@ -50,7 +50,7 @@ export class SessionGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   async afterInit(server: Server) {
     server.use(async (socket: AuthSocket, next) => {
       try {
-        const cookies = parseCookie(socket.handshake.headers.cookie ?? '')
+        const cookies = parse(socket.handshake.headers.cookie ?? '')
         const access_token = cookies[CookieNames.ACCESS_TOKEN]
 
         const payload = await this.tokenService.verifyAccessToken(access_token)
@@ -109,7 +109,7 @@ export class SessionGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   *
   * @returns No retorna ningún valor.
   */
-   async handleConnection(client: AuthSocket) {
+  async handleConnection(client: AuthSocket) {
     //registrar sesion en redis
     const result = await this.sessionService.connectWorld({
       accountId: client.data.accountId,
