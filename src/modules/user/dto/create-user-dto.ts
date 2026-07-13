@@ -1,4 +1,4 @@
-import { IsEmail, IsNumber, IsString, Matches, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsString, Matches, MaxLength, MinLength } from "class-validator";
 import { USER_VALIDATION_CONFIG } from "../config/user-validation.config";
 
 export class CreateUserDto {

@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { CharacterModel, characterSchema } from './schema/character.schema';
 import { CharacterRepository } from './repository/character-repository';
 import { SharedModule } from '../shared/shared.module';
+import { CharacterMapper } from './mapper/character-mapper';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { SharedModule } from '../shared/shared.module';
     ])
   ],
   controllers: [CharacterController],
-  providers: [CharacterService, CharacterRepository],
+  providers: [CharacterService, CharacterRepository,CharacterMapper],
   exports: [
     CharacterService
   ]

@@ -34,9 +34,6 @@ export class CharacterModel {
     @Prop({ type: Array, default: [] })
     stars_discovery!: StarDiscovery[];
 
-    @Prop({ type: Object, default: { x: 0, y: 0 } })
-    icono!: { x: number, y: number };
-
     @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
     timer_mob!: number;
 
@@ -56,7 +53,7 @@ export class CharacterModel {
     reino!: ReinosNames
 
     @Prop({ type: String, required: true })
-    genero!: 'Femenino' | 'Masculino'
+    genero!: 'femenino' | 'masculino'
 
     @Prop({ type: Number, default: 0 })
     puntos_atributos!: number;
@@ -103,9 +100,6 @@ export class CharacterModel {
     @Prop({ type: Number, default: 0 })
     atribute_per_lv!: number;
 
-    @Prop({ type: String, required: true })
-    img!: string;
-
     @Prop({ type: Number, default: 0 })
     time_played!: number;
 
@@ -115,7 +109,7 @@ export class CharacterModel {
     @Prop({ type: Number, default: CharacterRole.USER })
     role!: CharacterRole
 
-    @Prop({ type: Object, default: {} })
+    @Prop({ type: Object })
     montura!: MonturaType;
 
     @Prop({ type: Number, default: 0 })

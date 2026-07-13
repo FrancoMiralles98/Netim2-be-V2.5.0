@@ -141,14 +141,13 @@ export interface BaseCharacterProps {
     nombre: string
     discovery_world: DiscoveryWorld;
     stars_discovery: StarDiscovery[];
-    icono: { x: number, y: number };
     timer_mob: number;
     timer_metin: number;
     timer_pvp: number;
     timer_boss: number;
     timer_lv: number;
     reino: ReinosNames
-    genero: 'Femenino' | 'Masculino'
+    genero: 'femenino' | 'masculino'
     puntos_atributos: number;
     puntos_habilidad: number;
     buffos: AppliedBuffos[];
@@ -158,16 +157,13 @@ export interface BaseCharacterProps {
     equipo_options: EquipoOptions;
     equipo_selected: 1 | 2 | 3;
     yang: number;
-    gremio_options: GremioOptions;
     lv: number;
     exp: number;
     exp_next_lv: number;
     atribute_per_lv: number;
-    img: string;
     time_played: number;
     stats: CharacterStats;
     role: CharacterRole
-    montura: MonturaType;
     montura_lv: number;
     beginning: boolean;
     mission_option: MissionOption;
@@ -178,5 +174,7 @@ export interface BaseCharacterProps {
     type_weapon: TypeWeapon | ''
     target_type: Extract<AllTargetType,"medio_humanos">;
     raza: CharacterRace;
-    especialidad: CharacterSpeciality;
+    montura?: MonturaType;
+    gremio_options?: GremioOptions;
+    especialidad?: CharacterSpeciality;
 }

@@ -14,16 +14,21 @@ import { CharacterPersistence } from "../types/character-persistence.type";
 export class CharacterRepository {
     constructor(
         @InjectModel(CharacterModel.name)
-        private characterModel: Model<CharacterDocument>
+        private characterModel: Model<CharacterDocument>,
+        private characterMapper: CharacterMapper
     ) { }
+
+    async createCharacter(props: Partial<CharacterModel>): Promise<CharacterModel> {
+        return await this.characterModel.create(props)
+    }
 
     async getCharacterByName(nombre: string): Promise<CharacterEntity> {
         const character = await this.characterModel.findOne({ nombre }).lean()
         if (!character) {
             throw new NotFoundException('character not found')
         }
-        const characterPersistence = CharacterMapper.fromDb(character)
-        return CharacterMapper.toDomain(characterPersistence)
+        const characterPersistence = this.characterMapper.fromDb(character)
+        return this.characterMapper.toDomain(characterPersistence)
     }
 
     async getCharacterById(id: string): Promise<CharacterModel> {
@@ -43,7 +48,7 @@ export class CharacterRepository {
     }
 
     async updateCharacterById(id: string, data: CharacterPersistence): Promise<CharacterModel> {
-        const updatedCharacter = await this.characterModel.findByIdAndUpdate(id, {$set: data}, {new:true})
+        const updatedCharacter = await this.characterModel.findByIdAndUpdate(id, { $set: data }, { new: true })
         if (!updatedCharacter) {
             throw new NotFoundException('character not found')
         }
