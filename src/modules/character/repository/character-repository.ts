@@ -32,11 +32,15 @@ export class CharacterRepository {
     }
 
     async getCharacterById(id: string): Promise<CharacterModel> {
-        const character = await this.characterModel.findById(id).lean()
+        const character = await this.characterModel.findById(id)
         if (!character) {
             throw new NotFoundException('character not found')
         }
         return character
+    }
+
+    async getCharacterByUserId(userId: string): Promise<CharacterDocument[]> {
+        return await this.characterModel.find({ user_owner: userId })
     }
 
     async deleteCharacterById(id: string): Promise<CharacterModel> {

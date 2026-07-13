@@ -11,6 +11,8 @@ import { TokenService } from '../services/token.service';
  *
  * @throws UnauthorizedException Si el token no existe, es inválido o su payload
  * no contiene la información mínima requerida.
+ * 
+ * @use - para rutas de fresh y session
  */
 @Injectable()
 export class AuthGuard implements CanActivate {

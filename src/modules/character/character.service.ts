@@ -3,6 +3,7 @@ import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
 import { CharacterPersistence } from './types/character-persistence.type';
+import { CharacterDocument } from './schema/character.schema';
 
 @Injectable()
 export class CharacterService {
@@ -14,6 +15,10 @@ export class CharacterService {
     async validateCharacterOwnership(characterId: string, accountId: string): Promise<boolean> {
         const character = await this.characterRepository.getCharacterById(characterId)
         return character.user_owner === accountId
+    }
+
+    async getCharactersByUserId(userId: string): Promise<CharacterDocument[]> {
+        return await this.characterRepository.getCharacterByUserId(userId)
     }
 
     async createCharacter(createCharacterValue: CreateCharacterDto): Promise<{ character: CharacterPersistence }> {

@@ -17,7 +17,8 @@ import { CharacterMapper } from './mapper/character-mapper';
   controllers: [CharacterController],
   providers: [CharacterService, CharacterRepository,CharacterMapper],
   exports: [
-    CharacterService
+    CharacterService,
+    CharacterMapper
   ]
 })
 export class CharacterModule { }

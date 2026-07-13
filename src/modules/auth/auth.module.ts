@@ -6,6 +6,7 @@ import { TokenService } from './services/token.service';
 import { AuthGuard } from './guards/auth-guards.guard';
 import { UserModule } from '../user/user.module';
 import { RedisModule } from '../redis/redis.module';
+import { AccessTokenGuard } from './guards/access-token.guard';
 
 @Module({
   imports: [
@@ -17,12 +18,14 @@ import { RedisModule } from '../redis/redis.module';
   providers: [
     AuthService,
     TokenService,
-    AuthGuard
+    AuthGuard,
+    AccessTokenGuard
   ],
   exports: [
     AuthService,
     TokenService,
-    AuthGuard
+    AuthGuard,
+    AccessTokenGuard
   ]
 })
 export class AuthModule { }

@@ -1,11 +1,12 @@
 import { Inventory } from "src/modules/inventory/entities/inventory.entity";
 import { CharacterPersistence } from "../types/character-persistence.type";
 import { CharacterEntity } from "../entity/character-entity";
-import { CharacterModel } from "../schema/character.schema";
+import { CharacterDocument, CharacterModel } from "../schema/character.schema";
 import { SkillFactory } from "src/modules/skill/factories/skill.factory";
 import { GENERAL_CHARACTER } from "../const/general-character.const";
 import { CreateCharacterDto } from "../dto/create-character.dto";
 import { Injectable } from "@nestjs/common";
+import { CharacterSummary } from "../types/character-summary.type";
 
 /**
  * Mapper encargado de transformar datos entre las distintas capas:
@@ -15,12 +16,12 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class CharacterMapper {
 
-   /**
-   * Convierte un documento de MongoDB a `CharacterPersistence`.
-   *
-   * Normaliza datos que pueden no existir en la base de datos
-   * y asegura una estructura consistente para la capa de aplicación.
-   */
+    /**
+    * Convierte un documento de MongoDB a `CharacterPersistence`.
+    *
+    * Normaliza datos que pueden no existir en la base de datos
+    * y asegura una estructura consistente para la capa de aplicación.
+    */
     fromDb(doc: CharacterModel): CharacterPersistence {
         return {
             ...doc,
@@ -48,11 +49,11 @@ export class CharacterMapper {
     }
 
 
-   /**
-   * Convierte una entidad de dominio 
-   * a datos planos listos para persistir en la base de datos
-   */
-    toPersistence(entity:CharacterEntity): CharacterPersistence {
+    /**
+    * Convierte una entidad de dominio 
+    * a datos planos listos para persistir en la base de datos
+    */
+    toPersistence(entity: CharacterEntity): CharacterPersistence {
         return entity.toPrimitives()
     }
 
@@ -66,6 +67,34 @@ export class CharacterMapper {
         baseCharacterCopy.raza = props.raza!
         baseCharacterCopy.reino = props.reino!
 
-        return baseCharacterCopy 
+        return baseCharacterCopy
+    }
+
+/**
+ * Convierte un documento de personaje de MongoDB a un resumen seguro para el cliente.
+ *
+ * Este mapper reduce la información del personaje a los datos necesarios para
+ * mostrarlo en la pantalla de selección de personajes.
+ *
+ *
+ * @param character Documento completo del personaje obtenido desde MongoDB.
+ * @returns Resumen del personaje preparado para ser enviado al cliente.
+ */
+    toSummary(character: CharacterDocument): CharacterSummary {
+        return {
+            id: character._id.toString(),
+            nombre: character.nombre,
+            raza: character.raza,
+            genero: character.genero,
+            lv: character.lv,
+            reino: character.reino,
+            time_played: character.time_played,
+            stats: {
+                atributos: character.stats.atributos
+            },
+            especialidad: character.especialidad,
+            gremio_options: character.gremio_options
+
+        };
     }
 }
