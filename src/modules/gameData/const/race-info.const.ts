@@ -1,6 +1,6 @@
 import { ATTRIBUTE_RACE_CAPS } from "src/modules/character/const/statsProgress/attribute-race-caps.const";
-import { RaceInfo } from "../types/characterSelection/race-info.types";
 import { ATTRIBUTE_SPECIALITY_CAPS } from "src/modules/character/const/statsProgress/attribute-speciality-caps.const";
+import { RaceInfo } from "netim2-shared";
 
 export const RACE_INFO: RaceInfo[] = [
     {

@@ -6,6 +6,7 @@ import { HashSharedService } from '../shared/services/hash-shared.service';
 import { CreateUserDto } from './dto/create-user-dto';
 import { UserEntity } from './entity/user-entity';
 import { UserMapper } from './mapper/user-mapper';
+import { ReinosNames } from 'netim2-shared';
 
 @Injectable()
 export class UserService {
@@ -26,6 +27,10 @@ export class UserService {
             throw new UnauthorizedException('Invalid credentials')
         }
         return user
+    }
+
+    async asignReinoToAccount (userId:string, reino: ReinosNames) {
+        await this.userRepository.updateUserDataById(userId,{reino})
     }
 
     async getUserById(id: string): Promise<UserEntity> {

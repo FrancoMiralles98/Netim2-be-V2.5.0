@@ -3,7 +3,7 @@ import { CharacterRace, CharacterSpeciality, CharacterStats } from "./character-
 import { MonturaType } from "src/modules/item/types/entities-props/montura.type";
 import { DiscoveryWorld } from "./discovery-world.type";
 import { StarDiscovery } from "./stars-discovery.type";
-import { ReinosNames } from "src/modules/gameData/types/reinos-names.type";
+import { ReinosNames } from "src/modules/gameData/reinos/reinos-names.type";
 import { AppliedBuffos } from "./buffos-in-character.type";
 import { EquipoOptions } from "./equipo-options.type";
 import { GremioOptions } from "./gremio-options.type";

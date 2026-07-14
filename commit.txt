@@ -1,2 +1,1 @@
-agregado de interceptors y filter para la centralizacion de returns y manejo de errores de los controllers
-agregado throttlers para regular la cantidad de peticiones para rutas especificas, agregado rutas para landing-page
+agregado de netim2-shared dependencia para los types compartidos con el cliente, agregado de buff por reinos y cambiado que user ahora solo puede tener personajes pertenencientes a un reino y configracion de los buffos de reinos

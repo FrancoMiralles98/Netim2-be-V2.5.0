@@ -1,3 +1,4 @@
+import { ReinosNames } from "netim2-shared";
 import { UserRole } from "./user-roles.enum";
 
 export interface UserEntityProps {
@@ -6,4 +7,5 @@ export interface UserEntityProps {
     yang: number;
     email: string;
     role: UserRole;
+    reino?: ReinosNames
 }

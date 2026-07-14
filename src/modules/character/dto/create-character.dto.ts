@@ -1,6 +1,6 @@
 import { IsIn, IsString, Matches, MaxLength, MinLength } from "class-validator";
 import { CharacterRace } from "../types/baseCharacterProps/character-stats.type";
-import { ReinosNames } from "src/modules/gameData/types/reinos-names.type";
+import { ReinosNames } from "src/modules/gameData/reinos/reinos-names.type";
 
 export class CreateCharacterDto {
 

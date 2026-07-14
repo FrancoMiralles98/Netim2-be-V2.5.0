@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { DiscoveryWorld } from "../types/baseCharacterProps/discovery-world.type";
 import { StarDiscovery } from "../types/baseCharacterProps/stars-discovery.type";
-import { ReinosNames } from "src/modules/gameData/types/reinos-names.type";
+import { ReinosNames } from "src/modules/gameData/reinos/reinos-names.type";
 import { AppliedBuffos } from "../types/baseCharacterProps/buffos-in-character.type";
 import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
 import { EquipType, TypeWeapon } from "src/modules/item/types/entities-props/equip.type";

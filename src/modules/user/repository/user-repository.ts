@@ -42,7 +42,7 @@ export class UserRepository {
         return user
     }
 
-    async updateUserById(id: string, data: UserPersistence): Promise<UserModel> {
+    async updateUserDataById(id: string, data: Partial<UserPersistence>): Promise<UserModel> {
         const userUpdated = await this.userModel.findByIdAndUpdate(id, { $set: data }, { new: true })
         if (!userUpdated) {
             throw new NotFoundException('User not found')
