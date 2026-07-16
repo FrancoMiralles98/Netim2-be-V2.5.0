@@ -7,6 +7,8 @@ import { CreateUserDto } from './dto/create-user-dto';
 import { UserEntity } from './entity/user-entity';
 import { UserMapper } from './mapper/user-mapper';
 import { ReinosNames } from 'netim2-shared';
+import { UserPersistence } from './types/user-persistence.type';
+import { ClientSession } from 'mongoose';
 
 @Injectable()
 export class UserService {
@@ -29,12 +31,17 @@ export class UserService {
         return user
     }
 
-    async asignReinoToAccount (userId:string, reino: ReinosNames) {
-        await this.userRepository.updateUserDataById(userId,{reino})
+    async asignReinoToAccount(userId: string, reino: ReinosNames, session?:ClientSession) {
+        await this.userRepository.updateUserDataById(userId, { reino },session)
     }
 
-    async getUserById(id: string): Promise<UserEntity> {
-        return await this.userRepository.findUserById(id)
+    async updateUserDataById(userId: string, data: Partial<UserPersistence>) {
+        await this.userRepository.updateUserDataById(userId, data)
+    }
+
+
+    async getUserById(id: string,session?:ClientSession): Promise<UserEntity> {
+        return await this.userRepository.findUserById(id,session)
     }
 
     /**

@@ -82,7 +82,7 @@ export class CharacterModel {
     @Prop({ type: Number, default: 1 })
     equipo_selected!: 1 | 2 | 3;
 
-    @Prop({ type: Number, default: 10 })
+    @Prop({ type: Number, default: 0 })
     yang!: number;
 
     @Prop({ type: Object })
@@ -106,7 +106,7 @@ export class CharacterModel {
     @Prop({ type: Object, required: true })
     stats!: CharacterStats;
 
-    @Prop({ type: Number, default: CharacterRole.USER })
+    @Prop({ type: String, default: CharacterRole.USER })
     role!: CharacterRole
 
     @Prop({ type: Object })
@@ -115,7 +115,7 @@ export class CharacterModel {
     @Prop({ type: Number, default: 0 })
     montura_lv!: number;
 
-    @Prop({ type: Number, default: true })
+    @Prop({ type: Boolean, default: true })
     beginning!: boolean;
 
     @Prop({ type: Object, default: BASE_MISSION_IN_PROGRESS })

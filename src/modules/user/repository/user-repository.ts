@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { UserDocument, UserModel } from "../schema/user-schema";
-import { Model } from "mongoose";
+import { ClientSession, Model } from "mongoose";
 import { UserMapper } from "../mapper/user-mapper";
 import { UserEntity } from "../entity/user-entity";
 import { UserPersistence } from "../types/user-persistence.type";
@@ -18,8 +18,8 @@ export class UserRepository {
         return await this.userModel.create(user)
     }
 
-    async findUserById(id: string): Promise<UserEntity> {
-        const user = await this.userModel.findById(id)
+    async findUserById(id: string, session?: ClientSession): Promise<UserEntity> {
+        const user = await this.userModel.findById(id, null, { session })
         if (!user) {
             throw new NotFoundException('User not found')
         }
@@ -42,8 +42,8 @@ export class UserRepository {
         return user
     }
 
-    async updateUserDataById(id: string, data: Partial<UserPersistence>): Promise<UserModel> {
-        const userUpdated = await this.userModel.findByIdAndUpdate(id, { $set: data }, { new: true })
+    async updateUserDataById(id: string, data: Partial<UserPersistence>, session?: ClientSession): Promise<UserModel> {
+        const userUpdated = await this.userModel.findByIdAndUpdate(id, { $set: data }, { new: true, session })
         if (!userUpdated) {
             throw new NotFoundException('User not found')
         }

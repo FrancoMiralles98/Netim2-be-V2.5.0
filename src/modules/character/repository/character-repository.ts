@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from "@nestjs/common";
 import { CharacterDocument, CharacterModel } from "../schema/character.schema";
-import { Model } from "mongoose";
+import { ClientSession, Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { CharacterEntity } from "../entity/character-entity";
 import { CharacterMapper } from "../mapper/character-mapper";
@@ -18,8 +18,13 @@ export class CharacterRepository {
         private characterMapper: CharacterMapper
     ) { }
 
-    async createCharacter(props: Partial<CharacterModel>): Promise<CharacterModel> {
-        return await this.characterModel.create(props)
+    async createCharacter(props: Partial<CharacterModel>, userId: string, session?: ClientSession): Promise<CharacterDocument> {
+        const character = new this.characterModel({
+            ...props,
+            user_owner: userId,
+        });
+
+        return character.save({ session });
     }
 
     async getCharacterByName(nombre: string): Promise<CharacterEntity> {
