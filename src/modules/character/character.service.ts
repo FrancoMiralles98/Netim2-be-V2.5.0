@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
@@ -25,6 +25,17 @@ export class CharacterService {
 
     async getCharactersByUserId(userId: string): Promise<CharacterDocument[]> {
         return await this.characterRepository.getCharacterByUserId(userId)
+    }
+
+    async deleteCharacter(userId: string, characterId: string) {
+        const character = await this.characterRepository.getCharacterById(characterId)
+        if (!character) {
+            throw new NotFoundException('No se encuentra el personaje a eliminar.')
+        }
+        if (character.user_owner !== userId) {
+            throw new ConflictException('No tienes permiso para eliminar este personaje.')
+        }
+        await this.characterRepository.deleteCharacterById(characterId)
     }
 
     /**
