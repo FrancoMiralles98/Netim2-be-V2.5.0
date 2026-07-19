@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RedisService } from '../redis/redis.service';
 import { ActiveWorldSession, DataToConnectWorld } from './types/active-world-session.type';
 import { randomUUID } from 'crypto';
+import { ACTIVE_SESSION_TTL_SECONDS } from './const/active-session-ttl.const';
 
 @Injectable()
 export class SessionService {

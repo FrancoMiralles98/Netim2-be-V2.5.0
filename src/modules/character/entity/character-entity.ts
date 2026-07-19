@@ -9,7 +9,7 @@ import { MasteryLvRank } from "src/modules/skill/types/props/skill-lv-rank.types
 import { ATTRIBUTE_SPECIALITY_CAPS } from "../const/statsProgress/attribute-speciality-caps.const";
 import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.const";
 import { AddItemResult } from "src/modules/inventory/types/inventory-result.types";
-import { AttributePointProgression } from "../types/attribute-point-progression.enum";
+import { ATTRIBUTE_POINT_PROGRESSION } from "../const/statsProgress/attribute-point-progression.const";
 import { EXP_PER_LV } from "../const/exp-per-lv.const";
 import { CharacterPersistence } from "../types/character-persistence.type";
 import { AuraSkillEntity } from "src/modules/skill/entities/aura-skill.entity";
@@ -165,7 +165,7 @@ export class CharacterEntity {
         if (!this.canIncreaseAttribute(attribute)) {
             throw new Error(`No es posible incrementar el atributo: ${attribute}`)
         }
-        this.props.stats.general[attribute].lvPoints += 1
+        this.props.stats.atributos[attribute].lvPoints += 1
         this.props.puntos_atributos -= 1
     }
 
@@ -188,7 +188,7 @@ export class CharacterEntity {
     private canIncreaseAttribute(attribute: CharacterAttribute): boolean {
         const cap = this.getAttributeCap(attribute, this.props.raza, this.props.especialidad)
         return (
-            this.props.stats.general[attribute].lvPoints < cap &&
+            this.props.stats.atributos[attribute].lvPoints < cap &&
             this.props.puntos_atributos > 0
         )
     }
@@ -210,8 +210,9 @@ export class CharacterEntity {
     private getAttributeCap(
         attribute: CharacterAttribute,
         race: CharacterRace,
-        speciality: CharacterSpeciality): number {
-        const attributesCaps = ATTRIBUTE_SPECIALITY_CAPS[speciality] ?
+        speciality?: CharacterSpeciality): number {
+
+        const attributesCaps = speciality && ATTRIBUTE_SPECIALITY_CAPS[speciality] ?
             ATTRIBUTE_SPECIALITY_CAPS[speciality]
             : ATTRIBUTE_RACE_CAPS[race]
 
@@ -254,11 +255,11 @@ export class CharacterEntity {
         //atribute_per_lv son los puntos de atributo ya obtenidos en el nivel 
         let newAttributeProgress = this.props.atribute_per_lv;
 
-        if (percentageExp >= AttributePointProgression.THIRD) {
+        if (percentageExp >= ATTRIBUTE_POINT_PROGRESSION.THIRD) {
             newAttributeProgress = 3;
-        } else if (percentageExp >= AttributePointProgression.SECOND) {
+        } else if (percentageExp >= ATTRIBUTE_POINT_PROGRESSION.SECOND) {
             newAttributeProgress = 2;
-        } else if (percentageExp >= AttributePointProgression.FIRST) {
+        } else if (percentageExp >= ATTRIBUTE_POINT_PROGRESSION.FIRST) {
             newAttributeProgress = 1;
         }
 

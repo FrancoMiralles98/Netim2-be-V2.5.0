@@ -1,7 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { DiscoveryWorld } from "../types/baseCharacterProps/discovery-world.type";
 import { StarDiscovery } from "../types/baseCharacterProps/stars-discovery.type";
-import { ReinosNames } from "src/modules/gameData/types/reinos-names.type";
+import { ReinosNames } from "src/modules/gameData/reinos/reinos-names.type";
 import { AppliedBuffos } from "../types/baseCharacterProps/buffos-in-character.type";
 import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
 import { EquipType, TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
@@ -34,9 +34,6 @@ export class CharacterModel {
     @Prop({ type: Array, default: [] })
     stars_discovery!: StarDiscovery[];
 
-    @Prop({ type: Object, default: { x: 0, y: 0 } })
-    icono!: { x: number, y: number };
-
     @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
     timer_mob!: number;
 
@@ -56,7 +53,7 @@ export class CharacterModel {
     reino!: ReinosNames
 
     @Prop({ type: String, required: true })
-    genero!: 'Femenino' | 'Masculino'
+    genero!: 'femenino' | 'masculino'
 
     @Prop({ type: Number, default: 0 })
     puntos_atributos!: number;
@@ -85,7 +82,7 @@ export class CharacterModel {
     @Prop({ type: Number, default: 1 })
     equipo_selected!: 1 | 2 | 3;
 
-    @Prop({ type: Number, default: 10 })
+    @Prop({ type: Number, default: 0 })
     yang!: number;
 
     @Prop({ type: Object })
@@ -103,25 +100,22 @@ export class CharacterModel {
     @Prop({ type: Number, default: 0 })
     atribute_per_lv!: number;
 
-    @Prop({ type: String, required: true })
-    img!: string;
-
     @Prop({ type: Number, default: 0 })
     time_played!: number;
 
     @Prop({ type: Object, required: true })
     stats!: CharacterStats;
 
-    @Prop({ type: Number, default: CharacterRole.USER })
+    @Prop({ type: String, default: CharacterRole.USER })
     role!: CharacterRole
 
-    @Prop({ type: Object, default: {} })
+    @Prop({ type: Object })
     montura!: MonturaType;
 
     @Prop({ type: Number, default: 0 })
     montura_lv!: number;
 
-    @Prop({ type: Number, default: true })
+    @Prop({ type: Boolean, default: true })
     beginning!: boolean;
 
     @Prop({ type: Object, default: BASE_MISSION_IN_PROGRESS })

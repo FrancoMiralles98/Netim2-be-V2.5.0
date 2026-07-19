@@ -47,35 +47,47 @@ export class SessionGateway implements OnGatewayInit, OnGatewayConnection, OnGat
   *
   * @param server Instancia del servidor Socket.IO inicializada por NestJS.
   */
-  async afterInit(server: Server) {
-    server.use(async (socket: AuthSocket, next) => {
-      try {
-        const cookies = parse(socket.handshake.headers.cookie ?? '')
-        const access_token = cookies[CookieNames.ACCESS_TOKEN]
-
-        const payload = await this.tokenService.verifyAccessToken(access_token)
-
-        const characterId = socket.handshake.auth?.characterId
-
-        if (!characterId || typeof characterId !== 'string') {
-          throw new Error('Character id missing');
-        }
-
-        const isCharacterOwner = await this.characterService.validateCharacterOwnership(payload.sub, characterId)
-
-        if (!isCharacterOwner) {
-          throw new Error('Invalid character owner')
-        }
-
-        socket.data.accountId = payload.sub;
-        socket.data.authSessionId = payload.authSessionId;
-        socket.data.characterId = characterId;
-
-        next()
-      } catch (error) {
-        next(new Error('UNAUTHORIZED'));
-      }
+  afterInit(server: Server): void {
+    server.use((socket: AuthSocket, next) => {
+      void this.authenticateSocket(socket,next)
     })
+  }
+
+  private async authenticateSocket(
+    socket: AuthSocket,
+    next: (err?: Error) => void,
+  ): Promise<void> {
+    try {
+      const cookies = parse(socket.handshake.headers.cookie ?? '');
+      const accessToken = cookies[CookieNames.ACCESS_TOKEN];
+
+      if (!accessToken) {
+        return next(new Error('ACCESS_TOKEN_MISSING'));
+      }
+
+      const payload = await this.tokenService.verifyAccessToken(accessToken);
+
+      const characterId = socket.handshake.auth?.characterId;
+
+      if (!characterId || typeof characterId !== 'string') {
+        return next(new Error('CHARACTER_ID_MISSING'));
+      }
+
+      const isCharacterOwner = await this.characterService.validateCharacterOwnership(characterId,payload.sub);
+
+      if (!isCharacterOwner) {
+        return next(new Error('INVALID_CHARACTER_OWNER'));
+      }
+
+      socket.data.accountId = payload.sub;
+      socket.data.authSessionId = payload.authSessionId;
+      socket.data.characterId = characterId;
+
+      next();
+    } catch (error) {
+      console.error('Socket auth error:', error);
+      next(new Error('UNAUTHORIZED'));
+    }
   }
 
   /**

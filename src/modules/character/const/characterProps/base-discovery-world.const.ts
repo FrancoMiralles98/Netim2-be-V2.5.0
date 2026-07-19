@@ -5,7 +5,7 @@ import { DiscoveryWorld } from "../../types/baseCharacterProps/discovery-world.t
  * No se ponen "Mazmorra de Monos, "Cueva de Arañas" y "Torre Demoniaca" porque estos entran
  * en la categoria de "dungeons" y no la de "mundo abierto"
  */
-export const BASE_DISCOVERY_WORLD: Partial<DiscoveryWorld> = {
+export const BASE_DISCOVERY_WORLD: DiscoveryWorld = {
     city1: 0,
     city2: 0,
     desierto: 0,

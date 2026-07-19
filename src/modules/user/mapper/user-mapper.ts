@@ -13,6 +13,7 @@ export class UserMapper {
             email: userObject.email,
             role: userObject.role,
             md: userObject.md,
+            reino: userObject.reino,
             yang: userObject.yang,
             almacen: new Inventory(userObject.almacen),
             almacenItemShop: new Inventory(userObject.almacenItemShop),

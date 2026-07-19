@@ -15,8 +15,8 @@
  * - Los puntos de atributo vuelven a poder ganarse únicamente al subir
  *   de nivel y comenzar un nuevo ciclo de progreso.
  */
-export enum AttributePointProgression {
-    FIRST = 25,
-    SECOND = 50,
-    THIRD = 75
-}
+export const ATTRIBUTE_POINT_PROGRESSION = {
+    FIRST: 25,
+    SECOND: 50,
+    THIRD: 75,
+} as const;
