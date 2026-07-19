@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
