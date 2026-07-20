@@ -3,7 +3,7 @@ import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
 import { CharacterDocument } from './schema/character.schema';
-import { CharacterSummary } from 'netim2-shared';
+import { CharacterPersistence, CharacterSession, CharacterSummary } from 'netim2-shared';
 import { UserService } from '../user/user.service';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
@@ -21,6 +21,16 @@ export class CharacterService {
     async validateCharacterOwnership(characterId: string, accountId: string): Promise<boolean> {
         const character = await this.characterRepository.getCharacterById(characterId)
         return character.user_owner === accountId
+    }
+
+    async getCharacterById(characterId: string, userId: string): Promise<CharacterSession> {
+        const character = await this.characterRepository.getCharacterById(characterId)
+     
+        if (character.user_owner !== userId) {
+            throw new ConflictException('No puedes conectarte con este personaje.')
+        }
+
+        return { ...this.characterMapper.fromDb(character), id: character._id.toString() }
     }
 
     async getCharactersByUserId(userId: string): Promise<CharacterDocument[]> {

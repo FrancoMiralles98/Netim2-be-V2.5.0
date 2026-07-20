@@ -36,7 +36,7 @@ export class CharacterRepository {
         return this.characterMapper.toDomain(characterPersistence)
     }
 
-    async getCharacterById(id: string): Promise<CharacterModel> {  
+    async getCharacterById(id: string): Promise<CharacterDocument> {  
         const character = await this.characterModel.findById(id)
         if (!character) {
             throw new NotFoundException('character not found')

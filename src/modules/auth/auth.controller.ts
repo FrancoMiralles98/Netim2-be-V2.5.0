@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
 import { AppConfigType } from 'src/config/types/app-config.type';
@@ -26,7 +26,7 @@ export class AuthController {
     return { data: userData }
   }
 
-  @Post('refresh')
+  @Get('refresh')
   @HttpCode(HttpStatus.OK)
   async refresh(
     @ReqCookies(CookieNames.REFRESH_TOKEN) refreshToken: string | undefined,

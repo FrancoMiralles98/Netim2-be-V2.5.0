@@ -44,7 +44,7 @@ export class AuthService {
             throw new UnauthorizedException('Refresh session expired');
         }
 
-        const newAccessToken = this.tokenService.signAccessToken(accountId, payload.authSessionId)
+        const newAccessToken = await this.tokenService.signAccessToken(accountId, payload.authSessionId)
 
         const user = (await this.userService.getUserById(accountId)).toPrimitives()
 
