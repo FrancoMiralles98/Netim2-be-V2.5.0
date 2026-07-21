@@ -7,6 +7,7 @@ import { GENERAL_CHARACTER } from "../const/general-character.const";
 import { CreateCharacterDto } from "../dto/create-character.dto";
 import { Injectable } from "@nestjs/common";
 import { CharacterSummary } from "../types/character-summary.type";
+import { CharacterSession } from "netim2-shared";
 
 /**
  * Mapper encargado de transformar datos entre las distintas capas:
@@ -24,7 +25,43 @@ export class CharacterMapper {
     */
     fromDb(doc: CharacterModel): CharacterPersistence {
         return {
-            ...doc,
+            atribute_per_lv: doc.atribute_per_lv,
+            beginning: doc.beginning,
+            buffos: doc.buffos,
+            discovery_world: doc.discovery_world,
+            dungeon_in_progress: doc.dungeon_in_progress,
+            equipo_1: doc.equipo_1,
+            equipo_2: doc.equipo_2,
+            equipo_3: doc.equipo_3,
+            equipo_options: doc.equipo_options,
+            equipo_selected: doc.equipo_selected,
+            exp: doc.exp,
+            exp_next_lv: doc.exp_next_lv,
+            genero: doc.genero,
+            lv: doc.lv,
+            mission_option: doc.mission_option,
+            montura_lv: doc.montura_lv,
+            nombre: doc.nombre,
+            puntos_atributos: doc.puntos_atributos,
+            puntos_habilidad: doc.puntos_habilidad,
+            pvp_data: doc.pvp_data,
+            raza: doc.raza,
+            reino: doc.reino,
+            role: doc.role,
+            stars_discovery: doc.stars_discovery,
+            stats: doc.stats,
+            target_type: doc.target_type,
+            time_played: doc.time_played,
+            timer_boss: doc.timer_boss,
+            timer_lv: doc.timer_lv,
+            timer_metin: doc.timer_metin,
+            timer_mob: doc.timer_mob,
+            timer_pvp: doc.timer_pvp,
+            type_weapon: doc.type_weapon,
+            yang: doc.yang,
+            especialidad: doc.especialidad,
+            gremio_options: doc.gremio_options,
+            montura: doc.montura,
             hab: doc.hab ?? [],
             inventario: doc.inventario ?? [],
             historial: [],

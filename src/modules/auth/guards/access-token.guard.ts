@@ -12,7 +12,7 @@ export class AccessTokenGuard implements CanActivate {
         const request = context.switchToHttp().getRequest<AuthRequest>();
 
         const token = request.cookies?.access_token;
-
+        
         const payload = await this.tokenService.verifyAccessToken(token);
 
         if (!payload.sub || !payload.authSessionId) {
