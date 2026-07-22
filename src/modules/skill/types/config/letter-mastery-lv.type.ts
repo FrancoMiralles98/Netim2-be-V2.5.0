@@ -1,1 +1,0 @@
-export type LetterMasteryLv = 'M' | 'G' | 'P'

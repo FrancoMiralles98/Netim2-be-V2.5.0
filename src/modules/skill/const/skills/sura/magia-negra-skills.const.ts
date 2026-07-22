@@ -1,134 +1,47 @@
-import { SkillType } from "src/modules/skill/types/const/skill.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
+import { UNIQUE_ID_SKILLS } from "netim2-shared";
+import { SkillSummary } from "src/modules/skill/types/summary-skills.types";
 
-export const MAGIA_NEGRA_SKILLS: SkillType[] =  [
-    {
-      nombre: 'Golpe Oscuro',
-      daño: {min:0,max:0},
-      lv: 0,
-      tipo_daño: 'ap',
-      cd: 7,
-      bonus_efecto: {
-        penetracion_habilidad: 0,
-        vampirismo_hechizo: 0,
-        desmayo: 0,
-        incendio: 0,
-        retardo: 0,
-        veneno: 0,
-        sangrado: 0
-      },
-      
-      idPosition: 1,
-      type: 'Daño',
-      icon: { x: 0, y: 0 },
-      descripcion: 'Lanza fuerza oscura para herir a los enemigos.',
-      
-      idSkill: UNIQUE_ID_SKILLS.GOLPE_OSCURO,
-    },
-    {
-      nombre: 'Espíritu de la LLama',
-      daño: {min:0,max:0},
-      lv: 0,
-      tipo_daño: 'ap',
-      cd: 3,
-      bonus_efecto: {
-        penetracion_habilidad: 0,
-        vampirismo_hechizo: 0,
-        desmayo: 0,
-        incendio: 0,
-        retardo: 0,
-        veneno: 0,
-        sangrado: 0
-      },
-      
-      idPosition: 2,
-      
-      type: 'Daño',
-      descripcion: 'Crea un espíritu de la llama que ataca a los enemigos.',
-      icon: { x: 0, y: 35 },
-      idSkill: UNIQUE_ID_SKILLS.ESPIRITU_DE_LA_LLAMA,
-    },
-    {
-      nombre: 'Golpe Espiritual',
-      daño: {min:0,max:0},
-      lv: 0,
-      tipo_daño: 'ap',
-      cd: 12,
-      bonus_efecto: {
-        penetracion_habilidad: 0,
-        vampirismo_hechizo: 0,
-        desmayo: 0,
-        incendio: 0,
-        retardo: 34.8,
-        veneno: 0,
-        sangrado: 0
-      },
-      
-      idPosition: 3,
-      type: 'Daño',
-      descripcion:
-        'Lanza espíritus oscuros para herir a los enemigos y poder relantizarlos.',
-      icon: { x: 0, y: 0 },
-      
-      idSkill: UNIQUE_ID_SKILLS.GOLPE_ESPIRITUAL,
-    },
-    {
-      nombre: 'Golpe de Llama',
-      daño: {min:0,max:0},
-      lv: 0,
-      tipo_daño: 'ap',
-      cd: 12,
-      bonus_efecto: {
-        penetracion_habilidad: 0,
-        vampirismo_hechizo: 0,
-        desmayo: 0,
-        incendio: 5,
-        retardo: 0,
-        veneno: 0,
-        sangrado: 0
-      },
-      
-      idPosition: 4,
-      type: 'Daño',
-      descripcion: 'Quema a tus enemigos con una explosión.',
-      icon: { x: 112, y: 0 },
-      
-      idSkill: UNIQUE_ID_SKILLS.GOLPE_DE_LLAMA,
-    },
-    {
-      nombre: 'Orbe Oscuro',
-      daño: {min:0,max:0},
-      lv: 0,
-      tipo_daño: 'ap',
-      cd: 24,
-      bonus_efecto: {
-        penetracion_habilidad: 0,
-        vampirismo_hechizo: 0,
-        desmayo: 0,
-        incendio: 0,
-        retardo: 0,
-        veneno: 0,
-        sangrado: 0
-      },
-      
-      idPosition: 6,
-      type: 'Daño',
-      descripcion: 'Lanza un globo oscuro para herir a tus enemigos.',
-      icon: { x: 112, y: 71 },
-      
-      idSkill: UNIQUE_ID_SKILLS.ORBE_OSCURO,
-    },
-    {
-      nombre: 'Protección Oscura',
-      lv: 0,
-      buffos: {
-        def_hab: 0,
-      },
-      idPosition: 5,
-      type: 'Aura',
-      descripcion: 'Protégete con el señor oscuro de ataques.',
-      icon: { x: 112, y: 36 },
-      
-      idSkill: UNIQUE_ID_SKILLS.PROTECCION_OSCURA,
-    },
-  ]
+export const MAGIA_NEGRA_SKILLS: SkillSummary[] = [
+  {
+
+    type: 'damage',
+    description: 'Lanza fuerza oscura para herir a los enemigos.',
+
+    id: UNIQUE_ID_SKILLS.GOLPE_OSCURO,
+  },
+  {
+
+
+    type: 'damage',
+    description: 'Crea un espíritu de la llama que ataca a los enemigos.',
+    id: UNIQUE_ID_SKILLS.ESPIRITU_DE_LA_LLAMA,
+  },
+  {
+
+    type: 'damage',
+    description:
+      'Lanza espíritus oscuros para herir a los enemigos y poder relantizarlos.',
+
+    id: UNIQUE_ID_SKILLS.GOLPE_ESPIRITUAL,
+  },
+  {
+
+    type: 'damage',
+    description: 'Quema a tus enemigos con una explosión.',
+
+    id: UNIQUE_ID_SKILLS.GOLPE_DE_LLAMA,
+  },
+  {
+
+    type: 'damage',
+    description: 'Lanza un globo oscuro para herir a tus enemigos.',
+
+    id: UNIQUE_ID_SKILLS.ORBE_OSCURO,
+  },
+  {
+    type: 'aura',
+    description: 'Protégete con el señor oscuro de ataques.',
+
+    id: UNIQUE_ID_SKILLS.PROTECCION_OSCURA,
+  },
+]
