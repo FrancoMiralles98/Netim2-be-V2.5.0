@@ -1,27 +1,21 @@
 import { UNIQUE_ID_SKILLS } from "netim2-shared";
 import { StructureSkillScaling } from "../../types/structureSkillScaling.types";
+import { ESCALADO_LV_DEFAULT } from "../escaladoLvDefault";
 
 
 export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
     Luz: {
         [UNIQUE_ID_SKILLS.CURACION]: {
             type: 'heal',
-            cd: 30,
+            cd: { onActivate: 1 },
             components: [{
                 damageType: 'true',
-                id: '',
                 tags: ['heal', 'ap', 'skill'],
                 escaladoMain: {
                     min: 1,
                     max: 2
                 },
-                escaladoLv: {
-                    perLv: 2,
-                    basicMulti: 2,
-                    masterMulti: 4,
-                    granMasterMulti: 6,
-                    perfectMulti: 8
-                },
+                escaladoLv: ESCALADO_LV_DEFAULT,
                 escaladoAtributos: {
                     VIT: 20,
                     INT: 20
@@ -35,21 +29,14 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.LLAMADA_RELAMPAGO]: {
             type: 'damage',
-            cd: 15,
+            cd: { onActivate: 1 },
             components: [{
                 damageType: 'ap',
-                escaladoLv: {
-                    perLv: 2,
-                    basicMulti: 2,
-                    masterMulti: 4,
-                    granMasterMulti: 6,
-                    perfectMulti: 8
-                },
+                escaladoLv: ESCALADO_LV_DEFAULT,
                 escaladoMain: {
                     min: 1,
                     max: 2
                 },
-                id: '',
                 tags: ['ap', 'skill', 'electrico', 'cc', 'ranged', 'weapon'],
                 escaladoAtributos: {
                     INT: 0,
@@ -67,21 +54,14 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.TIRO_RELAMPAGO]: {
             type: 'damage',
-            cd: 15,
+            cd: { onActivate: 1 },
             components: [{
                 damageType: 'ap',
-                escaladoLv: {
-                    perLv: 2,
-                    basicMulti: 2,
-                    masterMulti: 4,
-                    granMasterMulti: 6,
-                    perfectMulti: 8
-                },
+                escaladoLv: ESCALADO_LV_DEFAULT,
                 escaladoMain: {
                     min: 1,
                     max: 2
                 },
-                id: '',
                 tags: ['ap', 'electrico', 'skill', 'ranged', 'weapon'],
                 escaladoAtributos: {
                     INT: 20
@@ -97,21 +77,14 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.GARRA_RELAMPAGO]: {
             type: 'damage',
-            cd: 20,
+            cd: { onActivate: 1 },
             components: [{
                 damageType: 'ap',
-                escaladoLv: {
-                    perLv: 2,
-                    basicMulti: 2,
-                    masterMulti: 4,
-                    granMasterMulti: 6,
-                    perfectMulti: 8
-                },
+                escaladoLv: ESCALADO_LV_DEFAULT,
                 escaladoMain: {
                     min: 1,
                     max: 1
                 },
-                id: '',
                 tags: ['ap', 'electrico', 'skill', 'ranged', 'weapon'],
                 escaladoAtributos: {
                     INT: 1,
@@ -143,13 +116,16 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.ATAQUE]: {
             type: 'aura',
+            cd: { onDeactivate: 1 },
+            duration: { base: 1, perLv: 1 },
+            mana: { base: 1, perLv: 1 },
             escaladoAtributos: {
                 STR: 1,
                 INT: 1
             },
             escaladoBuffos: {
                 vm: {
-                    base:1,
+                    base: 1,
                     escaladoLv: {
                         perLv: 0.3,
                         basicMulti: 1.2,
@@ -160,7 +136,7 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                     scaleWithAttribute: true
                 },
                 vh: {
-                    base:1,
+                    base: 1,
                     escaladoLv: {
                         perLv: 0.3,
                         basicMulti: 1.2,
@@ -171,20 +147,19 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                     scaleWithAttribute: true
                 },
             },
-            mana: {
-                base: 70,
-                perLv: 2
-            },
-            duration: {
-                base: 30,
-                perLv: 1
-            }
         },
         [UNIQUE_ID_SKILLS.REMOLINOS]: {
             type: "aura",
-            escaladoAtributos: { INT: 0.5, DEX: 1.5 },
+            cd: { onDeactivate: 1 },
+            duration: { base: 1, perLv: 1 },
+            mana: { base: 1, perLv: 1 },
+            escaladoAtributos: {
+                DEX: 1,
+                INT: 1
+            },
             escaladoBuffos: {
                 vm: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 0.3,
                         basicMulti: 1.2,
@@ -192,9 +167,10 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                         granMasterMulti: 1.6,
                         perfectMulti: 1.8,
                     },
-                    scaleWithAtribute: true
+                    scaleWithAttribute: true
                 },
                 vh: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 0.3,
                         basicMulti: 1.2,
@@ -202,86 +178,86 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                         granMasterMulti: 1.6,
                         perfectMulti: 1.8,
                     },
-                    scaleWithAtribute: true
+                    scaleWithAttribute: true
                 },
-            },
+            }
         },
     },
     Dragon: {
         [UNIQUE_ID_SKILLS.DISPARO_DEL_DRAGON]: {
             type: "damage",
-            cd: 8,
-            escaladoMain: { min: 0.70, max: 0.70 },
-            escaladoLv: {
-                perLv: 1.50,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ap',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 2 },
+                tags: ['ap', 'incendio', 'ranged', 'skill', 'weapon'],
+                escaladoAtributos: {
+                    INT: 1,
+                    STR: 1
+                },
+            }],
+            mana: {
+                base: 1,
+                perLv: 1
             },
-            escaladoAtributos: { INT: 4, DEX: 2 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 1, perLv: 1 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 },
-                vampirismo_hechizo: { base: 0, perLv: 0 }
+            statusEffectScaling: {
+                incendio: { base: 15, perLv: 1 }
             },
-
         },
         [UNIQUE_ID_SKILLS.RUGIDO_DEL_DRAGON]: {
             type: "damage",
-            cd: 20,
-            escaladoMain: { min: 0.80, max: 1.10 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ap',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 2 },
+                tags: ['ap', 'incendio', 'ranged', 'skill', 'weapon'],
+                escaladoAtributos: {
+                    VIT: 1,
+                    INT: 1,
+                    STR: 1
+                },
+            }],
+            mana: {
+                base: 1,
+                perLv: 1
             },
-            escaladoAtributos: { INT: 4, VIT: 3, DEX: 1 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 5, perLv: 1.50 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 },
-                vampirismo_hechizo: { base: 0, perLv: 0 }
-            },
+            statusEffectScaling: {
+                incendio: { base: 1, perLv: 1 }
+            }
 
         },
         [UNIQUE_ID_SKILLS.TALISMAN_VOLADOR]: {
             type: "damage",
-            cd: 7,
-            escaladoMain: { min: 0.66, max: 0.74 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ap',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 2 },
+                tags: ['ap', 'skill', 'ranged']
+            }],
+            mana: {
+                base: 1,
+                perLv: 1
             },
-            escaladoAtributos: { INT: 4, DEX: 2 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 },
-                vampirismo_hechizo: { base: 0, perLv: 0 }
-            },
-
+            damageModifiersScaling: {
+                type: 'conditional_multiplier',
+                multiplier: {
+                    baseMultiplier: 1.30,
+                    perLv: 0.01
+                }
+            }
         },
         [UNIQUE_ID_SKILLS.FUERZA_DEL_DRAGON]: {
             type: "aura",
+            cd: { onDeactivate: 1 },
+            duration: { base: 1, perLv: 1 },
+            mana: { base: 1, perLv: 1 },
             escaladoAtributos: { INT: 1, STR: 1 },
             escaladoBuffos: {
                 critico: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 0.2,
                         basicMulti: 1.1,
@@ -289,15 +265,19 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                         granMasterMulti: 1.3,
                         perfectMulti: 1.4,
                     },
-                    scaleWithAtribute: true
+                    scaleWithAttribute: true
                 },
             },
         },
         [UNIQUE_ID_SKILLS.BENDICION]: {
             type: "aura",
+            cd: { onDeactivate: 1 },
+            duration: { base: 1, perLv: 1 },
+            mana: { base: 1, perLv: 1 },
             escaladoAtributos: { INT: 0.5, VIT: 0.5 },
             escaladoBuffos: {
                 def_media: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 0.2,
                         basicMulti: 0.9,
@@ -305,15 +285,19 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                         granMasterMulti: 1,
                         perfectMulti: 1,
                     },
-                    scaleWithAtribute: true
+                    scaleWithAttribute: true
                 },
             },
         },
         [UNIQUE_ID_SKILLS.REFLECTAR]: {
             type: "aura",
+            cd: { onDeactivate: 1 },
+            duration: { base: 1, perLv: 1 },
+            mana: { base: 1, perLv: 1 },
             escaladoAtributos: { INT: 1, DEX: 1 },
             escaladoBuffos: {
                 reflectar: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 0.4,
                         basicMulti: 1,
@@ -321,7 +305,7 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                         granMasterMulti: 1.1,
                         perfectMulti: 1.2,
                     },
-                    scaleWithAtribute: true
+                    scaleWithAttribute: true
                 },
             },
         },

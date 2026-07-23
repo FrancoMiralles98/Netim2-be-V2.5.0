@@ -59,7 +59,7 @@ export interface CharacterStats {
     DEX: CharacterAttributeValue;
   },
   general: {
-
+    
     hp: { actual: number, max: number };
     regen_hp: number;
     def: number;

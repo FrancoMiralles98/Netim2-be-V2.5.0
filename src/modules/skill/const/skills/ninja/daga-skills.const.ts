@@ -6,6 +6,8 @@ export const DAGA_SKILLS: SkillSummary[] = [
   {
 
     type: 'damage',
+    mana: {type: 'instant',amount:0},
+    weaponRestricted: ['daga','espada'],
     description:
       'Haz un ataque preciso y genera mucho daño, probabilidad de generar golpe mortal (+40% de daño)',
 
@@ -13,6 +15,8 @@ export const DAGA_SKILLS: SkillSummary[] = [
   },
   {
     type: 'damage',
+    mana: {type: 'instant',amount:0},
+    weaponRestricted: ['daga','espada'],
     description:
       'Girar alrededor del enemigo con una daga y ten probabilidades de generar múltiples daños y causar veneno.',
 
@@ -20,6 +24,8 @@ export const DAGA_SKILLS: SkillSummary[] = [
   },
   {
     type: 'damage',
+    mana: {type: 'instant',amount:0},
+    weaponRestricted: [],
     description:
       'Realiza nubes venenosas alrededor del enemigo para intoxicarlo.',
 
@@ -27,17 +33,18 @@ export const DAGA_SKILLS: SkillSummary[] = [
   },
   {
     type: 'damage',
+    mana: {type: 'instant',amount:0},
+    weaponRestricted: ['daga','espada'],
     description:
       'Aproximación rápida al enemigo y realizando un ataque sin que el enemigo se de cuenta.',
 
     id: UNIQUE_ID_SKILLS.ATAQUE_RAPIDO,
   },
-
   {
-    type: 'damage',
+    type: 'buff',
+    mana: {type: 'instant',amount:0},
     description:
       'Camufalte para que el enemigo no te vea y aumenta tu daño en tu siguiente habilidad.',
-
     id: UNIQUE_ID_SKILLS.CAMUFLAJE,
   },
 ]

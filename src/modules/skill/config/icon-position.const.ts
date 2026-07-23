@@ -15,7 +15,7 @@
  * Estas constantes contienen esos desplazamientos fijos.
  */
 
-import { LetterMasteryLv } from "../types/config/letter-mastery-lv.type"
+import { LetterMasteryLv } from "netim2-shared"
 
 /**
  * Coordenada en el eje Y para cada skill según su `idPosition`.

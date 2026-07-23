@@ -1,9 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { MasteryLvRank } from "../types/props/skill-lv-rank.types";
 import { TOTAL_LV_POINTS_PER_MASTERY_CONFIG } from "../config/total-lv-points-per-mastery.config";
-import { LetterMasteryLv } from "../types/config/letter-mastery-lv.type";
 import { CharacterAttribute, CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
-import { SkillScalingLv } from "../types/config/skill-base-escalado.type";
+import { LetterMasteryLv, MasteryLvRank, SkillAuraScaling, SkillBuffScaling, SkillDamageScaling, SkillManaCost, SkillScalingLv } from "netim2-shared";
 
 @Injectable()
 export class SharedSkillService {
@@ -104,10 +102,11 @@ export class SharedSkillService {
      * @param scaling Configuración de escalado de atributos.
      * @returns Multiplicador final de atributos.
      */
-     getAttributeBonification(
-        statsGeneral: CharacterStats['general'],
+    getAttributeBonification(
+        statsGeneral: CharacterStats['atributos'],
         attributeScaling: Partial<Record<CharacterAttribute, number>>
     ): number {
+        if (!attributeScaling) return 1
         let bonification = 0
         for (const [attribute, value] of Object.entries(attributeScaling) as [CharacterAttribute, number][]) {
 
@@ -118,5 +117,31 @@ export class SharedSkillService {
         }
 
         return 1 + bonification / 100
+    }
+
+
+    getManaCost(
+        mana: SkillManaCost,
+        scaling: SkillAuraScaling | SkillDamageScaling | SkillBuffScaling,
+        skillLv: number | MasteryLvRank
+    ): SkillManaCost {
+        const totalLvPoints = this.getPointsLvBonification(skillLv)
+        const totalManaToAdd = scaling.mana.base + (scaling.mana.perLv * totalLvPoints)
+        if (mana.type === 'instant') {
+            return {
+                type: 'instant',
+                amount: totalManaToAdd
+            }
+        }
+        if (mana.type === 'upkeep') {
+            return {
+                type: 'upkeep',
+                amountPerTurn: totalManaToAdd / 10, //el costo por turno en 1/10 del total de l activacion
+                initialAmount: totalManaToAdd
+            }
+        }
+        return {
+            type: 'none'
+        }
     }
 }

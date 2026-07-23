@@ -1,133 +1,122 @@
-import { Injectable } from "@nestjs/common";
-import { DamageSkillType } from "../types/props/damage-skill.type";
-import { CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
+import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { SharedSkillService } from "./shared-skill.service";
-import { BonusDamageService } from "./bonus-damage.service";
-import { SkillDamageEscalado } from "../types/config/skill-damage-escalado.type";
+import { CharacterRace, CharacterSpeciality, CharacterStats, DamageType, SkillDamage, SkillDamageScaling, SkillDamageStatScaling, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { SKILL_SCALING_BY_RACE_CONFIG } from "../config/skillScaling/skill-scaling-by-race.const";
+import { isSkillDamageScaling } from "../types/skills.guards";
+import { CharacterSharedService } from "src/modules/shared/services/character-shared.service";
 
 @Injectable()
 export class DamageSkillService {
 
     constructor(
         private sharedSkillService: SharedSkillService,
-        private bonusDamageService: BonusDamageService
+        private sharedCharacterService: CharacterSharedService,
     ) { }
 
-    updateDamageSkillStats(
-        skill: DamageSkillType,
-        scaling: SkillDamageEscalado,
-        statsGeneral: CharacterStats['general']
-    ): DamageSkillType {
-
-        const updatedSkill = { ...skill }
-
-        updatedSkill.daño = this.calculateDmg(updatedSkill, scaling, statsGeneral)
-        updatedSkill.bonus_efecto = this.calculateBonusEffect(updatedSkill, scaling)
-        updatedSkill.cd = scaling.cd
-
-        if (this.bonusDamageService.hasBonusDamage(updatedSkill.idSkill)) {
-            updatedSkill.bonus_damage = this.bonusDamageService.calculateBonusDamage(updatedSkill)
+    getUpdatedSkill(
+        skill: SkillDamage,
+        stats: CharacterStats,
+        race: CharacterRace,
+        speciality: CharacterSpeciality
+    ): SkillDamage {
+        const updatedSkill = structuredClone(skill)
+        const scalingSkillInfo = this.getSkillScalingInfo(skill.id, race, speciality)
+        if (!isSkillDamageScaling(scalingSkillInfo)) {
+            throw new InternalServerErrorException(`La skill ${skill.id} no posee una configuración de escalado de daño válida`)
         }
-
         return updatedSkill
     }
 
-    /**
-     * Calcula el daño final mínimo y máximo de una habilidad.
-     *
-     * @param skill Habilidad que se utilizará para el cálculo.
-     * @param scaling Configuración de escalado de la habilidad.
-     * @param statsGeneral Estadísticas generales del personaje.
-     * @returns Daño mínimo y máximo final de la habilidad.
-     */
-    calculateDmg(
-        skill: DamageSkillType,
-        scaling: SkillDamageEscalado,
-        statsGeneral: CharacterStats['general']
-    ): DamageSkillType["daño"] {
+    private updatedSkillStats(skill: SkillDamage, scaling: SkillDamageScaling, stats: CharacterStats): SkillDamage {
+        const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
+        return {
+            nombre: skill.nombre,
+            cd: scaling.cd,
+            components: this.getDamage(skill,scaling,stats),
+            mana: this.sharedSkillService.getManaCost(skill.mana,scaling,skill.lv),
+            description: skill.description,
+            id: skill.id,
+            lv: skill.lv,
+        }
+    }
 
-        const basicDmg = this.getBasicDmg(statsGeneral, skill, scaling)
-        const attributeBonification = this.sharedSkillService.getAttributeBonification(statsGeneral, scaling.escaladoAtributos)
-        const skillLvBonification = this.getSkillLvBonification(skill, scaling)
+    private getDamage(
+        skill: SkillDamage,
+        scaling: SkillDamageScaling,
+        stats: CharacterStats
+    ): SkillDamage['components'] {
+        return scaling.components.map(component => {
+            const ranges = this.getRangesDamage(component.damageType, stats)
+            const statsBonusDamage = this.getStatsBonificationDamage(skill, stats, component.statsScaling)
+            const attributeBonification = this.sharedSkillService.getAttributeBonification(stats.atributos, component.escaladoAtributos!)
+
+            return {
+                damageType: component.damageType,
+                range: {
+                    min: Math.trunc((ranges.min + statsBonusDamage) * attributeBonification),
+                    max: Math.trunc((ranges.max + statsBonusDamage) * attributeBonification),
+                },
+                tags: component.tags,
+                flags: component.flags,
+                statsScaling: [],
+            }
+        })
+    }
+
+    private getRangesDamage(
+        damageType: DamageType,
+        stats: CharacterStats
+    ): { min: number, max: number } {
+        if (damageType === 'true') {
+            return { min: 0, max: 0 }
+        }
+        const minRange = damageType === 'ad'
+            ? stats.general.ad.min
+            : stats.general.ap.min
+
+        const maxRange = damageType === 'ad'
+            ? stats.general.ad.max
+            : stats.general.ap.max
 
         return {
-            min: Math.trunc((basicDmg.min + skillLvBonification) * attributeBonification),
-            max: Math.trunc((basicDmg.max + skillLvBonification) * attributeBonification),
+            max: maxRange,
+            min: minRange
         }
     }
 
-    calculateBonusEffect(
-        skill: DamageSkillType,
-        scaling: SkillDamageEscalado
-    ): DamageSkillType["bonus_efecto"] {
-
-        const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
-
-        const skillEffects = { ...skill.bonus_efecto }
-
-        for (const effectKey of Object.keys(skillEffects) as Array<keyof typeof scaling.escaladoEfecto>) {
-
-            const effectScaling = scaling.escaladoEfecto[effectKey]
-
-            if (!effectScaling) {
-                throw new Error(`No se encuentra el escalado del efecto ${effectKey}`)
+    private getStatsBonificationDamage(
+        skill: SkillDamage,
+        stats: CharacterStats,
+        statsScaling?: SkillDamageStatScaling[],
+    ): number {
+        if (!statsScaling) return 0
+        let bonusDamage = 0
+        const pointsLv = this.sharedSkillService.getPointsLvBonification(skill.lv)
+        for (const statInfo of statsScaling) {
+            const statInCharacter = this.sharedCharacterService.getCharacterStatValue(stats, statInfo.stat)
+            if (typeof statInCharacter !== 'number') {
+                continue;
             }
-
-            skillEffects[effectKey] = effectScaling.base + (effectScaling.perLv * lvPoints)
+            const multiplier = statInfo.base + (pointsLv * statInfo.perLv)
+            bonusDamage += Math.trunc(statInCharacter * multiplier)
         }
 
-        return skillEffects
+        return Math.min(0, bonusDamage)
     }
 
-    /**
-     * Obtiene el daño base de la habilidad antes de aplicar
-     * bonificaciones por atributos y nivel de habilidad.
-     *
-     * Si la habilidad es física (`ad`) utiliza el ataque físico.
-     * Si es mágica (`ap`) utiliza el ataque mágico.
-     *
-     * @param statsGeneral Estadísticas generales del personaje.
-     * @param skill Habilidad utilizada.
-     * @param scaling Configuración de escalado principal de la habilidad.
-     * @returns Daño base mínimo y máximo.
-     */
-    private getBasicDmg(
-        statsGeneral: CharacterStats['general'],
-        skill: DamageSkillType,
-        scaling: SkillDamageEscalado
-    ): { min: number, max: number } {
 
-        const basicDmg = { min: 0, max: 0 }
-
-        if (skill.tipo_daño === 'ad') {
-            basicDmg.min = statsGeneral.ad.min * scaling.escaladoMain.min
-            basicDmg.max = statsGeneral.ad.max * scaling.escaladoMain.max
-        } else {
-            basicDmg.min = statsGeneral.ap.min * scaling.escaladoMain.min
-            basicDmg.max = statsGeneral.ap.max * scaling.escaladoMain.max
+    private getSkillScalingInfo(id: UNIQUE_ID_SKILLS, race: CharacterRace, speciality: CharacterSpeciality) {
+        const allSkillsScalingByRace = SKILL_SCALING_BY_RACE_CONFIG[race]
+        if (!allSkillsScalingByRace) {
+            throw new NotFoundException(`No se encuentra informacion del escalado de la raza: ${race}`)
         }
+        const skillScalingInfo = allSkillsScalingByRace[speciality]?.[id]
 
-        return basicDmg
+        if (!skillScalingInfo) {
+            throw new NotFoundException(`No se encuentra informacion del escalado de id skill ${id} y especialidad: ${speciality}`)
+        }
+        return skillScalingInfo
     }
 
-    /**
-     * Calcula la bonificación de daño otorgada
-     * por el nivel actual de la habilidad.
-     *
-     * Tiene en cuenta:
-     * - Los puntos efectivos de la habilidad
-     * - El multiplicador según el rango de maestría
-     *
-     * @param skill Habilidad utilizada.
-     * @param scaling Configuración de escalado por nivel.
-     * @returns Bonificación plana de daño.
-     */
-    private getSkillLvBonification(skill: DamageSkillType, scaling: SkillDamageEscalado): number {
 
-        const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
-
-        const multi = this.sharedSkillService.getMultiMasteryLvBonification(skill.lv, scaling.escaladoLv)
-
-        return (lvPoints * scaling.escaladoLv.perLv) * multi
-    }
 }
