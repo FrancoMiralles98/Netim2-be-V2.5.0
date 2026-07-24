@@ -4,7 +4,7 @@ import { AuraSkillType } from './types/props/aura-skill.type';
 import { SKILL_SCALING_BY_RACE_CONFIG } from './config/skillScaling/skill-scaling-by-race.const';
 import { CharacterRace, CharacterSpeciality, CharacterStats } from '../character/types/baseCharacterProps/character-stats.type';
 import { UNIQUE_ID_SKILLS } from './types/props/unique-id-skill.enum';
-import { DamageSkillService } from './services/damage-skill.service';
+import { DamageSkillService } from './services/damage/damage-skill.service';
 import { AuraSkillService } from './services/aura-skill.service';
 import { SkillFactory } from './factories/skill.factory';
 import { SkillAuraEscalado } from './types/config/skill-aura-escalado.type';

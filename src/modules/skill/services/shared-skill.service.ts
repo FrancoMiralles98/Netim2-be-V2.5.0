@@ -144,4 +144,18 @@ export class SharedSkillService {
             type: 'none'
         }
     }
+
+    meetsMasteryRequirement(
+        skillMastery: LetterMasteryLv | null | undefined,
+        requiredMastery: LetterMasteryLv
+    ): boolean {
+        if (!skillMastery) return false
+        const masteryRank: Record<LetterMasteryLv, number> = {
+            M: 1,
+            G: 2,
+            P: 3,
+        };
+
+        return masteryRank[skillMastery] >= masteryRank[requiredMastery];
+    }
 }
