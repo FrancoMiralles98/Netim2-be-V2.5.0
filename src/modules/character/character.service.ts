@@ -3,10 +3,11 @@ import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
 import { CharacterDocument } from './schema/character.schema';
-import { CharacterPersistence, CharacterSession, CharacterSummary } from 'netim2-shared';
+import {  CharacterSummary } from 'netim2-shared';
 import { UserService } from '../user/user.service';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
+import { CharacterPersistence } from './types/character-persistence.type';
 
 @Injectable()
 export class CharacterService {
@@ -23,7 +24,7 @@ export class CharacterService {
         return character.user_owner === accountId
     }
 
-    async getCharacterById(characterId: string, userId: string): Promise<CharacterSession> {
+    async getCharacterById(characterId: string, userId: string): Promise<CharacterPersistence & {id:string}> {
         const character = await this.characterRepository.getCharacterById(characterId)
      
         if (character.user_owner !== userId) {

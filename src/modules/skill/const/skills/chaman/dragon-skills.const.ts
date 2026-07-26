@@ -31,6 +31,10 @@ export const DRAGON_SKILLS: SkillSummary[] = [
     id: UNIQUE_ID_SKILLS.FUERZA_DEL_DRAGON,
     type: 'aura',
     mana: {type: 'instant',amount:0},
+    duration: {
+      turns: 1,
+      type: 'turns'
+    },
     tags: ['aura','defensive']
   },
   {
@@ -38,6 +42,10 @@ export const DRAGON_SKILLS: SkillSummary[] = [
     id: UNIQUE_ID_SKILLS.BENDICION,
     type: 'aura',
     mana: {type: 'instant',amount:0},
+    duration: {
+      turns: 1,
+      type: 'turns'
+    },
     tags: ['aura','defensive']
   },
   {
@@ -45,6 +53,10 @@ export const DRAGON_SKILLS: SkillSummary[] = [
     id: UNIQUE_ID_SKILLS.REFLECTAR,
     type: 'aura',
     mana: {type: 'instant',amount:0},
+    duration: {
+      turns: 1,
+      type: 'turns'
+    },
     tags: ['aura','defensive']
   },
 ]

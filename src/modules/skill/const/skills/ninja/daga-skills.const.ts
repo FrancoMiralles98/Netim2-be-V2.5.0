@@ -46,5 +46,14 @@ export const DAGA_SKILLS: SkillSummary[] = [
     description:
       'Camufalte para que el enemigo no te vea y aumenta tu daño en tu siguiente habilidad.',
     id: UNIQUE_ID_SKILLS.CAMUFLAJE,
+    effects: [{
+      multiplier: 1,
+      type: 'next_skill_damage_multiplier',
+      allowedSkillIds: [
+        UNIQUE_ID_SKILLS.EMBOSCADA,
+        UNIQUE_ID_SKILLS.ATAQUE_RAPIDO
+      ],
+      description: 'Al activarse aumenta el daño de la siguiente habilidad ya se Emboscada o Ataque Rapido.'
+    }]
   },
 ]

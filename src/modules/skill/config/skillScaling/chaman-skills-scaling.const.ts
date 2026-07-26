@@ -243,6 +243,10 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
             },
             damageModifiersScaling: {
                 type: 'conditional_multiplier',
+                condition: {
+                    effectId: 'incendio',
+                    type: 'target_has_effect'
+                },
                 multiplier: {
                     baseMultiplier: 1.30,
                     perLv: 0.01

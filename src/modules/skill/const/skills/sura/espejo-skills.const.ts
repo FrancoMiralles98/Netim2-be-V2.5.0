@@ -29,7 +29,10 @@ export const ESPEJO_SKILLS: SkillSummary[] = [
   },
   {
     type: 'aura',
-    tags: ['aura','offensive'],
+    duration: {
+      type: 'until_no_mana',
+    },
+    tags: ['aura', 'offensive'],
     mana: { type: 'upkeep', initialAmount: 0, amountPerTurn: 0 },
     description:
       'Encanta tu espada con magia oscura,incrementa tu valor de ataque y absorberas HP del daño realizado.',
@@ -39,7 +42,11 @@ export const ESPEJO_SKILLS: SkillSummary[] = [
   {
 
     type: 'aura',
-    tags: ['aura','defensive'],
+    duration: {
+      turns: 1,
+      type: 'turns'
+    },
+    tags: ['aura', 'defensive'],
     mana: { type: 'instant', amount: 0 },
     description: 'Proteje tu cuerpo con una armadura oscura.',
 
@@ -47,7 +54,11 @@ export const ESPEJO_SKILLS: SkillSummary[] = [
   },
   {
     type: 'aura',
-    tags: ['aura','defensive'],
+    duration: {
+      turns: 1,
+      type: 'turns'
+    },
+    tags: ['aura', 'defensive'],
     mana: { type: 'instant', amount: 0 },
     description:
       'Rodeate de una aura maldita y debilita las habilidades de los enemigos que te atacan.',

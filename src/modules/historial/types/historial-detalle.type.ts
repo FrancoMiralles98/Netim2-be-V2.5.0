@@ -1,4 +1,3 @@
-import { FightResult } from "src/modules/fight/types/entites/fight-result.type";
 
 /**
  * Información detallada de una batalla registrada en el historial.
@@ -13,7 +12,7 @@ export interface HistorialDetalle {
     enemigo: string;
     fecha: number;
     remainingReward: boolean;
-    fightResult: FightResult
+    fightResult: any
 }
 
 /**

@@ -1,7 +1,6 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { SharedSkillService } from "../shared-skill.service";
-import { CharacterRace, CharacterSpeciality, CharacterStats, SkillDamage, SkillDamageScaling, UNIQUE_ID_SKILLS } from "netim2-shared";
-import { SKILL_SCALING_BY_RACE_CONFIG } from "../../config/skillScaling/skill-scaling-by-race.const";
+import { CharacterRace, CharacterSpeciality, CharacterStats, SkillDamage, SkillDamageScaling } from "netim2-shared";
 import { isSkillDamageScaling } from "../../types/skills.guards";
 import { DamageCalculatorService } from "./damage-calculator.service";
 import { EffectsCalculatorService } from "./effects-calculator.service";
@@ -23,7 +22,7 @@ export class DamageSkillService {
         race: CharacterRace,
         speciality: CharacterSpeciality
     ): SkillDamage {
-        const scalingSkillInfo = this.getSkillScalingInfo(skill.id, race, speciality)
+        const scalingSkillInfo = this.sharedSkillService.getSkillScalingInfo(skill.id, race, speciality)
         if (!isSkillDamageScaling(scalingSkillInfo)) {
             throw new InternalServerErrorException(`La skill ${skill.id} no posee una configuración de escalado de daño válida`)
         }
@@ -43,19 +42,4 @@ export class DamageSkillService {
             hitModifiers: this.modifiersCalculatorService.getHitModifier(skill, lvPoints, scaling),
         }
     }
-
-    private getSkillScalingInfo(id: UNIQUE_ID_SKILLS, race: CharacterRace, speciality: CharacterSpeciality) {
-        const allSkillsScalingByRace = SKILL_SCALING_BY_RACE_CONFIG[race]
-        if (!allSkillsScalingByRace) {
-            throw new InternalServerErrorException(`No se encuentra informacion del escalado de la raza: ${race}`)
-        }
-        const skillScalingInfo = allSkillsScalingByRace[speciality]?.[id]
-
-        if (!skillScalingInfo) {
-            throw new InternalServerErrorException(`No se encuentra informacion del escalado de id skill ${id} y especialidad: ${speciality}`)
-        }
-        return skillScalingInfo
-    }
-
-
 }

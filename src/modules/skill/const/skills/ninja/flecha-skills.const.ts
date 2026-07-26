@@ -41,6 +41,10 @@ export const FLECHA_SKILLS: SkillSummary[] = [
   {
     type: 'aura',
     tags: ['aura','defensive'],
+    duration: {
+      turns: 1,
+      type: 'turns'
+    },
     mana: {type:"instant",amount:0},
     description:
       'Aligera el cuerpo para aumentar la velocidad de movimiento.',

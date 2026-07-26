@@ -40,6 +40,10 @@ export const LUZ_SKILLS: SkillSummary[] = [
     description:
       'Obten el poder del viento e incrementa tu velocidad de movimiento y de hechizo.',
     id: UNIQUE_ID_SKILLS.REMOLINOS,
+    duration: {
+      turns:1,
+      type: "turns"
+    },
     tags: ['aura','defensive']
   },
   {
@@ -47,6 +51,10 @@ export const LUZ_SKILLS: SkillSummary[] = [
     mana: {type: 'instant',amount: 0},
     description: 'Obten AD gracias al poder de la Luz.',
     id: UNIQUE_ID_SKILLS.ATAQUE,
+    duration: {
+      turns:1,
+      type: "turns"
+    },
     tags: ['aura','offensive']
   },
 ]

@@ -25,6 +25,10 @@ export const CORPORAL_SKILLS: SkillSummary[] = [
   },
   {
     type: 'aura',
+    duration: {
+      turns: 1,
+      type: 'turns'
+    },
     tags: ['aura','offensive'],
     mana: {type: 'instant',amount:0},
     description:
@@ -33,6 +37,10 @@ export const CORPORAL_SKILLS: SkillSummary[] = [
   },
   {
     type: 'aura',
+    duration: {
+      turns: 1,
+      type: 'turns'
+    },
     tags: ['aura','offensive'],
     mana: {type: 'instant',amount:0},
     description: 'Canaliza tu poder en el arma y aumenta tu AD.',

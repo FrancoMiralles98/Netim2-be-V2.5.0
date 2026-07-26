@@ -19,6 +19,7 @@ export type SkillAuraSummary = Pick<SkillAura,
     'type' |
     'id' |
     'description' |
+    'duration' |
     'mana' | 
     'tags'
 >
@@ -27,5 +28,6 @@ export type SkillBuffSummary = Pick<SkillBuff,
     'type' |
     'id' |
     'description' |
-    'mana'
+    'mana'|
+    'effects'
 >

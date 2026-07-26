@@ -38,6 +38,10 @@ export const MENTAL_SKILLS: SkillSummary[] = [
     },
     {
       type: 'aura',
+      duration: {
+        turns: 1,
+        type: 'turns'
+      },
       tags: ['aura','defensive'],
       mana: {type: 'instant',amount:0},
       description:

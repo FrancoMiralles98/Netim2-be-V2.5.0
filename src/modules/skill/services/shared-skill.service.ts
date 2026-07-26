@@ -1,7 +1,8 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { TOTAL_LV_POINTS_PER_MASTERY_CONFIG } from "../config/total-lv-points-per-mastery.config";
 import { CharacterAttribute, CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
-import { LetterMasteryLv, MasteryLvRank, SkillAuraScaling, SkillBuffScaling, SkillDamageScaling, SkillManaCost, SkillScalingLv } from "netim2-shared";
+import { CharacterRace, CharacterSpeciality, LetterMasteryLv, MasteryLvRank, SkillAuraScaling, SkillBuffScaling, SkillDamageScaling, SkillManaCost, SkillScalingLv, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { SKILL_SCALING_BY_RACE_CONFIG } from "../config/skillScaling/skill-scaling-by-race.const";
 
 @Injectable()
 export class SharedSkillService {
@@ -157,5 +158,54 @@ export class SharedSkillService {
         };
 
         return masteryRank[skillMastery] >= masteryRank[requiredMastery];
+    }
+
+    getScalingLvValue(skillLv: number | MasteryLvRank, scalingLv: SkillScalingLv): number {
+        const letterLv = typeof skillLv === 'number'
+            ? 'N'
+            : this.getLetterAndNumberOfMasteryLvRank(skillLv).letterLv
+
+        const reference: Record<LetterMasteryLv | 'N', keyof SkillScalingLv> = {
+            N: "basicMulti",
+            M: "masterMulti",
+            G: "granMasterMulti",
+            P: "perfectMulti"
+        }
+
+        const referenceToUse = reference[letterLv]
+
+        return scalingLv[referenceToUse]
+    }
+
+    getAttributeMultiplier(
+        characterAttributes: CharacterStats['atributos'],
+        scaling: Partial<Record<CharacterAttribute, number>>
+    ): number {
+        let multiplier = 1
+
+        for (const [attribute, percentage] of Object.entries(scaling) as Array<[CharacterAttribute, number]>) {
+            if (percentage === undefined) continue;
+
+            const attributeValue = characterAttributes[attribute];
+
+            const totalAttributeValue = attributeValue.lvPoints + attributeValue.bonusPoints;
+
+            multiplier += totalAttributeValue * (percentage / 100) / 100;
+        }
+        return multiplier
+    }
+
+
+    getSkillScalingInfo(id: UNIQUE_ID_SKILLS, race: CharacterRace, speciality: CharacterSpeciality) {
+        const allSkillsScalingByRace = SKILL_SCALING_BY_RACE_CONFIG[race]
+        if (!allSkillsScalingByRace) {
+            throw new InternalServerErrorException(`No se encuentra informacion del escalado de la raza: ${race}`)
+        }
+        const skillScalingInfo = allSkillsScalingByRace[speciality]?.[id]
+
+        if (!skillScalingInfo) {
+            throw new InternalServerErrorException(`No se encuentra informacion del escalado de id skill ${id} y especialidad: ${speciality}`)
+        }
+        return skillScalingInfo
     }
 }

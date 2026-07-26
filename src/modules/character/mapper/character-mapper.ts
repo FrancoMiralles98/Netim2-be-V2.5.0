@@ -7,7 +7,6 @@ import { GENERAL_CHARACTER } from "../const/general-character.const";
 import { CreateCharacterDto } from "../dto/create-character.dto";
 import { Injectable } from "@nestjs/common";
 import { CharacterSummary } from "../types/character-summary.type";
-import { CharacterSession } from "netim2-shared";
 
 /**
  * Mapper encargado de transformar datos entre las distintas capas:
