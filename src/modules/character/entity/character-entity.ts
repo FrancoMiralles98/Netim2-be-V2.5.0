@@ -5,16 +5,17 @@ import { ItemsToConsumeType } from "src/modules/inventory/types/items-to-consume
 import { InventoryChangeResult } from "src/modules/inventory/types/item-to-update.types";
 import { Position } from "src/modules/item/types/entities-props/item-base.type";
 import { CharacterAttribute, CharacterRace, CharacterSpeciality } from "../types/baseCharacterProps/character-stats.type";
-import { MasteryLvRank } from "src/modules/skill/types/props/skill-lv-rank.types";
 import { ATTRIBUTE_SPECIALITY_CAPS } from "../const/statsProgress/attribute-speciality-caps.const";
 import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.const";
 import { AddItemResult } from "src/modules/inventory/types/inventory-result.types";
 import { ATTRIBUTE_POINT_PROGRESSION } from "../const/statsProgress/attribute-point-progression.const";
 import { EXP_PER_LV } from "../const/exp-per-lv.const";
 import { CharacterPersistence } from "../types/character-persistence.type";
-import { AuraSkillEntity } from "src/modules/skill/entities/aura-skill.entity";
-import { DamageSkillEntity } from "src/modules/skill/entities/damage-skill.entity";
 import { isUtilityItem } from "src/modules/item/types/item-type-guard.type";
+import { MasteryLvRank } from "netim2-shared";
+import { SkillAuraEntity } from "src/modules/skill/entities/skill-aura.entity";
+import { SkillDamageEntity } from "src/modules/skill/entities/skill-damage.entity";
+import { SkillBuffEntity } from "src/modules/skill/entities/skill-buff.entity";
 
 export class CharacterEntity {
     private readonly MAX_LV = 125 //nivel maximo del personaje 
@@ -169,7 +170,7 @@ export class CharacterEntity {
         this.props.puntos_atributos -= 1
     }
 
-    increaseSkillLv(idSkill: number): AuraSkillEntity | DamageSkillEntity {
+    increaseSkillLv(idSkill: number): SkillAuraEntity | SkillDamageEntity | SkillBuffEntity {
         const skill = this.findSkillById(idSkill)
         if (!this.canUpgradeSkill(skill.lv)) {
             throw new Error(`No se puede subir de nivel la skill idSkill: ${idSkill} `)
@@ -223,9 +224,8 @@ export class CharacterEntity {
         return attributesCaps[attribute]
     }
 
-    private findSkillById(idSkill: number): AuraSkillEntity | DamageSkillEntity {
+    private findSkillById(idSkill: number): SkillAuraEntity | SkillDamageEntity | SkillBuffEntity {
         const skill = this.props.hab.find(h => h.idSkill === idSkill)
-
         if (!skill) {
             throw new Error(`No se encuentra la skill idSkill: ${idSkill}`)
         }

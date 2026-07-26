@@ -1,4 +1,4 @@
-import { LetterMasteryLv } from "../types/config/letter-mastery-lv.type";
+import { LetterMasteryLv } from "netim2-shared";
 
 /**
  * Cantidad total de puntos efectivos que representa

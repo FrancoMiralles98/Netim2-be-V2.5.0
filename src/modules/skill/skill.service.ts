@@ -1,22 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { SkillType } from './types/const/skill.type';
-import { AuraSkillType } from './types/props/aura-skill.type';
-import { SKILL_SCALING_BY_RACE_CONFIG } from './config/skillScaling/skill-scaling-by-race.const';
-import { CharacterRace, CharacterSpeciality, CharacterStats } from '../character/types/baseCharacterProps/character-stats.type';
-import { UNIQUE_ID_SKILLS } from './types/props/unique-id-skill.enum';
-import { DamageSkillService } from './services/damage-skill.service';
-import { AuraSkillService } from './services/aura-skill.service';
+import { DamageSkillService } from './services/damage/damage-skill.service';
+import { AuraSkillService } from './services/aura/aura-skill.service';
 import { SkillFactory } from './factories/skill.factory';
-import { SkillAuraEscalado } from './types/config/skill-aura-escalado.type';
-import { SkillDamageEscalado } from './types/config/skill-damage-escalado.type';
 import { ALL_SKILLS } from './const/skills';
+import { CharacterRace, CharacterSpeciality, CharacterStats, SkillType } from 'netim2-shared';
+import { BuffSkillService } from './services/buffo/buff-skill.service';
+import { SkillMapper } from './mapper/skill-mapper';
 
 @Injectable()
 export class SkillService {
 
     constructor(
         private damageSkillService: DamageSkillService,
-        private auraSkillService: AuraSkillService
+        private auraSkillService: AuraSkillService,
+        private buffSkillService: BuffSkillService,
     ) { }
 
     /**
@@ -29,7 +26,12 @@ export class SkillService {
     * a la especialidad indicada.
     */
     getSpecialitySkillPool(speciality: CharacterSpeciality): SkillType[] {
-        return ALL_SKILLS[speciality]
+        const summarySkills = ALL_SKILLS[speciality]
+        const skills = summarySkills.map(summary => {
+            const skillEntity = SkillFactory.create(SkillMapper.summaryToSkill(summary))
+            return skillEntity.toPrimitives()
+        })
+        return skills
     }
 
     /**
@@ -55,7 +57,7 @@ export class SkillService {
         skill: SkillType,
         race: CharacterRace,
         speciality: CharacterSpeciality,
-        statsGeneral: CharacterStats['general'],
+        stats: CharacterStats,
         lvUp: boolean = false
     ): SkillType {
         const skillEntity = SkillFactory.create(skill)
@@ -65,11 +67,10 @@ export class SkillService {
         }
 
         skillEntity.updateSkillName(speciality)
-        skillEntity.updatedIconPosition()
 
         const skillUpdated = skillEntity.toPrimitives()
 
-        return this.calculateSkillEffect(skillUpdated, race, speciality, statsGeneral)
+        return this.handleUpdateSkill(skillUpdated, race, speciality, stats)
     }
 
 
@@ -84,78 +85,22 @@ export class SkillService {
      * @returns {SkillType} Skill con sus efectos calculados.
      *
      */
-    private calculateSkillEffect(
+    private handleUpdateSkill(
         skill: SkillType,
         race: CharacterRace,
         speciality: CharacterSpeciality,
-        statsGeneral: CharacterStats['general']
+        stats: CharacterStats
     ): SkillType {
-
-        const skillScaling = this.getScalingSkill(race, speciality, skill.idSkill)
-
-        if (this.isSkillAura(skill)) {
-            if (!this.isAuraScaling(skillScaling)) {
-                throw new Error(`El scaling de la skill ${skill.idSkill} no corresponde a una skill aura`);
-            }
-            return this.auraSkillService.updateAuraEffects(skill, skillScaling, statsGeneral);
+        switch (skill.type) {
+            case 'damage':
+            case 'heal':
+                return this.damageSkillService.getUpdatedSkill(skill, stats, race, speciality)
+            case 'aura':
+                return this.auraSkillService.getUpdatedAura(skill, stats, race, speciality)
+            case 'buff':
+                return this.buffSkillService.getUpdatedSkill(skill, race, speciality)
+            default:
+                throw new Error(`No se encuentra un tipo de la habilidad para actualizar`);
         }
-
-        if (!this.isDamageScaling(skillScaling)) {
-            throw new Error(`El scaling de la skill ${skill.idSkill} no corresponde a una skill de daño`);
-        }
-
-        return this.damageSkillService.updateDamageSkillStats(skill, skillScaling, statsGeneral)
-    }
-
-    /**
-     * Obtiene la configuración de escalado correspondiente
-     * a una skill específica.
-     *
-     * La búsqueda se realiza por raza, especialidad, idSkill
-     * 
-     * @param {CharacterRace} race - Raza del personaje.
-     * @param {CharacterSpeciality} speciality - Especialidad del personaje.
-     * @param {UNIQUE_ID_SKILLS} idSkill - ID único de la skill.
-     *
-     * @returns {SkillDamageEscalado | SkillAuraEscalado}
-     * Configuración de escalado encontrada.
-     *
-     */
-    private getScalingSkill(
-        race: CharacterRace,
-        speciality: CharacterSpeciality,
-        idSkill: UNIQUE_ID_SKILLS
-    ): SkillDamageEscalado | SkillAuraEscalado {
-        const raceScaling = SKILL_SCALING_BY_RACE_CONFIG[race]
-
-        if (!raceScaling) {
-            throw new Error(`No se encuentra los escalados de las skill de  raza${race}`)
-        }
-
-        const specialityScaling = raceScaling[speciality]
-
-        if (!specialityScaling) {
-            throw new Error(`No se encuentra los escalados de las skill de especialidad ${speciality}`)
-        }
-
-        const skillScaling = specialityScaling[idSkill]
-
-        if (!skillScaling) {
-            throw new Error(`No se encuentra los escalados de las skill de de idSkill ${idSkill}`)
-        }
-
-        return skillScaling
-    }
-
-    private isSkillAura(skill: SkillType): skill is AuraSkillType {
-        return skill.type === 'Aura';
-    }
-
-    private isAuraScaling(scaling: SkillAuraEscalado | SkillDamageEscalado): scaling is SkillAuraEscalado {
-        return scaling.type === 'aura'
-    }
-
-    private isDamageScaling(scaling: SkillAuraEscalado | SkillDamageEscalado): scaling is SkillDamageEscalado {
-        return scaling.type === 'damage'
     }
 }

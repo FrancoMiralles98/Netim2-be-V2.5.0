@@ -1,21 +1,31 @@
 import { Module } from '@nestjs/common';
 import { SkillService } from './skill.service';
-import { AuraSkillService } from './services/aura-skill.service';
-import { BonusDamageService } from './services/bonus-damage.service';
+import { AuraSkillService } from './services/aura/aura-skill.service';
 import { SharedSkillService } from './services/shared-skill.service';
-import { DamageSkillService } from './services/damage-skill.service';
+import { DamageSkillService } from './services/damage/damage-skill.service';
+import { SharedModule } from '../shared/shared.module';
+import { DamageCalculatorService } from './services/damage/damage-calculator.service';
+import { ModifiersCalculatorService } from './services/damage/modifiers-calculator.service';
+import { EffectsCalculatorService } from './services/damage/effects-calculator.service';
+import { BuffSkillService } from './services/buffo/buff-skill.service';
 
 @Module({
+  imports: [
+    SharedModule
+  ],
   controllers: [],
   providers: [
     SkillService,
     AuraSkillService,
-    BonusDamageService,
     SharedSkillService,
+    DamageCalculatorService,
+    ModifiersCalculatorService,
+    EffectsCalculatorService,
+    BuffSkillService,
     DamageSkillService
   ],
   exports: [
     SkillService
   ]
 })
-export class SkillModule {}
+export class SkillModule { }

@@ -1,16 +1,17 @@
-import { AuraSkillEntity } from "../entities/aura-skill.entity";
-import { DamageSkillEntity } from "../entities/damage-skill.entity";
-import {  AuraSkillType } from "../types/props/aura-skill.type";
-import {  DamageSkillType } from "../types/props/damage-skill.type";
-import { SkillEntity } from "../types/entity/skill-entity.type";
+import { SkillType } from "netim2-shared"
+import { SkillAuraEntity } from "../entities/skill-aura.entity"
+import { SkillDamageEntity } from "../entities/skill-damage.entity"
+import { SkillBuffEntity } from "../entities/skill-buff.entity"
 
 export class SkillFactory {
-    static create(skill: DamageSkillType | AuraSkillType): SkillEntity {
+    static create(skill: SkillType): SkillAuraEntity | SkillDamageEntity | SkillBuffEntity {
         switch (skill.type) {
-            case 'Aura':
-                return new AuraSkillEntity(skill)
-            case 'Daño': 
-                return new DamageSkillEntity(skill)
+            case 'aura':
+                return new SkillAuraEntity(skill)
+            case 'buff':
+                return new SkillBuffEntity(skill)
+            case 'damage':
+                return new SkillDamageEntity(skill)
             default:
                 throw new Error('No se pudo identificar el tipo de skill')
         }

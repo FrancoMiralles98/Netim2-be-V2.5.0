@@ -1,1 +1,0 @@
-export const BASIC_MAX_TURNS = 500

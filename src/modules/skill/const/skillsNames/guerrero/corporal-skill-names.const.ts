@@ -1,7 +1,8 @@
-import { SkillsNamesType } from "src/modules/skill/types/const/skills-names.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
+import { UNIQUE_ID_SKILLS } from "netim2-shared";
+import { SkillsNames } from "src/modules/skill/types/skills-names.type";
 
-export const CORPORAL_SKILLS_NAMES: SkillsNamesType = {
+
+export const CORPORAL_SKILLS_NAMES: SkillsNames = {
     [UNIQUE_ID_SKILLS.CORTE_DE_TRES_MANERAS]: {
         'N': 'Corte de Tres Maneras',
         'M': 'Tajo Triple',

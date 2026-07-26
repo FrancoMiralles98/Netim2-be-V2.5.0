@@ -6,12 +6,12 @@ import { HydratedDocument } from "mongoose";
 import { IdMobList } from "../types/id-mob-list.enum";
 import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
-import { SkillType } from "src/modules/skill/types/const/skill.type";
 import { MobRace } from "../types/mobProps/mob-race.type";
 import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 import { MobDifficulty } from "../types/mobProps/mob-difficult.type";
 import { EnemyType } from "../types/mobProps/enemie-type.type";
 import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type";
+import { SkillType } from "netim2-shared";
 
 @Schema()
 export class MobModel {

@@ -1,119 +1,60 @@
-import { SkillType } from "src/modules/skill/types/const/skill.type";
-import { UNIQUE_ID_SKILLS } from "src/modules/skill/types/props/unique-id-skill.enum";
+import { UNIQUE_ID_SKILLS } from "netim2-shared";
+import { SkillSummary } from "src/modules/skill/types/summary-skills.types";
 
-export const LUZ_SKILLS:SkillType[] = [
-    {
-      nombre: 'Llamada Relámpago',
-      daño: {min:0,max:0},
-      lv: 0,
-      tipo_daño: 'ap',
-      cd: 15,
-      bonus_efecto: {
-        penetracion_habilidad:0,
-        vampirismo_hechizo: 0,
-        desmayo: 10,
-        incendio: 0,
-        retardo: 0,
-        veneno: 0,
-        sangrado: 0
-      },
-      
-      idPosition: 4,
-      type: 'Daño',
-      icon: { x: 0, y: 0 },
-      descripcion: 'Evoca un relámpago del cielo.',
-      idSkill: UNIQUE_ID_SKILLS.LLAMADA_RELAMPAGO,
+
+export const LUZ_SKILLS: SkillSummary[] = [
+  {
+    type: 'damage',
+    mana: {type: 'instant',amount: 0},
+    weaponRestricted: ['campana','fan'],
+    description: 'Evoca un relámpago del cielo.',
+    id: UNIQUE_ID_SKILLS.LLAMADA_RELAMPAGO,
+  },
+  {
+
+    type: 'damage',
+    mana: {type: 'instant',amount: 0},
+    weaponRestricted: ['campana','fan'],
+    description: 'Canaliza tu arma para generar un ataque con relámpagos.',
+    id: UNIQUE_ID_SKILLS.TIRO_RELAMPAGO,
+  },
+  {
+    type: 'damage',
+    mana: {type: 'instant',amount: 0},
+    weaponRestricted: ['campana','fan'],
+    description:
+      'Convocas un relampago para dividirlo y lanzarlo al objetivo.',
+    id: UNIQUE_ID_SKILLS.GARRA_RELAMPAGO,
+  },
+  {
+
+    type: 'heal',
+    mana: {type: 'instant',amount: 0},
+    weaponRestricted: ['campana','fan'],
+    description: 'Cura las heridas con la ayuda de la luz.',
+    id: UNIQUE_ID_SKILLS.CURACION,
+  },
+  {
+    type: 'aura',
+    mana: {type: 'instant',amount: 0},
+    description:
+      'Obten el poder del viento e incrementa tu velocidad de movimiento y de hechizo.',
+    id: UNIQUE_ID_SKILLS.REMOLINOS,
+    duration: {
+      turns:1,
+      type: "turns"
     },
-    {
-      nombre: 'Tiro Relámpago',
-      daño: {min:0,max:0},
-      lv: 0,
-      tipo_daño: 'ap',
-      cd: 7,
-      bonus_efecto: {
-        penetracion_habilidad:0,
-        vampirismo_hechizo: 0,
-        desmayo: 0,
-        incendio: 0,
-        retardo: 0,
-        veneno: 0,
-        sangrado: 0
-      },
-      
-      idPosition: 1,
-      type: 'Daño',
-      icon: { x: 0, y: 0 },
-      descripcion: 'Canaliza tu arma para generar un ataque con relámpagos.',
-      idSkill: UNIQUE_ID_SKILLS.TIRO_RELAMPAGO,
+    tags: ['aura','defensive']
+  },
+  {
+    type: 'aura',
+    mana: {type: 'instant',amount: 0},
+    description: 'Obten AD gracias al poder de la Luz.',
+    id: UNIQUE_ID_SKILLS.ATAQUE,
+    duration: {
+      turns:1,
+      type: "turns"
     },
-    {
-      nombre: 'Garra Relámpago',
-      daño: {min:0,max:0},
-      lv: 0,
-      tipo_daño: 'ap',
-      cd: 10,
-      bonus_efecto: {
-        penetracion_habilidad:0,
-        vampirismo_hechizo: 0,
-        desmayo: 0,
-        incendio: 0,
-        retardo: 0,
-        veneno: 0,
-        sangrado: 0
-      },   
-      idPosition: 2,
-      type: 'Daño',
-      icon: { x: 0, y: 0 },
-      descripcion:
-        'Convocas un relampago para dividirlo y lanzarlo al objetivo.',
-      idSkill: UNIQUE_ID_SKILLS.GARRA_RELAMPAGO,
-    },
-    {
-      nombre: 'Curación',
-      daño: {min:500, max:600},
-      lv: 0,
-      tipo_daño: 'ap',
-      cd: 10,
-      bonus_efecto: {
-        penetracion_habilidad:0,
-        vampirismo_hechizo: 0,
-        desmayo: 0,
-        incendio: 0,
-        retardo: 0,
-        veneno: 0,
-        sangrado: 0
-      },
-      
-      idPosition: 5,
-      type: 'Daño',
-      icon: { x: 0, y: 0 },
-      descripcion: 'Cura las heridas con la ayuda de la luz.',
-      idSkill: UNIQUE_ID_SKILLS.CURACION,
-    },
-    {
-      nombre: 'Remolinos',
-      lv: 0,
-      buffos: {
-        vm: 0,
-        vh: 0,
-      },
-      idPosition: 3,
-      type: 'Aura',
-      icon: { x: 0, y: 0 },
-      descripcion:
-        'Obten el poder del viento e incrementa tu velocidad de movimiento y de hechizo.',
-      idSkill: UNIQUE_ID_SKILLS.REMOLINOS,
-    },
-    {
-      nombre: 'Ataque',
-      lv: 0,
-      buffos: {
-        ad: 0,
-      },
-      idPosition: 6,
-      type: 'Aura',
-      icon: { x: 0, y: 0 },
-      descripcion: 'Obten AD gracias al poder de la Luz.',
-      idSkill: UNIQUE_ID_SKILLS.ATAQUE,
-    },
-  ]
+    tags: ['aura','offensive']
+  },
+]

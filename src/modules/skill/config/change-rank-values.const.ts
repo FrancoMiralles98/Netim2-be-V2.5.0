@@ -1,4 +1,4 @@
-import { MasteryLvRank } from "../types/props/skill-lv-rank.types";
+import { MasteryLvRank } from "netim2-shared";
 
 /**
  * Define la transición automática entre rangos de mastery de una skill.

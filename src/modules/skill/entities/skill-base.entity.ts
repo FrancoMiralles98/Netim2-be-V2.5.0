@@ -1,13 +1,10 @@
 import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { CHANGE_MASTERY_RANK_LV_VALUES } from "../config/change-rank-values.const";
-import { ICON_POSITION_X, ICON_POSITION_Y } from "../config/icon-position.const";
-import { BaseSkill } from "../types/props/base-skill.type";
-import { MasteryLvRank } from "../types/props/skill-lv-rank.types";
 import { ALL_SKILLS_NAMES } from "../const/skillsNames";
-import { NamesByTierMasteryLv } from "../types/const/skills-names.type";
-import { LetterMasteryLv } from "../types/config/letter-mastery-lv.type";
+import { LetterMasteryLv, MasteryLvRank, SkillBase } from "netim2-shared";
+import { SkillNamesByGrade } from "../types/skills-names.type";
 
-export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
+export abstract class BaseSkillEntity<T extends SkillBase = SkillBase> {
     protected props: T
 
     constructor(props: T) {
@@ -15,7 +12,7 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
     }
 
     get idSkill(): number {
-        return this.props.idSkill
+        return this.props.id
     }
 
     get lv(): number | MasteryLvRank {
@@ -26,28 +23,7 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
         this.props.lv = this.getNextLv(this.props.lv)
     }
 
-    /**
-     * @description - Obtiene las coordenadas en el spritesheet para el icono de una skill
-     * según su idPosition y nivel.
-     * @note - para saber mas el porque de calcular las posiciones del icono de las skills
-     * {@link ICON_POSITION_Y} {@link ICON_POSITION_X}
-     */
-    updatedIconPosition(): void {
-        const ejeY = ICON_POSITION_Y[this.props.idPosition] ?? 0
-        const groupOfPosition = this.props.idPosition <= 3 ? 3 : 6
-
-        /*en el eje X, para saber su coordenada solo necesitamos si es un numero o la primera letra 
-        si la habilidad esta masterizada */
-        const categoryOfLvToUse: LetterMasteryLv | 'N' = typeof this.props.lv === "number"
-            ? 'N'
-            : this.props.lv.charAt(0) as LetterMasteryLv
-
-        const ejeX = ICON_POSITION_X[groupOfPosition][categoryOfLvToUse] ?? 0
-
-        this.props.icon = { x: ejeX, y: ejeY }
-    }
-
-    /**
+/**
 * Actualiza el nombre de la skill segun el nivel de maestría actual de la skill
 *
 * Busca la lista de nombres disponibles para la especialidad indicada
@@ -59,10 +35,10 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
     updateSkillName(speciality: CharacterSpeciality) {
         const specialitySkillsNames = ALL_SKILLS_NAMES[speciality]
 
-        const skillNames = specialitySkillsNames[this.props.idSkill]
+        const skillNames = specialitySkillsNames[this.props.id]
 
         if (!skillNames) {
-            throw new Error(`No se encuentra el la lista de nombres de la skill idSkill: ${this.props.idSkill}`)
+            throw new Error(`No se encuentra el la lista de nombres de la skill id: ${this.props.id}`)
         }
 
         this.props.nombre = this.getSkillNameByMasteryTier(skillNames)
@@ -142,7 +118,7 @@ export abstract class BaseSkillEntity<T extends BaseSkill = BaseSkill> {
     *
     * @returns {string} Nombre correspondiente al tier actual de la skill.
     */
-    private getSkillNameByMasteryTier(namesByTier: NamesByTierMasteryLv) {
+    private getSkillNameByMasteryTier(namesByTier: SkillNamesByGrade) {
 
         const tierOfSkill: LetterMasteryLv | 'N' = typeof this.props === 'number'
             ? 'N'

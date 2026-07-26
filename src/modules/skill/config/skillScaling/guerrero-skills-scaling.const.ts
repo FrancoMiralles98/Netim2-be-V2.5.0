@@ -1,82 +1,96 @@
-import { StructureCharacterSkillScaling } from "../../types/config/skill-scaling.type";
-import { UNIQUE_ID_SKILLS } from "../../types/props/unique-id-skill.enum";
+import { UNIQUE_ID_SKILLS } from "netim2-shared";
+import { StructureSkillScaling } from "../../types/structureSkillScaling.types";
+import { ESCALADO_LV_DEFAULT } from "../escaladoLvDefault";
 
-export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
+export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
     Corporal: {
         [UNIQUE_ID_SKILLS.CORTE_DE_TRES_MANERAS]: {
             type: "damage",
-            cd: 12,
-            escaladoMain: { min: 0.85, max: 0.85 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ad',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 2 },
+
+                tags: ['ad', 'melee', 'sangrado', 'weapon', 'skill'],
+                escaladoAtributos: {
+                    STR: 1,
+                    VIT: 1
+                }
+            }],
+            mana: {
+                base: 1,
+                perLv: 1
             },
-            escaladoAtributos: { STR: 3, DEX: 2 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                vampirismo_hechizo: {base: 0, perLv: 0},
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 7.5, perLv: 1.5 }
-            },
-            
+            hitModifiersScaling: {
+                type: 'chance_multi_hit',
+                chancesConfig: {
+                    base: 100,
+                    per_lv: 0
+                },
+                damageMultiplierPerHitConfig: {
+                    base: 1,
+                    perLv: 0
+                },
+                hitsConfig: {
+                    base: 3,
+                    perLv: 0
+                }
+            }
         },
         [UNIQUE_ID_SKILLS.ROCIADA]: {
-            type: "damage",
-            cd: 16,
-            escaladoMain: { min: 1.0, max: 1.0 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
+            type: 'damage',
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ad',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 2 },
+
+                tags: ['ad', 'cc', 'melee', 'weapon', 'skill'],
+                escaladoAtributos: {
+                    STR: 1,
+                    DEX: 1
+                },
+                statsScaling: [{
+                    stat: 'vm',
+                    base: 1,
+                    perLv: 0.1
+                }]
+            }],
+            mana: {
+                base: 1,
+                perLv: 1
             },
-            escaladoAtributos: { STR: 1, DEX: 3 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                vampirismo_hechizo: {base: 0, perLv: 0},
-                desmayo: { base: 100, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
+            statusEffectScaling: {
+                desmayo: { base: 60, perLv: 1 }
             },
-            
         },
         [UNIQUE_ID_SKILLS.GIRO_DE_ESPADA]: {
             type: "damage",
-            cd: 15,
-            escaladoMain: { min: 1.20, max: 1.33 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
-            },
-            escaladoAtributos: { STR: 3, DEX: 1 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                vampirismo_hechizo: {base: 0, perLv: 0},
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ad',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 1 },
+
+                tags: ['ad', 'melee', 'skill'],
+                escaladoAtributos: {
+                    VIT: 1,
+                    STR: 1,
+                    DEX: 1
+                }
+            }],
+            mana: { base: 1, perLv: 1 },
         },
         [UNIQUE_ID_SKILLS.AURA_DE_ESPADA]: {
             type: "aura",
+            cd: { onDeactivate: 1 },
+            duration: { base: 1, perLv: 1 },
+            mana: { base: 1, perLv: 1 },
             escaladoAtributos: { STR: 1.5 },
             escaladoBuffos: {
                 media: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 1.05,
                         basicMulti: 1,
@@ -84,15 +98,19 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                         granMasterMulti: 1.2,
                         perfectMulti: 1.3,
                     },
-                    scaleWithAtribute: true
+                    scaleWithAttribute: true
                 },
             },
         },
         [UNIQUE_ID_SKILLS.BERSEK]: {
             type: "aura",
+            cd: { onDeactivate: 1 },
+            duration: { base: 1, perLv: 1 },
+            mana: { base: 1, perLv: 1 },
             escaladoAtributos: {},
             escaladoBuffos: {
                 va: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 1,
                         basicMulti: 1,
@@ -100,9 +118,10 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                         granMasterMulti: 1,
                         perfectMulti: 1,
                     },
-                    scaleWithAtribute: false
+                    scaleWithAttribute: false
                 },
                 vm: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 1,
                         basicMulti: 1,
@@ -110,119 +129,85 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                         granMasterMulti: 1,
                         perfectMulti: 1,
                     },
-                    scaleWithAtribute: false
-                },
-                damage_taken: {
-                    escaladoLv: {
-                        perLv: 0.54,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAtribute: false
+                    scaleWithAttribute: false
                 },
             },
         },
     },
     Mental: {
         [UNIQUE_ID_SKILLS.PULSO_ESPIRITUAL]: {
-            type: "damage",
-            cd: 17,
-            escaladoMain: { min: 1.04, max: 1.16 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
+            type: 'damage',
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ad',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 1 },
+
+                tags: ['ad', 'melee', 'weapon', 'skill'],
+                escaladoAtributos: { STR: 1, VIT: 1, INT: 1 }
+            }],
+            mana: { base: 1, perLv: 1 },
+            mechanicsEffectScaling: {
+                penetracion_habilidad: { base: 1, perLv: 1 }
             },
-            escaladoAtributos: { STR: 2, VIT: 6 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                vampirismo_hechizo: {base: 0, perLv: 0},
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            
         },
         [UNIQUE_ID_SKILLS.GOLPE]: {
-            type: "damage",
-            cd: 13,
-            escaladoMain: { min: 0.83, max: 1.03 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
+            type: 'damage',
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ad',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 1 },
+
+                tags: ['ad', 'melee', 'weapon', 'skill'],
+                escaladoAtributos: { STR: 1, DEX: 1 }
+            }],
+            mana: { base: 1, perLv: 1 },
+            statusEffectScaling: {
+                retardo: { base: 10, perLv: 1 }
             },
-            escaladoAtributos: { STR: 4, VIT: 2 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                vampirismo_hechizo: {base: 0, perLv: 0},
-                desmayo: { base: 0, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            
         },
         [UNIQUE_ID_SKILLS.TOCON]: {
-            type: "damage",
-            cd: 18,
-            escaladoMain: { min: 0.83, max: 0.87 },
-            escaladoLv: {
-                perLv: 1.5,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
+            type: 'damage',
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ad',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 1 },
+
+                tags: ['ad', 'melee', 'weapon', 'skill'],
+                escaladoAtributos: { STR: 1, VIT: 1 }
+            }],
+            mana: { base: 1, perLv: 1 },
+            statusEffectScaling: {
+                desmayo: { base: 10, perLv: 1 }
             },
-            escaladoAtributos: { STR: 2, VIT: 2, DEX: 2 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                vampirismo_hechizo: {base: 0, perLv: 0},
-                desmayo: { base: 15, perLv: 1 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            
         },
         [UNIQUE_ID_SKILLS.GOLPE_DE_ESPADA]: {
-            type: "damage",
-            cd: 14,
-            escaladoMain: { min: 0.70, max: 0.80 },
-            escaladoLv: {
-                perLv: 1.50,
-                basicMulti: 2,
-                masterMulti: 4,
-                granMasterMulti: 6,
-                perfectMulti: 8
+            type: 'damage',
+            cd: { onActivate: 1 },
+            components: [{
+                damageType: 'ap',
+                escaladoLv: ESCALADO_LV_DEFAULT,
+                escaladoMain: { min: 1, max: 1 },
+
+                tags: ['ap', 'ranged', 'cc', 'weapon', 'skill'],
+                escaladoAtributos: { INT: 1, VIT: 1 }
+            }],
+            mana: { base: 1, perLv: 1 },
+            statusEffectScaling: {
+                desmayo: { base: 100, perLv: 0 }
             },
-            escaladoAtributos: { STR: 2, DEX: 2, INT: 4 },
-            escaladoEfecto: {
-                penetracion_habilidad: { base: 0, perLv: 0 },
-                vampirismo_hechizo: {base: 0, perLv: 0},
-                desmayo: { base: 100, perLv: 0 },
-                veneno: { base: 0, perLv: 0 },
-                incendio: { base: 0, perLv: 0 },
-                retardo: { base: 0, perLv: 0 },
-                sangrado: { base: 0, perLv: 0 }
-            },
-            
         },
         [UNIQUE_ID_SKILLS.CUERPO_FUERTE]: {
             type: "aura",
+            cd: { onDeactivate: 1 },
+            duration: { base: 1, perLv: 1 },
+            mana: { base: 1, perLv: 1 },
             escaladoAtributos: { VIT: 1.5, STR: 0.5 },
             escaladoBuffos: {
                 def_veneno: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 1,
                         basicMulti: 1,
@@ -230,9 +215,21 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                         granMasterMulti: 1,
                         perfectMulti: 1,
                     },
-                    scaleWithAtribute: false
+                    scaleWithAttribute: false
+                },
+                def_electrico: {
+                    base: 1,
+                    escaladoLv: {
+                        perLv: 1,
+                        basicMulti: 1,
+                        masterMulti: 1,
+                        granMasterMulti: 1,
+                        perfectMulti: 1,
+                    },
+                    scaleWithAttribute: false
                 },
                 def_sangrado: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 1,
                         basicMulti: 1,
@@ -240,9 +237,10 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                         granMasterMulti: 1,
                         perfectMulti: 1,
                     },
-                    scaleWithAtribute: false
+                    scaleWithAttribute: false
                 },
                 def_incendio: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 1,
                         basicMulti: 1,
@@ -250,9 +248,10 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                         granMasterMulti: 1,
                         perfectMulti: 1,
                     },
-                    scaleWithAtribute: false
+                    scaleWithAttribute: false
                 },
                 regen_hp: {
+                    base: 1,
                     escaladoLv: {
                         perLv: 0.2,
                         basicMulti: 1.5,
@@ -260,7 +259,7 @@ export const GUERRERO_SKILLS_SCALING: StructureCharacterSkillScaling = {
                         granMasterMulti: 4.5,
                         perfectMulti: 6,
                     },
-                    scaleWithAtribute: true
+                    scaleWithAttribute: true
                 },
             },
         },
