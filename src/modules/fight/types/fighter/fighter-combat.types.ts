@@ -1,7 +1,10 @@
 import { AllTargetType, SkillType, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { TypeWeapon } from "netim2-shared/dist/item/entities-props/equip.type";
 import { FighterBaseStats } from "./fight-base-stats.type";
-import { FighterCombatStatistics } from "./statistics/fighter-combat-statistics.type";
+import { ActiveAuraEntity } from "../../entities/active-aura.entity";
+import { ActiveBuffEntity } from "../../entities/active-buff.entity";
+import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
+import { FightCombatStatisticsTracker } from "../../statistics/fight-combat-statistics.tracker";
 
 export interface CreateFighterCombatProps {
     id: string;
@@ -32,7 +35,7 @@ export interface FighterCombatProps {
     activeAuras: Map<string, ActiveAuraEntity>;
     activeBuffs: Map<string, ActiveBuffEntity>;
 
-    statistics: FighterCombatStatistics;
+    statistics: FightCombatStatisticsTracker;
 
     statsDirty: boolean;
     alive: boolean;

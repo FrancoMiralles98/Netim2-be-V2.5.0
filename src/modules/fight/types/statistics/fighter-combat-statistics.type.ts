@@ -5,7 +5,7 @@ import { HealingStatistics } from "./healing-statistics.types";
 import { HitStatistics } from "./hit-statistics.types";
 import { ResourceStatistics } from "./resource-statistics.types";
 
-export interface FighterCombatStatistics {
+export interface FighterCombatStatisticsState {
     damage: DamageStatistics;
     healing: HealingStatistics;
     resources: ResourceStatistics;

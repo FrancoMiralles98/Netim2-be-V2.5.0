@@ -9,6 +9,7 @@ export interface EffectStatistics {
         Record<StatusEffectsKeys, number>
     >;
 
+    //En caso de retardo y desmayo que podes evitar ese efecto, ese valor se acumula aca
     resistedByType: Partial<
         Record<StatusEffectsKeys, number>
     >;

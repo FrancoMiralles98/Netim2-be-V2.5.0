@@ -1,11 +1,11 @@
 import { DamageType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 
 export interface DamageStatistics {
-    dealt: DamageStatistics
+    dealt: DamageDealStatistics
     mitigated: DamageMitigationStatistics;
 }
 
-export interface DamageStatistics {
+export interface DamageDealStatistics {
     total: number;
 
     byDamageType: Record<DamageType, number>;
@@ -33,8 +33,7 @@ export interface DamageSourceStatistics {
 
 export interface SkillDamageStatistics {
     total: number;
-    periodicFromEffects: number;
-    totalAttributed: number;
+    damageType: DamageType;
 }
 
 export interface DamageMitigationStatistics {
@@ -42,5 +41,5 @@ export interface DamageMitigationStatistics {
 
     byDamageType: Record<DamageType, number>;
 
-    byStatusEffect: Record<StatusEffectsKeys,number>;
+    byStatusEffect: Partial<Record<StatusEffectsKeys,number>>
 }

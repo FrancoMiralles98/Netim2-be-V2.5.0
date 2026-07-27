@@ -3,6 +3,7 @@ export interface HitStatistics {
     successful: number;
     missed: number;
     dodged: number; //ataques que has esquivado
+    blocked: number; //ataques que has bloqueado
 
     critical: number;
     penetrating: number;
