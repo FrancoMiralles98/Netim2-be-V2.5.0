@@ -5,17 +5,17 @@ export type ActiveStatusEffectData =
     | SlowEffectData
     | ElectricEffectData
     | StunEffectData
-    | HealingReductionEffectData
 
 export interface PoisonEffectData {
     type: 'veneno';
     damagePerTick: number;
+    healReduction: number
 }
 
 export interface FireEffectData {
     type: 'incendio';
     damagePerTick: number;
-    extraBaseDamagePercentage: number;
+    extraDamagePerRefresh: number;
 }
 
 export interface BleedingEffectData {
@@ -39,10 +39,4 @@ export interface SlowEffectData {
 
 export interface StunEffectData {
     type: 'desmayo';
-}
-
-//Cuando se aplica veneno se tiene que generar otra entidad que añada este efecto de reduccion de curaciones
-export interface HealingReductionEffectData {
-    type: 'healing_reduction';
-    reductionPercentage: number;
 }

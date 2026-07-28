@@ -56,6 +56,8 @@ export interface FightRuntimeState {
     fighters: Map<string, FighterCombatEntity>;
 
     initiativeResults: FighterInitiativeResult[];
+    aliveFighters: string[];
+    defeatedFighters: string[];
     turnOrder: string[];
 
     currentTurnIndex: number;

@@ -1,10 +1,12 @@
+import { StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
-import { CreateFighterCombatProps, FighterCombatProps } from "../types/fighter/fighter-combat.types";
+import { CreateFighterCombatProps, FighterCombatProps, SkillCooldownState } from "../types/fighter/fighter-combat.types";
 import { ActiveAuraEntity } from "./active-aura.entity";
 import { ActiveBuffEntity } from "./active-buff.entity";
 import { ActiveStatusEffectEntity } from "./active-status-effect.entity";
+import { SkillCooldownReductionResult } from "../types/fighter/cooldown.types";
 
 export class FighterCombatEntity {
     private props: FighterCombatProps;
@@ -36,6 +38,7 @@ export class FighterCombatEntity {
             activeEffects: new Map(),
             activeAuras: new Map(),
             activeBuffs: new Map(),
+            statModifiers: new Map(),
 
             statistics: new FightCombatStatisticsTracker(),
 
@@ -50,6 +53,14 @@ export class FighterCombatEntity {
 
     get id(): string {
         return this.props.id
+    }
+
+    get baseStats(): FighterBaseStats {
+        return this.props.baseStats
+    }
+
+    get statistics(): FightCombatStatisticsTracker {
+        return this.props.statistics;
     }
 
     markStatsDirty(): void {
@@ -74,6 +85,45 @@ export class FighterCombatEntity {
                 buff => buff.getStatModifiers()
             )
         ];
+    }
+
+    addStatModifiers(modifiers: readonly CombatStatModifier[]): void {
+        if (modifiers.length === 0) {
+            return;
+        }
+
+        for (const modifier of modifiers) {
+            if (this.props.statModifiers.has(modifier.id)) {
+                throw new Error(`Combat stat modifier ${modifier.id} is already active.`);
+            }
+
+            this.props.statModifiers.set(modifier.id, modifier);
+        }
+
+        this.markStatsDirty();
+    }
+
+    getStatModifiers(): readonly CombatStatModifier[] {
+        return Array.from(this.props.statModifiers.values());
+    }
+
+    removeStatModifiersByAuraInstance(auraInstanceId: string): void {
+        let removedAny = false;
+
+        for (const [modifierId, modifier] of this.props.statModifiers) {
+            if (
+                modifier.source.type === 'aura' &&
+                modifier.source.instanceId ===
+                auraInstanceId
+            ) {
+                this.props.statModifiers.delete(modifierId);
+                removedAny = true;
+            }
+        }
+
+        if (removedAny) {
+            this.markStatsDirty();
+        }
     }
 
     updateEffectiveStats(stats: FighterBaseStats): void {
@@ -191,12 +241,118 @@ export class FighterCombatEntity {
         return [...this.props.activeAuras.values()];
     }
 
+    getActiveAuraBySkillId(id: UNIQUE_ID_SKILLS): ActiveAuraEntity {
+        const activeAuras = [...this.props.activeAuras.values()];
+        const aura = activeAuras.find(actieAura => actieAura.getSkillId() === id)
+        if (!aura) {
+            throw new Error('Active Aura not found')
+        }
+        return aura
+    }
+
+    hasActiveAuraBySkillId(id: UNIQUE_ID_SKILLS): boolean {
+        const activeAuras = [...this.props.activeAuras.values()];
+        return activeAuras.some(actieAura => actieAura.getSkillId() === id)
+    }
+
     getActiveStatusEffects(): readonly ActiveStatusEffectEntity[] {
         return [...this.props.activeEffects.values()];
     }
 
+    removeActiveStatusEffect(instanceId: string): ActiveStatusEffectEntity | undefined {
+        const effect = this.props.activeEffects.get(instanceId);
+
+        if (!effect) {
+            return undefined;
+        }
+
+        this.props.activeEffects.delete(instanceId);
+
+        return effect;
+    }
+
     getActiveBuffs(): readonly ActiveBuffEntity[] {
         return [...this.props.activeBuffs.values()];
+    }
+
+    findActiveStatusEffect(effectId: StatusEffectsKeys): ActiveStatusEffectEntity | undefined {
+        return this.getActiveStatusEffects().find(
+            effect => effect.getEffectId() === effectId && effect.isActive());
+    }
+
+    startSkillCooldown(skillId: UNIQUE_ID_SKILLS, turns: number): SkillCooldownState {
+        const normalizedTurns = Math.max(0, Math.floor(turns));
+
+        if (normalizedTurns === 0) {
+            this.props.cooldowns.delete(skillId);
+
+            return {
+                initialTurns: 0,
+                remainingTurns: 0
+            };
+        }
+
+        const cooldown: SkillCooldownState = {
+            initialTurns: normalizedTurns,
+            remainingTurns: normalizedTurns
+        };
+
+        this.props.cooldowns.set(skillId, cooldown);
+
+        return { ...cooldown };
+    }
+
+    getRegenerationValues(): { hp: number, mana: number } {
+        return {
+            hp: this.props.effectiveStats.general.regenHp,
+            mana: this.props.effectiveStats.general.regenMana
+        }
+    }
+
+    isSkillOnCooldown(skillId: UNIQUE_ID_SKILLS): boolean {
+        return (this.props.cooldowns.get(skillId)?.remainingTurns ?? 0) > 0;
+    }
+
+    getSkillCooldown(skillId: UNIQUE_ID_SKILLS): Readonly<SkillCooldownState> | undefined {
+        const cooldown =
+            this.props.cooldowns.get(skillId);
+
+        return cooldown ? { ...cooldown } : undefined;
+    }
+
+    getSkillRemainingCooldown(skillId: UNIQUE_ID_SKILLS): number {
+        return (this.props.cooldowns.get(skillId)?.remainingTurns ?? 0);
+    }
+
+    reduceSkillCooldowns(): SkillCooldownReductionResult[] {
+        const results: SkillCooldownReductionResult[] = [];
+
+        for (const [skillId, cooldown] of this.props.cooldowns) {
+            const previousTurns = cooldown.remainingTurns;
+
+            const remainingTurns = Math.max(0, previousTurns - 1);
+
+            results.push({
+                skillId,
+                initialTurns: cooldown.initialTurns,
+                previousTurns,
+                remainingTurns,
+                finished: remainingTurns === 0
+            });
+
+            if (remainingTurns === 0) {
+                this.props.cooldowns.delete(skillId);
+                continue;
+            }
+
+            /*
+             * Se conserva initialTurns y solamente
+             * se actualiza remainingTurns.
+             */
+            cooldown.remainingTurns = remainingTurns;
+        }
+
+        return results;
     }
 
 

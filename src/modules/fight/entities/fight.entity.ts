@@ -24,7 +24,8 @@ export class FightEntity {
 
             initiativeResults: [],
             turnOrder: [],
-
+            aliveFighters: props.fighters.map(fighter => fighter.id),
+            defeatedFighters: [],
             currentTurnIndex: -1,
             currentActorId: undefined,
 
@@ -125,6 +126,18 @@ export class FightEntity {
         this.state.initiativeResults = orderedResults;
 
         this.state.turnOrder = orderedResults.map(result => result.fighterId);
+    }
+
+    getSingleOpponentOf(fighterId: string): FighterCombatEntity {
+        const fightersIds = this.getAliveOpponentsIdsOf(fighterId)
+        if (fightersIds.length < 1) {
+            throw new Error(`Expected exactly one alive opponent for fighter ${fighterId}.`);
+        }
+        return this.getFighter(fightersIds[0])
+    }
+
+    private getAliveOpponentsIdsOf(fighterId: string): string[] {
+        return this.state.aliveFighters.filter(ids => ids !== fighterId)
     }
 
     start(): void {

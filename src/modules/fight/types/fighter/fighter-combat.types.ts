@@ -5,6 +5,7 @@ import { ActiveAuraEntity } from "../../entities/active-aura.entity";
 import { ActiveBuffEntity } from "../../entities/active-buff.entity";
 import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
 import { FightCombatStatisticsTracker } from "../../statistics/fight-combat-statistics.tracker";
+import { CombatStatModifier } from "../activeAura/active-aura.type";
 
 export interface CreateFighterCombatProps {
     id: string;
@@ -34,6 +35,7 @@ export interface FighterCombatProps {
     activeEffects: Map<string, ActiveStatusEffectEntity>;
     activeAuras: Map<string, ActiveAuraEntity>;
     activeBuffs: Map<string, ActiveBuffEntity>;
+    statModifiers: Map<string,CombatStatModifier>;
 
     statistics: FightCombatStatisticsTracker;
 

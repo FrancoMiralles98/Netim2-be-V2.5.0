@@ -35,6 +35,10 @@ export class ActiveAuraEntity {
         return this.instanceId;
     }
 
+    getSourceFighterId(): string {
+        return this.sourceFighterId
+    }
+
     getSkillId(): UNIQUE_ID_SKILLS {
         return this.skill.id;
     }

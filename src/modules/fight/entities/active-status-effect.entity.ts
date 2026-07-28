@@ -3,6 +3,7 @@ import { CreateActiveStatusEffectProps } from "../types/statusEffects/active-sta
 import { ActiveDurationEntity } from "./active-duration.entity";
 import { ActiveStatusEffectData } from "../types/statusEffects/effect-data.types";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
+import { DeactivateStatusEffectInput } from "../services/processors/status-effect-processor.types";
 
 export class ActiveStatusEffectEntity {
     private readonly instanceId: string;
@@ -47,8 +48,13 @@ export class ActiveStatusEffectEntity {
         this.data = props.data;
     }
 
+
     getInstanceId(): string {
         return this.instanceId;
+    }
+
+    get Effectdata(): ActiveStatusEffectData {
+        return this.data
     }
 
     getEffectId(): StatusEffectsKeys {
@@ -71,6 +77,18 @@ export class ActiveStatusEffectEntity {
         return this.stacks;
     }
 
+    consumeTurn(): void {
+        if (this.duration.getRemainingTurns() === 0) {
+            return;
+        }
+
+        this.duration.advanceTurn()
+    }
+
+    isExpired(): boolean {
+        return this.duration.isExpired()
+    }
+
 
     isActive(): boolean {
         return this.active;
@@ -82,6 +100,22 @@ export class ActiveStatusEffectEntity {
 
     getStatModifiers(): readonly CombatStatModifier[] {
         return this.statsModifier;
+    }
+
+    deactivate(input: DeactivateStatusEffectInput): void {
+        const { owner, effect } = input;
+
+        if (!effect.isActive()) {
+            return;
+        }
+
+        if (effect.getTargetFighterId() !== owner.id) {
+            throw new Error(`Status effect ${effect.getInstanceId()} does not belong to fighter ${owner.id}.`);
+        }
+
+        owner.removeStatModifiersByAuraInstance(effect.getInstanceId());
+
+        owner.removeActiveStatusEffect(effect.getInstanceId());
     }
 
     registerTick(): void {
