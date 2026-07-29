@@ -2,9 +2,9 @@ export type ActiveStatusEffectData =
     | PoisonEffectData
     | FireEffectData
     | BleedingEffectData
-    | SlowEffectData
+    | RetardoEffectData
     | ElectricEffectData
-    | StunEffectData
+    | DesmayoEffectData
 
 export interface PoisonEffectData {
     type: 'veneno';
@@ -30,13 +30,15 @@ export interface ElectricEffectData {
     extraDamageToApplyStacks: number;
 }
 
-export interface SlowEffectData {
+export interface RetardoEffectData {
     type: 'retardo';
+    preventAction: boolean;
     VA_Reduction: number; //velocidad de ataque reducido (%)
     MV_Reduction: number; //velocidad de movimiento reducido (%)
     VH_Reduction: number; //velocidad de hechizo reducido (%)
 }
 
-export interface StunEffectData {
+export interface DesmayoEffectData {
     type: 'desmayo';
+    preventAction: boolean;
 }

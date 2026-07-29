@@ -39,6 +39,14 @@ export class ActiveBuffEntity {
         return this.active;
     }
 
+    getBuffId(): UNIQUE_ID_SKILLS {
+        return this.skillId
+    }
+
+    getInstanceId(): string {
+        return this.instanceId
+    }
+
     supportsSkill(skillId: UNIQUE_ID_SKILLS): boolean {
         return this.effects.some(effect => {
             if (

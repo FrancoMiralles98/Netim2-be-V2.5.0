@@ -85,6 +85,10 @@ export class ActiveStatusEffectEntity {
         this.duration.advanceTurn()
     }
 
+    getRemainingTurns(): number | undefined {
+        return this.duration.getRemainingTurns()
+    }
+
     isExpired(): boolean {
         return this.duration.isExpired()
     }

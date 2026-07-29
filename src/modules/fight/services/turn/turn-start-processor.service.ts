@@ -4,6 +4,7 @@ import { CooldownProcessorService } from "../processors/cooldown.processor.servi
 import { RegenerationProcessorService } from "../processors/regeneration-processor.service";
 import { AuraUnkeepProcessorService } from "../processors/aura-unkeep-processor.service";
 import { StatusEffectProcessorService } from "../processors/status-effect-processor.service";
+import { ControlEffectProcessorService } from "../processors/control-effect-processor.service";
 
 @Injectable()
 export class TurnStartProcessorSerivce {
@@ -12,16 +13,20 @@ export class TurnStartProcessorSerivce {
         private regenerationProcessorService: RegenerationProcessorService,
         private auraUnkeepProcessorService: AuraUnkeepProcessorService,
         private statusEffectProcessor: StatusEffectProcessorService,
-    ){}
+        private controlEffectProcessor: ControlEffectProcessorService,
+    ) { }
 
-    process(context: TurnContext) {
-       this.cooldownProcessorService.processTurnStart(context)
-       this.regenerationProcessorService.processTurnStart(context)
-       this.auraUnkeepProcessorService.process(context.actor,context)
-       this.statusEffectProcessor.process(context) //falta resolver daños y duracion
-        /**
-         * falta los status de CC (desmayo y retardo)
-         * y verificar si sigue vivo y si puede realizar acciones
-         */
+    process(context: TurnContext): { canAct: boolean } {
+        this.cooldownProcessorService.processTurnStart(context)
+        this.regenerationProcessorService.processTurnStart(context)
+        this.auraUnkeepProcessorService.process(context.actor, context)
+        this.statusEffectProcessor.process(context) //falta resolver daños y duracion y verificar si sigue vivo y si puede realizar acciones
+        const controlResult = this.controlEffectProcessor.process(context)
+        if (!controlResult.canAct) {
+            return {
+                canAct: false
+            }
+        }
+        return { canAct: true }
     }
 }

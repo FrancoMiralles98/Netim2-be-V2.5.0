@@ -1,5 +1,5 @@
 import { StatusEffectsKeys } from "netim2-shared";
-import { ActiveStatusEffectData, BleedingEffectData, ElectricEffectData, FireEffectData, PoisonEffectData } from "../../types/statusEffects/effect-data.types";
+import { ActiveStatusEffectData, BleedingEffectData, DesmayoEffectData, ElectricEffectData, FireEffectData, PoisonEffectData, RetardoEffectData } from "../../types/statusEffects/effect-data.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
 
@@ -25,11 +25,24 @@ export interface PeriodicEffectTickResult {
 }
 
 export type PeriodicEffect = PoisonEffectData | FireEffectData | BleedingEffectData | ElectricEffectData
+export type ControlEffect = DesmayoEffectData
+export type TimedStatModifier = RetardoEffectData
 
 export function isPeriodicDamageEffectData(data: ActiveStatusEffectData
 ): data is PeriodicEffect {
     return 'damagePerTick' in data;
 }
+
+export function isControlDamageEffectData(data: ActiveStatusEffectData
+): data is ControlEffect {
+    return data.type === 'desmayo'
+}
+
+export function isTimedStatModifierEffectData(data: ActiveStatusEffectData
+): data is TimedStatModifier {
+    return data.type === 'retardo'
+}
+
 
 
 export interface PeriodicEffectTickResult {

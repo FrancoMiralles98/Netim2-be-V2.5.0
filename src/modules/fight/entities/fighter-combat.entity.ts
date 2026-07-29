@@ -1,8 +1,8 @@
-import { StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { SkillAura, SkillBuff, SkillDamage, SkillHeal, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
-import { CreateFighterCombatProps, FighterCombatProps, SkillCooldownState } from "../types/fighter/fighter-combat.types";
+import { CreateFighterCombatProps, FighterCombatProps, FighterResources, SkillCooldownState } from "../types/fighter/fighter-combat.types";
 import { ActiveAuraEntity } from "./active-aura.entity";
 import { ActiveBuffEntity } from "./active-buff.entity";
 import { ActiveStatusEffectEntity } from "./active-status-effect.entity";
@@ -51,6 +51,8 @@ export class FighterCombatEntity {
         return new FighterCombatEntity(props)
     }
 
+
+
     get id(): string {
         return this.props.id
     }
@@ -59,12 +61,32 @@ export class FighterCombatEntity {
         return this.props.baseStats
     }
 
+    get resources(): FighterResources {
+        return this.props.resources
+    }
+
     get statistics(): FightCombatStatisticsTracker {
         return this.props.statistics;
     }
 
     markStatsDirty(): void {
         this.props.statsDirty = true;
+    }
+
+    getSkillsAura(): SkillAura[] {
+        return this.props.skills.filter((skill) => skill.type === 'aura');
+    }
+
+    getSkillsBuff(): SkillBuff[] {
+        return this.props.skills.filter((skill) => skill.type === 'buff');
+    }
+
+    getSkillsDamage(): SkillDamage[] {
+        return this.props.skills.filter((skill) => skill.type === 'damage');
+    }
+
+    getSkillsHeal(): SkillHeal[] {
+        return this.props.skills.filter((skill) => skill.type === 'heal');
     }
 
     needsStatsRecalculation(): boolean {
@@ -241,6 +263,17 @@ export class FighterCombatEntity {
         return [...this.props.activeAuras.values()];
     }
 
+    getHpPercentage(): number {
+        const { current, max } =
+            this.props.resources.hp;
+
+        if (max <= 0) {
+            return 0;
+        }
+
+        return current * 100 / max;
+    }
+
     getActiveAuraBySkillId(id: UNIQUE_ID_SKILLS): ActiveAuraEntity {
         const activeAuras = [...this.props.activeAuras.values()];
         const aura = activeAuras.find(actieAura => actieAura.getSkillId() === id)
@@ -252,7 +285,12 @@ export class FighterCombatEntity {
 
     hasActiveAuraBySkillId(id: UNIQUE_ID_SKILLS): boolean {
         const activeAuras = [...this.props.activeAuras.values()];
-        return activeAuras.some(actieAura => actieAura.getSkillId() === id)
+        return activeAuras.some(actieAura => actieAura.getSkillId() === id && actieAura.isActive())
+    }
+
+    hasActiveBuffBySkillId(id: UNIQUE_ID_SKILLS): boolean {
+        const activeAuras = [...this.props.activeBuffs.values()];
+        return activeAuras.some(activeBuff => activeBuff.getBuffId() === id && activeBuff.isActive())
     }
 
     getActiveStatusEffects(): readonly ActiveStatusEffectEntity[] {
