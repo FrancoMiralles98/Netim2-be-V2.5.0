@@ -1,13 +1,15 @@
 import { UNIQUE_ID_SKILLS } from "netim2-shared";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
-import { ActiveBuffEffect, ActiveNextSkillDamageMultiplier, CreateActiveBuffProps } from "../types/activeBuff/activeBuff.type";
+import { ActiveBuffEffect, ActiveNextSkillDamageMultiplier, ConsumeBuffForSkillResult, CreateActiveBuffProps } from "../types/activeBuff/activeBuff.type";
 import { ActiveDurationEntity } from "./active-duration.entity";
+import { ActiveDurationAdvanceResult } from "../types/activeDuration/activeDuration.types";
 
 export class ActiveBuffEntity {
     private readonly instanceId: string;
     private readonly skillId: UNIQUE_ID_SKILLS;
 
     private readonly sourceFighterId: string;
+    private readonly targetFighterId: string;
 
     private readonly appliedOnTurn: number;
 
@@ -25,54 +27,91 @@ export class ActiveBuffEntity {
 
         this.sourceFighterId = props.sourceFighterId;
 
-        this.appliedOnTurn = props.appliedOnTurn;
+        this.targetFighterId = props.targetFighterId;
+
+        this.appliedOnTurn =
+            props.appliedOnTurn;
 
         this.duration = ActiveDurationEntity.create(props.duration);
 
-        this.effects = props.effects;
+        /*
+         * Se copian porque algunos efectos contienen estado
+         * mutable, como remainingUses.
+         */
+        this.effects = props.effects.map(effect => ({ ...effect }));
 
-        this.appliedModifiers = props.appliedModifiers ?? [];
+        this.appliedModifiers = [...(props.appliedModifiers ?? [])];
     }
-
 
     isActive(): boolean {
         return this.active;
     }
 
-    getBuffId(): UNIQUE_ID_SKILLS {
-        return this.skillId
-    }
-
     getInstanceId(): string {
-        return this.instanceId
+        return this.instanceId;
     }
 
-    supportsSkill(skillId: UNIQUE_ID_SKILLS): boolean {
+    getSkillId(): UNIQUE_ID_SKILLS {
+        return this.skillId;
+    }
+
+    getSourceFighterId(): string {
+        return this.sourceFighterId;
+    }
+
+    getTargetFighterId(): string {
+        return this.targetFighterId;
+    }
+
+    getAppliedOnTurn(): number {
+        return this.appliedOnTurn;
+    }
+
+    getRemainingTurns(): number | undefined {
+        return this.duration.getRemainingTurns();
+    }
+
+    hasLimitedDuration(): boolean {
+        return this.duration.hasLimitedDuration();
+    }
+
+    isDurationExpired(): boolean {
+        return this.duration.isExpired();
+    }
+
+    supportsSkill(skillId: UNIQUE_ID_SKILLS
+    ): boolean {
+        if (!this.active) {
+            return false;
+        }
+
         return this.effects.some(effect => {
-            if (
-                effect.type !==
-                'next_skill_damage_multiplier'
-            ) {
+            if (effect.type !== 'next_skill_damage_multiplier') {
                 return false;
             }
 
             return (
                 effect.remainingUses > 0 &&
-                effect.allowedSkillIds.includes(skillId)
+                effect.allowedSkillIds.includes(
+                    skillId
+                )
             );
         });
     }
 
     getSkillDamageMultiplier(skillId: UNIQUE_ID_SKILLS): number {
+        if (!this.active) {
+            return 1;
+        }
+
         return this.effects.reduce(
             (multiplier, effect) => {
                 if (
-                    effect.type ===
-                    'next_skill_damage_multiplier' &&
+                    effect.type === 'next_skill_damage_multiplier' &&
                     effect.remainingUses > 0 &&
                     effect.allowedSkillIds.includes(skillId)
                 ) {
-                    return multiplier * effect.multiplier;
+                    return (multiplier * effect.multiplier);
                 }
 
                 return multiplier;
@@ -84,8 +123,17 @@ export class ActiveBuffEntity {
     consumeForSkill(
         skillId: UNIQUE_ID_SKILLS,
         trigger: ActiveNextSkillDamageMultiplier['consumeOn']
-    ): boolean {
-        let consumed = false;
+    ): ConsumeBuffForSkillResult {
+        if (!this.active) {
+            return {
+                consumed: false,
+                consumedEffects: 0,
+                remainingUses: 0,
+                depleted: true
+            };
+        }
+
+        let consumedEffects = 0;
 
         for (const effect of this.effects) {
             if (effect.type !== 'next_skill_damage_multiplier') {
@@ -101,38 +149,85 @@ export class ActiveBuffEntity {
             }
 
             effect.remainingUses -= 1;
-            consumed = true;
+            consumedEffects += 1;
         }
 
-        if (!this.hasAvailableEffects()) {
-            this.active = false;
+        const remainingUses =
+            this.getTotalRemainingUses();
+
+        const depleted =
+            !this.hasAvailableEffects();
+
+        if (depleted) {
+            this.deactivate();
         }
 
-        return consumed;
+        return {
+            consumed: consumedEffects > 0,
+            consumedEffects,
+            remainingUses,
+            depleted
+        };
     }
 
-    advanceTurn() {
+    advanceTurn(): ActiveDurationAdvanceResult {
+        if (!this.active) {
+            return this.duration.advanceTurn();
+        }
+
         const result = this.duration.advanceTurn();
 
         if (result.expired) {
-            this.active = false;
+            this.deactivate();
         }
 
         return result;
     }
 
-
-    private hasAvailableEffects(): boolean {
-        return this.effects.some(effect => {
-            if (effect.type === 'next_skill_damage_multiplier') {
-                return effect.remainingUses > 0;
-            }
-
-            return true;
-        });
+    deactivate(): void {
+        if (!this.active) {
+            return;
+        }
+        this.active = false;
     }
 
     getStatModifiers(): readonly CombatStatModifier[] {
         return this.appliedModifiers;
+    }
+
+    hasStatModifiers(): boolean {
+        return this.appliedModifiers.length > 0;
+    }
+
+    getEffects():readonly ActiveBuffEffect[] {
+        return this.effects;
+    }
+
+    getTotalRemainingUses(): number {
+        return this.effects.reduce((total, effect) => {
+            if (effect.type === 'next_skill_damage_multiplier') {
+                return (total + effect.remainingUses);
+            }
+            return total;
+        },
+            0
+        );
+    }
+
+    private hasAvailableEffects(): boolean {
+        /*
+         * Si el buff solo contiene modificadores de stats,
+         * su vigencia depende de la duración y no de usos.
+         */
+        if (this.effects.length === 0) {
+            return true;
+        }
+
+        return this.effects.some(effect => {
+            switch (effect.type) {
+                case 'next_skill_damage_multiplier':
+                    return effect.remainingUses > 0;
+            }
+        });
     }
 }

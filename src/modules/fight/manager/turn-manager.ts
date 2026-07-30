@@ -3,11 +3,14 @@ import { TurnStartProcessorSerivce } from "../services/turn/turn-start-processor
 import { FightEntity } from "../entities/fight.entity";
 import { TurnContext } from "../types/fight/fight-context.types";
 import { CombatAction } from "../types/combatAction/combat-action.types";
+import { CombatActionSelectorService } from "../services/action/combat-action-selector.service";
+import { ActionResolution } from "../types/actionResolution/action-resolution.types";
 
 @Injectable()
 export class TurnManager {
     constructor(
-        private turnStartProcessor: TurnStartProcessorSerivce
+        private turnStartProcessor: TurnStartProcessorSerivce,
+        private combatActionSelector: CombatActionSelectorService
     ) { }
 
     executeNextTurn(fight: FightEntity) {
@@ -29,10 +32,10 @@ export class TurnManager {
         const startTurnResult = this.turnStartProcessor.process(context)
         
         let action: CombatAction | undefined
-        let resolution: any |  undefined //(type): CombatResolution
+        let resolution: ActionResolution |  undefined 
 
         if (startTurnResult.canAct) {
-
+            action = this.combatActionSelector.select(context)
         }
 
     }

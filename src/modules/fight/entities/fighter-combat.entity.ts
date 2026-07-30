@@ -1,4 +1,4 @@
-import { SkillAura, SkillBuff, SkillDamage, SkillHeal, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
@@ -87,6 +87,14 @@ export class FighterCombatEntity {
 
     getSkillsHeal(): SkillHeal[] {
         return this.props.skills.filter((skill) => skill.type === 'heal');
+    }
+
+    getSkillById(id: UNIQUE_ID_SKILLS): SkillType {
+        const skill = this.props.skills.find((skill) => skill.id === id);
+        if (!skill) {
+            throw new Error('Skill not found')
+        }
+        return skill
     }
 
     needsStatsRecalculation(): boolean {
@@ -244,17 +252,24 @@ export class FighterCombatEntity {
 
     addAura(aura: ActiveAuraEntity): void {
         if (this.props.activeAuras.has(aura.getInstanceId())) {
-            throw new Error(
-                `Aura instance ${aura.getInstanceId()} is already active`
-            );
+            throw new Error(`Aura instance ${aura.getInstanceId()} is already active`);
         }
 
-        this.props.activeAuras.set(
-            aura.getInstanceId(),
-            aura
-        );
+        this.props.activeAuras.set(aura.getInstanceId(), aura);
 
         if (aura.hasStatModifiers()) {
+            this.markStatsDirty();
+        }
+    }
+
+    addBuff(buff: ActiveBuffEntity): void {
+        if (this.props.activeBuffs.has(buff.getInstanceId())) {
+            throw new Error(`Buff instance ${buff.getInstanceId()} is already active`);
+        }
+
+        this.props.activeBuffs.set(buff.getInstanceId(), buff);
+
+        if (buff.hasStatModifiers()) {
             this.markStatsDirty();
         }
     }
@@ -264,8 +279,7 @@ export class FighterCombatEntity {
     }
 
     getHpPercentage(): number {
-        const { current, max } =
-            this.props.resources.hp;
+        const { current, max } = this.props.resources.hp;
 
         if (max <= 0) {
             return 0;
@@ -290,14 +304,14 @@ export class FighterCombatEntity {
 
     hasActiveBuffBySkillId(id: UNIQUE_ID_SKILLS): boolean {
         const activeAuras = [...this.props.activeBuffs.values()];
-        return activeAuras.some(activeBuff => activeBuff.getBuffId() === id && activeBuff.isActive())
+        return activeAuras.some(activeBuff => activeBuff.getSkillId() === id && activeBuff.isActive())
     }
 
     getActiveStatusEffects(): readonly ActiveStatusEffectEntity[] {
         return [...this.props.activeEffects.values()];
     }
 
-    removeActiveStatusEffect(instanceId: string): ActiveStatusEffectEntity | undefined {
+    removeActiveStatusEffectByIstanceId(instanceId: string): ActiveStatusEffectEntity | undefined {
         const effect = this.props.activeEffects.get(instanceId);
 
         if (!effect) {
@@ -309,8 +323,43 @@ export class FighterCombatEntity {
         return effect;
     }
 
+    removeActiveBuff(instanceId: string): ActiveBuffEntity | undefined {
+        const buff = this.props.activeBuffs.get(instanceId)
+
+        if (!buff) {
+            return undefined
+        }
+
+        this.props.activeBuffs.delete(instanceId)
+
+        return buff
+    }
+
+    removeActiveAura(instanceId: string): ActiveAuraEntity | undefined {
+        const aura = this.props.activeAuras.get(instanceId)
+
+        if (!aura) {
+            return undefined
+        }
+
+        this.props.activeAuras.delete(instanceId)
+
+        return aura
+    }
+
     getActiveBuffs(): readonly ActiveBuffEntity[] {
         return [...this.props.activeBuffs.values()];
+    }
+
+    getActiveBuffBySkillId(
+        skillId: UNIQUE_ID_SKILLS
+    ): ActiveBuffEntity | undefined {
+        for (const buff of this.props.activeBuffs.values()) {
+            if (buff.isActive() && buff.getSkillId() === skillId) {
+                return buff;
+            }
+        }
+        return undefined
     }
 
     findActiveStatusEffect(effectId: StatusEffectsKeys): ActiveStatusEffectEntity | undefined {

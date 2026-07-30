@@ -47,13 +47,11 @@ export class AuraManager {
             };
         }
 
-        owner.removeStatModifiersByAuraInstance(
-            aura.getInstanceId()
-        );
+        owner.removeStatModifiersByAuraInstance(aura.getInstanceId());
 
         aura.deactivate();
 
-        owner.removeStatModifiersByAuraInstance(aura.getInstanceId());
+        owner.removeActiveAura(aura.getInstanceId());
 
         return {
             auraInstanceId: aura.getInstanceId(),

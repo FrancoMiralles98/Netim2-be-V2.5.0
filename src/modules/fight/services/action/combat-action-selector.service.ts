@@ -2,11 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { TurnContext } from "../../types/fight/fight-context.types";
 import { CastAuraAction, CastBuffAction, CombatAction, UseDamageSkillAction, UseHealingSkillAction } from "../../types/combatAction/combat-action.types";
 import { HEALING_SKILL_HP_THRESHOLD_PERCENT } from "../../config/skill-healing.config";
-import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { SkillType } from "netim2-shared";
+import { SharedFightService } from "../shared-fight.service";
 
 @Injectable()
 export class CombatActionSelectorService {
+    constructor(
+        private sharedFightService:SharedFightService
+    ){}
     select(context: TurnContext): CombatAction {
         const healingAction = this.selectAvailableHealingSkill(context)
         if (healingAction) {
@@ -35,7 +37,7 @@ export class CombatActionSelectorService {
         const allAuras = ctx.actor.getSkillsAura()
         for (const aura of allAuras) {
             if (ctx.actor.hasActiveAuraBySkillId(aura.id)) continue
-            if (!this.canUseSkill(ctx.actor, aura)) continue
+            if (!this.sharedFightService.canUseSkill(ctx.actor, aura)) continue
             return {
                 type: 'cast_aura',
                 skillId: aura.id
@@ -48,7 +50,7 @@ export class CombatActionSelectorService {
         const allBuffs = ctx.actor.getSkillsBuff()
         for (const buff of allBuffs) {
             if (ctx.actor.hasActiveBuffBySkillId(buff.id)) continue
-            if (!this.canUseSkill(ctx.actor, buff)) continue
+            if (!this.sharedFightService.canUseSkill(ctx.actor, buff)) continue
             return {
                 type: 'cast_buff',
                 skillId: buff.id,
@@ -64,7 +66,7 @@ export class CombatActionSelectorService {
         }
         const allHealingSkills = ctx.actor.getSkillsHeal()
         for (const skill of allHealingSkills) {
-            if (!this.canUseSkill(ctx.actor, skill)) continue
+            if (!this.sharedFightService.canUseSkill(ctx.actor, skill)) continue
             return {
                 skillId: skill.id,
                 targetId: ctx.actor.id,
@@ -78,7 +80,7 @@ export class CombatActionSelectorService {
         const allSkillDamage = ctx.actor.getSkillsDamage()
 
         for (const skill of allSkillDamage) {
-            if (!this.canUseSkill(ctx.actor, skill)) continue
+            if (!this.sharedFightService.canUseSkill(ctx.actor, skill)) continue
             const opponent = ctx.fight.getSingleOpponentOf(ctx.actor.id).id
             return {
                 skillId: skill.id,
@@ -89,17 +91,5 @@ export class CombatActionSelectorService {
         return undefined
     }
 
-    private canUseSkill(actor: FighterCombatEntity, skill: SkillType): boolean {
-        if (actor.isSkillOnCooldown(skill.id)) {
-            return false;
-        }
 
-        if (skill.mana.type === 'none') return true
-
-        const initialManaCost = skill.mana.type === 'instant'
-            ? skill.mana.amount
-            : skill.mana.initialAmount ?? 0
-
-        return actor.hasEnoughMana(initialManaCost);
-    }
 }

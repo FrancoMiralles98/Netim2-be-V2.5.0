@@ -1,4 +1,4 @@
-import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys, BonusStatsGeneralRefKeys, SkillAura, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys, BonusStatsGeneralRefKeys, SkillAura, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 
 export interface CreateActiveAuraProps {
     instanceId: string;
@@ -47,9 +47,32 @@ export type CombatStatModifierOperation =
     | 'less'
     | 'override';
 
+export type CombatStatModifierSource =
+    | AuraStatModifierSource
+    | BuffStatModifierSource
+    | StatusEffectStatModifierSource;
 
-export interface CombatStatModifierSource {
+
+export interface AuraStatModifierSource {
     type: 'aura';
+
     instanceId: string;
+
     skillId: UNIQUE_ID_SKILLS;
+}
+export interface BuffStatModifierSource {
+    type: 'buff';
+
+    instanceId: string;
+
+    skillId: UNIQUE_ID_SKILLS;
+}
+export interface StatusEffectStatModifierSource {
+    type: 'status_effect';
+
+    instanceId: string;
+
+    effectId: StatusEffectsKeys;
+
+    sourceFighterId: string;
 }

@@ -1,12 +1,12 @@
-import { DurationConfig, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { DurationConfig, StatsModifiers, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { CombatStatModifier } from "../activeAura/active-aura.type";
 
 export interface CreateActiveBuffProps {
     instanceId: string;
-
     skillId: UNIQUE_ID_SKILLS;
 
     sourceFighterId: string;
+    targetFighterId: string;
 
     appliedOnTurn: number;
 
@@ -35,3 +35,13 @@ export type BuffConsumeTrigger =
     | 'skill_use'
     | 'successful_hit'
     | 'damage_dealt';
+
+export interface ConsumeBuffForSkillResult {
+    consumed: boolean;
+
+    consumedEffects: number;
+
+    remainingUses: number;
+
+    depleted: boolean;
+}
