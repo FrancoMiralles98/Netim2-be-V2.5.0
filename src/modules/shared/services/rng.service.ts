@@ -74,4 +74,55 @@ export class RngService {
         throw new Error('No se pudo determinar el resultado del roll')
     }
 
+    /**
+     * Determina que valor se va a usar en un array de opciones
+     * @param items 
+     * @param getWeight 
+     * @returns 
+     */
+    pickWeightedItem<T>(
+        items: readonly T[],
+        getWeight: (item: T) => number
+    ): T {
+        const totalWeight = items.reduce(
+            (total, item) => {
+                const weight = getWeight(item)
+
+                return total + Math.max(0, weight)
+            },
+            0
+        )
+
+        if (totalWeight <= 0) {
+            throw new Error(
+                'La suma de los pesos debe ser mayor a 0'
+            )
+        }
+
+        const roll = this.randomNumberInRange(
+            1,
+            totalWeight
+        )
+
+        let accumulatedWeight = 0
+
+        for (const item of items) {
+            const weight = getWeight(item)
+
+            if (weight <= 0) {
+                continue
+            }
+
+            accumulatedWeight += weight
+
+            if (roll <= accumulatedWeight) {
+                return item
+            }
+        }
+
+        throw new Error(
+            'No se pudo determinar el resultado del roll'
+        )
+    }
+
 }

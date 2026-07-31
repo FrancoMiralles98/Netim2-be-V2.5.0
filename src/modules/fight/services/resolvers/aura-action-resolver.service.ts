@@ -21,6 +21,9 @@ export class AuraActionResolverService {
         if (skill.type !== 'aura') {
             throw new Error('La skill tiene que ser una aura')
         }
+        if (context.actor.hasActiveAuraBySkillId(skill.id)) {
+            throw new Error('No puede usar un aura que ya esta activado')
+        }
 
         const manaSpent = context.actor.spendMana(this.sharedFightService.getInitialManaCost(skill))
 

@@ -21,14 +21,16 @@ export class RegenerationProcessorService {
         const manaResult = context.actor.restoreMana(regenValues.mana)
 
         context.actor.statistics.registerHealing({
-            hpRegenerated: healingResult.effectiveHealing
+            type: 'regeneration',
+            amount: healingResult.effectiveHealing
         })
         context.actor.statistics.registerResources({
             manaRegenerated: manaResult.effectiveRestoration
         })
 
         target.statistics.registerHealing({
-            prevented: healingResult.preventedAmount
+            type: 'prevented',
+            amount: healingResult.preventedAmount
         })
     }
 }

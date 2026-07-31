@@ -1,4 +1,4 @@
-import { SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { FightEffectId, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
@@ -161,6 +161,10 @@ export class FighterCombatEntity {
         this.props.statsDirty = false;
     }
 
+    get effectiveStats(): FighterBaseStats {
+        return this.props.effectiveStats
+    }
+
     receiveDamage(amount: number) {
         const normalizedAmount = Math.max(0, Math.floor(amount))
 
@@ -309,6 +313,14 @@ export class FighterCombatEntity {
 
     getActiveStatusEffects(): readonly ActiveStatusEffectEntity[] {
         return [...this.props.activeEffects.values()];
+    }
+
+    hasActiveStatusEffect(statusEffectId: StatusEffectsKeys): boolean {
+        const activeEffects = [...this.props.activeEffects.values()];
+        return activeEffects.some(effect =>
+            effect.getEffectId() === statusEffectId &&
+            effect.isActive()
+        )
     }
 
     removeActiveStatusEffectByIstanceId(instanceId: string): ActiveStatusEffectEntity | undefined {

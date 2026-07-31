@@ -69,7 +69,18 @@ export type RegisterDefensiveHitInput =
         blockType: 'full' | 'partial';
     };
 
-export type RegisterHealingInput = Partial<HealingStatistics>
+export type RegisterHealingInput = GenericHealingInput | SkillHealingInput 
+
+export interface GenericHealingInput {
+    type: 'regeneration' | 'prevented' | 'basic_attack'
+    amount: number
+}
+
+export interface SkillHealingInput {
+    type: 'skill'
+    idSkill: UNIQUE_ID_SKILLS
+    amount: number
+}
 
 export type RegisterResourceInput = Partial<ResourceStatistics>;
 

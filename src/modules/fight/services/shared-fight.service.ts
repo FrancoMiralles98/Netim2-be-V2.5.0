@@ -31,5 +31,25 @@ export class SharedFightService {
         }
     }
 
+    validateAction(input: {
+        actor: FighterCombatEntity;
+        target: FighterCombatEntity;
+        skill: SkillType;
+    }): void {
+        const { actor, target, skill } = input;
+
+        if (!actor.isAlive()) {
+            throw new Error(`Defeated fighter ${actor.id} cannot use a skill.`);
+        }
+
+        if (!target.isAlive()) {
+            throw new Error(`Cannot attack defeated fighter ${target.id}.`);
+        }
+
+        if (actor.id === target.id) {
+            throw new Error(`Damage skill ${skill.id} cannot target its caster.`);
+        }
+    }
+
 
 }

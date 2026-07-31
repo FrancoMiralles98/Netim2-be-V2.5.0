@@ -122,11 +122,31 @@ export class FightCombatStatisticsTracker {
     }
 
     registerHealing(input: RegisterHealingInput): void {
-        this.state.healing.done += this.normalizeAmount(input.done ?? 0);
-
-        this.state.healing.prevented += this.normalizeAmount(input.prevented ?? 0);
-
-        this.state.healing.hpRegenerated += this.normalizeAmount(input.hpRegenerated ?? 0);
+        switch (input.type) {
+            case 'basic_attack':
+                this.state.healing.byBasicAttack += this.normalizeAmount(input.amount ?? 0);
+                break;
+            case 'prevented':
+                this.state.healing.prevented += this.normalizeAmount(input.amount ?? 0);
+                break;
+            case 'regeneration':
+                this.state.healing.hpRegenerated += this.normalizeAmount(input.amount ?? 0);
+                break;
+            case 'skill':{
+                const findSkill = this.state.healing.bySkill.find(skill=>skill.idSkill === input.idSkill )
+                if (findSkill) {
+                    findSkill.amount += input.amount
+                } else {
+                    this.state.healing.bySkill.push({
+                        amount: input.amount,
+                        idSkill: input.idSkill
+                    })
+                }
+            }
+                break;
+            default:
+                break;
+        }
     }
 
     registerResources(input: RegisterResourceInput): void {

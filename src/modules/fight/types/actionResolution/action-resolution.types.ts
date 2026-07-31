@@ -56,8 +56,11 @@ export interface HealingSkillActionResolution
     targetId: string;
 
     manaSpent: number;
+    remainingMana: number;
 
-    rawHealing: number;
+    hpAfter: number;
+    hpBefore: number;
+    cooldownRemainingTurns: number
 
     appliedHealing: number;
 
