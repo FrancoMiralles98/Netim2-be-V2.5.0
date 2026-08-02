@@ -7,7 +7,7 @@ export class HitModifiersResolverService {
     constructor(
         private rngService: RngService
     ) { }
-    resolveSkillHits(
+    resolveSkillHitsCount(
         modifier: SkillHitModifier | undefined
     ): { hitCount: number, dmgMultiplierPerHit: number } {
 
@@ -18,23 +18,25 @@ export class HitModifiersResolverService {
             return { hitCount, dmgMultiplierPerHit }
         }
 
-            switch (modifier.type) {
-                case 'chance_multi_hit':
-                    if (this.rngService.rollChance(modifier.chance)) {
-                        hitCount *= modifier.hits
-                        dmgMultiplierPerHit = modifier.damageMultiplierPerHit
-                    }
-                    break
-                case 'weighted_hit_count':
-                    const selectedOption = this.rngService.pickWeightedItem(
-                        modifier.options, (option) => option.chance)
-                    hitCount = selectedOption.hits,
-                        dmgMultiplierPerHit = selectedOption.damageMultiplierPerHit
-                    break
-                default:
-                    throw new Error(`No se encuentra supporteado el type de hitModifier`);
+        switch (modifier.type) {
+            case 'chance_multi_hit':
+                if (this.rngService.rollChance(modifier.chance)) {
+                    hitCount *= modifier.hits
+                    dmgMultiplierPerHit = modifier.damageMultiplierPerHit
+                }
+                break
+            case 'weighted_hit_count': {
+                const selectedOption = this.rngService.pickWeightedItem(
+                    modifier.options, (option) => option.chance)
+
+                hitCount = selectedOption.hits
+                dmgMultiplierPerHit = selectedOption.damageMultiplierPerHit
             }
-        
+                break
+            default:
+                throw new Error(`No se encuentra supporteado el type de hitModifier`);
+        }
+
         return {
             hitCount: Math.max(1, Math.floor(hitCount)),
             dmgMultiplierPerHit: Math.max(0, dmgMultiplierPerHit)

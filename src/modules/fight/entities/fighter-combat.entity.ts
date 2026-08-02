@@ -1,4 +1,4 @@
-import { FightEffectId, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { CharacterRace, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
@@ -14,7 +14,7 @@ export class FighterCombatEntity {
         this.props = {
             id: createProps.id,
             name: createProps.name,
-
+            race: createProps.race,
             targetType: createProps.targetType,
             weaponType: createProps.weaponType,
 
@@ -71,6 +71,10 @@ export class FighterCombatEntity {
 
     markStatsDirty(): void {
         this.props.statsDirty = true;
+    }
+
+    get race(): CharacterRace | 'desconocido' {
+        return this.props.race;
     }
 
     getSkillsAura(): SkillAura[] {

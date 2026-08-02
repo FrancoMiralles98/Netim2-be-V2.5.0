@@ -28,7 +28,7 @@ export class DamageSkillActionResolver {
 
         const manaCost = this.sharedFightSerivice.getInitialManaCost(skill)
 
-        const hitModifierResult = this.hitModifiersResolverService.resolveSkillHits(skill.hitModifiers)
+        const hitModifierResult = this.hitModifiersResolverService.resolveSkillHitsCount(skill.hitModifiers)
         const dmgModifierResult = this.dmgModifiersResolverService.resolveSkillDamageModifier({
             modifier: skill.damageModifiers,
             source: context.actor,
