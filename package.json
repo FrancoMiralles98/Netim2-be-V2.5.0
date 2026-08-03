@@ -39,7 +39,7 @@
     "joi": "^18.1.1",
     "mongoose": "^8.23.0",
     "morgan": "^1.11.0",
-    "netim2-shared": "github:FrancoMiralles98/netim2-shared#v0.1.26",
+    "netim2-shared": "github:FrancoMiralles98/netim2-shared#v0.1.27",
     "reflect-metadata": "^0.2.2",
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.3"

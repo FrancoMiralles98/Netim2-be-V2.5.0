@@ -1,20 +1,49 @@
-import { DamageType, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { BonusRefKeys, CombatStatKey, DamageTag, DamageType, SkillDamageFlags, UNIQUE_ID_SKILLS } from "netim2-shared";
 
 export interface PreparedSkillDamageComponent {
     componentIndex: number;
 
     damageType: DamageType;
 
-    range: {
-        min: number;
-        max: number;
-    };
+    tags: DamageTag[]
+
+    flags?: SkillDamageFlags;
+
+    runtimeScaling: RuntimeDamageScalingResult;
 }
 
 export interface PreparedSkillDamage {
     skillId: UNIQUE_ID_SKILLS;
-
     components: PreparedSkillDamageComponent[];
+}
+
+export interface RuntimeDamageScalingResult {
+    originalRange: {
+        min: number;
+        max: number;
+    };
+
+    adjustedRange: {
+        min: number;
+        max: number;
+    };
+
+    totalDamageAdjustment: number;
+
+    scalingDetails: RuntimeDamageScalingDetail[];
+}
+
+export interface RuntimeDamageScalingDetail {
+    stat: BonusRefKeys;
+    target: CombatStatKey;
+
+    ratio: number;
+
+    baseValue: number;
+    effectiveValue: number;
+
+    statDifference: number;
+    damageAdjustment: number;
 }
 
 

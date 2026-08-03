@@ -51,5 +51,13 @@ export class SharedFightService {
         }
     }
 
+    normalizeValue(value: number): number {
+        if (!Number.isFinite(value)) {
+            throw new Error(`El daño no es válido: ${value}.`);
+        }
+
+        return Math.max(0,Math.floor(value));
+    }
+
 
 }

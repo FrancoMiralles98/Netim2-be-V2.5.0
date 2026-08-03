@@ -1,6 +1,6 @@
-import { CharacterRace, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { AllTargetType, CharacterRace, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
-import { CombatStatModifier } from "../types/activeAura/active-aura.type";
+import { CombatStatKey, CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
 import { CreateFighterCombatProps, FighterCombatProps, FighterResources, SkillCooldownState } from "../types/fighter/fighter-combat.types";
 import { ActiveAuraEntity } from "./active-aura.entity";
@@ -69,12 +69,20 @@ export class FighterCombatEntity {
         return this.props.statistics;
     }
 
-    markStatsDirty(): void {
-        this.props.statsDirty = true;
+    get targetType(): AllTargetType {
+        return this.props.targetType;
     }
 
-    get race(): CharacterRace | 'desconocido' {
+    get race(): CharacterRace | undefined {
         return this.props.race;
+    }
+
+    getCurrentHp(): number {
+        return this.props.resources.hp.current
+    }
+
+    markStatsDirty(): void {
+        this.props.statsDirty = true;
     }
 
     getSkillsAura(): SkillAura[] {
@@ -456,6 +464,38 @@ export class FighterCombatEntity {
         }
 
         return results;
+    }
+
+    getBaseStatValue(target: CombatStatKey): number {
+        return this.getNumericStatByPath(this.baseStats, target);
+    }
+
+    getEffectiveStatValue(target: CombatStatKey): number {
+        return this.getNumericStatByPath(this.effectiveStats, target);
+    }
+
+    private getNumericStatByPath(stats: FighterBaseStats, path: CombatStatKey): number {
+        const segments = path.split('.');
+
+        let current: unknown = stats;
+
+        for (const segment of segments) {
+            if (
+                current === null ||
+                typeof current !== 'object' ||
+                !(segment in current)
+            ) {
+                throw new Error(`No se encontró la estadística ${path}.`);
+            }
+
+            current = (current as Record<string, unknown>)[segment];
+        }
+
+        if (typeof current !== 'number' || !Number.isFinite(current)) {
+            throw new Error(`La estadística ${path} no contiene un valor numérico válido.`);
+        }
+
+        return current;
     }
 
 

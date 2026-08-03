@@ -5,13 +5,21 @@ import { DamageHitResolution, DamageSkillActionResolution } from "./dama-skill-a
 import { SharedFightService } from "../shared-fight.service";
 import { HitModifiersResolverService } from "./hit-modifiers-resolver.service";
 import { DmgModifierResolverService } from "./dmg-modifier-resolver.service";
+import { DamageCalculatorService } from "../damage-calculator.service";
+import { BuffManager } from "../../manager/buff-manager";
+import { ContextualBonusService } from "../contextual-bonus.service";
+import { SkillHitResolver } from "./skill-hit-resolver.service";
 
 @Injectable()
 export class DamageSkillActionResolver {
     constructor(
         private sharedFightSerivice: SharedFightService,
         private hitModifiersResolverService: HitModifiersResolverService,
-        private dmgModifiersResolverService: DmgModifierResolverService
+        private dmgModifiersResolverService: DmgModifierResolverService,
+        private damageCalculatorService: DamageCalculatorService,
+        private contextualBonusService: ContextualBonusService,
+        private skillHitResolver: SkillHitResolver,
+        private buffManager: BuffManager
 
     ) { }
 
@@ -28,11 +36,24 @@ export class DamageSkillActionResolver {
 
         const manaCost = this.sharedFightSerivice.getInitialManaCost(skill)
 
+        const PreparedSkillDamage = this.damageCalculatorService.prepareSkillDamage(context.actor, skill)
         const hitModifierResult = this.hitModifiersResolverService.resolveSkillHitsCount(skill.hitModifiers)
         const dmgModifierResult = this.dmgModifiersResolverService.resolveSkillDamageModifier({
             modifier: skill.damageModifiers,
             source: context.actor,
             target: target
+        })
+
+        const buffDamageMultiplier = this.buffManager.getSkillDamageMultiplier(context.actor, skill.id)
+        const contextualBonusDmgMultiplier = this.contextualBonusService.getPossibleSkillBonusMultiplier(
+            context.actor, target, skill)
+
+        const manaSpent = context.actor.spendMana(manaCost)
+
+        this.buffManager.consumeForSkill({
+            skillId: skill.id,
+            target: context.actor,
+            trigger: 'skill_use'
         })
 
         const hits: DamageHitResolution[] = [];
@@ -46,44 +67,34 @@ export class DamageSkillActionResolver {
             if (!target.isAlive()) {
                 break;
             }
+
+            const hitResult = this.skillHitResolver.resolveHit({
+                attacker: context.actor,
+                buffDamageMultiplier,
+                contextualBonusDamageMultiplier: contextualBonusDmgMultiplier,
+                dmgMultiplierPerHit: hitModifierResult.dmgMultiplierPerHit,
+                hitIndex,
+                preparedDamage: PreparedSkillDamage,
+                skill,
+                skillDamageMultiplier: dmgModifierResult.multiplier,
+                target
+            })
+
+            hits.push(hitResult)
+
+            totalBaseDamage += hitResult.totalBaseDamage;
+
+            totalModifiedDamage += hitResult.totalModifiedDamage;
+
+            totalMitigatedDamage += hitResult.totalMitigatedDamage;
+
+            totalAppliedDamage += hitResult.totalAppliedDamage;
+
             /**
-             *  const hitResult = this.resolveHit({
-                 attacker: actor,
-                 target,
-                 skill,
-                 hitIndex,
-                 hitCount,
-                 buffDamageMultiplier
-             });
- 
-             hits.push(hitResult);
- 
-             for (const component of hitResult.components) {
-                 totalBaseDamage +=
-                     component.baseDamage;
- 
-                 totalModifiedDamage +=
-                     component.modifiedDamage;
- 
-                 totalMitigatedDamage +=
-                     component.mitigatedDamage;
- 
-                 totalAppliedDamage +=
-                     component.appliedDamage;
-             }
-         }
- 
          /*
           * damage_dealt solo se consume si realmente entró
           * al menos un punto de daño.
           *
-            if (totalAppliedDamage > 0) {
-                this.buffManager.consumeForSkill({
-                    target: actor,
-                    skillId: skill.id,
-                    trigger: 'damage_dealt'
-                });
-            }
 
             const statusEffects =
                 this.resolveStatusEffects({

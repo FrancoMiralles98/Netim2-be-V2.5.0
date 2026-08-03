@@ -119,7 +119,7 @@ export class ActiveStatusEffectEntity {
 
         owner.removeStatModifiersByAuraInstance(effect.getInstanceId());
 
-        owner.removeActiveStatusEffect(effect.getInstanceId());
+        owner.removeActiveStatusEffectByIstanceId(effect.getInstanceId());
     }
 
     registerTick(): void {

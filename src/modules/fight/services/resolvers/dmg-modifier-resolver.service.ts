@@ -1,14 +1,23 @@
 import { Injectable } from "@nestjs/common";
 import { ResolveSkillDamageModifierInput, SkillDamageModifierResolution } from "./dmg-modifier-resolver.types";
 import { RngService } from "src/modules/shared/services/rng.service";
-import { ChanceDamageModifier, ConditionalDamageModifier, DamageCondition, StatusEffectsKeys, WeightedDamageModifier } from "netim2-shared";
+import { ChanceDamageModifier, ConditionalDamageModifier, DamageCondition, WeightedDamageModifier } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
+import { PreparedSkillDamageComponent } from "../damage-calculator.types";
 
 @Injectable()
 export class DmgModifierResolverService {
     constructor(
         private rngService: RngService
     ) { }
+
+    rollPreparedComponentDamage(component: PreparedSkillDamageComponent): number {
+        const { adjustedRange } = component.runtimeScaling;
+
+        return this.rngService.randomNumberInRange(adjustedRange.min, adjustedRange.max);
+    }
+
+
     resolveSkillDamageModifier(
         { modifier, source, target }: ResolveSkillDamageModifierInput
     ): SkillDamageModifierResolution {

@@ -12,7 +12,7 @@ export interface CreateFighterCombatProps {
     name: string;
     targetType: AllTargetType;
     weaponType?: TypeWeapon;
-    race: CharacterRace | 'desconocido'
+    race?: CharacterRace
     baseStats: FighterBaseStats;
     skills: SkillType[]
 }
@@ -37,7 +37,7 @@ export interface FighterCombatProps {
     activeAuras: Map<string, ActiveAuraEntity>;
     activeBuffs: Map<string, ActiveBuffEntity>;
     statModifiers: Map<string, CombatStatModifier>;
-    race: CharacterRace | 'desconocido'
+    race?: CharacterRace
     statistics: FightCombatStatisticsTracker;
 
     statsDirty: boolean;

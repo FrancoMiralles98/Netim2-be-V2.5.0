@@ -7,7 +7,6 @@ import { SkillModule } from '../skill/skill.module';
 @Module({
   imports: [
     SharedModule,
-    SkillModule
   ],
   controllers: [FightController],
   providers: [

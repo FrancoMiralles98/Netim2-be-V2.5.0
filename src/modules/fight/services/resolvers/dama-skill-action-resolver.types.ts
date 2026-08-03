@@ -22,6 +22,8 @@ export interface DamageHitResolution {
     components: DamageComponentResolution[];
 
     totalAppliedDamage: number;
+    totalBaseDamage: number;
+    totalModifiedDamage: number;
     totalMitigatedDamage: number;
 }
 
