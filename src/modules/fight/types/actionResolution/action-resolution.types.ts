@@ -1,6 +1,7 @@
 import { UNIQUE_ID_SKILLS } from "netim2-shared";
 import { CombatAction } from "../combatAction/combat-action.types";
 import { TurnContext } from "../fight/fight-context.types";
+import { AppliedStatusEffectResolution, DamageHitResolution } from "../../services/resolvers/dama-skill-action-resolver.types";
 
 export interface ResolveCombatActionInput {
     context: TurnContext;
@@ -71,13 +72,25 @@ export interface HealingSkillActionResolution
 
 export interface DamageSkillActionResolution
     extends ActionResolutionBase<'use_damage_skill'> {
+    targetId: string;
     skillId: UNIQUE_ID_SKILLS;
 
-    targetId: string;
-
     manaSpent: number;
+    remainingMana: number;
 
-    totalDamageApplied: number;
+    cooldownRemainingTurns: number;
+
+    hitCount: number;
+    hits: DamageHitResolution[];
+
+    totalBaseDamage: number;
+    totalModifiedDamage: number;
+    totalMitigatedDamage: number;
+    totalAppliedDamage: number;
+
+    statusEffects: AppliedStatusEffectResolution[];
+
+    targetDefeated: boolean;
 }
 
 export interface BasicAttackActionResolution

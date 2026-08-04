@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
+import { DamageSkillActionResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
 import { UseDamageSkillAction } from "../../types/combatAction/combat-action.types";
-import { DamageHitResolution, DamageSkillActionResolution } from "./dama-skill-action-resolver.types";
+import { DamageHitResolution } from "./dama-skill-action-resolver.types";
 import { SharedFightService } from "../shared-fight.service";
 import { HitModifiersResolverService } from "./hit-modifiers-resolver.service";
 import { DmgModifierResolverService } from "./dmg-modifier-resolver.service";
@@ -9,6 +9,8 @@ import { DamageCalculatorService } from "../damage-calculator.service";
 import { BuffManager } from "../../manager/buff-manager";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { SkillHitResolver } from "./skill-hit-resolver.service";
+import { StatusEffectApplicationResolverService } from "./status-effect-application-resolver.service";
+import { HealingResolverService } from "./healing-resolver.service";
 
 @Injectable()
 export class DamageSkillActionResolver {
@@ -19,7 +21,9 @@ export class DamageSkillActionResolver {
         private damageCalculatorService: DamageCalculatorService,
         private contextualBonusService: ContextualBonusService,
         private skillHitResolver: SkillHitResolver,
-        private buffManager: BuffManager
+        private healingResolver: HealingResolverService,
+        private buffManager: BuffManager,
+        private statusEffectsApplicationResolver: StatusEffectApplicationResolverService
 
     ) { }
 
@@ -89,70 +93,39 @@ export class DamageSkillActionResolver {
             totalMitigatedDamage += hitResult.totalMitigatedDamage;
 
             totalAppliedDamage += hitResult.totalAppliedDamage;
+        }
 
-            /**
-         /*
-          * damage_dealt solo se consume si realmente entró
-          * al menos un punto de daño.
-          *
+        const statusEffects = this.statusEffectsApplicationResolver.resolveSkillEffects({
+            appliedOnTurn: context.turnNumber,
+            skill,
+            source: context.actor,
+            target,
+            triggeringDamage: totalBaseDamage
+        })
 
-            const statusEffects =
-                this.resolveStatusEffects({
-                    context,
-                    skill,
-                    target,
-                    totalAppliedDamage
-                });
+        if (skill.cd.onActivate) {
+            context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
+        }
 
-            if (skill.cd.onActivate) {
-                actor.startSkillCooldown(
-                    skill.id,
-                    skill.cd.onActivate
-                );
-            }
 
-            actor.statistics.registerResources({
-                manaSpent: manaSpent.amount
-            });
 
-            /*
-             * Mantenelo acá únicamente si decidiste que cada
-             * resolver registra sus acciones.
-             *
-             * Si TurnEndProcessor ya registra la acción,
-             * eliminá esta llamada.
-             *
-            actor.statistics.registerSkillUsed();
-    
-            return {
-                type: 'use_damage_skill',
-                success: true,
-    
-                actorId: actor.id,
-                targetId: target.id,
-                skillId: skill.id,
-    
-                manaSpent: manaSpent.amount,
-                remainingMana: manaSpent.manaAfter,
-    
-                cooldownRemainingTurns:
-                    actor.getSkillRemainingCooldown(
-                        skill.id
-                    ),
-    
-                hitCount: hits.length,
-                hits,
-    
-                totalBaseDamage,
-                totalModifiedDamage,
-                totalMitigatedDamage,
-                totalAppliedDamage,
-    
-                statusEffects,
-    
-                targetDefeated: !target.isAlive()
-            }
-                */
+        return {
+            type: 'use_damage_skill',
+            actorId: context.actor.id,
+            cooldownRemainingTurns: context.actor.getSkillRemainingCooldown(skill.id),
+            hitCount: hitModifierResult.hitCount,
+            hits,
+            manaSpent: manaSpent.amount,
+            remainingMana: manaSpent.manaAfter,
+            skillId: skill.id,
+            statusEffects,
+            success: true,
+            targetDefeated: !target.isAlive(),
+            targetId: target.id,
+            totalAppliedDamage,
+            totalBaseDamage,
+            totalMitigatedDamage,
+            totalModifiedDamage
         }
     }
 }

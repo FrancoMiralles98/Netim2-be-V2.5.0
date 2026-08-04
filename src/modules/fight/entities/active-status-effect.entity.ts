@@ -106,20 +106,8 @@ export class ActiveStatusEffectEntity {
         return this.statsModifier;
     }
 
-    deactivate(input: DeactivateStatusEffectInput): void {
-        const { owner, effect } = input;
-
-        if (!effect.isActive()) {
-            return;
-        }
-
-        if (effect.getTargetFighterId() !== owner.id) {
-            throw new Error(`Status effect ${effect.getInstanceId()} does not belong to fighter ${owner.id}.`);
-        }
-
-        owner.removeStatModifiersByAuraInstance(effect.getInstanceId());
-
-        owner.removeActiveStatusEffectByIstanceId(effect.getInstanceId());
+    desactivate(): void {
+        this.active = false
     }
 
     registerTick(): void {
@@ -144,8 +132,6 @@ export class ActiveStatusEffectEntity {
         if (!this.stacks) {
             throw new Error('Este efecto no tiene la propiedad de stacks')
         }
-        const previousStacks = this.stacks;
-
         this.stacks = {
             ...this.stacks,
             current: this.stacks.current + 1

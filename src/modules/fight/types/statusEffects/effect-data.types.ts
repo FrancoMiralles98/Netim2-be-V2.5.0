@@ -6,39 +6,60 @@ export type ActiveStatusEffectData =
     | ElectricEffectData
     | DesmayoEffectData
 
+export type PeriodicDamageEffectData =
+    | PoisonEffectData
+    | FireEffectData
+    | BleedingEffectData
+    | ElectricEffectData;
+
 export interface PoisonEffectData {
-    type: 'veneno';
+    effectId: 'veneno';
     damagePerTick: number;
+    type: 'periodic_damage'
     healReduction: number
 }
 
 export interface FireEffectData {
-    type: 'incendio';
+    effectId: 'incendio';
     damagePerTick: number;
+    type: 'periodic_damage'
     extraDamagePerRefresh: number;
 }
 
 export interface BleedingEffectData {
-    type: 'sangrado';
+    effectId: 'sangrado';
     damagePerTick: number;
+    type: 'periodic_damage'
     extraDamagePerMovementSpeed: number;
 }
 
 export interface ElectricEffectData {
-    type: 'electrico';
+    effectId: 'electrico';
     damagePerTick: number;
+    type: 'periodic_damage'
     extraDamageToApplyStacks: number;
 }
 
 export interface RetardoEffectData {
-    type: 'retardo';
-    preventAction: boolean;
-    VA_Reduction: number; //velocidad de ataque reducido (%)
-    MV_Reduction: number; //velocidad de movimiento reducido (%)
-    VH_Reduction: number; //velocidad de hechizo reducido (%)
+    type: 'stat_modifier'
+    effectId: 'retardo';
 }
 
 export interface DesmayoEffectData {
-    type: 'desmayo';
-    preventAction: boolean;
+    type: 'control',
+    effectId: 'desmayo';
+}
+
+
+export function isPeriodicDamageEffectData(
+    data: ActiveStatusEffectData
+): data is PeriodicDamageEffectData {
+    switch (data.type) {
+        case 'periodic_damage':
+            return true;
+
+        case 'control':
+        case 'stat_modifier':
+            return false;
+    }
 }

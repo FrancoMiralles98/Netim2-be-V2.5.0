@@ -1,5 +1,6 @@
 import { DamageType, SkillDamage, StatusEffectsKeys } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
+import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
 
 export type ResolveDmgMitigationInput =
     | ResolveBasicAttackMitigationInput
@@ -32,7 +33,7 @@ export interface ResolveStatusEffectMitigationInput
     extends ResolveDmgMitigationBaseInput {
     sourceType: 'status_effect';
 
-    effectId: StatusEffectsKeys;
+    effect: ActiveStatusEffectEntity;
 }
 
 export interface ResolveReflectedMitigationInput

@@ -1,11 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
-import { DamageTag, DamageType, SkillDamage } from "netim2-shared";
+import { DamageType, SkillDamage, StatusEffectsKeys } from "netim2-shared";
 import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
-import { PreparedSkillDamageComponent } from "./damage-calculator.types";
 
 @Injectable()
 export class ContextualBonusService {
+
+    getPossibleStatusEffectMitigationPercent(target: FighterCombatEntity, effectId: StatusEffectsKeys): number {
+        return (target.effectiveStats.bonus.defensa[`def_${effectId}`] ?? 0)
+    }
+
+    getResistanceBonusByEffectId(target: FighterCombatEntity, effectId: StatusEffectsKeys): number {
+        return target.effectiveStats.bonus.defensa[`def_${effectId}`] ?? 0
+    }
 
     getPossibleSkillBonusMultiplier(
         attacker: FighterCombatEntity,
@@ -31,9 +38,9 @@ export class ContextualBonusService {
 
         return (
             mitigationPorcent +
-            this.getWeaponDefenseBonus(target,dmgType) +
-            this.getSkillDmgTypeDefenseBonus(target,dmgType) +
-            this.getRaceTypeDefenseBonus(target,attacker) +
+            this.getWeaponDefenseBonus(target, dmgType) +
+            this.getSkillDmgTypeDefenseBonus(target, dmgType) +
+            this.getRaceTypeDefenseBonus(target, attacker) +
             target.effectiveStats.bonus.defensa.def_hab
         )
     }

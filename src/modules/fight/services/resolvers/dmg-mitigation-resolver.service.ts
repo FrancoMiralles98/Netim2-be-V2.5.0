@@ -2,7 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { SharedFightService } from "../shared-fight.service";
 import { DamageType, SkillDamage } from "netim2-shared";
 import { ContextualBonusService } from "../contextual-bonus.service";
-import { DmgMitigationResult, ResolveDmgMitigationInput, ResolveSkillMitigationInput } from "./dmg-mitigation-resolver.types";
+import { DmgMitigationResult, ResolveDmgMitigationInput, ResolveSkillMitigationInput, ResolveStatusEffectMitigationInput } from "./dmg-mitigation-resolver.types";
+import { isPeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
 
 @Injectable()
 export class DmgMitigationResolverService {
@@ -38,11 +39,7 @@ export class DmgMitigationResolverService {
                 }
                 );
             case 'status_effect':
-                return this.resolveStatusEffectMitigation(
-                    input,
-                    requestedDamage
-                );
-
+                return this.resolveStatusEffectMitigation(input, requestedDamage);
             case 'reflected':
                 return this.createBypassedResult(requestedDamage, input.damageType);
 
@@ -52,7 +49,7 @@ export class DmgMitigationResolverService {
     }
 
 
-    
+
 
     resolveSkillMitigation({ attacker,
         damage,
@@ -106,11 +103,62 @@ export class DmgMitigationResolverService {
     private calculateEffectiveSkillBonusDefense(rawBonusDefensePercent: number, skill: SkillDamage): number {
         if (!skill.mechanicsEffects) return rawBonusDefensePercent
         if (!skill.mechanicsEffects.penetracion_habilidad) return rawBonusDefensePercent
-        return Math.max(
-            0, Math.floor(
-                rawBonusDefensePercent * (1 - skill.mechanicsEffects.penetracion_habilidad)
-            )
+        return Math.max(0, Math.floor(
+            rawBonusDefensePercent * (1 - skill.mechanicsEffects.penetracion_habilidad)
         )
+        )
+    }
 
+    private resolveStatusEffectMitigation(
+        input: ResolveStatusEffectMitigationInput,
+        requestedDamage: number
+    ): DmgMitigationResult {
+        const effectData = input.effect.Effectdata;
+
+        if (!isPeriodicDamageEffectData(effectData)) {
+            throw new Error(`El efecto ${input.effect.getEffectId()} no produce daño periódico.`);
+        }
+
+        const rawBonusDefensePercent =
+            this.contextualBonusService.getPossibleStatusEffectMitigationPercent(
+                input.target,
+                effectData.effectId
+            );
+
+        /*
+         * Por ahora no hay penetración para los estados.
+         * Por eso la defensa efectiva es igual a la defensa base.
+         */
+        const effectiveBonusDefensePercent = rawBonusDefensePercent
+
+        return this.createPercentageMitigationResult({
+            requestedDamage,
+            rawBonusDefensePercent,
+            effectiveBonusDefensePercent
+        });
+    }
+
+    private createPercentageMitigationResult(input: {
+        requestedDamage: number;
+        rawBonusDefensePercent: number;
+        effectiveBonusDefensePercent: number;
+        damageType?: DamageType;
+    }): DmgMitigationResult {
+
+        const damageAfterMitigation = Math.max(0, Math.floor(
+            input.requestedDamage * (1 - input.effectiveBonusDefensePercent / 100))
+        );
+
+        const mitigatedAmount = input.requestedDamage - damageAfterMitigation;
+
+        return {
+            requestedDamage: input.requestedDamage,
+            damageType: input.damageType,
+            rawBonusDefensePercent: input.rawBonusDefensePercent,
+            effectiveBonusDefensePercent: input.effectiveBonusDefensePercent,
+            mitigatedAmount,
+            damageAfterMitigation,
+            fullyMitigated: damageAfterMitigation === 0
+        };
     }
 }

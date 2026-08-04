@@ -35,29 +35,3 @@ export interface AppliedStatusEffectResolution {
 
     instanceId?: string;
 }
-
-export interface DamageSkillActionResolution {
-    type: 'use_damage_skill';
-    success: true;
-
-    actorId: string;
-    targetId: string;
-    skillId: UNIQUE_ID_SKILLS;
-
-    manaSpent: number;
-    remainingMana: number;
-
-    cooldownRemainingTurns: number;
-
-    hitCount: number;
-    hits: DamageHitResolution[];
-
-    totalBaseDamage: number;
-    totalModifiedDamage: number;
-    totalMitigatedDamage: number;
-    totalAppliedDamage: number;
-
-    statusEffects: AppliedStatusEffectResolution[];
-
-    targetDefeated: boolean;
-}

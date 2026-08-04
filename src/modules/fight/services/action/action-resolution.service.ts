@@ -5,6 +5,7 @@ import { ActionResolution } from "../../types/actionResolution/action-resolution
 import { AuraActionResolverService } from "../resolvers/aura-action-resolver.service";
 import { BuffActionResolver } from "../resolvers/buff-action-resolver.service";
 import { HealingSkillActionResolverService } from "../resolvers/healing-skill-action-resolver.service";
+import { DamageSkillActionResolver } from "../resolvers/damage-skill-action-resolver.service";
 
 @Injectable()
 export class ActionResolutionService {
@@ -12,6 +13,7 @@ export class ActionResolutionService {
         private auraActionResolver: AuraActionResolverService,
         private buffActionResolver: BuffActionResolver,
         private healingSkillActionResolver: HealingSkillActionResolverService,
+        private damageSkillActionResolver: DamageSkillActionResolver,
     ) { }
 
     resolve(action: CombatAction, context: TurnContext): ActionResolution {
@@ -22,6 +24,10 @@ export class ActionResolutionService {
                 return this.buffActionResolver.resolve({ action, context })
             case 'use_healing_skill':
                 return this.healingSkillActionResolver.resolve({ action, context })
+            case 'use_damage_skill':
+                return this.damageSkillActionResolver.resolve({ action, context })
+            case "basic_attack":
+            case "skip_turn":
             default:
                 return this.assertNever(action as never)
         }

@@ -221,23 +221,23 @@ export class FighterCombatEntity {
     }
 
     isAlive(): boolean {
-        return this.props.alive;
+        return this.props.alive
     }
 
     hasEnoughMana(amount: number): boolean {
-        return this.props.resources.mana.current >= amount;
+        return this.props.resources.mana.current >= amount
     }
 
     spendMana(amount: number) {
-        const normalizedAmount = Math.max(0, Math.floor(amount));
+        const normalizedAmount = Math.max(0, Math.floor(amount))
 
         if (!this.hasEnoughMana(normalizedAmount)) {
-            throw new Error(`Se quiere usar mana cuando no se tiene`);
+            throw new Error(`Se quiere usar mana cuando no se tiene`)
         }
 
-        const manaBefore = this.props.resources.mana.current;
+        const manaBefore = this.props.resources.mana.current
 
-        this.props.resources.mana.current -= normalizedAmount;
+        this.props.resources.mana.current -= normalizedAmount
 
         return {
             manaBefore,
@@ -247,16 +247,16 @@ export class FighterCombatEntity {
     }
 
     restoreMana(amount: number) {
-        const normalizedAmount = Math.max(0, Math.floor(amount));
+        const normalizedAmount = Math.max(0, Math.floor(amount))
 
-        const manaBefore = this.props.resources.mana.current;
-        const missingMana = this.props.resources.mana.max - manaBefore;
+        const manaBefore = this.props.resources.mana.current
+        const missingMana = this.props.resources.mana.max - manaBefore
 
-        const effectiveRestoration = Math.min(normalizedAmount, missingMana);
+        const effectiveRestoration = Math.min(normalizedAmount, missingMana)
 
-        const wastedRestoration = Math.max(0, normalizedAmount - missingMana);
+        const wastedRestoration = Math.max(0, normalizedAmount - missingMana)
 
-        this.props.resources.mana.current += effectiveRestoration;
+        this.props.resources.mana.current += effectiveRestoration
 
         return {
             manaBefore,
@@ -271,22 +271,22 @@ export class FighterCombatEntity {
             throw new Error(`Aura instance ${aura.getInstanceId()} is already active`);
         }
 
-        this.props.activeAuras.set(aura.getInstanceId(), aura);
+        this.props.activeAuras.set(aura.getInstanceId(), aura)
 
         if (aura.hasStatModifiers()) {
-            this.markStatsDirty();
+            this.markStatsDirty()
         }
     }
 
     addBuff(buff: ActiveBuffEntity): void {
         if (this.props.activeBuffs.has(buff.getInstanceId())) {
-            throw new Error(`Buff instance ${buff.getInstanceId()} is already active`);
+            throw new Error(`Buff instance ${buff.getInstanceId()} is already active`)
         }
 
-        this.props.activeBuffs.set(buff.getInstanceId(), buff);
+        this.props.activeBuffs.set(buff.getInstanceId(), buff)
 
         if (buff.hasStatModifiers()) {
-            this.markStatsDirty();
+            this.markStatsDirty()
         }
     }
 
@@ -295,17 +295,17 @@ export class FighterCombatEntity {
     }
 
     getHpPercentage(): number {
-        const { current, max } = this.props.resources.hp;
+        const { current, max } = this.props.resources.hp
 
         if (max <= 0) {
-            return 0;
+            return 0
         }
 
-        return current * 100 / max;
+        return current * 100 / max
     }
 
     getActiveAuraBySkillId(id: UNIQUE_ID_SKILLS): ActiveAuraEntity {
-        const activeAuras = [...this.props.activeAuras.values()];
+        const activeAuras = [...this.props.activeAuras.values()]
         const aura = activeAuras.find(actieAura => actieAura.getSkillId() === id)
         if (!aura) {
             throw new Error('Active Aura not found')
@@ -314,21 +314,34 @@ export class FighterCombatEntity {
     }
 
     hasActiveAuraBySkillId(id: UNIQUE_ID_SKILLS): boolean {
-        const activeAuras = [...this.props.activeAuras.values()];
+        const activeAuras = [...this.props.activeAuras.values()]
         return activeAuras.some(actieAura => actieAura.getSkillId() === id && actieAura.isActive())
     }
 
     hasActiveBuffBySkillId(id: UNIQUE_ID_SKILLS): boolean {
-        const activeAuras = [...this.props.activeBuffs.values()];
+        const activeAuras = [...this.props.activeBuffs.values()]
         return activeAuras.some(activeBuff => activeBuff.getSkillId() === id && activeBuff.isActive())
     }
 
     getActiveStatusEffects(): readonly ActiveStatusEffectEntity[] {
-        return [...this.props.activeEffects.values()];
+        return [...this.props.activeEffects.values()]
+    }
+
+    getActiveStatusEffectByEffectId(effectId: StatusEffectsKeys): ActiveStatusEffectEntity | undefined {
+        for (const effect of this.props.activeEffects.values()) {
+            if (effect.isActive() && effect.getEffectId() === effectId) {
+                return effect;
+            }
+        }
+        return undefined;
+    }
+
+    addActiveStatusEffect(effect: ActiveStatusEffectEntity): void {
+        this.props.activeEffects.set(effect.getInstanceId(), effect)
     }
 
     hasActiveStatusEffect(statusEffectId: StatusEffectsKeys): boolean {
-        const activeEffects = [...this.props.activeEffects.values()];
+        const activeEffects = [...this.props.activeEffects.values()]
         return activeEffects.some(effect =>
             effect.getEffectId() === statusEffectId &&
             effect.isActive()
@@ -336,15 +349,30 @@ export class FighterCombatEntity {
     }
 
     removeActiveStatusEffectByIstanceId(instanceId: string): ActiveStatusEffectEntity | undefined {
-        const effect = this.props.activeEffects.get(instanceId);
+        const effect = this.props.activeEffects.get(instanceId)
 
         if (!effect) {
-            return undefined;
+            return undefined
         }
 
-        this.props.activeEffects.delete(instanceId);
+        this.props.activeEffects.delete(instanceId)
 
-        return effect;
+        return effect
+    }
+
+    removeStatModifiersByStatusEffectInstance(instanceId: string): void {
+        let removed = false
+
+        for (const [modifierId, modifier] of this.props.statModifiers) {
+            if (modifier.source.type === 'status_effect' && modifier.source.instanceId === instanceId) {
+                this.props.statModifiers.delete(modifierId)
+                removed = true
+            }
+        }
+
+        if (removed) {
+            this.markStatsDirty();
+        }
     }
 
     removeActiveBuff(instanceId: string): ActiveBuffEntity | undefined {

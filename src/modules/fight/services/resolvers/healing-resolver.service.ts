@@ -45,7 +45,7 @@ export class HealingResolverService {
 
         let reductions: HealingReductionDetail[] = []
         const venenoEffect = healer.findActiveStatusEffect('veneno') //veneno aplica reducion de curaciones
-        if (venenoEffect && venenoEffect.Effectdata.type === 'veneno') {
+        if (venenoEffect && venenoEffect.Effectdata.effectId === 'veneno') {
             reductions.push({
                 percentage: venenoEffect.Effectdata.healReduction,
                 type: 'veneno',
