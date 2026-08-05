@@ -19,6 +19,7 @@ export interface ResolveDmgMitigationBaseInput {
 export interface ResolveBasicAttackMitigationInput
     extends ResolveDmgMitigationBaseInput {
     sourceType: 'basic_attack';
+    penetracion: boolean
 
 }
 
@@ -51,6 +52,11 @@ export interface DmgMitigationResult {
 
     rawBonusDefensePercent: number;
     effectiveBonusDefensePercent: number;
+
+    //actualmente esto sirve para ataques basicos en lo demas se pone 0
+    rawFlatDefense: number;
+    effectiveFlatDefense: number;
+    flatMitigatedAmount: number;
 
     mitigatedAmount: number;
     damageAfterMitigation: number;

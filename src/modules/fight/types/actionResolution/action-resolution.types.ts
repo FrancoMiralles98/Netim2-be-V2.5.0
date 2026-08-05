@@ -99,7 +99,13 @@ export interface BasicAttackActionResolution
 
     totalDamageApplied: number;
 
-    doubleHitTriggered: boolean;
+    extraAttackTriggered: boolean;
+
+    hitCount: number;
+
+    hits: BasicAttackHitResolution[];
+
+    targetDefeated: boolean;
 }
 
 export interface SkipTurnActionResolution
@@ -116,3 +122,44 @@ export type ActionResolution =
     | DamageSkillActionResolution
     | BasicAttackActionResolution
     | SkipTurnActionResolution;
+
+
+export type BasicAttackHitOutcome =
+    | 'missed'
+    | 'dodged'
+    | 'blocked'
+    | 'applied';
+
+export interface BasicAttackHitResolution {
+    hitIndex: number;
+
+    outcome: BasicAttackHitOutcome;
+
+    missChance: number;
+    dodgeChance: number;
+    blockChance: number;
+
+    missed: boolean;
+    dodged: boolean;
+    blocked: boolean;
+
+    critical: boolean;
+    criticalMultiplier: number;
+
+    penetration: boolean;
+
+    baseDamage: number;
+
+    /**
+     * Daño después de bonus ofensivos y crítico,
+     * antes de defensa.
+     */
+    modifiedDamage: number;
+
+    mitigatedDamage: number;
+    appliedDamage: number;
+    overkillDamage: number;
+
+    hpBefore: number;
+    hpAfter: number;
+}

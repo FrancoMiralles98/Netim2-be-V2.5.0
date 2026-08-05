@@ -6,6 +6,18 @@ import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 @Injectable()
 export class ContextualBonusService {
 
+    getPenetracionChance(target: FighterCombatEntity): number {
+        return target.effectiveStats.bonus.daño.penetracion
+    }
+
+    getDodgeChance(target: FighterCombatEntity): number {
+        return target.effectiveStats.bonus.defensa.esquivar_ataques
+    }
+
+    getBlockChance(target: FighterCombatEntity): number {
+        return target.effectiveStats.bonus.defensa.bloquear_ataques
+    }
+
     getPossibleStatusEffectMitigationPercent(target: FighterCombatEntity, effectId: StatusEffectsKeys): number {
         return (target.effectiveStats.bonus.defensa[`def_${effectId}`] ?? 0)
     }
@@ -14,12 +26,26 @@ export class ContextualBonusService {
         return target.effectiveStats.bonus.defensa[`def_${effectId}`] ?? 0
     }
 
+    getPossibleBasicAttakBonusMultiplier(
+        attacker: FighterCombatEntity,
+        target: FighterCombatEntity,
+    ): number {
+        let multiplier = 0
+
+        return (
+            multiplier +
+            this.getTargetTypeDamageBonus(attacker, target) +
+            this.getRaceDamageBonus(attacker, target) +
+            attacker.effectiveStats.bonus.daño.media
+        )
+    }
+
     getPossibleSkillBonusMultiplier(
         attacker: FighterCombatEntity,
         target: FighterCombatEntity,
         skill: SkillDamage
     ): number {
-        let multiplier = 1
+        let multiplier = 0
 
         return (
             multiplier +
@@ -34,15 +60,38 @@ export class ContextualBonusService {
         target: FighterCombatEntity,
         dmgType: DamageType
     ): number {
-        let mitigationPorcent = 0
 
-        return (
-            mitigationPorcent +
-            this.getWeaponDefenseBonus(target, dmgType) +
+        let generalMitigationPercent = this.getWeaponDefenseBonus(target, dmgType) +
             this.getSkillDmgTypeDefenseBonus(target, dmgType) +
-            this.getRaceTypeDefenseBonus(target, attacker) +
             target.effectiveStats.bonus.defensa.def_hab
-        )
+
+        const finalMitigationPercent =
+            (
+                1 -
+                (1 - generalMitigationPercent / 100) *
+                (1 - this.getRaceTypeDefenseBonus(target, attacker) / 100)
+            ) * 100;
+
+        return finalMitigationPercent
+    }
+
+    getPossibbleBasicAttackBonusMitigationPorcent(
+        attacker: FighterCombatEntity,
+        target: FighterCombatEntity,
+        dmgType: DamageType
+    ): number {
+        let generalMitigationPercent = this.getWeaponDefenseBonus(target, dmgType) +
+            target.effectiveStats.bonus.defensa.def_media
+
+        const finalMitigationPercent =
+            (
+                1 -
+                (1 - generalMitigationPercent / 100) *
+                (1 - this.getRaceTypeDefenseBonus(target, attacker) / 100)
+            ) * 100;
+
+
+        return finalMitigationPercent
     }
 
     private getWeaponDefenseBonus(target: FighterCombatEntity, dmgType: DamageType, attackerWeapon?: TypeWeapon): number {

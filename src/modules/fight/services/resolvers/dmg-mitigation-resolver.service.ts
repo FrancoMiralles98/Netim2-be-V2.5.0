@@ -2,8 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { SharedFightService } from "../shared-fight.service";
 import { DamageType, SkillDamage } from "netim2-shared";
 import { ContextualBonusService } from "../contextual-bonus.service";
-import { DmgMitigationResult, ResolveDmgMitigationInput, ResolveSkillMitigationInput, ResolveStatusEffectMitigationInput } from "./dmg-mitigation-resolver.types";
+import { DmgMitigationResult, ResolveBasicAttackMitigationInput, ResolveDmgMitigationInput, ResolveSkillMitigationInput, ResolveStatusEffectMitigationInput } from "./dmg-mitigation-resolver.types";
 import { isPeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
+import { BONUS_EFFECTS_CONFIG } from "../../config/bonus-effects.config";
 
 @Injectable()
 export class DmgMitigationResolverService {
@@ -23,11 +24,7 @@ export class DmgMitigationResolverService {
 
         switch (input.sourceType) {
             case 'basic_attack':
-                return this.resolveBasicAttackMitigation(
-                    input,
-                    requestedDamage
-                );
-
+                return this.resolveBasicAttackMitigation(input);
             case 'skill':
                 return this.resolveSkillMitigation({
                     attacker: input.attacker,
@@ -36,19 +33,66 @@ export class DmgMitigationResolverService {
                     skill: input.skill,
                     sourceType: "skill",
                     target: input.target
-                }
-                );
+                });
             case 'status_effect':
                 return this.resolveStatusEffectMitigation(input, requestedDamage);
             case 'reflected':
                 return this.createBypassedResult(requestedDamage, input.damageType);
-
             default:
-                return this.assertNever(input);
+                throw new Error('No esta supporteado el tipo para la mitigacion de dañof')
         }
     }
 
 
+    resolveBasicAttackMitigation({
+        attacker,
+        target,
+        damage,
+        damageType,
+        penetracion,
+    }: ResolveBasicAttackMitigationInput
+    ): DmgMitigationResult {
+
+        const rawFlatDefense = Math.max(0, target.getEffectiveStatValue('general.def'))
+        const rawBonusDefensePercent = this.contextualBonusService.
+            getPossibbleBasicAttackBonusMitigationPorcent(attacker, target, damageType)
+
+        const effectiveDefense = penetracion
+            ? rawFlatDefense * BONUS_EFFECTS_CONFIG.penetration_flat_defense
+            : rawFlatDefense
+
+        const effetiveDefensePercent = penetracion
+            ? rawBonusDefensePercent * BONUS_EFFECTS_CONFIG.penetracion_porcentual_defense
+            : rawBonusDefensePercent
+
+        /*
+   * Primero defensa plana.
+   */
+        const damageAfterFlatDefense = Math.max(0, damage - effectiveDefense);
+
+        const flatMitigatedAmount = damage - damageAfterFlatDefense;
+
+        /*
+         * Después defensa porcentual.
+         *
+         * Puede ser negativa y aumentar el daño.
+         */
+        const damageAfterMitigation =
+            Math.max(0, Math.floor(damageAfterFlatDefense * (1 - effetiveDefensePercent / 100)));
+
+        return {
+            damageAfterMitigation,
+            effectiveBonusDefensePercent: effetiveDefensePercent,
+            effectiveFlatDefense: effectiveDefense,
+            flatMitigatedAmount,
+            fullyMitigated: damageAfterMitigation === 0,
+            mitigatedAmount: damage - damageAfterMitigation,
+            rawBonusDefensePercent,
+            rawFlatDefense,
+            requestedDamage: damage,
+            damageType: 'ad'
+        }
+    }
 
 
     resolveSkillMitigation({ attacker,
@@ -82,7 +126,10 @@ export class DmgMitigationResolverService {
             effectiveBonusDefensePercent,
             fullyMitigated: damageAfterMitigation === 0,
             requestedDamage: requestedDmg,
-            damageType
+            damageType,
+            effectiveFlatDefense: 0,
+            flatMitigatedAmount: 0,
+            rawFlatDefense: 0
         }
 
     }
@@ -96,7 +143,10 @@ export class DmgMitigationResolverService {
             effectiveBonusDefensePercent: 0,
             mitigatedAmount: 0,
             damageAfterMitigation: requestedDamage,
-            fullyMitigated: requestedDamage === 0
+            fullyMitigated: requestedDamage === 0,
+            effectiveFlatDefense: 0,
+            flatMitigatedAmount: 0,
+            rawFlatDefense: 0
         };
     }
 
@@ -158,7 +208,10 @@ export class DmgMitigationResolverService {
             effectiveBonusDefensePercent: input.effectiveBonusDefensePercent,
             mitigatedAmount,
             damageAfterMitigation,
-            fullyMitigated: damageAfterMitigation === 0
+            fullyMitigated: damageAfterMitigation === 0,
+            effectiveFlatDefense: 0,
+            flatMitigatedAmount: 0,
+            rawFlatDefense: 0
         };
     }
 }
