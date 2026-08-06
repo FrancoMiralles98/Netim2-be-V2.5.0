@@ -7,7 +7,7 @@ import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
 import { EquipType, TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 import { EquipoOptions } from "../types/baseCharacterProps/equipo-options.type";
 import { GremioOptions } from "../types/baseCharacterProps/gremio-options.type";
-import { CharacterRace, CharacterSpeciality, CharacterStats } from "../types/baseCharacterProps/character-stats.type";
+import { CharacterRace, CharacterSpeciality } from "../types/baseCharacterProps/character-stats.type";
 import { CharacterRole } from "../types/baseCharacterProps/character-role.enum";
 import { MonturaType } from "src/modules/item/types/entities-props/montura.type";
 import { MissionOption } from "../types/baseCharacterProps/mission-option.type";
@@ -21,7 +21,7 @@ import { BASE_DUNGEON_IN_PROGRESS } from "../const/characterProps/base-dungeon-i
 import { BASE_MISSION_IN_PROGRESS } from "../const/characterProps/base-mission-in-progress.const";
 import { HydratedDocument } from "mongoose";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
-import { SkillType } from "netim2-shared";
+import { Atributos, SkillType, Stats } from "netim2-shared";
 
 @Schema({ timestamps: true })
 export class CharacterModel {
@@ -104,7 +104,10 @@ export class CharacterModel {
     time_played!: number;
 
     @Prop({ type: Object, required: true })
-    stats!: CharacterStats;
+    baseStats!: Stats;
+
+    @Prop({ type: Object, required: true })
+    atributos!: Atributos;
 
     @Prop({ type: String, default: CharacterRole.USER })
     role!: CharacterRole

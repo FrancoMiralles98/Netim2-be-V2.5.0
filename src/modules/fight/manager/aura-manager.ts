@@ -92,6 +92,38 @@ export class AuraManager {
         );
     }
 
+    advanceTurn(target: FighterCombatEntity, currentTurn: number): ActiveAuraEntity[] {
+        const expired: ActiveAuraEntity[] = [];
+
+        const activeAuras = target.getActiveAuras();
+
+        for (const aura of activeAuras) {
+            if (!aura.isActive()) {
+                continue;
+            }
+
+            /*
+             * No consumir duración durante
+             * el mismo turno global en que
+             * fue aplicado.
+             */
+            if (aura.getActivatedOnTurn() === currentTurn) {
+                continue;
+            }
+
+            const durationResult = aura.advanceTurn();
+
+            if (durationResult.expired) {
+                this.deactivate({ aura, owner: target });
+                expired.push(aura);
+            }
+        }
+
+        return expired;
+    }
+
+
+
     private createAppliedModifiers(input: {
         instanceId: string;
         skillId: UNIQUE_ID_SKILLS;

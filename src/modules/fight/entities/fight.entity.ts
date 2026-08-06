@@ -169,7 +169,7 @@ export class FightEntity {
         this.state.currentActorId = this.state.turnOrder[nextIndex];
 
         this.state.turnNumber += 1;
-        this.state.phase = 'turn_start';
+        this.state.phase = 'turn_started';
 
         return {
             turnNumber: this.state.turnNumber,

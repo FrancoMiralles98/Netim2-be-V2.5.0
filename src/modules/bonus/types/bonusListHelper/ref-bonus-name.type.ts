@@ -1,9 +1,6 @@
-export type BonusStatsGeneralRefKeys =
-  | 'VIT'
-  | 'INT'
-  | 'STR'
-  | 'DEX'
+export type BonusStatsRefKeys =
   | 'hp'
+  | 'mana'
   | 'regen_hp'
   | 'def'
   | 'vh'
@@ -79,7 +76,7 @@ export type BonusMiscsRefKeys =
   | 'time_reduction';
 
 export type BonusRefKeys =
-  | BonusStatsGeneralRefKeys
+  | BonusStatsRefKeys
   | BonusDañoRefKeys
   | BonusDefensaRefKeys
   | BonusCCRefKeys
@@ -157,3 +154,4 @@ export type Bonus6_7RefBonusName = Extract<BonusRefKeys,
   | 'bloquear_ataques'
   | 'vm'
   | 'regen_hp'>
+

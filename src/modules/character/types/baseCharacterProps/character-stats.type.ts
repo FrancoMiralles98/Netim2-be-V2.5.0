@@ -22,8 +22,6 @@ export type CharacterRace =
   'guerrero' |
   'sura'
 
-export type CharacterAttribute = Extract<BonusRefKeys, 'VIT' | 'INT' | 'STR' | 'DEX'>
-
 /**
  * Valor de un atributo del personaje.
  *
@@ -36,7 +34,7 @@ export type CharacterAttribute = Extract<BonusRefKeys, 'VIT' | 'INT' | 'STR' | '
  * @note 
  * Se hace una separacion porque tiene un limite de puntos que se pueden subir por nivel (lvPoints)
  */
-export interface CharacterAttributeValue {
+export interface AttributeValue {
   lvPoints: number,
   bonusPoints: number
 }
@@ -51,15 +49,8 @@ export interface CharacterAttributeValue {
  * - bonus adicionales
  * - estadísticas acumuladas de combate
  */
-export interface CharacterStats {
-  atributos: {
-    VIT: CharacterAttributeValue;
-    INT: CharacterAttributeValue;
-    STR: CharacterAttributeValue;
-    DEX: CharacterAttributeValue;
-  },
+export interface Stats {
   general: {
-    
     hp: { actual: number, max: number };
     regen_hp: number;
     def: number;
@@ -76,3 +67,5 @@ export interface CharacterStats {
     miscs: Record<BonusMiscsRefKeys, number>
   }
 }
+
+

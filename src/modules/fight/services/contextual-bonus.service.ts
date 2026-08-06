@@ -6,6 +6,17 @@ import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 @Injectable()
 export class ContextualBonusService {
 
+    getBasicAttackStatusEffectsChances(target: FighterCombatEntity): Record<StatusEffectsKeys, number> {
+        return {
+            desmayo: target.getEffectiveStatValue('bonus.cc.desmayo'),
+            retardo: target.getEffectiveStatValue('bonus.cc.retardo'),
+            electrico: target.getEffectiveStatValue('bonus.daño.electrico'),
+            incendio: target.getEffectiveStatValue('bonus.daño.incendio'),
+            sangrado: target.getEffectiveStatValue('bonus.daño.sangrado'),
+            veneno: target.getEffectiveStatValue('bonus.daño.veneno'),
+        }
+    }
+
     getPenetracionChance(target: FighterCombatEntity): number {
         return target.effectiveStats.bonus.daño.penetracion
     }

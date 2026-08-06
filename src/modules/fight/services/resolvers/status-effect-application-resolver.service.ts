@@ -16,8 +16,9 @@ export class StatusEffectApplicationResolverService {
         private readonly contextualBonusService: ContextualBonusService
     ) { }
 
-    resolveSkillEffects(input: ResolveSkillEffectsInput): StatusEffectApplicationResult[] {
-        const configuredEffects = input.skill.statusEffects;
+
+    resolveEffects(input: ResolveSkillEffectsInput): StatusEffectApplicationResult[] {
+        const configuredEffects = input.effect;
 
         if (!configuredEffects) {
             return [];
@@ -121,6 +122,7 @@ export class StatusEffectApplicationResolverService {
                 target: input.target,
                 effectId: input.effectId,
                 appliedOnTurn: input.appliedOnTurn,
+                canStackDuration: config.duration.canStackDuration,
                 duration: {
                     type: 'turns',
                     turns: duration

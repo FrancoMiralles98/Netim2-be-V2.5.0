@@ -31,8 +31,12 @@ export class ActiveAuraEntity {
         this.appliedModifiers = props.appliedModifiers;
     }
 
-    get getDuration():ActiveDurationEntity {
+    get getDuration(): ActiveDurationEntity {
         return this.duration
+    }
+
+    getActivatedOnTurn() {
+        return this.activatedOnTurn
     }
 
     getInstanceId(): string {

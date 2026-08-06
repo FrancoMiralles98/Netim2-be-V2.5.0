@@ -3,26 +3,26 @@ import { CreateActiveStatusEffectProps } from "../types/statusEffects/active-sta
 import { ActiveDurationEntity } from "./active-duration.entity";
 import { ActiveStatusEffectData } from "../types/statusEffects/effect-data.types";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
-import { DeactivateStatusEffectInput } from "../services/processors/status-effect-processor.types";
 
 export class ActiveStatusEffectEntity {
     private readonly instanceId: string;
     private readonly effectId: StatusEffectsKeys;
 
-    private readonly sourceFighterId: string;
-    private readonly targetFighterId: string;
+    private sourceFighterId: string;
+    private targetFighterId: string;
 
     private readonly sourceSkillId?: UNIQUE_ID_SKILLS;
 
-    private readonly appliedOnTurn: number;
+    private appliedOnTurn: number;
+    private lastAppliedOnTurn: number
 
-    private readonly duration: ActiveDurationEntity;
+    private duration: ActiveDurationEntity;
 
     private stacks?: { current: number, toApplyExtraDamage: number }
 
     private ticksExecuted = 0;
 
-    private readonly data: ActiveStatusEffectData;
+    private data: ActiveStatusEffectData;
 
     private statsModifier: CombatStatModifier[]
 
@@ -32,6 +32,7 @@ export class ActiveStatusEffectEntity {
         this.instanceId = props.instanceId;
 
         this.effectId = props.effectId;
+        this.lastAppliedOnTurn = props.lastAppliedOnTurn;
 
         this.sourceFighterId = props.sourceFighterId;
         this.targetFighterId = props.targetFighterId;
@@ -55,6 +56,10 @@ export class ActiveStatusEffectEntity {
 
     get Effectdata(): ActiveStatusEffectData {
         return this.data
+    }
+
+    getlastAppliedOnTurn() {
+        return this.lastAppliedOnTurn
     }
 
     getEffectId(): StatusEffectsKeys {
@@ -138,5 +143,36 @@ export class ActiveStatusEffectEntity {
         }
 
         return { ...this.stacks }
+    }
+
+    reapplyDuration(duration: number, canStackDuration: boolean) {
+        const result = this.duration.addTurns(duration, canStackDuration)
+        return result
+    }
+
+    replaceApplication(input: {
+        sourceFighterId: string;
+        sourceSkillId?: UNIQUE_ID_SKILLS;
+        data: ActiveStatusEffectData;
+        appliedOnTurn: number;
+    }): void {
+        if (!this.active) {
+            throw new Error(`Cannot replace inactive effect ${this.instanceId}.`);
+        }
+
+        this.sourceFighterId = input.sourceFighterId;
+        this.data = input.data;
+        this.lastAppliedOnTurn = input.appliedOnTurn;
+    }
+
+
+    replaceStatModifiers(modifiers: CombatStatModifier[]): void {
+        if (!this.active) {
+            throw new Error(
+                `Cannot replace modifiers of inactive effect ${this.instanceId}.`
+            );
+        }
+
+        this.statsModifier = [...modifiers];
     }
 }

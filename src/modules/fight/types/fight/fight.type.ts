@@ -1,9 +1,10 @@
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
+import { TurnExecutionResult } from "../turns/turn.types";
 
 export type FightPhase =
     | 'setup'
     | 'between_turns'
-    | 'turn_start'
+    | 'turn_started'
     | 'cooldowns'
     | 'aura_upkeep'
     | 'periodic_effects'
@@ -35,7 +36,7 @@ export interface FightResult {
 export interface FighterInitiativeResult {
     fighterId: string;
     diceRoll: number;
-    tieBreakerRoll?:number
+    tieBreakerRoll?: number
     total: number;
 }
 
@@ -77,4 +78,12 @@ export interface FightIdentity {
     id: string;
     randomSeed: string;
     maxTurns: number;
+}
+
+export interface FightExecutionResult {
+    fightId: string;
+
+    turns: TurnExecutionResult[];
+
+    result: FightResult;
 }

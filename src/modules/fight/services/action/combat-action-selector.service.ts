@@ -7,9 +7,16 @@ import { SharedFightService } from "../shared-fight.service";
 @Injectable()
 export class CombatActionSelectorService {
     constructor(
-        private sharedFightService:SharedFightService
-    ){}
-    select(context: TurnContext): CombatAction {
+        private sharedFightService: SharedFightService
+    ) { }
+    
+    select(context: TurnContext, canAct: boolean): CombatAction {
+        if (!context.actor.isAlive() || !canAct) {
+            return {
+                type: 'skip_turn',
+                reason: 'no_available_action'
+            }
+        }
         const healingAction = this.selectAvailableHealingSkill(context)
         if (healingAction) {
             return healingAction

@@ -5,12 +5,12 @@ import { randomUUID } from "crypto";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 import { StatsModifiers, StatusEffectsKeys } from "netim2-shared";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
+import { isPeriodicDamageEffectData } from "../types/statusEffects/effect-data.types";
 
 @Injectable()
 export class StatusEffectManager {
-    apply(
-        input: ApplyStatusEffectInput
-    ): ActiveStatusEffectEntity {
+
+    apply(input: ApplyStatusEffectInput): ActiveStatusEffectEntity {
         const existingEffect = input.target.getActiveStatusEffectByEffectId(input.effectId);
 
         if (existingEffect) {
@@ -31,6 +31,7 @@ export class StatusEffectManager {
             instanceId,
 
             effectId: input.effectId,
+            lastAppliedOnTurn: input.appliedOnTurn,
 
             sourceFighterId: input.source.id,
 
@@ -42,8 +43,7 @@ export class StatusEffectManager {
 
             data: input.data,
 
-            statsModifier:
-                statModifiers,
+            statsModifier: statModifiers,
 
             stacks: input.stacks
                 ? {
@@ -73,25 +73,91 @@ export class StatusEffectManager {
         owner.removeActiveStatusEffectByIstanceId(effect.getInstanceId())
     }
 
+    advanceTurn(target: FighterCombatEntity, currentTurn: number): ActiveStatusEffectEntity[] {
+        const expired: ActiveStatusEffectEntity[] = [];
+
+        const activeEffects = target.getActiveStatusEffects();
+
+        for (const effect of activeEffects) {
+            if (!effect.isActive()) {
+                continue;
+            }
+
+            /*
+             * No consumir duración durante
+             * el mismo turno global en que
+             * fue aplicado.
+             */
+            if (effect.getlastAppliedOnTurn() === currentTurn) {
+                continue;
+            }
+
+            const durationResult = effect.advanceTurn();
+
+            if (durationResult.expired) {
+                this.deactivate(target, effect);
+                expired.push(effect);
+            }
+        }
+
+        return expired;
+    }
+
     private handleReapplication(
         existingEffect: ActiveStatusEffectEntity,
-        input: ApplyStatusEffectInput
+        input: ApplyStatusEffectInput,
     ): ActiveStatusEffectEntity {
-
         const stacks = existingEffect.getStacks();
 
         if (stacks) {
             existingEffect.addStack();
-            return existingEffect;
         }
 
-        /*
-         * Regla inicial:
-         * si no acumula stacks, reemplazar.
-         */
-        this.deactivate(input.target, existingEffect);
+        if (input.duration.type === 'until_no_mana') {
+            this.deactivate(input.target, existingEffect);
+            return this.apply(input);
+        }
 
-        return this.apply(input);
+        existingEffect.reapplyDuration(input.duration.turns, input.canStackDuration)
+
+        const existingData = existingEffect.Effectdata
+        const incomingData = input.data
+
+        if (isPeriodicDamageEffectData(existingData) && isPeriodicDamageEffectData(incomingData)) {
+            if (incomingData.damagePerTick > existingData.damagePerTick) {
+                this.replaceEffectApplication(existingEffect, input)
+            }
+            return existingEffect
+        }
+
+        if (isPeriodicDamageEffectData(existingData) !== isPeriodicDamageEffectData(incomingData)) {
+            throw new Error(`Effect ${input.effectId} was reapplied with an incompatible data type.`);
+        }
+
+        this.replaceEffectApplication(existingEffect, input);
+
+        return existingEffect;
+    }
+
+    private replaceEffectApplication(effect: ActiveStatusEffectEntity, input: ApplyStatusEffectInput) {
+        input.target.removeStatModifiersByStatusEffectInstance(effect.getInstanceId())
+
+        const newStatsModifers = this.createStatModifiers({
+            effectId: effect.getEffectId(),
+            instanceId: effect.getInstanceId(),
+            modifiers: input.modifiers,
+            sourceFighterId: input.source.id
+        })
+
+        effect.replaceApplication({
+            appliedOnTurn: input.appliedOnTurn,
+            data: input.data,
+            sourceFighterId: input.source.id
+        })
+
+        effect.replaceStatModifiers(newStatsModifers)
+
+        input.target.addStatModifiers(newStatsModifers)
     }
 
     private createStatModifiers(input: {

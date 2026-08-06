@@ -8,7 +8,7 @@ import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 
 @Injectable()
 export class BuffManager {
-    activate(input: ActivateBuffInput ): ActiveBuffEntity {
+    activate(input: ActivateBuffInput): ActiveBuffEntity {
         this.validateActivation(input);
 
         const instanceId = randomUUID();
@@ -23,11 +23,11 @@ export class BuffManager {
         const buff = new ActiveBuffEntity({
             instanceId,
             skillId: input.skill.id,
-            sourceFighterId:input.source.id,
-            targetFighterId:input.target.id,
-            appliedOnTurn:input.appliedOnTurn,
-            duration:input.skill.duration,
-            effects:input.effects,
+            sourceFighterId: input.source.id,
+            targetFighterId: input.target.id,
+            appliedOnTurn: input.appliedOnTurn,
+            duration: input.skill.duration,
+            effects: input.effects,
             appliedModifiers,
         });
 
@@ -38,10 +38,10 @@ export class BuffManager {
         return buff;
     }
 
-    deactivate( input: DeactivateBuffInput ): BuffDeactivationResult {
+    deactivate(input: DeactivateBuffInput): BuffDeactivationResult {
         const { target, buff } = input;
 
-        this.validateBuffTarget(target,buff);
+        this.validateBuffTarget(target, buff);
 
         const wasActive = buff.isActive();
 
@@ -59,8 +59,8 @@ export class BuffManager {
         }
 
         return {
-            instanceId:buff.getInstanceId(),
-            skillId:buff.getSkillId(),
+            instanceId: buff.getInstanceId(),
+            skillId: buff.getSkillId(),
             deactivated: wasActive,
         };
     }
@@ -75,17 +75,17 @@ export class BuffManager {
             return undefined;
         }
 
-        return this.deactivate({target: input.target,buff,});
+        return this.deactivate({ target: input.target, buff, });
     }
 
-    deactivateAllOnTarget(input: {target: FighterCombatEntity;}): BuffDeactivationResult[] {
+    deactivateAllOnTarget(input: { target: FighterCombatEntity; }): BuffDeactivationResult[] {
         /*
          * Creamos una copia porque deactivate() elimina
          * buffs del Map.
          */
         const buffs = [...input.target.getActiveBuffs()];
 
-        return buffs.map(buff =>this.deactivate({target: input.target,buff,}));
+        return buffs.map(buff => this.deactivate({ target: input.target, buff, }));
     }
 
     getSkillDamageMultiplier(
@@ -93,14 +93,14 @@ export class BuffManager {
         skillId: UNIQUE_ID_SKILLS
     ): number {
         return target.getActiveBuffs().reduce((multiplier, buff) => {
-                    return ( multiplier * buff.getSkillDamageMultiplier(skillId)
-                    );
-                },
-                1
+            return (multiplier * buff.getSkillDamageMultiplier(skillId)
             );
+        },
+            1
+        );
     }
 
-    consumeForSkill(input: ConsumeBuffsForSkillInput): ConsumeBuffsForSkillResult  {
+    consumeForSkill(input: ConsumeBuffsForSkillInput): ConsumeBuffsForSkillResult {
         const consumedBuffs: ConsumedBuffResult[] = [];
 
         /*
@@ -114,7 +114,7 @@ export class BuffManager {
                 continue;
             }
 
-            const result = buff.consumeForSkill(input.skillId,input.trigger);
+            const result = buff.consumeForSkill(input.skillId, input.trigger);
 
             if (!result.consumed) {
                 continue;
@@ -142,6 +142,36 @@ export class BuffManager {
         };
     }
 
+    advanceTurn(target: FighterCombatEntity, currentTurn: number): ActiveBuffEntity[] {
+        const expired: ActiveBuffEntity[] = [];
+
+        const activeBuffs = target.getActiveBuffs();
+
+        for (const buff of activeBuffs) {
+            if (!buff.isActive()) {
+                continue;
+            }
+
+            /*
+             * No consumir duración durante
+             * el mismo turno global en que
+             * fue aplicado.
+             */
+            if (buff.getAppliedOnTurn() === currentTurn) {
+                continue;
+            }
+
+            const durationResult = buff.advanceTurn();
+
+            if (durationResult.expired) {
+                this.deactivate({ buff, target });
+                expired.push(buff);
+            }
+        }
+
+        return expired;
+    }
+
     private createAppliedModifiers(input: {
         instanceId: string;
         skillId: UNIQUE_ID_SKILLS;
@@ -152,12 +182,12 @@ export class BuffManager {
                 id: randomUUID(),
                 source: {
                     type: 'buff',
-                    instanceId:input.instanceId,
-                    skillId:input.skillId
+                    instanceId: input.instanceId,
+                    skillId: input.skillId
                 },
-                target:modifier.target,
-                operation:modifier.operation,
-                value:modifier.value
+                target: modifier.target,
+                operation: modifier.operation,
+                value: modifier.value
             })
         );
     }
@@ -166,11 +196,11 @@ export class BuffManager {
         input: ActivateBuffInput
     ): void {
         if (!input.source.isAlive()) {
-            throw new Error( `Defeated fighter ${input.source.id} cannot cast a buff.`);
+            throw new Error(`Defeated fighter ${input.source.id} cannot cast a buff.`);
         }
 
         if (!input.target.isAlive()) {
-            throw new Error( `Buff ${input.skill.id} cannot be applied to defeated fighter ${input.target.id}.`);
+            throw new Error(`Buff ${input.skill.id} cannot be applied to defeated fighter ${input.target.id}.`);
         }
 
         if (input.target.hasActiveBuffBySkillId(input.skill.id)) {

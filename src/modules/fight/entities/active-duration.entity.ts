@@ -45,7 +45,7 @@ export class ActiveDurationEntity {
     }
 
     isExpired(): boolean {
-        return ( this.type === 'turns' && this.remainingTurns === 0);
+        return (this.type === 'turns' && this.remainingTurns === 0);
     }
 
     hasLimitedDuration(): boolean {
@@ -66,6 +66,30 @@ export class ActiveDurationEntity {
 
     getRemainingTurns(): number | undefined {
         return this.remainingTurns;
+    }
+
+    addTurns(duration: number, canStackDuration: boolean): ActiveDurationAdvanceResult {
+        if (this.type === 'until_no_mana') {
+            return {
+                type: 'until_no_mana',
+                expired: false,
+            };
+        }
+
+        const previousTurns = this.remainingTurns ?? 0;
+
+        this.remainingTurns = canStackDuration
+            ? previousTurns + duration
+            : duration
+
+        return {
+            type: this.type,
+            expired: this.remainingTurns === 0,
+            previousTurns,
+            remainingTurns: this.remainingTurns
+        }
+
+
     }
 
 }

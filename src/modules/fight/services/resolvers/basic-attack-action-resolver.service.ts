@@ -1,13 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { BasicAttackActionResolution, BasicAttackHitResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
 import { BasicAttackAction } from "../../types/combatAction/combat-action.types";
-import { SharedFightService } from "../shared-fight.service";
 import { RngService } from "src/modules/shared/services/rng.service";
+import { BasicAttackHitResolverService } from "./basic-attack-hit-resolver.service";
+import { StatusEffectApplicationResolverService } from "./status-effect-application-resolver.service";
+import { AppliedStatusEffectResolution } from "./dama-skill-action-resolver.types";
+import { ContextualBonusService } from "../contextual-bonus.service";
 
 @Injectable()
 export class BasicAttackActionResolverService {
     constructor(
-        private sharedFightService: SharedFightService,
+        private basicAttackHitResolver: BasicAttackHitResolverService,
+        private statusEffectsApplicationResolver: StatusEffectApplicationResolverService,
+        private contextualBonusSerivce: ContextualBonusService,
         private rngService: RngService
     ) { }
 
@@ -25,6 +30,7 @@ export class BasicAttackActionResolverService {
          */
 
         const hits: BasicAttackHitResolution[] = [];
+        const statusEffects: AppliedStatusEffectResolution[] = []
 
         let totalBaseDamage = 0;
         let totalModifiedDamage = 0;
@@ -35,10 +41,45 @@ export class BasicAttackActionResolverService {
             if (!target.isAlive()) {
                 break;
             }
-            
-            
+
+            const hitResult = this.basicAttackHitResolver.resolveHit({
+                attacker: context.actor,
+                target,
+                missChance: attackSequence.missChance,
+                hitIndex: index
+            })
+
+            hits.push(hitResult)
+
+            totalBaseDamage += hitResult.baseDamage;
+            totalModifiedDamage += hitResult.modifiedDamage;
+            totalMitigatedDamage += hitResult.mitigatedDamage;
+            totalAppliedDamage += hitResult.appliedDamage;
+
+            if (target.isAlive()) {
+                const hitStatusEffects = this.statusEffectsApplicationResolver.resolveEffects({
+                    appliedOnTurn: context.turnNumber,
+                    source: context.actor,
+                    effect: this.contextualBonusSerivce.getBasicAttackStatusEffectsChances(context.actor),
+                    target,
+                    triggeringDamage: hitResult.baseDamage,
+                })
+                statusEffects.push(...hitStatusEffects)
+            }
         }
 
+        return {
+            actorId: context.actor.id,
+            extraAttackTriggered: attackSequence.extraAttackTriggered,
+            hitCount: attackSequence.hitCount,
+            hits,
+            success: true,
+            statusEffects,
+            targetDefeated: !target.isAlive(),
+            targetId: target.id,
+            totalDamageApplied: totalAppliedDamage,
+            type: 'basic_attack'
+        }
     }
 
     private resolveAttackSequence(
@@ -55,11 +96,11 @@ export class BasicAttackActionResolverService {
         const extraAttackTriggered = this.rngService.rollChance(attackSpeed);
 
         return {
-            hitCount: extraAttackTriggered
-                ? 2
-                : 1,
+            hitCount: extraAttackTriggered ? 2 : 1,
             missChance: 0,
             extraAttackTriggered
         };
     }
+
+
 }

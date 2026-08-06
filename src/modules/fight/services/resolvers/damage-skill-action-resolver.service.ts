@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { DamageSkillActionResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
 import { UseDamageSkillAction } from "../../types/combatAction/combat-action.types";
-import { DamageHitResolution } from "./dama-skill-action-resolver.types";
+import { AppliedStatusEffectResolution, DamageHitResolution } from "./dama-skill-action-resolver.types";
 import { SharedFightService } from "../shared-fight.service";
 import { HitModifiersResolverService } from "./hit-modifiers-resolver.service";
 import { DmgModifierResolverService } from "./dmg-modifier-resolver.service";
@@ -10,7 +10,6 @@ import { BuffManager } from "../../manager/buff-manager";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { SkillHitResolver } from "./skill-hit-resolver.service";
 import { StatusEffectApplicationResolverService } from "./status-effect-application-resolver.service";
-import { HealingResolverService } from "./healing-resolver.service";
 
 @Injectable()
 export class DamageSkillActionResolver {
@@ -21,7 +20,6 @@ export class DamageSkillActionResolver {
         private damageCalculatorService: DamageCalculatorService,
         private contextualBonusService: ContextualBonusService,
         private skillHitResolver: SkillHitResolver,
-        private healingResolver: HealingResolverService,
         private buffManager: BuffManager,
         private statusEffectsApplicationResolver: StatusEffectApplicationResolverService
 
@@ -61,6 +59,7 @@ export class DamageSkillActionResolver {
         })
 
         const hits: DamageHitResolution[] = [];
+        const statusEffects: AppliedStatusEffectResolution[] = []
 
         let totalBaseDamage = 0;
         let totalModifiedDamage = 0;
@@ -93,15 +92,20 @@ export class DamageSkillActionResolver {
             totalMitigatedDamage += hitResult.totalMitigatedDamage;
 
             totalAppliedDamage += hitResult.totalAppliedDamage;
+
+            if (target.isAlive()) {
+                const hitStatusEffects = this.statusEffectsApplicationResolver.resolveEffects({
+                    appliedOnTurn: context.turnNumber,
+                    source: context.actor,
+                    effect: skill.statusEffects,
+                    target,
+                    triggeringDamage: hitResult.totalBaseDamage,
+
+                })
+                statusEffects.push(...hitStatusEffects)
+            }
         }
 
-        const statusEffects = this.statusEffectsApplicationResolver.resolveSkillEffects({
-            appliedOnTurn: context.turnNumber,
-            skill,
-            source: context.actor,
-            target,
-            triggeringDamage: totalBaseDamage
-        })
 
         if (skill.cd.onActivate) {
             context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)

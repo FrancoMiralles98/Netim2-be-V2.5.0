@@ -1,10 +1,16 @@
-import {  BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys } from "netim2-shared";
+import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys } from "netim2-shared";
 
 
 export interface FighterBaseStats {
     general: {
-        maxHp: number;
-        maxMana: number;
+        hp: {
+            actual: number;
+            max: number;
+        };
+        mana: {
+            actual: number;
+            max: number;
+        };
 
         regenHp: number;
         regenMana: number;

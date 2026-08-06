@@ -2,7 +2,7 @@ import { DurationConfig, StatusEffectsKeys } from "netim2-shared";
 import { ActiveStatusEffectData } from "./effect-data.types";
 import { CombatStatModifier } from "../activeAura/active-aura.type";
 
-export interface CreateActiveStatusEffectProps { 
+export interface CreateActiveStatusEffectProps {
     instanceId: string;
     effectId: StatusEffectsKeys;
 
@@ -10,6 +10,7 @@ export interface CreateActiveStatusEffectProps {
     targetFighterId: string;
 
     appliedOnTurn: number;
+    lastAppliedOnTurn: number;
     duration: DurationConfig;
 
     stacks?: {

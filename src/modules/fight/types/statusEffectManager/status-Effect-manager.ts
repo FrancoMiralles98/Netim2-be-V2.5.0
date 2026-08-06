@@ -7,7 +7,7 @@ export interface ApplyStatusEffectInput {
     target: FighterCombatEntity;
 
     effectId: StatusEffectsKeys;
-
+    canStackDuration: boolean;
     appliedOnTurn: number;
 
     duration: DurationConfig;

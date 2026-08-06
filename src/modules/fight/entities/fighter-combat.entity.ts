@@ -23,12 +23,12 @@ export class FighterCombatEntity {
 
             resources: {
                 hp: {
-                    current: createProps.baseStats.general.maxHp,
-                    max: createProps.baseStats.general.maxHp
+                    current: createProps.baseStats.general.hp.actual,
+                    max: createProps.baseStats.general.hp.max
                 },
                 mana: {
-                    current: createProps.baseStats.general.maxMana,
-                    max: createProps.baseStats.general.maxMana
+                    current: createProps.baseStats.general.mana.actual,
+                    max: createProps.baseStats.general.mana.max
                 }
             },
 

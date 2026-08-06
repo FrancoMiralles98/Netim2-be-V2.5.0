@@ -6,6 +6,7 @@ import { AuraActionResolverService } from "../resolvers/aura-action-resolver.ser
 import { BuffActionResolver } from "../resolvers/buff-action-resolver.service";
 import { HealingSkillActionResolverService } from "../resolvers/healing-skill-action-resolver.service";
 import { DamageSkillActionResolver } from "../resolvers/damage-skill-action-resolver.service";
+import { BasicAttackActionResolverService } from "../resolvers/basic-attack-action-resolver.service";
 
 @Injectable()
 export class ActionResolutionService {
@@ -14,9 +15,18 @@ export class ActionResolutionService {
         private buffActionResolver: BuffActionResolver,
         private healingSkillActionResolver: HealingSkillActionResolverService,
         private damageSkillActionResolver: DamageSkillActionResolver,
+        private basicAttackActionResolver: BasicAttackActionResolverService,
     ) { }
 
-    resolve(action: CombatAction, context: TurnContext): ActionResolution {
+    resolve(action: CombatAction, context: TurnContext, canAct: boolean): ActionResolution {
+        if (!context.actor.isAlive() || !canAct) {
+            return {
+                type: "skip_turn",
+                actorId: context.actor.id,
+                reason: 'no_available_action',
+                success: true
+            }
+        }
         switch (action.type) {
             case 'cast_aura':
                 return this.auraActionResolver.resolve({ action, context })
@@ -27,7 +37,14 @@ export class ActionResolutionService {
             case 'use_damage_skill':
                 return this.damageSkillActionResolver.resolve({ action, context })
             case "basic_attack":
+                return this.basicAttackActionResolver.resolve({ action, context })
             case "skip_turn":
+                return {
+                    type: 'skip_turn',
+                    actorId: context.actor.id,
+                    reason: 'no_available_action',
+                    success: true
+                }
             default:
                 return this.assertNever(action as never)
         }

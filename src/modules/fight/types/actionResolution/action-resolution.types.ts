@@ -104,6 +104,7 @@ export interface BasicAttackActionResolution
     hitCount: number;
 
     hits: BasicAttackHitResolution[];
+    statusEffects: AppliedStatusEffectResolution[]
 
     targetDefeated: boolean;
 }

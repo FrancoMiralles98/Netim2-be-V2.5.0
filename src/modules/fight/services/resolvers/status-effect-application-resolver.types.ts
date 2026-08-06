@@ -126,7 +126,7 @@ export interface ResolveSkillEffectsInput {
     source: FighterCombatEntity;
     target: FighterCombatEntity;
     triggeringDamage: number
-    skill: SkillDamage;
+    effect: Partial<Record<StatusEffectsKeys, number>> | undefined;
 
     appliedOnTurn: number;
 
