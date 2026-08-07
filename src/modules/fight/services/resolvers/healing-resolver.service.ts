@@ -1,24 +1,25 @@
 import { Injectable } from "@nestjs/common";
-import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { HealingReductionDetail, HealingResolution, ResolveHealingInput } from "./healing-resolver.types";
-import { RngService } from "src/modules/shared/services/rng.service";
-import { BONUS_EFFECTS_CONFIG } from "../../config/bonus-effects.config";
+import { HealingReductionAppliedDetail, HealingResolution, ResolveHealingInput } from "./healing-resolver.types";
+import { HealingReductionSource } from "../../types/fighter/healing-reduction.types";
 
 @Injectable()
 export class HealingResolverService {
-    constructor(
-        private rngService: RngService
-    ) { }
 
-    resolve(
-        { healer, opponent, source, baseAmount }: ResolveHealingInput
-    ): HealingResolution {
+    resolve({ healer, source, baseAmount }: ResolveHealingInput): HealingResolution {
         const amountBeforeReduction = this.normalizeAmount(baseAmount)
-        const reductionsDetails = this.getHealingReductionDetails(healer, opponent)
-        const reductionsPorcentage = Math.min(1, reductionsDetails.reduce((total, reduction) =>
-            total + reduction.percentage, 0));
+        const reductionsDetails = healer.getHealingReduction()
+        const reductionsPorcentage = reductionsDetails.totalReductionPercent
 
         const preventedAmount = Math.floor(amountBeforeReduction * reductionsPorcentage)
+
+        const reductions =
+            this.resolveReductionDetails({
+                amountBeforeReduction,
+                totalReductionPercentage: reductionsPorcentage,
+                preventedAmount,
+                sources: reductionsDetails.sources
+            });
+
         const amountAfterReduction = Math.max(0, amountBeforeReduction - preventedAmount);
 
         const applied = healer.heal(amountAfterReduction)
@@ -32,37 +33,67 @@ export class HealingResolverService {
             hpBefore: applied.hpBefore,
             overhealing: applied.overhealing,
             preventedAmount,
-            reductions: reductionsDetails,
+            reductions,
             source,
             totalReductionPercentage: reductionsPorcentage
         }
     }
 
-    private getHealingReductionDetails(
-        healer: FighterCombatEntity,
-        target: FighterCombatEntity
-    ): HealingReductionDetail[] {
+    private resolveReductionDetails(input: {
+        amountBeforeReduction: number;
+        totalReductionPercentage: number;
+        preventedAmount: number;
+        sources: HealingReductionSource[];
+    }): HealingReductionAppliedDetail[] {
 
-        let reductions: HealingReductionDetail[] = []
-        const venenoEffect = healer.findActiveStatusEffect('veneno') //veneno aplica reducion de curaciones
-        if (venenoEffect && venenoEffect.Effectdata.effectId === 'veneno') {
-            reductions.push({
-                percentage: venenoEffect.Effectdata.healReduction,
-                type: 'veneno',
-            })
+        if (input.sources.length === 0 || input.preventedAmount === 0) {
+            return [];
         }
 
-        const targetCortaCuras = target.baseStats.bonus.defensa.corta_curacion
+        const rawTotalPercent = input.sources.reduce((total, source) =>
+            total + source.reductionPercent, 0);
 
-        if (this.rngService.randomNumberInRange(targetCortaCuras)) {
-            reductions.push({
-                percentage: BONUS_EFFECTS_CONFIG.corta_curacion,
-                type: 'corta_cura',
-                sourceFighterId: target.id
-            })
+        if (rawTotalPercent <= 0) {
+            return [];
         }
 
-        return reductions
+        /*
+         * Distribuimos el preventedAmount real
+         * proporcionalmente entre todos los efectos.
+         *
+         * Esto también funciona correctamente cuando
+         * las reducciones superan el límite de 100%.
+         */
+        let distributedAmount = 0;
+
+        return input.sources.map((reduction, index) => {
+
+            /*
+             * Al último efecto le asignamos
+             * el resto para evitar diferencias
+             * por redondeo.
+             */
+            const isLast = index === input.sources.length - 1;
+
+            const preventedByEffect = isLast
+                ? input.preventedAmount - distributedAmount
+                : Math.floor(input.preventedAmount * (reduction.reductionPercent / rawTotalPercent));
+
+            distributedAmount += preventedByEffect;
+
+            return {
+                effectId: reduction.effectId,
+
+                sourceFighterId: reduction.sourceFighterId,
+
+                effectInstanceId: reduction.effectInstanceId,
+
+                reductionPercent: reduction.reductionPercent,
+
+                preventedAmount: preventedByEffect
+            };
+        }
+        );
     }
 
     private normalizeAmount(amount: number): number {

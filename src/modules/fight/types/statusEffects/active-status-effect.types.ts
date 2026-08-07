@@ -4,7 +4,7 @@ import { CombatStatModifier } from "../activeAura/active-aura.type";
 
 export interface CreateActiveStatusEffectProps {
     instanceId: string;
-    effectId: StatusEffectsKeys;
+    effectId: ActiveStatusEffectId;
 
     sourceFighterId: string;
     targetFighterId: string;
@@ -22,3 +22,5 @@ export interface CreateActiveStatusEffectProps {
 
     data: ActiveStatusEffectData;
 }
+
+export type ActiveStatusEffectId = StatusEffectsKeys | 'corta_curacion'

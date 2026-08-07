@@ -2,6 +2,7 @@ import { UNIQUE_ID_SKILLS } from "netim2-shared";
 import { CombatAction } from "../combatAction/combat-action.types";
 import { TurnContext } from "../fight/fight-context.types";
 import { AppliedStatusEffectResolution, DamageHitResolution } from "../../services/resolvers/dama-skill-action-resolver.types";
+import { HealingResolution } from "../../services/resolvers/healing-resolver.types";
 
 export interface ResolveCombatActionInput {
     context: TurnContext;
@@ -80,6 +81,8 @@ export interface DamageSkillActionResolution
 
     cooldownRemainingTurns: number;
 
+    lifeSteal: HealingResolution
+
     hitCount: number;
     hits: DamageHitResolution[];
 
@@ -102,6 +105,8 @@ export interface BasicAttackActionResolution
     extraAttackTriggered: boolean;
 
     hitCount: number;
+
+    lifeSteal: HealingResolution
 
     hits: BasicAttackHitResolution[];
     statusEffects: AppliedStatusEffectResolution[]

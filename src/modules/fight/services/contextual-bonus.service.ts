@@ -17,6 +17,14 @@ export class ContextualBonusService {
         }
     }
 
+    getSkillLifeSteal(target: FighterCombatEntity) {
+        return target.getEffectiveStatValue('bonus.defensa.vampirismo_hechizo')
+    }
+
+    getBasicAttackLifeSteal(target: FighterCombatEntity) {
+        return target.getEffectiveStatValue('bonus.defensa.robo_vida')
+    }
+
     getPenetracionChance(target: FighterCombatEntity): number {
         return target.effectiveStats.bonus.daño.penetracion
     }

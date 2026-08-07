@@ -10,6 +10,7 @@ import { BuffManager } from "../../manager/buff-manager";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { SkillHitResolver } from "./skill-hit-resolver.service";
 import { StatusEffectApplicationResolverService } from "./status-effect-application-resolver.service";
+import { LifeStealResolverService } from "./life-steal-resolver.service";
 
 @Injectable()
 export class DamageSkillActionResolver {
@@ -21,7 +22,8 @@ export class DamageSkillActionResolver {
         private contextualBonusService: ContextualBonusService,
         private skillHitResolver: SkillHitResolver,
         private buffManager: BuffManager,
-        private statusEffectsApplicationResolver: StatusEffectApplicationResolverService
+        private statusEffectsApplicationResolver: StatusEffectApplicationResolverService,
+        private lifeStealResolverService: LifeStealResolverService,
 
     ) { }
 
@@ -106,6 +108,13 @@ export class DamageSkillActionResolver {
             }
         }
 
+        const lifeStealResult = this.lifeStealResolverService.resolveSkillLifeSteal({
+            attacker: context.actor,
+            mechanicsEffects: skill.mechanicsEffects,
+            damageDealt: totalAppliedDamage,
+            target,
+        })
+
 
         if (skill.cd.onActivate) {
             context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
@@ -119,6 +128,7 @@ export class DamageSkillActionResolver {
             cooldownRemainingTurns: context.actor.getSkillRemainingCooldown(skill.id),
             hitCount: hitModifierResult.hitCount,
             hits,
+            lifeSteal: lifeStealResult,
             manaSpent: manaSpent.amount,
             remainingMana: manaSpent.manaAfter,
             skillId: skill.id,

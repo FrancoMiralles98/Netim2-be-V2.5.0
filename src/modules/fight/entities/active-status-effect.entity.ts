@@ -1,12 +1,12 @@
 import { StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
-import { CreateActiveStatusEffectProps } from "../types/statusEffects/active-status-effect.types";
+import { ActiveStatusEffectId, CreateActiveStatusEffectProps } from "../types/statusEffects/active-status-effect.types";
 import { ActiveDurationEntity } from "./active-duration.entity";
 import { ActiveStatusEffectData } from "../types/statusEffects/effect-data.types";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 
 export class ActiveStatusEffectEntity {
     private readonly instanceId: string;
-    private readonly effectId: StatusEffectsKeys;
+    private readonly effectId: ActiveStatusEffectId;
 
     private sourceFighterId: string;
     private targetFighterId: string;
@@ -62,7 +62,7 @@ export class ActiveStatusEffectEntity {
         return this.lastAppliedOnTurn
     }
 
-    getEffectId(): StatusEffectsKeys {
+    getEffectId(): ActiveStatusEffectId {
         return this.effectId;
     }
 

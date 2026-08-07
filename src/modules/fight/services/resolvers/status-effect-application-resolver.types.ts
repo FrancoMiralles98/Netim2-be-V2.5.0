@@ -120,7 +120,8 @@ export type StatusEffectConfig =
     | BleedingStatusEffectConfig
     | ElectricStatusEffectConfig
     | ControlStatusEffectConfig
-    | StatModifierStatusEffectConfig;
+    | StatModifierStatusEffectConfig
+    | HealingReductionEffectData
 
 export interface ResolveSkillEffectsInput {
     source: FighterCombatEntity;
@@ -146,4 +147,18 @@ export interface StatusEffectApplicationResult {
     resistanceChance?: number;
 
     stacks?: number;
+}
+
+export interface HealingReductionEffectData {
+    type: 'healing_reduction';
+
+    effectId: 'corta_curacion';
+    resistible: boolean;
+    duration: StatusEffectDurationConfig;
+
+    /**
+     * 50 significa reducir un 50% toda
+     * curación recibida.
+     */
+    reductionPercent: number;
 }

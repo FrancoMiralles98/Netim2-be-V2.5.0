@@ -1,4 +1,4 @@
-import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys, BonusStatsGeneralRefKeys, SkillAura, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys, BonusGeneralRefKeys, SkillAura, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 
 export interface CreateActiveAuraProps {
     instanceId: string;
@@ -25,7 +25,7 @@ export interface CombatStatModifier {
 }
 
 export type CombatStatKey =
-    | `general.${BonusStatsGeneralRefKeys}`
+    | `general.${BonusGeneralRefKeys}`
     | `bonus.daño.${BonusDañoRefKeys}`
     | `bonus.defensa.${BonusDefensaRefKeys}`
     | `bonus.cc.${BonusCCRefKeys}`

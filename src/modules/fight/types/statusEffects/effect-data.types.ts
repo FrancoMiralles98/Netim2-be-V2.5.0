@@ -5,6 +5,7 @@ export type ActiveStatusEffectData =
     | RetardoEffectData
     | ElectricEffectData
     | DesmayoEffectData
+    | HealingReductionEffectData
 
 export type PeriodicDamageEffectData =
     | PoisonEffectData
@@ -12,11 +13,17 @@ export type PeriodicDamageEffectData =
     | BleedingEffectData
     | ElectricEffectData;
 
+export interface HealingReductionEffectData {
+    effectId: 'corta_curacion',
+    type: 'healing_reduction';
+    healReductionPorcent: number;
+}
+
 export interface PoisonEffectData {
     effectId: 'veneno';
     damagePerTick: number;
     type: 'periodic_damage'
-    healReduction: number
+    healReductionPorcent: number
 }
 
 export interface FireEffectData {
@@ -60,6 +67,7 @@ export function isPeriodicDamageEffectData(
 
         case 'control':
         case 'stat_modifier':
+        case 'healing_reduction':
             return false;
     }
 }

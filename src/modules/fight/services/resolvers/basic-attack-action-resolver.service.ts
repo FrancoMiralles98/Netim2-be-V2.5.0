@@ -6,6 +6,7 @@ import { BasicAttackHitResolverService } from "./basic-attack-hit-resolver.servi
 import { StatusEffectApplicationResolverService } from "./status-effect-application-resolver.service";
 import { AppliedStatusEffectResolution } from "./dama-skill-action-resolver.types";
 import { ContextualBonusService } from "../contextual-bonus.service";
+import { LifeStealResolverService } from "./life-steal-resolver.service";
 
 @Injectable()
 export class BasicAttackActionResolverService {
@@ -13,6 +14,7 @@ export class BasicAttackActionResolverService {
         private basicAttackHitResolver: BasicAttackHitResolverService,
         private statusEffectsApplicationResolver: StatusEffectApplicationResolverService,
         private contextualBonusSerivce: ContextualBonusService,
+        private lifeStealResolverService: LifeStealResolverService,
         private rngService: RngService
     ) { }
 
@@ -68,11 +70,18 @@ export class BasicAttackActionResolverService {
             }
         }
 
+        const lifeStealResult = this.lifeStealResolverService.resolveBasicAttackLifeSteal({
+            attacker: context.actor,
+            damageDealt: totalAppliedDamage,
+            target,
+        })
+
         return {
             actorId: context.actor.id,
             extraAttackTriggered: attackSequence.extraAttackTriggered,
             hitCount: attackSequence.hitCount,
             hits,
+            lifeSteal: lifeStealResult,
             success: true,
             statusEffects,
             targetDefeated: !target.isAlive(),

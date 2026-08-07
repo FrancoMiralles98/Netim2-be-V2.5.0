@@ -7,6 +7,7 @@ import { ActiveAuraEntity } from "./active-aura.entity";
 import { ActiveBuffEntity } from "./active-buff.entity";
 import { ActiveStatusEffectEntity } from "./active-status-effect.entity";
 import { SkillCooldownReductionResult } from "../types/fighter/cooldown.types";
+import { HealingReductionResult, HealingReductionSource } from "../types/fighter/healing-reduction.types";
 
 export class FighterCombatEntity {
     private props: FighterCombatProps;
@@ -147,6 +148,45 @@ export class FighterCombatEntity {
 
     getStatModifiers(): readonly CombatStatModifier[] {
         return Array.from(this.props.statModifiers.values());
+    }
+
+    getHealingReduction(): HealingReductionResult {
+        const sources: HealingReductionSource[] = [];
+
+        for (const effect of this.props.activeEffects.values()) {
+            if (!effect.isActive()) {
+                continue;
+            }
+
+            const data = effect.Effectdata;
+
+            switch (data.effectId) {
+                case 'veneno':
+                    sources.push({
+                        effectId: 'veneno',
+                        sourceFighterId: effect.getSourceFighterId(),
+                        effectInstanceId: effect.getInstanceId(),
+                        reductionPercent: data.healReductionPorcent
+                    });
+                    break;
+                case 'corta_curacion':
+                    sources.push({
+                        effectId: 'corta_curacion',
+                        sourceFighterId: effect.getSourceFighterId(),
+                        effectInstanceId: effect.getInstanceId(),
+                        reductionPercent: data.healReductionPorcent
+                    });
+                    break;
+            }
+        }
+
+        const totalReductionPercent = Math.min(100, sources.reduce((total, source) =>
+            total + source.reductionPercent, 0));
+
+        return {
+            totalReductionPercent,
+            sources
+        };
     }
 
     removeStatModifiersByAuraInstance(auraInstanceId: string): void {

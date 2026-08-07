@@ -1,5 +1,5 @@
-import { FightEntity } from "../../entities/fight.entity";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
+import { HealingReductionResult } from "../../types/fighter/healing-reduction.types";
 
 export type HealingSource =
     | 'skill'
@@ -7,19 +7,13 @@ export type HealingSource =
     | 'robo_vida'
     | 'vampirismo_hechizo';
 
-export interface HealingReductionDetail {
-    type: 'corta_cura' | 'veneno';
-    percentage: number;
-    sourceFighterId?: string;
-}
-
 export interface HealingResolution {
     source: HealingSource;
 
     baseAmount: number;
     amountBeforeReduction: number;
 
-    reductions: HealingReductionDetail[];
+    reductions: HealingReductionAppliedDetail[];
     totalReductionPercentage: number;
     preventedAmount: number;
 
@@ -32,22 +26,22 @@ export interface HealingResolution {
     hpAfter: number;
 }
 
-export type HealingReductionSource =
-    | {
-        type: 'healing_cut';
-        sourceFighterId: string;
-        percentage: number;
-    }
-    | {
-        type: 'poison';
-        effectInstanceId: string;
-        sourceFighterId?: string;
-        percentage: number;
-    };
+export interface HealingReductionAppliedDetail {
+    effectId: 'veneno' | 'corta_curacion';
+
+    sourceFighterId: string;
+    effectInstanceId: string;
+
+    reductionPercent: number;
+
+    /**
+     * Cantidad de curación que este efecto evitó.
+     */
+    preventedAmount: number;
+}
 
 export interface ResolveHealingInput {
     healer: FighterCombatEntity;
-    opponent: FighterCombatEntity;
     source: HealingSource;
     baseAmount: number;
 

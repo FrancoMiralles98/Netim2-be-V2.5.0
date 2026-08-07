@@ -1,7 +1,7 @@
 import { StatusEffectsKeys } from "netim2-shared";
 import { StatusEffectConfig } from "../services/resolvers/status-effect-application-resolver.types";
 
-export const STATUS_EFFECTS_CONFIG: Record<StatusEffectsKeys, StatusEffectConfig> = {
+export const STATUS_EFFECTS_CONFIG: Record<StatusEffectsKeys | 'corta_curacion', StatusEffectConfig> = {
     veneno: {
         type: 'periodic_damage',
         effectId: 'veneno',
@@ -109,5 +109,16 @@ export const STATUS_EFFECTS_CONFIG: Record<StatusEffectsKeys, StatusEffectConfig
             value: 25
         }
         ]
+    },
+    corta_curacion: {
+        resistible: false,
+        duration: {
+            baseTurns: 4,
+            canStackDuration: false,
+            bonusTarget: [],
+        },
+        type: 'healing_reduction',
+        effectId: 'corta_curacion',
+        reductionPercent: 0.5
     }
 }
