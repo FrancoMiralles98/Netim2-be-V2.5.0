@@ -6,6 +6,7 @@ import { CombatStatModifier } from "../activeAura/active-aura.type";
 import { CombatAction } from "../combatAction/combat-action.types";
 import { HitResolutionSnapshot } from "./resource/hit-resolution-snapshot.types";
 import { CombatDamageSource } from "./resource/combat-damage-resource.types";
+import { ActiveStatusEffectId } from "../statusEffects/active-status-effect.types";
 
 export interface DamageResolutionSnapshot {
     damageType: DamageType;
@@ -466,13 +467,13 @@ export interface ControlEffectProcessedEvent
     fighterId: string;
 
     effectInstanceId: string;
-    effectId: StatusEffectsKeys;
+    effectId: ActiveStatusEffectId;
 
     controlType: 'stun';
 
     preventedAction: boolean;
 
-    remainingTurns: number;
+    remainingTurns?: number;
     expired: boolean;
 }
 

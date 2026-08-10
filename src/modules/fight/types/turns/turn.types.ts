@@ -1,4 +1,4 @@
-import { ActionResolution } from "../actionResolution/action-resolution.types";
+import { ActionResolution, PeriodicStatusEffectResolution } from "../actionResolution/action-resolution.types";
 import { CombatAction } from "../combatAction/combat-action.types";
 import { FightResult } from "../fight/fight.type";
 import { FightEvent } from "../fightEvents/fight-event.types";
@@ -24,4 +24,12 @@ export interface TurnEndResult {
     expiredAuraInstanceIds: string[];
     expiredBuffInstanceIds: string[];
     expiredStatusEffectInstanceIds: string[];
+}
+
+export interface PeriodicEffectsTurnStartResult {
+    effects: PeriodicStatusEffectResolution[];
+
+    totalAppliedDamage: number;
+
+    actorDefeated: boolean;
 }

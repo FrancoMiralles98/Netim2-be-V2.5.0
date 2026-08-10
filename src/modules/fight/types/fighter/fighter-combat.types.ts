@@ -58,3 +58,10 @@ export interface ResourcePool {
     current: number;
     max: number;
 }
+
+export interface RestoreManaResult {
+    manaBefore: number,
+    manaAfter: number,
+    effectiveRestoration: number,
+    wastedRestoration: number
+}

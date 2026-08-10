@@ -33,7 +33,6 @@ export class TurnManager {
             actorId: context.actor.id,
             eventId: randomUUID(),
             fightId: context.fight.id,
-            sequence: fight.turnNumber,
             turnNumber: context.turnNumber
         })
 

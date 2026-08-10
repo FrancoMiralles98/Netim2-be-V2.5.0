@@ -6,6 +6,7 @@ import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 import { StatsModifiers, StatusEffectsKeys } from "netim2-shared";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { isPeriodicDamageEffectData } from "../types/statusEffects/effect-data.types";
+import { ActiveStatusEffectId } from "../types/statusEffects/active-status-effect.types";
 
 @Injectable()
 export class StatusEffectManager {
@@ -162,7 +163,7 @@ export class StatusEffectManager {
 
     private createStatModifiers(input: {
         instanceId: string;
-        effectId: StatusEffectsKeys;
+        effectId: ActiveStatusEffectId;
         sourceFighterId: string;
         modifiers: readonly StatsModifiers[];
     }): CombatStatModifier[] {

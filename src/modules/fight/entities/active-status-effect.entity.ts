@@ -1,5 +1,5 @@
 import { StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
-import { ActiveStatusEffectId, CreateActiveStatusEffectProps } from "../types/statusEffects/active-status-effect.types";
+import { ActiveStatusEffectId, CreateActiveStatusEffectProps, StatusEffectStackProcResult } from "../types/statusEffects/active-status-effect.types";
 import { ActiveDurationEntity } from "./active-duration.entity";
 import { ActiveStatusEffectData } from "../types/statusEffects/effect-data.types";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
@@ -52,6 +52,10 @@ export class ActiveStatusEffectEntity {
 
     getInstanceId(): string {
         return this.instanceId;
+    }
+
+    getTicksExecuted(): number {
+        return this.ticksExecuted
     }
 
     get Effectdata(): ActiveStatusEffectData {
@@ -143,6 +147,54 @@ export class ActiveStatusEffectEntity {
         }
 
         return { ...this.stacks }
+    }
+
+    consumeStacksForExtraDamage(): StatusEffectStackProcResult {
+        if (!this.stacks) {
+            return {
+                consumedStacks: 0,
+                triggered: false,
+                procCount: 0,
+                remainingStacks: 0
+            }
+        }
+        const threshold = this.stacks.toApplyExtraDamage
+
+        if (threshold <= 0) {
+            throw new Error(`Invalid stack threshold for effect ${this.instanceId}.`);
+        }
+
+        const procCount = Math.floor(this.stacks.current / threshold);
+
+        if (procCount === 0) {
+            return {
+                triggered: false,
+
+                procCount: 0,
+
+                consumedStacks: 0,
+
+                remainingStacks: this.stacks.current
+            };
+        }
+
+        const consumedStacks = procCount * threshold;
+
+        this.stacks = {
+            ...this.stacks,
+            current: this.stacks.current - consumedStacks
+        }
+
+        return {
+            triggered: true,
+
+            procCount,
+
+            consumedStacks,
+
+            remainingStacks:
+                this.stacks.current
+        };
     }
 
     reapplyDuration(duration: number, canStackDuration: boolean) {

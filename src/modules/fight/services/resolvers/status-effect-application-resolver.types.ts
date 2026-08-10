@@ -155,6 +155,7 @@ export interface HealingReductionEffectData {
     effectId: 'corta_curacion';
     resistible: boolean;
     duration: StatusEffectDurationConfig;
+    statsModifiers?: StatsModifiers[];
 
     /**
      * 50 significa reducir un 50% toda

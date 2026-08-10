@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
-import { SkillAura, SkillType } from "netim2-shared";
+import { SkillType } from "netim2-shared";
 
 @Injectable()
 export class SharedFightService {
@@ -56,7 +56,7 @@ export class SharedFightService {
             throw new Error(`El daño no es válido: ${value}.`);
         }
 
-        return Math.max(0,Math.floor(value));
+        return Math.max(0, Math.floor(value));
     }
 
 

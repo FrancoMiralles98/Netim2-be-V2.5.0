@@ -24,3 +24,12 @@ export interface CreateActiveStatusEffectProps {
 }
 
 export type ActiveStatusEffectId = StatusEffectsKeys | 'corta_curacion'
+
+export interface StatusEffectStackProcResult {
+    triggered: boolean;
+
+    procCount: number;
+
+    consumedStacks: number;
+    remainingStacks: number;
+}

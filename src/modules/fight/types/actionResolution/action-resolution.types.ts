@@ -3,6 +3,9 @@ import { CombatAction } from "../combatAction/combat-action.types";
 import { TurnContext } from "../fight/fight-context.types";
 import { AppliedStatusEffectResolution, DamageHitResolution } from "../../services/resolvers/dama-skill-action-resolver.types";
 import { HealingResolution } from "../../services/resolvers/healing-resolver.types";
+import { PeriodicDamageEffectData } from "../statusEffects/effect-data.types";
+import { DamageResolutionResult } from "../../services/resolvers/damage-resolver.types";
+import { ActiveStatusEffectId } from "../statusEffects/active-status-effect.types";
 
 export interface ResolveCombatActionInput {
     context: TurnContext;
@@ -164,6 +167,52 @@ export interface BasicAttackHitResolution {
 
     mitigatedDamage: number;
     appliedDamage: number;
+    overkillDamage: number;
+
+    hpBefore: number;
+    hpAfter: number;
+}
+
+
+export interface PeriodicStatusEffectResolution {
+    effectId: ActiveStatusEffectId;
+
+    instanceId: string;
+
+    sourceFighterId: string;
+    targetFighterId: string;
+
+    tickNumber: number;
+
+    tickDamage: DamageResolutionResult;
+
+    stackProc?: {
+        procCount: number;
+
+        consumedStacks: number;
+        remainingStacks: number;
+
+        damagePerProc: number;
+
+        totalRequestedDamage: number;
+
+        damage: DamageResolutionResult;
+    };
+
+    totalAppliedDamage: number;
+
+    targetDefeated: boolean;
+}
+
+export interface PeriodicDamageApplicationResult {
+    requestedDamage: number;
+
+    mitigatedDamage: number;
+
+    damageAfterMitigation: number;
+
+    appliedDamage: number;
+
     overkillDamage: number;
 
     hpBefore: number;

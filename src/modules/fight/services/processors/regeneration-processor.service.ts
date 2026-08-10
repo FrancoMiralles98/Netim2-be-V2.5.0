@@ -1,6 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { TurnContext } from "../../types/fight/fight-context.types";
 import { HealingResolverService } from "../resolvers/healing-resolver.service";
+import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
+import { FightEntity } from "../../entities/fight.entity";
+import { HealingResolution } from "../resolvers/healing-resolver.types";
+import { RestoreManaResult } from "../../types/fighter/fighter-combat.types";
 
 @Injectable()
 export class RegenerationProcessorService {
@@ -10,27 +14,39 @@ export class RegenerationProcessorService {
 
     processTurnStart(context: TurnContext) {
         const regenValues = context.actor.getRegenerationValues()
-        const target = context.fight.getSingleOpponentOf(context.actor.id)
         const healingResult = this.healingResolver.resolve({
             baseAmount: regenValues.hp,
             healer: context.actor,
-            opponent: target,
             source: 'regeneration'
         })
 
         const manaResult = context.actor.restoreMana(regenValues.mana)
 
-        context.actor.statistics.registerHealing({
+        this.regenerationStatisticRegister(context.actor, context.fight, healingResult, manaResult)
+
+    }
+
+    private regenerationStatisticRegister(
+        actor: FighterCombatEntity,
+        fight: FightEntity,
+        healingResult: HealingResolution,
+        manaResult: RestoreManaResult
+    ): void {
+        actor.statistics.registerHealing({
             type: 'regeneration',
             amount: healingResult.effectiveHealing
         })
-        context.actor.statistics.registerResources({
+
+        actor.statistics.registerResources({
             manaRegenerated: manaResult.effectiveRestoration
         })
 
-        target.statistics.registerHealing({
-            type: 'prevented',
-            amount: healingResult.preventedAmount
+        healingResult.reductions.forEach(reductionDetail => {
+            const fighter = fight.getFighter(reductionDetail.sourceFighterId)
+            fighter.statistics.registerHealing({
+                type: 'prevented',
+                amount: reductionDetail.preventedAmount
+            })
         })
     }
 }

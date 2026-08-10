@@ -17,10 +17,20 @@ export class TurnStartProcessorSerivce {
     ) { }
 
     process(context: TurnContext): { canAct: boolean } {
+        
         this.cooldownProcessorService.processTurnStart(context)
+
         this.regenerationProcessorService.processTurnStart(context)
+
         this.auraUnkeepProcessorService.process(context.actor, context)
-        this.statusEffectProcessor.process(context) //falta resolver daños y duracion y verificar si sigue vivo y si puede realizar acciones
+
+        const periodicEffects = this.statusEffectProcessor.process(context)
+        if (periodicEffects.actorDefeated) {
+            return {
+                canAct: false
+            }
+        }
+
         const controlResult = this.controlEffectProcessor.process(context)
         if (!controlResult.canAct) {
             return {

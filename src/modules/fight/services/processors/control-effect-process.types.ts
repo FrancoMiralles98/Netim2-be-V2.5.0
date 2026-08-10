@@ -1,8 +1,9 @@
 import { StatusEffectsKeys } from "netim2-shared";
+import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
 
 export interface ProcessedControlEffect {
     effectInstanceId: string;
-    effectId: StatusEffectsKeys;
+    effectId: ActiveStatusEffectId;
 
     preventedAction: boolean;
 

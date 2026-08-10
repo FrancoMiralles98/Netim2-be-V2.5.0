@@ -4,9 +4,16 @@ import { ControlEffectProcessorResult, ProcessedControlEffect } from "./control-
 import { ControlEffect, isControlDamageEffectData } from "./status-effect-processor.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
+import { randomUUID } from "crypto";
+import { StatusEffectManager } from "../../manager/status-effect-manager";
 
 @Injectable()
 export class ControlEffectProcessorService {
+
+    constructor(
+        private statusEffectManager: StatusEffectManager
+    ){}
+
     process(context: TurnContext): ControlEffectProcessorResult {
         const result: ControlEffectProcessorResult = {
             canAct: true,
@@ -41,8 +48,6 @@ export class ControlEffectProcessorService {
         context: TurnContext,
     ): ProcessedControlEffect {
 
-        const preventAction = data.preventAction
-
         effect.consumeTurn()
 
         const expired = effect.isExpired();
@@ -55,19 +60,22 @@ export class ControlEffectProcessorService {
             fighterId: actor.id,
             effectInstanceId: effect.getInstanceId(),
             effectId: effect.getEffectId(),
-            controlType: data.type,
-            preventAction,
-            expired
+            controlType: "stun",
+            expired,
+            eventId: randomUUID(),
+            fightId: context.fight.id,
+            preventedAction: !effect.isExpired(),
+            remainingTurns,
         })
 
         if (expired) {
-            effect.deactivate({ owner: actor, effect })
+            this.statusEffectManager.deactivate(actor,effect)
         }
 
         return {
             effectInstanceId: effect.getInstanceId(),
             effectId: effect.getEffectId(),
-            preventedAction: preventAction,
+            preventedAction: !effect.isExpired(),
             remainingTurns,
             expired
         };

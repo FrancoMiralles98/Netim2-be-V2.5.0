@@ -34,7 +34,6 @@ export class HealingSkillActionResolverService {
         const healingResult = this.healingResolver.resolve({
             baseAmount: heal,
             healer: context.actor,
-            opponent,
             source: 'skill'
         })
         if (skill.cd.onActivate) {

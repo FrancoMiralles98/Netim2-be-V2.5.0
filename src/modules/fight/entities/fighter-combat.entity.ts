@@ -2,7 +2,7 @@ import { AllTargetType, CharacterRace, SkillAura, SkillBuff, SkillDamage, SkillH
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
 import { CombatStatKey, CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
-import { CreateFighterCombatProps, FighterCombatProps, FighterResources, SkillCooldownState } from "../types/fighter/fighter-combat.types";
+import { CreateFighterCombatProps, FighterCombatProps, FighterResources, RestoreManaResult, SkillCooldownState } from "../types/fighter/fighter-combat.types";
 import { ActiveAuraEntity } from "./active-aura.entity";
 import { ActiveBuffEntity } from "./active-buff.entity";
 import { ActiveStatusEffectEntity } from "./active-status-effect.entity";
@@ -286,7 +286,7 @@ export class FighterCombatEntity {
         };
     }
 
-    restoreMana(amount: number) {
+    restoreMana(amount: number): RestoreManaResult {
         const normalizedAmount = Math.max(0, Math.floor(amount))
 
         const manaBefore = this.props.resources.mana.current

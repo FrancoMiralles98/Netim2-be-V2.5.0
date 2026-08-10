@@ -1,4 +1,5 @@
 import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys, BonusGeneralRefKeys, SkillAura, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { ActiveStatusEffectId } from "../statusEffects/active-status-effect.types";
 
 export interface CreateActiveAuraProps {
     instanceId: string;
@@ -72,7 +73,7 @@ export interface StatusEffectStatModifierSource {
 
     instanceId: string;
 
-    effectId: StatusEffectsKeys;
+    effectId: ActiveStatusEffectId;
 
     sourceFighterId: string;
 }

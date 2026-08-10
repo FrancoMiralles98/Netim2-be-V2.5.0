@@ -18,7 +18,8 @@ export const createEmptyFighterCombatStatisticsState =
             }
         },
         healing: {
-            done: 0,
+            byBasicAttack: 0,
+            bySkill: [],
             hpRegenerated: 0,
             prevented: 0,
         },

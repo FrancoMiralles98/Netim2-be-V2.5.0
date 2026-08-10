@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { SkillCooldownReductionResult } from "../../types/fighter/cooldown.types";
 import { TurnContext } from "../../types/fight/fight-context.types";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class CooldownProcessorService {
@@ -9,19 +10,26 @@ export class CooldownProcessorService {
 
         for (const result of results) {
             context.events.push({
-                type: 'skill_cooldown_reduced',
+                type: 'cooldown_updated',
                 fighterId: context.actor.id,
                 skillId: result.skillId,
-                initialTurns:result.initialTurns,
-                previousTurns:result.previousTurns,
-                remainingTurns:result.remainingTurns
+                turnNumber: context.turnNumber,
+                previousRemainingTurns: result.previousTurns,
+                remainingTurns: result.remainingTurns,
+                fightId: context.fight.id,
+                eventId: randomUUID(),
             });
 
             if (result.finished) {
                 context.events.push({
-                    type: 'skill_cooldown_finished',
-                    fighterId:context.actor.id,
-                    skillId: result.skillId
+                    type: 'cooldown_updated',
+                    fighterId: context.actor.id,
+                    skillId: result.skillId,
+                    turnNumber: context.turnNumber,
+                    previousRemainingTurns: result.previousTurns,
+                    remainingTurns: result.remainingTurns,
+                    fightId: context.fight.id,
+                    eventId: randomUUID(),
                 });
             }
         }

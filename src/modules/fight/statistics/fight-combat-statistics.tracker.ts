@@ -76,15 +76,20 @@ export class FightCombatStatisticsTracker {
         if (amount === 0) {
             return;
         }
-
         const statistics = this.state.damage.mitigated;
-
-        statistics.total += amount;
-        statistics.byDamageType[input.damageType] += amount;
 
         if (input.statusEffectId !== undefined) {
             this.incrementPartialRecord(statistics.byStatusEffect, input.statusEffectId, amount);
+            return
         }
+
+        if (input.damageType === undefined) {
+            throw new Error ('a la hora de registrar el daño mitigado se tiene que espeficiar el tipo de daño')
+        }
+
+
+        statistics.total += amount;
+        statistics.byDamageType[input.damageType] += amount;
     }
 
     /**
@@ -132,8 +137,8 @@ export class FightCombatStatisticsTracker {
             case 'regeneration':
                 this.state.healing.hpRegenerated += this.normalizeAmount(input.amount ?? 0);
                 break;
-            case 'skill':{
-                const findSkill = this.state.healing.bySkill.find(skill=>skill.idSkill === input.idSkill )
+            case 'skill': {
+                const findSkill = this.state.healing.bySkill.find(skill => skill.idSkill === input.idSkill)
                 if (findSkill) {
                     findSkill.amount += input.amount
                 } else {

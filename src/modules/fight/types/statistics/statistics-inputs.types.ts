@@ -1,8 +1,8 @@
 import { DamageType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { DamageDelivery } from "./damage-statistics.types";
-import { HealingStatistics } from "./healing-statistics.types";
 import { ResourceStatistics } from "./resource-statistics.types";
 import { EffectStatistics } from "./effects-statistics.types";
+import { ActiveStatusEffectId } from "../statusEffects/active-status-effect.types";
 
 export type RegisteredDamageSource =
     | {
@@ -14,7 +14,7 @@ export type RegisteredDamageSource =
     }
     | {
         type: 'status_effect';
-        effectId: StatusEffectsKeys;
+        effectId: ActiveStatusEffectId;
     }
     | {
         type: 'reflected';
@@ -31,13 +31,13 @@ export interface RegisterDamageDealtInput {
 
 export interface RegisterDamageMitigatedInput {
     amount: number;
-    damageType: DamageType;
+    damageType?: DamageType;
 
     /**
      * Se informa únicamente cuando el daño mitigado
      * provenía de un efecto de estado.
      */
-    statusEffectId?: StatusEffectsKeys;
+    statusEffectId?: ActiveStatusEffectId;
 }
 
 export interface RegisterAttackHitsInput {

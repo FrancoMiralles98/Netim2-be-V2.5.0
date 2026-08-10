@@ -265,7 +265,7 @@ export class StatusEffectApplicationResolverService {
                     type: 'periodic_damage',
                     effectId: 'veneno',
                     damagePerTick: baseTickDamage,
-                    healReduction: input.config.healReduction
+                    healReductionPorcent: input.config.healReduction
                 }
             case 'incendio':
                 return {

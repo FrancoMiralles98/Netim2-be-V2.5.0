@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { HealingResolution } from "./healing-resolver.types";
 import { HealingResolverService } from "./healing-resolver.service";
-import { MechanicsEffectsKeys, SkillDamage } from "netim2-shared";
+import { MechanicsEffectsKeys } from "netim2-shared";
 import { ContextualBonusService } from "../contextual-bonus.service";
 
 @Injectable()

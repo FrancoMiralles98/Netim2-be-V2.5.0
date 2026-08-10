@@ -3,13 +3,14 @@ import { AuraManager } from "../../manager/aura-manager";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { TurnContext } from "../../types/fight/fight-context.types";
 import { AuraUpkeepResult } from "./aura-unkeep-processor.types";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class AuraUnkeepProcessorService {
     constructor(private readonly auraManager: AuraManager
     ) { }
 
-    process(owner: FighterCombatEntity,context: TurnContext): AuraUpkeepResult {
+    process(owner: FighterCombatEntity, context: TurnContext): AuraUpkeepResult {
         const result: AuraUpkeepResult = {
             maintainedAuraIds: [],
             deactivatedAuraIds: [],
@@ -27,7 +28,7 @@ export class AuraUnkeepProcessorService {
              * Seguridad: solamente se procesa el mantenimiento
              * de las auras cuyo dueño es el actor actual.
              */
-            if ( aura.getSourceFighterId() !== owner.id) {
+            if (aura.getSourceFighterId() !== owner.id) {
                 continue;
             }
 
@@ -45,7 +46,7 @@ export class AuraUnkeepProcessorService {
              * No puede mantener el aura.
              */
             if (!owner.hasEnoughMana(upkeepMana)) {
-                this.auraManager.deactivate({aura,owner});
+                this.auraManager.deactivate({ aura, owner });
 
                 result.deactivatedAuraIds.push(aura.getInstanceId());
 
@@ -71,10 +72,12 @@ export class AuraUnkeepProcessorService {
                 type: 'aura_upkeep_paid',
                 turnNumber: context.turnNumber,
                 fighterId: owner.id,
-                auraInstanceId:
-                    aura.getInstanceId(),
+                auraInstanceId: aura.getInstanceId(),
                 skillId: aura.getSkillId(),
-                manaSpent
+                manaSpent: manaSpent.amount,
+                remainingMana: manaSpent.manaAfter,
+                fightId: context.fight.id,
+                eventId: randomUUID()
             });
         }
 

@@ -1,4 +1,5 @@
 import { DamageType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { ActiveStatusEffectId } from "../statusEffects/active-status-effect.types";
 
 export interface DamageStatistics {
     dealt: DamageDealStatistics
@@ -16,7 +17,7 @@ export interface DamageDealStatistics {
 
     bySource: DamageSourceStatistics
 
-    byStatusEffect: Partial<Record<StatusEffectsKeys, number>>;
+    byStatusEffect: Partial<Record<ActiveStatusEffectId, number>>;
 }
 
 export type DamageDelivery =
@@ -41,5 +42,5 @@ export interface DamageMitigationStatistics {
 
     byDamageType: Record<DamageType, number>;
 
-    byStatusEffect: Partial<Record<StatusEffectsKeys,number>>
+    byStatusEffect: Partial<Record<ActiveStatusEffectId,number>>
 }
