@@ -8,6 +8,7 @@ import { ActiveBuffEntity } from "./active-buff.entity";
 import { ActiveStatusEffectEntity } from "./active-status-effect.entity";
 import { SkillCooldownReductionResult } from "../types/fighter/cooldown.types";
 import { HealingReductionResult, HealingReductionSource } from "../types/fighter/healing-reduction.types";
+import { FightConfig } from "netim2-shared/dist/character/character-fight-config.type";
 
 export class FighterCombatEntity {
     private props: FighterCombatProps;
@@ -18,6 +19,7 @@ export class FighterCombatEntity {
             race: createProps.race,
             targetType: createProps.targetType,
             weaponType: createProps.weaponType,
+            fightConfig: createProps.fightConfig,
 
             baseStats: structuredClone(createProps.baseStats),
             effectiveStats: structuredClone(createProps.baseStats),
@@ -53,6 +55,9 @@ export class FighterCombatEntity {
     }
 
 
+    get fightConfig(): FightConfig {
+        return this.props.fightConfig
+    }
 
     get id(): string {
         return this.props.id
@@ -60,6 +65,10 @@ export class FighterCombatEntity {
 
     get baseStats(): FighterBaseStats {
         return this.props.baseStats
+    }
+
+    getFocusedEnemyId(): string | undefined {
+        return this.props.enemieFocus
     }
 
     get resources(): FighterResources {
@@ -80,6 +89,18 @@ export class FighterCombatEntity {
 
     getCurrentHp(): number {
         return this.props.resources.hp.current
+    }
+
+    setFocusedEnemyId(targetId: string) {
+        this.props.enemieFocus = targetId
+    }
+
+    clearFocusedEnemy() {
+        this.props.enemieFocus = undefined
+    }
+
+    getMaxHp(): number {
+        return this.props.effectiveStats.general.hp.max
     }
 
     markStatsDirty(): void {

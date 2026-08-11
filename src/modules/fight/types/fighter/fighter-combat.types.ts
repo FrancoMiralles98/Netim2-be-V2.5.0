@@ -6,6 +6,7 @@ import { ActiveBuffEntity } from "../../entities/active-buff.entity";
 import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
 import { FightCombatStatisticsTracker } from "../../statistics/fight-combat-statistics.tracker";
 import { CombatStatModifier } from "../activeAura/active-aura.type";
+import { FightConfig } from "netim2-shared/dist/character/character-fight-config.type";
 
 export interface CreateFighterCombatProps {
     id: string;
@@ -14,7 +15,8 @@ export interface CreateFighterCombatProps {
     weaponType?: TypeWeapon;
     race?: CharacterRace
     baseStats: FighterBaseStats;
-    skills: SkillType[]
+    skills: SkillType[];
+    fightConfig: FightConfig
 }
 
 export interface FighterCombatProps {
@@ -26,8 +28,10 @@ export interface FighterCombatProps {
 
     baseStats: FighterBaseStats;
     effectiveStats: FighterBaseStats;
+    enemieFocus?: string
 
     resources: FighterResources;
+    fightConfig: FightConfig
 
     skills: SkillType[];
 

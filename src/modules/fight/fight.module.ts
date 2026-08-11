@@ -39,6 +39,7 @@ import { FightFactory } from './factories/fight.factory';
 import { FighterCombatFactory } from './factories/fighter-combat-entity.factory';
 import { CharacterModule } from '../character/character.module';
 import { MobModule } from '../mob/mob.module';
+import { TargetSelectorService } from './services/action/target-selector.service';
 
 @Module({
   imports: [
@@ -83,7 +84,8 @@ import { MobModule } from '../mob/mob.module';
     StatusEffectManager,
     TurnManager,
     FightFactory,
-    FighterCombatFactory
+    FighterCombatFactory,
+    TargetSelectorService
   ],
 })
-export class FightModule {}
+export class FightModule { }

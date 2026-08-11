@@ -3,13 +3,15 @@ import { TurnContext } from "../../types/fight/fight-context.types";
 import { CastAuraAction, CastBuffAction, CombatAction, UseDamageSkillAction, UseHealingSkillAction } from "../../types/combatAction/combat-action.types";
 import { HEALING_SKILL_HP_THRESHOLD_PERCENT } from "../../config/skill-healing.config";
 import { SharedFightService } from "../shared-fight.service";
+import { TargetSelectorService } from "./target-selector.service";
 
 @Injectable()
 export class CombatActionSelectorService {
     constructor(
-        private sharedFightService: SharedFightService
+        private sharedFightService: SharedFightService,
+        private targetSelectorService: TargetSelectorService,
     ) { }
-    
+
     select(context: TurnContext, canAct: boolean): CombatAction {
         if (!context.actor.isAlive() || !canAct) {
             return {
@@ -21,6 +23,7 @@ export class CombatActionSelectorService {
         if (healingAction) {
             return healingAction
         }
+
         const auraAction = this.selectAvailableAura(context)
         if (auraAction) {
             return auraAction
@@ -29,6 +32,14 @@ export class CombatActionSelectorService {
         if (buffAction) {
             return buffAction
         }
+
+        if (context.actor.fightConfig.self.priorityBassicAttack) {
+            return {
+                type: 'basic_attack',
+                targetId: this.targetSelectorService.selectTarget(context)
+            }
+        }
+
         const skillAction = this.selectAvailableDamageSkill(context)
         if (skillAction) {
             return skillAction
@@ -36,7 +47,7 @@ export class CombatActionSelectorService {
 
         return {
             type: 'basic_attack',
-            targetId: context.fight.getSingleOpponentOf(context.actor.id).id,
+            targetId: this.targetSelectorService.selectTarget(context)
         }
     }
 
@@ -88,10 +99,10 @@ export class CombatActionSelectorService {
 
         for (const skill of allSkillDamage) {
             if (!this.sharedFightService.canUseSkill(ctx.actor, skill)) continue
-            const opponent = ctx.fight.getSingleOpponentOf(ctx.actor.id).id
+            const opponentId = this.targetSelectorService.selectTarget(ctx)
             return {
                 skillId: skill.id,
-                targetId: opponent,
+                targetId: opponentId,
                 type: 'use_damage_skill'
             }
         }

@@ -17,6 +17,7 @@ export type FightPhase =
 export type FightEndReason =
     | 'fighter_defeated'
     | 'simultaneous_defeat'
+    | 'team_defeated'
     | 'max_turns_reached'
     | 'stalemate';
 
@@ -25,8 +26,13 @@ export interface FightResult {
 
     winnerFighterId?: string;
 
-    defeatedFighterIds: string[];
     survivingFighterIds: string[];
+
+    winnerSide?: FightSide;
+
+    winnerFighterIds?: string[];
+
+    defeatedFighterIds: string[];
 
     reason: FightEndReason;
 
@@ -43,7 +49,8 @@ export interface FighterInitiativeResult {
 export interface CreateFightProps {
     id: string;
 
-    fighters: FighterCombatEntity[];
+    allies: FighterCombatEntity[];
+    enemies: FighterCombatEntity[];
 
     randomSeed: string;
 
@@ -56,9 +63,9 @@ export interface FightRuntimeState {
 
     fighters: Map<string, FighterCombatEntity>;
 
+    sides: Record<FightSide, string[]>;
+
     initiativeResults: FighterInitiativeResult[];
-    aliveFighters: string[];
-    defeatedFighters: string[];
     turnOrder: string[];
 
     currentTurnIndex: number;
@@ -87,3 +94,7 @@ export interface FightExecutionResult {
 
     result: FightResult;
 }
+
+export type FightSide =
+    | 'allies'
+    | 'enemies';

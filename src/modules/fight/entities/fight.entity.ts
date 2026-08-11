@@ -1,4 +1,4 @@
-import { CreateFightProps, FighterInitiativeResult, FightIdentity, FightPhase, FightResult, FightRuntimeState, FightStatus } from "../types/fight/fight.type";
+import { CreateFightProps, FighterInitiativeResult, FightIdentity, FightPhase, FightResult, FightRuntimeState, FightSide, FightStatus } from "../types/fight/fight.type";
 import { FighterCombatEntity } from "./fighter-combat.entity";
 
 export class FightEntity {
@@ -6,7 +6,12 @@ export class FightEntity {
     private readonly state: FightRuntimeState;
 
     constructor(props: CreateFightProps) {
-        this.validateFighters(props.fighters);
+        this.validateFighters([...props.allies, ...props.enemies]);
+
+        const fighters = [
+            ...props.allies,
+            ...props.enemies
+        ];
 
         this.identity = {
             id: props.id,
@@ -17,20 +22,17 @@ export class FightEntity {
         this.state = {
             status: 'pending',
             phase: 'setup',
-
-            fighters: new Map(
-                props.fighters.map(fighter => [fighter.id, fighter])
-            ),
+            fighters: new Map(fighters.map(fighter => [fighter.id, fighter])),
+            sides: {
+                allies: props.allies.map(fighter => fighter.id),
+                enemies: props.enemies.map(fighter => fighter.id)
+            },
 
             initiativeResults: [],
             turnOrder: [],
-            aliveFighters: props.fighters.map(fighter => fighter.id),
-            defeatedFighters: [],
             currentTurnIndex: -1,
             currentActorId: undefined,
-
             turnNumber: 0,
-
             result: undefined
         };
     }
@@ -69,6 +71,56 @@ export class FightEntity {
 
     get isInProgress(): boolean {
         return this.state.status === 'in_progress';
+    }
+
+    getSideOf(fighterId: string): FightSide {
+        this.getFighter(fighterId);
+        if (this.state.sides.allies.includes(fighterId)) {
+            return 'allies';
+        }
+
+        if (this.state.sides.enemies.includes(fighterId)) {
+            return 'enemies';
+        }
+
+        throw new Error(`Fighter ${fighterId} does not belong to any side.`);
+    }
+
+    getFightersOfSide(side: FightSide): FighterCombatEntity[] {
+        return this.state.sides[side].map(fighterId => this.getFighter(fighterId));
+    }
+
+    getAliveFightersOfSide(side: FightSide): FighterCombatEntity[] {
+        return this.getFightersOfSide(side).filter(fighter => fighter.isAlive);
+    }
+
+    getAliveOpponentsOf(fighterId: string): FighterCombatEntity[] {
+        const fighterSide = this.getSideOf(fighterId);
+
+        const opponentSide = this.getOppositeSide(fighterSide);
+
+        return this.getAliveFightersOfSide(opponentSide);
+    }
+
+    private getAliveTeamOf(fighterId: string): FighterCombatEntity[] {
+        const side = this.getSideOf(fighterId
+        );
+
+        return this.getAliveFightersOfSide(side);
+    }
+
+    getAliveTeammatesOf(
+        fighterId: string
+    ): FighterCombatEntity[] {
+        return this.getAliveTeamOf(fighterId)
+            .filter(fighter => fighter.id !== fighterId);
+    }
+
+
+    private getOppositeSide(side: FightSide): FightSide {
+        return side === 'allies'
+            ? 'enemies'
+            : 'allies';
     }
 
     setPhase(phase: FightPhase): void {
@@ -128,17 +180,6 @@ export class FightEntity {
         this.state.turnOrder = orderedResults.map(result => result.fighterId);
     }
 
-    getSingleOpponentOf(fighterId: string): FighterCombatEntity {
-        const fightersIds = this.getAliveOpponentsIdsOf(fighterId)
-        if (fightersIds.length < 1) {
-            throw new Error(`Expected exactly one alive opponent for fighter ${fighterId}.`);
-        }
-        return this.getFighter(fightersIds[0])
-    }
-
-    private getAliveOpponentsIdsOf(fighterId: string): string[] {
-        return this.state.aliveFighters.filter(ids => ids !== fighterId)
-    }
 
     start(): void {
         if (this.state.status !== 'pending') {
@@ -211,43 +252,55 @@ export class FightEntity {
         return undefined;
     }
 
-    tryFinish(): FightResult | undefined {
+    tryFinish():
+        FightResult | undefined {
         if (this.state.status === 'finished') {
             return this.state.result;
         }
 
-        const aliveFighters = this.getAliveFighters();
+        const aliveAllies = this.getAliveFightersOfSide('allies');
 
-        if (aliveFighters.length === 1) {
+        const aliveEnemies = this.getAliveFightersOfSide('enemies');
+
+        /*
+         * Ambos equipos murieron.
+         */
+        if (aliveAllies.length === 0 && aliveEnemies.length === 0) {
             return this.finish({
-                outcome: 'winner',
-
-                winnerFighterId:
-                    aliveFighters[0].id,
-
-                defeatedFighterIds:
-                    this.getDefeatedFighters().map(fighter => fighter.id),
-
-                survivingFighterIds:
-                    aliveFighters.map(fighter => fighter.id),
-
-                reason: 'fighter_defeated',
-
+                outcome: 'draw',
+                defeatedFighterIds: this.getDefeatedFighters().map(fighter => fighter.id),
+                survivingFighterIds: [],
+                reason: 'simultaneous_defeat',
                 finishedOnTurn: this.state.turnNumber
             });
         }
 
-        if (aliveFighters.length === 0) {
+        /*
+         * Perdió el equipo aliado.
+         */
+        if (aliveAllies.length === 0) {
             return this.finish({
-                outcome: 'draw',
+                outcome: 'winner',
+                winnerSide: 'enemies',
+                winnerFighterIds: aliveEnemies.map(fighter => fighter.id),
+                defeatedFighterIds: this.getDefeatedFighters().map(fighter => fighter.id),
+                survivingFighterIds: aliveEnemies.map(fighter => fighter.id),
+                reason: 'team_defeated',
+                finishedOnTurn: this.state.turnNumber
+            });
+        }
 
-                defeatedFighterIds:
-                    this.getDefeatedFighters().map(fighter => fighter.id),
-
-                survivingFighterIds: [],
-
-                reason: 'simultaneous_defeat',
-
+        /*
+         * Perdió el equipo enemigo.
+         */
+        if (aliveEnemies.length === 0) {
+            return this.finish({
+                outcome: 'winner',
+                winnerSide: 'allies',
+                winnerFighterIds: aliveAllies.map(fighter => fighter.id),
+                defeatedFighterIds: this.getDefeatedFighters().map(fighter => fighter.id),
+                survivingFighterIds: aliveAllies.map(fighter => fighter.id),
+                reason: 'team_defeated',
                 finishedOnTurn: this.state.turnNumber
             });
         }
@@ -255,14 +308,9 @@ export class FightEntity {
         if (this.state.turnNumber >= this.identity.maxTurns) {
             return this.finish({
                 outcome: 'draw',
-
-                defeatedFighterIds:
-                    this.getDefeatedFighters().map(fighter => fighter.id),
-
-                survivingFighterIds: aliveFighters.map(fighter => fighter.id),
-
+                defeatedFighterIds: this.getDefeatedFighters().map(fighter => fighter.id),
+                survivingFighterIds: this.getAliveFighters().map(fighter => fighter.id),
                 reason: 'max_turns_reached',
-
                 finishedOnTurn: this.state.turnNumber
             });
         }
