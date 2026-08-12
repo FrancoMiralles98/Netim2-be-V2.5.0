@@ -77,7 +77,8 @@ export const NINJA_SKILLS_SCALING: StructureSkillScaling = {
                 statsScaling: [{
                     stat: 'va',
                     base: 1,
-                    perLv: 0.2
+                    perLv: 1,
+                    target: 'general.va'
                 }]
             }],
             mana: { base: 1, perLv: 1 },
@@ -85,6 +86,15 @@ export const NINJA_SKILLS_SCALING: StructureSkillScaling = {
         },
         [UNIQUE_ID_SKILLS.CAMUFLAJE]: {
             type: 'buff',
+            duration: {
+                base: 10,
+                perLv: 0.1
+            },
+            statsScaling: [],
+            uses: {
+                base: 1,
+                perLv: 0
+            },
             cd: { onActivate: 1 },
             mana: { base: 1, perLv: 1 },
             multiplier: {
@@ -104,6 +114,7 @@ export const NINJA_SKILLS_SCALING: StructureSkillScaling = {
                 tags: ['ad', 'ranged', 'skill', 'weapon'],
                 escaladoAtributos: { DEX: 1, STR: 1 },
                 statsScaling: [{
+                    target: 'general.va',
                     stat: 'va',
                     base: 1,
                     perLv: 0.2
@@ -186,19 +197,7 @@ export const NINJA_SKILLS_SCALING: StructureSkillScaling = {
             cd: {onDeactivate: 5},
             mana: {base:1,perLv:1},
             duration: {base:1,perLv:1},
-            escaladoBuffos: {
-                vm: {
-                    base:1,
-                    escaladoLv: {
-                        perLv: 2.5,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-            },
+            escaladoStatsModifiers: []
         },
     },
 

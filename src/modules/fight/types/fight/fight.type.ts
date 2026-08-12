@@ -1,5 +1,5 @@
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { TurnExecutionResult } from "../turns/turn.types";
+import { SideTurnExecutionResult } from "../side/side.types";
 
 export type FightPhase =
     | 'setup'
@@ -66,9 +66,9 @@ export interface FightRuntimeState {
     sides: Record<FightSide, string[]>;
 
     initiativeResults: FighterInitiativeResult[];
-    turnOrder: string[];
+    sideTurnOrder: Record<FightSide, string[]>
 
-    currentTurnIndex: number;
+    currentSide?: FightSide
     currentActorId?: string;
 
     turnNumber: number;
@@ -90,7 +90,7 @@ export interface FightIdentity {
 export interface FightExecutionResult {
     fightId: string;
 
-    turns: TurnExecutionResult[];
+    turns: SideTurnExecutionResult[];
 
     result: FightResult;
 }

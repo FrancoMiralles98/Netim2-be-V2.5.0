@@ -4,12 +4,13 @@ import { FightEntity } from "../entities/fight.entity";
 import { TurnContext } from "../types/fight/fight-context.types";
 import { CombatActionSelectorService } from "../services/action/combat-action-selector.service";
 import { ActionResolutionService } from "../services/action/action-resolution.service";
-import { TurnExecutionResult } from "../types/turns/turn.types";
+import { FighterTurnExecutionResult } from "../types/turns/turn.types";
 import { TurnEndProcessorService } from "../services/turn/turn-end-processor.service";
 import { randomUUID } from "crypto";
+import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 
 @Injectable()
-export class TurnManager {
+export class FighterTurnManager {
     constructor(
         private turnStartProcessor: TurnStartProcessorSerivce,
         private combatActionSelector: CombatActionSelectorService,
@@ -17,11 +18,10 @@ export class TurnManager {
         private turnEndProcessor: TurnEndProcessorService,
     ) { }
 
-    executeNextTurn(fight: FightEntity): TurnExecutionResult {
-        const { actorId, phase, turnNumber } = fight.beginNextTurn()
+    execute(fight: FightEntity, actor: FighterCombatEntity, turnNumber: number): FighterTurnExecutionResult {
 
         const context: TurnContext = {
-            actor: fight.getFighter(actorId),
+            actor: fight.getFighter(actor.id),
             turnNumber,
             fight,
             events: []
@@ -29,7 +29,7 @@ export class TurnManager {
 
         //tipo de evento agragado: Inicio del Turno"
         context.events.push({
-            type: phase,
+            type: 'turn_started',
             actorId: context.actor.id,
             eventId: randomUUID(),
             fightId: context.fight.id,
@@ -57,6 +57,7 @@ export class TurnManager {
         return {
             action,
             actorId: context.actor.id,
+            side: fight.getSideOf(actor.id),
             turnNumber: context.turnNumber,
             resolution,
             startTurnResult,

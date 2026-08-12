@@ -3,10 +3,11 @@ import { RngService } from "src/modules/shared/services/rng.service";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { PeriodicStatusEffectConfig, ResolveSkillEffectsInput, StatusEffectApplicationResult, StatusEffectConfig, StatusEffectDurationConfig } from "./status-effect-application-resolver.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { CombatStatKey, DamageCondition, StatsScaling, StatusEffectsKeys } from "netim2-shared";
+import { CombatStatKey, DamageCondition, StatsScaling } from "netim2-shared";
 import { StatusEffectManager } from "../../manager/status-effect-manager";
 import { STATUS_EFFECTS_CONFIG } from "../../config/status-effects.config";
 import { ActiveStatusEffectData, PeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
+import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
 
 @Injectable()
 export class StatusEffectApplicationResolverService {
@@ -24,8 +25,7 @@ export class StatusEffectApplicationResolverService {
             return [];
         }
 
-        const entries = Object.entries(configuredEffects) as Array<
-            [StatusEffectsKeys, number | undefined]>
+        const entries = Object.entries(configuredEffects) as Array<[ActiveStatusEffectId, number | undefined]>
 
         const results: StatusEffectApplicationResult[] = [];
 
@@ -44,6 +44,8 @@ export class StatusEffectApplicationResolverService {
             results.push(result);
         }
 
+        this.statusEffectAplicationStatisticRegister(input.source, input.target, results)
+
         return results;
     }
 
@@ -51,7 +53,7 @@ export class StatusEffectApplicationResolverService {
         source: FighterCombatEntity;
         target: FighterCombatEntity;
 
-        effectId: StatusEffectsKeys;
+        effectId: ActiveStatusEffectId;
 
         baseChance: number;
 
@@ -73,7 +75,6 @@ export class StatusEffectApplicationResolverService {
                 resisted: false,
                 baseChance: input.baseChance,
                 effectId: input.effectId,
-
             }
         }
 
@@ -171,7 +172,7 @@ export class StatusEffectApplicationResolverService {
 
     private resolveDuration(input: {
         source: FighterCombatEntity,
-        effectId: StatusEffectsKeys,
+        effectId: ActiveStatusEffectId,
         config: StatusEffectDurationConfig
     }): number {
         let totalBonusDuration = 0
@@ -188,7 +189,7 @@ export class StatusEffectApplicationResolverService {
     private createActiveStatusEffectData(input: {
         source: FighterCombatEntity;
         target: FighterCombatEntity;
-        effectId: StatusEffectsKeys
+        effectId: ActiveStatusEffectId
         triggeringDamage: number;
 
         config: StatusEffectConfig;
@@ -224,7 +225,7 @@ export class StatusEffectApplicationResolverService {
         source: FighterCombatEntity,
         target: FighterCombatEntity,
         triggeringDamage: number,
-        effectId: StatusEffectsKeys,
+        effectId: ActiveStatusEffectId,
         config: PeriodicStatusEffectConfig
     }): PeriodicDamageEffectData {
         const baseDamage = input.triggeringDamage * input.config.baseDamageRatio
@@ -369,5 +370,27 @@ export class StatusEffectApplicationResolverService {
         },
             0
         );
+    }
+
+    private statusEffectAplicationStatisticRegister(
+        actor: FighterCombatEntity,
+        target: FighterCombatEntity,
+        results: StatusEffectApplicationResult[]
+    ) {
+        results.forEach(result => {
+            actor.statistics.registerEffects({
+                appliedByType: {
+                    [result.effectId]: result.applied ? 1 : 0
+                }
+            })
+            target.statistics.registerEffects({
+                receivedByType: {
+                    [result.effectId]: result.applied ? 1 : 0,
+                },
+                resistedByType: {
+                    [result.effectId]: result.resisted ? 1 : 0
+                }
+            })
+        })
     }
 }

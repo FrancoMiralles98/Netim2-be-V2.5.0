@@ -11,6 +11,10 @@ import { ContextualBonusService } from "../contextual-bonus.service";
 import { SkillHitResolver } from "./skill-hit-resolver.service";
 import { StatusEffectApplicationResolverService } from "./status-effect-application-resolver.service";
 import { LifeStealResolverService } from "./life-steal-resolver.service";
+import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
+import { FightEntity } from "../../entities/fight.entity";
+import { SkillDamage } from "netim2-shared";
+import { HealingResolution } from "./healing-resolver.types";
 
 @Injectable()
 export class DamageSkillActionResolver {
@@ -24,7 +28,6 @@ export class DamageSkillActionResolver {
         private buffManager: BuffManager,
         private statusEffectsApplicationResolver: StatusEffectApplicationResolverService,
         private lifeStealResolverService: LifeStealResolverService,
-
     ) { }
 
     resolve({ action, context }: ResolveActionInput<UseDamageSkillAction>): DamageSkillActionResolution {
@@ -121,6 +124,15 @@ export class DamageSkillActionResolver {
         }
 
 
+        this.DamageSkillActionStatisticRegister(
+            context.actor,
+            context.fight,
+            hits,
+            skill,
+            manaSpent.amount,
+            lifeStealResult,
+            target
+        )
 
         return {
             type: 'use_damage_skill',
@@ -141,5 +153,44 @@ export class DamageSkillActionResolver {
             totalMitigatedDamage,
             totalModifiedDamage
         }
+    }
+
+    private DamageSkillActionStatisticRegister(
+        actor: FighterCombatEntity,
+        fight: FightEntity,
+        hits: DamageHitResolution[],
+        skill: SkillDamage,
+        manaSpent: number,
+        lifeStealResult: HealingResolution,
+        target: FighterCombatEntity
+    ) {
+        actor.statistics.registerResources({ manaSpent })
+        actor.statistics.registerSkillUsed()
+
+        hits.forEach(hit => hit.components.forEach(component => {
+            actor.statistics.registerDamageDealt({
+                source: {
+                    type: 'skill',
+                    skillId: skill.id
+                },
+                amount: component.appliedDamage,
+                damageType: component.damageType,
+                delivery: 'direct'
+            })
+
+            target.statistics.registerDamageMitigated({
+                amount: component.mitigatedDamage,
+                damageType: component.damageType
+            })
+        }))
+
+
+        lifeStealResult.reductions.forEach(reductionDetail => {
+            const fighter = fight.getFighter(reductionDetail.sourceFighterId)
+            fighter.statistics.registerHealing({
+                type: 'prevented',
+                amount: reductionDetail.preventedAmount
+            })
+        })
     }
 }

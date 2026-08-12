@@ -2,10 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { MobModel } from '../mob/schema/mob.schema';
 import { RngService } from '../shared/services/rng.service';
 import { DROP_CONFIG_BY_ENEMY_TYPE } from './config/drop/drop-difficulty.config';
-import { CharacterStats } from '../character/types/baseCharacterProps/character-stats.type';
 import { MicsBonusService } from './service/miscs-bonus.service';
 import { DropResult } from './types/drop-result.type';
 import { ItemDropService } from './service/item-drop.service';
+import { Stats } from 'netim2-shared';
 
 @Injectable()
 export class DropService {
@@ -46,7 +46,7 @@ export class DropService {
     */
     generateMobDrop(
         mob: MobModel,
-        bonus: CharacterStats['bonus']['miscs']
+        bonus: Stats['bonus']['miscs']
     ): DropResult {
         const dropConfig = structuredClone(DROP_CONFIG_BY_ENEMY_TYPE[mob.enemie_type][mob.dificultad])
 

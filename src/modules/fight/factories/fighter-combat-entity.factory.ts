@@ -15,7 +15,8 @@ export class FighterCombatFactory {
             skills: input.skills,
             targetType: input.targetType,
             race: input.race,
-            weaponType: input.weaponType
+            weaponType: input.weaponType,
+            fightConfig: input.fightConfig
         })
     }
 

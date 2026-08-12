@@ -1,24 +1,22 @@
 import { Injectable } from "@nestjs/common";
-import { TurnManager } from "./turn-manager";
 import { FightEntity } from "../entities/fight.entity";
 import { FightExecutionResult } from "../types/fight/fight.type";
-import { TurnExecutionResult } from "../types/turns/turn.types";
+import { SideTurnExecutionResult } from "../types/side/side.types";
+import { SideTurnManager } from "./side-turn-manger";
 
 @Injectable()
 export class FightManager {
-    constructor(
-        private turnManager: TurnManager
-    ) { }
+    constructor(private readonly sideTurnManager: SideTurnManager) { }
 
     executeFight(fight: FightEntity): FightExecutionResult {
         if (fight.status === 'pending') {
             fight.start();
         }
 
-        const turns: TurnExecutionResult[] = [];
+        const turns: SideTurnExecutionResult[] = [];
 
         while (!fight.isFinished) {
-            const turn = this.turnManager.executeNextTurn(fight);
+            const turn = this.sideTurnManager.executeNextTurn(fight);
             turns.push(turn);
         }
 
@@ -33,6 +31,5 @@ export class FightManager {
             turns,
             result
         };
-
     }
 }

@@ -54,7 +54,6 @@ export interface RegisterOffensiveHitInput {
 export type OffensiveHitResult =
     | 'successful'
     | 'missed'
-    | 'dodged_by_target';
 
 
 export type RegisterDefensiveHitInput =

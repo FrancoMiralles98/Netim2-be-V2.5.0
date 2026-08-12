@@ -1,4 +1,5 @@
 import { DamageType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
 
 export interface DamageComponentResolution {
     hitIndex: number;
@@ -28,7 +29,7 @@ export interface DamageHitResolution {
 }
 
 export interface AppliedStatusEffectResolution {
-    effectId: StatusEffectsKeys;
+    effectId: ActiveStatusEffectId;
 
     applied: boolean;
     resisted: boolean;

@@ -2,11 +2,12 @@ import { Injectable } from "@nestjs/common";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 import { DamageType, SkillDamage, StatusEffectsKeys } from "netim2-shared";
 import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
+import { ActiveStatusEffectId } from "../types/statusEffects/active-status-effect.types";
 
 @Injectable()
 export class ContextualBonusService {
 
-    getBasicAttackStatusEffectsChances(target: FighterCombatEntity): Record<StatusEffectsKeys, number> {
+    getBasicAttackStatusEffectsChances(target: FighterCombatEntity): Record<ActiveStatusEffectId, number> {
         return {
             desmayo: target.getEffectiveStatValue('bonus.cc.desmayo'),
             retardo: target.getEffectiveStatValue('bonus.cc.retardo'),
@@ -14,6 +15,7 @@ export class ContextualBonusService {
             incendio: target.getEffectiveStatValue('bonus.daño.incendio'),
             sangrado: target.getEffectiveStatValue('bonus.daño.sangrado'),
             veneno: target.getEffectiveStatValue('bonus.daño.veneno'),
+            corta_curacion: target.getEffectiveStatValue('bonus.defensa.corta_curacion')
         }
     }
 
@@ -37,11 +39,11 @@ export class ContextualBonusService {
         return target.effectiveStats.bonus.defensa.bloquear_ataques
     }
 
-    getPossibleStatusEffectMitigationPercent(target: FighterCombatEntity, effectId: StatusEffectsKeys): number {
+    getPossibleStatusEffectMitigationPercent(target: FighterCombatEntity, effectId: ActiveStatusEffectId): number {
         return (target.effectiveStats.bonus.defensa[`def_${effectId}`] ?? 0)
     }
 
-    getResistanceBonusByEffectId(target: FighterCombatEntity, effectId: StatusEffectsKeys): number {
+    getResistanceBonusByEffectId(target: FighterCombatEntity, effectId: ActiveStatusEffectId): number {
         return target.effectiveStats.bonus.defensa[`def_${effectId}`] ?? 0
     }
 

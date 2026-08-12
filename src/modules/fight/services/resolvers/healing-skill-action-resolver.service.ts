@@ -2,10 +2,12 @@ import { Injectable } from "@nestjs/common";
 import { HealingSkillActionResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
 import { UseHealingSkillAction } from "../../types/combatAction/combat-action.types";
 import { SharedFightService } from "../shared-fight.service";
-import { SkillHeal } from "netim2-shared";
+import { SkillHeal, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { HealingResolverService } from "./healing-resolver.service";
+import { FightEntity } from "../../entities/fight.entity";
+import { HealingResolution } from "./healing-resolver.types";
 
 @Injectable()
 export class HealingSkillActionResolverService {
@@ -29,26 +31,24 @@ export class HealingSkillActionResolverService {
         const manaSpent = context.actor.spendMana(this.sharedFightService.getInitialManaCost(skill))
         const { critical, heal } = this.calculateHealing(skill, context.actor)
 
-        const opponent = context.fight.getSingleOpponentOf(context.actor.id)
 
         const healingResult = this.healingResolver.resolve({
             baseAmount: heal,
             healer: context.actor,
             source: 'skill'
         })
+
         if (skill.cd.onActivate) {
             context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
         }
-        context.actor.statistics.registerHealing({
-            type: 'skill',
-            amount: healingResult.effectiveHealing,
-            idSkill: skill.id
-        })
 
-        opponent.statistics.registerHealing({
-           type: 'prevented',
-           amount: healingResult.preventedAmount
-        })
+        this.healingSkillActionStatisticRegister(
+            context.actor,
+            context.fight,
+            healingResult,
+            skill.id,
+            manaSpent.amount
+        )
 
         return {
             actorId: context.actor.id,
@@ -83,5 +83,34 @@ export class HealingSkillActionResolverService {
         }
 
         return { heal: Math.floor(totalHealing), critical: isCritic }
+    }
+
+    private healingSkillActionStatisticRegister(
+        actor: FighterCombatEntity,
+        fight: FightEntity,
+        healingResult: HealingResolution,
+        idSkill: UNIQUE_ID_SKILLS,
+        manaSpent: number,
+    ): void {
+
+        actor.statistics.registerHealing({
+            type: 'skill',
+            amount: healingResult.effectiveHealing,
+            idSkill,
+        })
+
+        actor.statistics.registerResources({
+            manaSpent
+        })
+
+        actor.statistics.registerSkillUsed()
+
+        healingResult.reductions.forEach(reductionDetail => {
+            const fighter = fight.getFighter(reductionDetail.sourceFighterId)
+            fighter.statistics.registerHealing({
+                type: 'prevented',
+                amount: reductionDetail.preventedAmount
+            })
+        })
     }
 }

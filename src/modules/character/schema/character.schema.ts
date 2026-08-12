@@ -21,7 +21,7 @@ import { BASE_DUNGEON_IN_PROGRESS } from "../const/characterProps/base-dungeon-i
 import { BASE_MISSION_IN_PROGRESS } from "../const/characterProps/base-mission-in-progress.const";
 import { HydratedDocument } from "mongoose";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
-import { Atributos, SkillType, Stats } from "netim2-shared";
+import { Atributos, FightConfig, SkillType, Stats } from "netim2-shared";
 
 @Schema({ timestamps: true })
 export class CharacterModel {
@@ -147,6 +147,9 @@ export class CharacterModel {
 
     @Prop({ type: String, required: true })
     user_owner!: string;
+
+    @Prop({ type: Object, required: true })
+    fightConfig!: FightConfig
 }
 
 export type CharacterDocument = HydratedDocument<CharacterModel>

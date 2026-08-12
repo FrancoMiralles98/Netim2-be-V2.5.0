@@ -1,4 +1,5 @@
-import { CharacterAttribute, CharacterSpeciality } from "../../types/baseCharacterProps/character-stats.type";
+import { AttributesRefKeys } from "netim2-shared";
+import {  CharacterSpeciality } from "../../types/baseCharacterProps/character-stats.type";
 
 /**
  * Límites máximos de atributos por especialidad.
@@ -18,7 +19,7 @@ import { CharacterAttribute, CharacterSpeciality } from "../../types/baseCharact
  * - habilidades
  * 
  */
-export const ATTRIBUTE_SPECIALITY_CAPS: Partial<Record<CharacterSpeciality, Record<CharacterAttribute, number>>> = {
+export const ATTRIBUTE_SPECIALITY_CAPS: Partial<Record<CharacterSpeciality, Record<AttributesRefKeys, number>>> = {
     Luz: {
         DEX: 87,
         INT: 128,

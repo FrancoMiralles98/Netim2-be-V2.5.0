@@ -1,14 +1,13 @@
 import { Injectable } from "@nestjs/common";
-import { BonusRefKeys, CharacterStats } from "netim2-shared";
+import { BonusRefKeys, Stats } from "netim2-shared";
 
 @Injectable()
 export class CharacterSharedService {
     getCharacterStatValue(
-        stats: CharacterStats,
+        stats: Stats,
         refKey: BonusRefKeys
     ): unknown {
         const groups: Record<string, unknown>[] = [
-            stats.atributos,
             stats.general,
             stats.bonus.daño,
             stats.bonus.defensa,

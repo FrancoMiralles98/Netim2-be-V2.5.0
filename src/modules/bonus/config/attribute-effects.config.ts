@@ -1,4 +1,4 @@
-import { CharacterAttribute } from "src/modules/character/types/baseCharacterProps/character-stats.type";
+import { AttributesRefKeys } from "netim2-shared";
 import { BonusRefKeys } from "../types/bonusListHelper/ref-bonus-name.type";
 
 /**
@@ -13,7 +13,7 @@ import { BonusRefKeys } from "../types/bonusListHelper/ref-bonus-name.type";
  * - VIT: { hp: 1 }
  *   - Cada punto de VIT otorga +1% de vida maxima
  */
-export const ATTRIBUTE_EFFECTS_CONFIG: Record<CharacterAttribute, Partial<Record<BonusRefKeys, number>>> = {
+export const ATTRIBUTE_EFFECTS_CONFIG: Record<AttributesRefKeys, Partial<Record<BonusRefKeys, number>>> = {
     VIT: { hp: 1 },
     INT: { ap: 1.5, vh: 0.3 },
     STR: { ad: 2 },

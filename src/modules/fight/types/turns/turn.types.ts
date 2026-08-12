@@ -1,9 +1,9 @@
 import { ActionResolution, PeriodicStatusEffectResolution } from "../actionResolution/action-resolution.types";
 import { CombatAction } from "../combatAction/combat-action.types";
-import { FightResult } from "../fight/fight.type";
+import { FightResult, FightSide } from "../fight/fight.type";
 import { FightEvent } from "../fightEvents/fight-event.types";
 
-export interface TurnExecutionResult {
+export interface FighterTurnExecutionResult {
     turnNumber: number;
     actorId: string;
 
@@ -13,6 +13,7 @@ export interface TurnExecutionResult {
     resolution: ActionResolution;
 
     endTurnResult: TurnEndResult;
+    side: FightSide
 
     events: FightEvent[]; /**FightEvent */
 

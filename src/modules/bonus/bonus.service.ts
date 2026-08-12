@@ -3,10 +3,10 @@ import { BonusWeightService } from "./services/bonus-weight.service";
 import { LimitBonusService } from "./services/limit-bonus.service";
 import { BonusInItem } from "./types/bonus-in-item.type";
 import { BonusCategory } from "./types/bonusListHelper/bonus.type";
-import { CharacterStats } from "../character/types/baseCharacterProps/character-stats.type";
 import { ItemBonusQuality } from "./types/item-bonus-quaility.type";
 import { GenerateItemBonusService } from "./services/generate-item-bonus.service";
 import { subTypeEquip } from "../item/types/entities-props/equip.type";
+import { Stats } from "netim2-shared";
 
 @Injectable()
 export class BonusService {
@@ -38,7 +38,7 @@ export class BonusService {
         )
     }
 
-    limitStatsBonus (stats:CharacterStats): CharacterStats {
+    limitStatsBonus (stats:Stats): Stats {
         return this.limitBonusService.applyBonusLimitsToStats(stats)
     }
 

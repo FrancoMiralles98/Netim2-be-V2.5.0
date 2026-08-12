@@ -9,6 +9,7 @@ import { ActiveStatusEffectEntity } from "./active-status-effect.entity";
 import { SkillCooldownReductionResult } from "../types/fighter/cooldown.types";
 import { HealingReductionResult, HealingReductionSource } from "../types/fighter/healing-reduction.types";
 import { FightConfig } from "netim2-shared/dist/character/character-fight-config.type";
+import { ActiveStatusEffectId } from "../types/statusEffects/active-status-effect.types";
 
 export class FighterCombatEntity {
     private props: FighterCombatProps;
@@ -388,7 +389,7 @@ export class FighterCombatEntity {
         return [...this.props.activeEffects.values()]
     }
 
-    getActiveStatusEffectByEffectId(effectId: StatusEffectsKeys): ActiveStatusEffectEntity | undefined {
+    getActiveStatusEffectByEffectId(effectId: ActiveStatusEffectId): ActiveStatusEffectEntity | undefined {
         for (const effect of this.props.activeEffects.values()) {
             if (effect.isActive() && effect.getEffectId() === effectId) {
                 return effect;

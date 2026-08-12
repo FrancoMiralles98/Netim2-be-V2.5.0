@@ -13,6 +13,8 @@ export class SkillBuffEntity extends BaseSkillEntity<SkillBuff> {
 
     static summaryToSkillType(summary: SkillBuffSummary): SkillBuff {
         return {
+            stats: [],
+            duration: {turns:0,type:'turns'},
             ...summary,
             lv: 1,
             effects: [],

@@ -6,6 +6,8 @@ import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.en
 import { hasStackExtraDamage, isPeriodicDamageEffectData } from "../processors/status-effect-processor.types";
 import { DamageResolverService } from "./damage-resolver.service";
 import { PeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
+import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
+import { DamageResolutionResult } from "./damage-resolver.types";
 
 @Injectable()
 export class PeriodicStatusEffectResolverService {
@@ -61,6 +63,14 @@ export class PeriodicStatusEffectResolverService {
 
         input.effect.registerTick()
 
+        this.periodicStatusEffectStatisticRegister(
+            tickDamage,
+            stackProc,
+            input.effect.getEffectId(),
+            source,
+            input.target
+        )
+
         return {
             effectId: input.effect.getEffectId(),
             instanceId: input.effect.getInstanceId(),
@@ -115,6 +125,45 @@ export class PeriodicStatusEffectResolverService {
             procCount: stackResult.procCount,
             remainingStacks: stackResult.remainingStacks,
             totalRequestedDamage
+        }
+    }
+
+    private periodicStatusEffectStatisticRegister(
+        tickDamage: DamageResolutionResult,
+        stackProc: PeriodicStatusEffectResolution['stackProc'] | undefined,
+        effectId: ActiveStatusEffectId,
+        source: FighterCombatEntity,
+        target: FighterCombatEntity
+    ) {
+        target.statistics.registerDamageMitigated({
+            statusEffectId: effectId,
+            amount: tickDamage.mitigatedAmount
+        })
+        source.statistics.registerDamageDealt({
+            source: {
+                type: 'status_effect',
+                effectId
+            },
+            amount: tickDamage.effectiveDamage,
+            damageType: 'ad',
+            delivery: 'periodic'
+        })
+
+        if (stackProc && stackProc.damage) {
+            source.statistics.registerDamageDealt({
+                source: {
+                    type: 'status_effect',
+                    effectId
+                },
+                amount: stackProc.damage.effectiveDamage,
+                damageType: 'ad',
+                delivery: 'periodic'
+            })
+
+            target.statistics.registerDamageMitigated({
+                statusEffectId: effectId,
+                amount: stackProc.damage.mitigatedAmount,
+            })
         }
     }
 }

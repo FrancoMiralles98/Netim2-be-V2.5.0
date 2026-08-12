@@ -1,10 +1,10 @@
-import { CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type"
 import { MISCS_BONUS_CONFIG } from "../config/bonus-config"
 import { DropDifficultyConfig } from "../types/drop.dificult.type"
 import { RngService } from "src/modules/shared/services/rng.service"
 import { Injectable } from "@nestjs/common"
 import { DropTag } from "src/modules/item/types/entities-props/item-drop.config.type"
 import { RARE_DROP_TAGS } from "../config/drop/rare-drop-tags.config"
+import { Stats } from "netim2-shared"
 
 @Injectable()
 export class MicsBonusService {
@@ -60,7 +60,7 @@ export class MicsBonusService {
     * @returns Cantidad final de yang obtenida.
     */
     calculateYang(
-        bonus: CharacterStats['bonus']['miscs'],
+        bonus: Stats['bonus']['miscs'],
         yang: { min: number, max: number }
     ): number {
         return this.calculateReward(
@@ -83,7 +83,7 @@ export class MicsBonusService {
     * @returns Cantidad final de experiencia obtenida.
     */
     calculateExp(
-        bonus: CharacterStats['bonus']['miscs'],
+        bonus: Stats['bonus']['miscs'],
         exp: { min: number, max: number }
     ): number {
         return this.calculateReward(
@@ -126,7 +126,7 @@ export class MicsBonusService {
     */
     applyItemDropAndYangChanceBonus(
         chances: DropDifficultyConfig['resultChances'],
-        bonus: CharacterStats['bonus']['miscs'],
+        bonus: Stats['bonus']['miscs'],
     ): DropDifficultyConfig['resultChances'] {
 
         return {

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { BonusRefKeys } from "../types/bonusListHelper/ref-bonus-name.type";
 import { LIMIT_BONUS_CONFIG } from "../config/limit-bonus.config";
+import { Stats } from "netim2-shared";
 
 /**
  * Servicio encargado de aplicar límites máximos a los bonus
@@ -12,15 +12,14 @@ import { LIMIT_BONUS_CONFIG } from "../config/limit-bonus.config";
  */
 @Injectable()
 export class LimitBonusService {
-    applyBonusLimitsToStats (stats:CharacterStats): CharacterStats {
+    applyBonusLimitsToStats (stats:Stats): Stats {
         return {
-            atributos: {...stats.atributos},
             general: this.limitToGeneralStats(stats.general),
             bonus: this.limitToBonusStats(stats.bonus),
         }
     }
 
-    private limitToGeneralStats (bonus: CharacterStats["general"]): CharacterStats["general"] {
+    private limitToGeneralStats (bonus: Stats["general"]): Stats["general"] {
         return {
             ...bonus,
             vh: this.limitBonusValue('vh',bonus.vh),
@@ -28,7 +27,7 @@ export class LimitBonusService {
         }
     }
 
-    private limitToBonusStats(bonus:CharacterStats["bonus"]): CharacterStats["bonus"] {
+    private limitToBonusStats(bonus:Stats["bonus"]): Stats["bonus"] {
         return {
             miscs: this.limitBonusToGroup(bonus.miscs),
             defensa: this.limitBonusToGroup(bonus.defensa),

@@ -1,5 +1,5 @@
 import { EquipType, TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
-import { CharacterRace, CharacterSpeciality, CharacterStats } from "./character-stats.type";
+import { CharacterRace, CharacterSpeciality } from "./character-stats.type";
 import { MonturaType } from "src/modules/item/types/entities-props/montura.type";
 import { DiscoveryWorld } from "./discovery-world.type";
 import { StarDiscovery } from "./stars-discovery.type";
@@ -13,6 +13,7 @@ import { DungeonInProgressType } from "./dungeon-in-progress.type";
 import { PvpDataType } from "./pvp-data.type";
 import { HistorialInUser } from "./historial-in-user.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
+import { Stats } from "netim2-shared";
 
 /**
  *
@@ -162,7 +163,7 @@ export interface BaseCharacterProps {
     exp_next_lv: number;
     atribute_per_lv: number;
     time_played: number;
-    stats: CharacterStats;
+    stats: Stats;
     role: CharacterRole
     montura_lv: number;
     beginning: boolean;

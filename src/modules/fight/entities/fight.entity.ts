@@ -29,8 +29,11 @@ export class FightEntity {
             },
 
             initiativeResults: [],
-            turnOrder: [],
-            currentTurnIndex: -1,
+            sideTurnOrder: {
+                allies: [],
+                enemies: []
+            },
+            currentSide: undefined,
             currentActorId: undefined,
             turnNumber: 0,
             result: undefined
@@ -151,72 +154,100 @@ export class FightEntity {
     }
 
     getAliveFighters(): FighterCombatEntity[] {
-        return this.getFighters().filter(fighter => fighter.isAlive);
+        return this.getFighters().filter(fighter => fighter.isAlive());
     }
 
     getDefeatedFighters(): FighterCombatEntity[] {
-        return this.getFighters().filter(fighter => !fighter.isAlive);
+        return this.getFighters().filter(fighter => !fighter.isAlive());
     }
 
     setInitiative(results: FighterInitiativeResult[]): void {
         if (this.state.status !== 'pending') {
-            throw new Error('Initiative can only be set before the fight starts.');
+            throw new Error('Initiative can only be set before the fight starts.')
         }
 
-        this.validateInitiativeResults(results);
+        this.validateInitiativeResults(results)
 
-        const orderedResults = [...results].sort(
-            (fighterA, fighterB) => {
-                if (fighterB.total !== fighterA.total) {
-                    return fighterB.total - fighterA.total;
-                }
-
-                return ((fighterB.tieBreakerRoll ?? 0) - (fighterA.tieBreakerRoll ?? 0));
+        const orderedResults = [...results].sort((fighterA, fighterB) => {
+            if (fighterB.total !== fighterA.total) {
+                return fighterB.total - fighterA.total
             }
-        );
 
-        this.state.initiativeResults = orderedResults;
+            return ((fighterB.tieBreakerRoll ?? 0) - (fighterA.tieBreakerRoll ?? 0))
+        })
 
-        this.state.turnOrder = orderedResults.map(result => result.fighterId);
+        this.state.initiativeResults = orderedResults
+
+        this.state.sideTurnOrder = {
+            allies: orderedResults.filter(result => this.isFighterInSide(
+                result.fighterId,
+                'allies'
+            )).map(result => result.fighterId),
+
+            enemies: orderedResults.filter(result => this.isFighterInSide(
+                result.fighterId,
+                'enemies'
+            )).map(result => result.fighterId)
+        }
+    }
+
+    private isFighterInSide(fighterId: string, side: FightSide): boolean {
+        return this.state.sides[side].includes(fighterId)
+    }
+
+    private getStartingSide(): FightSide {
+        const first = this.state.initiativeResults[0]
+
+        return this.getSideOf(first.fighterId)
     }
 
 
     start(): void {
         if (this.state.status !== 'pending') {
-            throw new Error('The fight has already started.');
+            throw new Error('The fight has already started.')
         }
 
-        if (this.state.turnOrder.length === 0) {
-            throw new Error('Initiative must be resolved before starting the fight.');
+        if (this.state.initiativeResults.length === 0) {
+            throw new Error('Initiative must be resolved before starting the fight.')
         }
 
-        this.state.status = 'in_progress';
-        this.state.phase = 'between_turns';
+        this.state.currentSide = this.getStartingSide()
+
+        this.state.status =
+            'in_progress'
+
+        this.state.phase =
+            'between_turns'
     }
 
-    beginNextTurn() {
-        this.ensureFightInProgress();
+    beginNextTurn(): {
+        side: FightSide
+        turnNumber: number
+        phase: FightPhase
+    } {
+        this.ensureFightInProgress()
 
-        const result = this.tryFinish();
+        const result = this.tryFinish()
 
         if (result) {
-            throw new Error('Cannot begin a new turn because the fight has finished.');
+            throw new Error('Cannot begin a new turn because the fight has finished.')
         }
 
-        const nextIndex = this.findNextAliveFighterIndex(this.state.currentTurnIndex);
+        const currentSide = this.state.currentSide
 
-        this.state.currentTurnIndex = nextIndex;
+        if (!currentSide) {
+            throw new Error('Fight has no current side.')
+        }
 
-        this.state.currentActorId = this.state.turnOrder[nextIndex];
+        this.state.turnNumber += 1
 
-        this.state.turnNumber += 1;
-        this.state.phase = 'turn_started';
+        this.state.phase = 'turn_started'
 
         return {
+            side: currentSide,
             turnNumber: this.state.turnNumber,
-            actorId: this.state.currentActorId,
             phase: this.state.phase
-        };
+        }
     }
 
     getCurrentActor(): FighterCombatEntity {
@@ -232,24 +263,27 @@ export class FightEntity {
     }
 
     completeCurrentTurn(): FightResult | undefined {
-        this.ensureFightInProgress();
+        this.ensureFightInProgress()
 
-        if (!this.state.currentActorId) {
-            throw new Error('There is no active turn to complete.');
+        if (!this.state.currentSide) {
+            throw new Error('There is no active side.')
         }
 
-        this.state.phase = 'turn_end';
+        this.state.phase = 'turn_end'
 
-        const result = this.tryFinish();
+        const result = this.tryFinish()
 
         if (result) {
-            return result;
+            return result
         }
 
-        this.state.currentActorId = undefined;
-        this.state.phase = 'between_turns';
+        this.state.currentSide = this.getOppositeSide(this.state.currentSide)
 
-        return undefined;
+        this.state.currentActorId = undefined
+
+        this.state.phase = 'between_turns'
+
+        return undefined
     }
 
     tryFinish():
@@ -330,24 +364,6 @@ export class FightEntity {
         this.state.result = result;
 
         return result;
-    }
-
-    private findNextAliveFighterIndex(currentIndex: number): number {
-        const totalFighters = this.state.turnOrder.length;
-
-        for (let offset = 1; offset <= totalFighters; offset += 1) {
-            const nextIndex = (currentIndex + offset) % totalFighters;
-
-            const fighterId = this.state.turnOrder[nextIndex];
-
-            const fighter = this.getFighter(fighterId);
-
-            if (fighter.isAlive()) {
-                return nextIndex;
-            }
-        }
-
-        throw new Error('There are no alive fighters available for the next turn.');
     }
 
     private ensureFightInProgress(): void {

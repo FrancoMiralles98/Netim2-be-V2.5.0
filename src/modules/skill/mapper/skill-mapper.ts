@@ -3,6 +3,7 @@ import { SkillSummary } from "../types/summary-skills.types";
 import { SkillAuraEntity } from "../entities/skill-aura.entity";
 import { SkillBuffEntity } from "../entities/skill-buff.entity";
 import { SkillDamageEntity } from "../entities/skill-damage.entity";
+import { SkillHealEntity } from "../entities/skill-heal.entity";
 
 export class SkillMapper {
     static summaryToSkill(skillSummary: SkillSummary): SkillType {
@@ -12,6 +13,7 @@ export class SkillMapper {
             case "buff":
                 return SkillBuffEntity.summaryToSkillType(skillSummary)
             case "heal":
+                return SkillHealEntity.summaryToSkillType(skillSummary)
             case "damage":
                 return SkillDamageEntity.summaryToSkillType(skillSummary)
             default:

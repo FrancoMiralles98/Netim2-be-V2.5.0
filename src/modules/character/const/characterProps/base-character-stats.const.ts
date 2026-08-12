@@ -1,18 +1,14 @@
-import { CharacterStats } from "../../types/baseCharacterProps/character-stats.type";
+import { Stats } from "netim2-shared";
 
 /**
  * Estructura general de la propiedad `Stats` del character
  */
-export const GENERAL_CHARACTER_STATS: CharacterStats = {
-    atributos: {
-        VIT: { lvPoints: 0, bonusPoints: 0 },
-        DEX: { lvPoints: 0, bonusPoints: 0 },
-        INT: { lvPoints: 0, bonusPoints: 0 },
-        STR: { lvPoints: 0, bonusPoints: 0 },
-    },
+export const GENERAL_CHARACTER_STATS: Stats = {
     general: {
         ad: { min: 0, max: 0 },
         ap: { min: 0, max: 0 },
+        mana: {actual: 0, max: 0},
+        regen_mana: 0,
         def: 0,
         hp: { actual: 0, max: 0 },
         regen_hp: 0,
@@ -36,6 +32,7 @@ export const GENERAL_CHARACTER_STATS: CharacterStats = {
             habilidad: 0,
             bonus_sangrado: 0,
             duracion_estado: 0,
+            electrico: 0,
             sangrado: 0,
             incendio: 0,
             media: 0,
@@ -51,6 +48,9 @@ export const GENERAL_CHARACTER_STATS: CharacterStats = {
         defensa: {
             bloquear_ataques: 0,
             def_campana: 0,
+            def_electrico: 0,
+            mana_cost: 0,
+            porcentage_mana_cost: 0,
             def_daga: 0,
             damage_taken: 0,
             robo_vida: 0,

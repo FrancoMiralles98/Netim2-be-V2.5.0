@@ -1,6 +1,4 @@
-import { PatternScaleType } from "src/modules/item/types/config/general-implicit.type";
-import { allFullNameBonusList } from "./bonusListHelper/bonus-list-full-name.enum";
-import { BonusRefKeys } from "./bonusListHelper/ref-bonus-name.type";
+import { allFullNameBonusList, BonusRefKeys } from "netim2-shared";
 
 /**
  * Representa un bonus aplicado a un ítem.

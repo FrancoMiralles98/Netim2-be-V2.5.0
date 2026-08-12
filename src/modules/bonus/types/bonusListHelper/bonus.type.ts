@@ -1,7 +1,7 @@
 import { subTypeEquip } from "src/modules/item/types/entities-props/equip.type";
 import { ValueBonusType } from "../bonus-in-item.type";
 import { allFullNameBonusList } from "./bonus-list-full-name.enum";
-import { BonusRefKeys } from "./ref-bonus-name.type";
+import { BonusRefKeys } from "netim2-shared";
 
 /**
  * Categorías de bonus disponibles en el sistema.

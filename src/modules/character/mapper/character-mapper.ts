@@ -1,12 +1,11 @@
 import { Inventory } from "src/modules/inventory/entities/inventory.entity";
-import { CharacterPersistence } from "../types/character-persistence.type";
 import { CharacterEntity } from "../entity/character-entity";
 import { CharacterDocument, CharacterModel } from "../schema/character.schema";
 import { SkillFactory } from "src/modules/skill/factories/skill.factory";
 import { GENERAL_CHARACTER } from "../const/general-character.const";
 import { CreateCharacterDto } from "../dto/create-character.dto";
 import { Injectable } from "@nestjs/common";
-import { CharacterSummary } from "../types/character-summary.type";
+import { CharacterPersistence, CharacterSummary } from "netim2-shared";
 
 /**
  * Mapper encargado de transformar datos entre las distintas capas:
@@ -26,6 +25,8 @@ export class CharacterMapper {
         return {
             atribute_per_lv: doc.atribute_per_lv,
             beginning: doc.beginning,
+            atributos: doc.atributos,
+            fightConfig: doc.fightConfig,
             buffos: doc.buffos,
             discovery_world: doc.discovery_world,
             dungeon_in_progress: doc.dungeon_in_progress,
@@ -48,7 +49,7 @@ export class CharacterMapper {
             reino: doc.reino,
             role: doc.role,
             stars_discovery: doc.stars_discovery,
-            stats: doc.stats,
+            stats: doc.baseStats,
             target_type: doc.target_type,
             time_played: doc.time_played,
             timer_boss: doc.timer_boss,
@@ -125,9 +126,7 @@ export class CharacterMapper {
             lv: character.lv,
             reino: character.reino,
             time_played: character.time_played,
-            stats: {
-                atributos: character.stats.atributos
-            },
+            stats: character.atributos,
             especialidad: character.especialidad,
             gremio_options: character.gremio_options
 

@@ -1,5 +1,4 @@
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { HealingReductionResult } from "../../types/fighter/healing-reduction.types";
 
 export type HealingSource =
     | 'skill'

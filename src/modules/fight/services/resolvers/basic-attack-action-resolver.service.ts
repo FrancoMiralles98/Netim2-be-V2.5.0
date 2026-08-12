@@ -7,6 +7,9 @@ import { StatusEffectApplicationResolverService } from "./status-effect-applicat
 import { AppliedStatusEffectResolution } from "./dama-skill-action-resolver.types";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { LifeStealResolverService } from "./life-steal-resolver.service";
+import { HealingResolution } from "./healing-resolver.types";
+import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
+import { FightEntity } from "../../entities/fight.entity";
 
 @Injectable()
 export class BasicAttackActionResolverService {
@@ -76,6 +79,15 @@ export class BasicAttackActionResolverService {
             target,
         })
 
+        this.BasicAttackActionStatisticRegister(
+            context.actor,
+            context.fight,
+            hits,
+            lifeStealResult,
+            attackSequence.extraAttackTriggered,
+            target
+        )
+
         return {
             actorId: context.actor.id,
             extraAttackTriggered: attackSequence.extraAttackTriggered,
@@ -109,6 +121,61 @@ export class BasicAttackActionResolverService {
             missChance: 0,
             extraAttackTriggered
         };
+    }
+
+    private BasicAttackActionStatisticRegister(
+        actor: FighterCombatEntity,
+        fight: FightEntity,
+        hits: BasicAttackHitResolution[],
+        lifeStealResult: HealingResolution,
+        extraAttackTriggered: boolean,
+        target: FighterCombatEntity
+    ) {
+
+        actor.statistics.registerAttackHits({
+            doubleHitTriggered: extraAttackTriggered,
+            hits: [] //no se pone nada porque luego por hit se pondran las estadisticas
+        })
+
+        hits.forEach(hit => {
+
+            actor.statistics.registerDamageDealt({
+                source: { type: 'basic_attack' },
+                amount: hit.appliedDamage,
+                damageType: 'ad',
+                delivery: 'direct'
+            })
+            actor.statistics.registerAttackHits({
+                doubleHitTriggered: false, //se pone false porque ya se registro el doubleHitTriggered
+                hits: [{
+                    result: hit.outcome === 'missed' ? 'missed' : 'successful',
+                    critical: hit.critical,
+                    penetrating: hit.penetration,
+                }]
+            })
+            actor.statistics.registerBasicAttackUsed()
+
+            target.statistics.registerDefensiveHit({
+                blockType: 'full',
+                result: hit.dodged === true
+                    ? 'dodged'
+                    : hit.blocked === true
+                        ? 'blocked'
+                        : 'received'
+            })
+            target.statistics.registerDamageMitigated({
+                amount: hit.mitigatedDamage,
+                damageType: 'ad'
+            })
+        })
+
+        lifeStealResult.reductions.forEach(reductionDetail => {
+            const fighter = fight.getFighter(reductionDetail.sourceFighterId)
+            fighter.statistics.registerHealing({
+                type: 'prevented',
+                amount: reductionDetail.preventedAmount
+            })
+        })
     }
 
 

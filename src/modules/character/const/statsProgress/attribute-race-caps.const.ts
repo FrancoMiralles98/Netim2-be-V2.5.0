@@ -1,4 +1,5 @@
-import { CharacterAttribute, CharacterRace } from "../../types/baseCharacterProps/character-stats.type";
+import { AttributesRefKeys } from "netim2-shared";
+import {  CharacterRace } from "../../types/baseCharacterProps/character-stats.type";
 
 /**
  * Límites máximos de atributos base por raza.
@@ -18,7 +19,7 @@ import { CharacterAttribute, CharacterRace } from "../../types/baseCharacterProp
  * pero puede exceder ese valor con equipo o efectos.
  *
  */
-export const ATTRIBUTE_RACE_CAPS: Record<CharacterRace, Record<CharacterAttribute, number>> = {
+export const ATTRIBUTE_RACE_CAPS: Record<CharacterRace, Record<AttributesRefKeys, number>> = {
     chaman: {
         DEX: 47,
         INT: 73,

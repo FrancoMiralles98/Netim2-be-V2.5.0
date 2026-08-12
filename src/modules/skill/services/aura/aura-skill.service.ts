@@ -1,6 +1,6 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { SharedSkillService } from "../shared-skill.service";
-import { BonusRefKeys, CharacterRace, CharacterSpeciality, CharacterStats, DurationConfig, EscaladoStat, MasteryLvRank, SkillAura, SkillAuraScaling } from "netim2-shared";
+import { BonusRefKeys, CharacterRace, CharacterSpeciality, DurationConfig, EscaladoStat, MasteryLvRank, SkillAura, SkillAuraScaling, Stats } from "netim2-shared";
 import { isSkillAuraScaling } from "../../types/skills.guards";
 
 @Injectable()
@@ -12,7 +12,7 @@ export class AuraSkillService {
 
     getUpdatedAura(
         skill: SkillAura,
-        stats: CharacterStats,
+        stats: Stats,
         race: CharacterRace,
         speciality: CharacterSpeciality
     ): SkillAura {

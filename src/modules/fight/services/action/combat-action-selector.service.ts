@@ -1,15 +1,16 @@
 import { Injectable } from "@nestjs/common";
 import { TurnContext } from "../../types/fight/fight-context.types";
-import { CastAuraAction, CastBuffAction, CombatAction, UseDamageSkillAction, UseHealingSkillAction } from "../../types/combatAction/combat-action.types";
-import { HEALING_SKILL_HP_THRESHOLD_PERCENT } from "../../config/skill-healing.config";
+import { CastAuraAction, CastBuffAction, CombatAction, UseHealingSkillAction } from "../../types/combatAction/combat-action.types";
 import { SharedFightService } from "../shared-fight.service";
 import { TargetSelectorService } from "./target-selector.service";
+import { SkillDamageSelectorService } from "./skill-damage-selector.service";
 
 @Injectable()
 export class CombatActionSelectorService {
     constructor(
         private sharedFightService: SharedFightService,
         private targetSelectorService: TargetSelectorService,
+        private skillDamageSelectorService: SkillDamageSelectorService,
     ) { }
 
     select(context: TurnContext, canAct: boolean): CombatAction {
@@ -33,21 +34,23 @@ export class CombatActionSelectorService {
             return buffAction
         }
 
+        const targetId = this.targetSelectorService.selectTarget(context)
+
         if (context.actor.fightConfig.self.priorityBassicAttack) {
             return {
                 type: 'basic_attack',
-                targetId: this.targetSelectorService.selectTarget(context)
+                targetId
             }
         }
 
-        const skillAction = this.selectAvailableDamageSkill(context)
+        const skillAction = this.skillDamageSelectorService.trySelectAvailableDamageSkill(context, targetId)
         if (skillAction) {
             return skillAction
         }
 
         return {
             type: 'basic_attack',
-            targetId: this.targetSelectorService.selectTarget(context)
+            targetId
         }
     }
 
@@ -79,7 +82,7 @@ export class CombatActionSelectorService {
     }
 
     private selectAvailableHealingSkill(ctx: TurnContext): UseHealingSkillAction | undefined {
-        if (ctx.actor.getHpPercentage() > HEALING_SKILL_HP_THRESHOLD_PERCENT) {
+        if (ctx.actor.getHpPercentage() >= ctx.actor.fightConfig.self.HealingSkillHpThresholdPercent) {
             return undefined
         }
         const allHealingSkills = ctx.actor.getSkillsHeal()
@@ -93,21 +96,4 @@ export class CombatActionSelectorService {
         }
         return undefined
     }
-
-    private selectAvailableDamageSkill(ctx: TurnContext): UseDamageSkillAction | undefined {
-        const allSkillDamage = ctx.actor.getSkillsDamage()
-
-        for (const skill of allSkillDamage) {
-            if (!this.sharedFightService.canUseSkill(ctx.actor, skill)) continue
-            const opponentId = this.targetSelectorService.selectTarget(ctx)
-            return {
-                skillId: skill.id,
-                targetId: opponentId,
-                type: 'use_damage_skill'
-            }
-        }
-        return undefined
-    }
-
-
 }
