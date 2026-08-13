@@ -34,7 +34,7 @@ import { AuraManager } from './manager/aura-manager';
 import { BuffManager } from './manager/buff-manager';
 import { FightManager } from './manager/fight-manager';
 import { StatusEffectManager } from './manager/status-effect-manager';
-import { FighterTurnManager } from './manager/turn-manager';
+import { FighterTurnManager } from './manager/fighter-turn-manager';
 import { FightFactory } from './factories/fight.factory';
 import { FighterCombatFactory } from './factories/fighter-combat-entity.factory';
 import { CharacterModule } from '../character/character.module';
@@ -42,6 +42,8 @@ import { MobModule } from '../mob/mob.module';
 import { TargetSelectorService } from './services/action/target-selector.service';
 import { SideTurnManager } from './manager/side-turn-manger';
 import { SkillDamageSelectorService } from './services/action/skill-damage-selector.service';
+import { LabFightService } from './lab/lab-fight.service';
+import { FightEngine } from './engine/fight-engine';
 
 @Module({
   imports: [
@@ -61,6 +63,8 @@ import { SkillDamageSelectorService } from './services/action/skill-damage-selec
     RegenerationProcessorService,
     StatusEffectProcessorService,
     AuraActionResolverService,
+    LabFightService,
+    FightEngine,
     BasicAttackActionResolverService,
     BasicAttackHitResolverService,
     BuffActionResolver,

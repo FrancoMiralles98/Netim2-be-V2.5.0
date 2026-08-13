@@ -7,7 +7,7 @@ import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { MobRace } from "../types/mobProps/mob-race.type";
 import { MobDifficulty } from "../types/mobProps/mob-difficult.type";
 import { EnemyType } from "../types/mobProps/enemie-type.type";
-import { CharacterSpeciality, IdItemList, SkillType, Stats, TypeWeapon } from "netim2-shared";
+import { CharacterSpeciality, FightConfig, IdItemList, SkillType, Stats, TypeWeapon } from "netim2-shared";
 
 @Schema()
 export class MobModel {
@@ -64,6 +64,9 @@ export class MobModel {
 
     @Prop({ type: Number, required: true })
     discovery!: number;
+
+    @Prop({ type: Object, required: true })
+    fightConfig!: FightConfig
 }
 
 export type MobDocument = HydratedDocument<MobModel>

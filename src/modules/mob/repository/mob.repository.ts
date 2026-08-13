@@ -4,6 +4,7 @@ import { MobDocument, MobModel } from "../schema/mob.schema";
 import { InjectModel } from "@nestjs/mongoose";
 import { UbicationNames } from "src/modules/gameData/types/ubication-names.type";
 import { MobType } from "../types/mobProps/mob.type";
+import { IdMob } from "netim2-shared";
 
 @Injectable()
 export class MobRepository {
@@ -15,7 +16,7 @@ export class MobRepository {
     /**
      * Se usa El "IdMob" no el de la base de datos
      */
-    async getMobById(idMob: number): Promise<MobModel> {
+    async getMobById(idMob: IdMob): Promise<MobModel> {
         const mob = await this.mobModel.findOne({ idMob }).lean()
         if (!mob) {
             throw new NotFoundException('Mob not found')
@@ -39,9 +40,13 @@ export class MobRepository {
         return result
     }
 
+    async getMobsByIds(mobIds: IdMob[]): Promise<MobModel[]> {
+        return this.mobModel.find({ idMob: { $in: mobIds } }).lean();
+    }
+
     //Estructura base, despues se tiene que mejorar para mayor seguridad
-    async updateOneMob(idMob:number,data: MobType): Promise<MobModel> {
-        const result = await this.mobModel.findOneAndUpdate({idMob},{$set:data})
+    async updateOneMob(idMob: number, data: MobType): Promise<MobModel> {
+        const result = await this.mobModel.findOneAndUpdate({ idMob }, { $set: data })
         if (!result) {
             throw new InternalServerErrorException('Error al crear los mobs')
         }

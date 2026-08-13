@@ -23,7 +23,6 @@ export class RegenerationProcessorService {
         const manaResult = context.actor.restoreMana(regenValues.mana)
 
         this.regenerationStatisticRegister(context.actor, context.fight, healingResult, manaResult)
-
     }
 
     private regenerationStatisticRegister(

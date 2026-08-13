@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { FighterTurnManager } from "./turn-manager";
+import { FighterTurnManager } from "./fighter-turn-manager";
 import { FightEntity } from "../entities/fight.entity";
 import { FighterTurnExecutionResult } from "../types/turns/turn.types";
 import { SideTurnExecutionResult } from "../types/side/side.types";
