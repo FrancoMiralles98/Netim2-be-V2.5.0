@@ -1,4 +1,4 @@
-import { DropTag } from "src/modules/item/types/entities-props/item-drop.config.type";
+import { DropTag } from "netim2-shared";
 import { EnemyType } from "src/modules/mob/types/mobProps/enemie-type.type";
 
 /**

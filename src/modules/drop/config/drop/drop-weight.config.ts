@@ -1,4 +1,4 @@
-import { DropWeightType } from "../../types/drop-weight.type";
+import { DropWeightType } from "netim2-shared/dist/drop/drop-weight.type";
 
 /**
  * Pesos utilizados por el sistema de selección de drops.

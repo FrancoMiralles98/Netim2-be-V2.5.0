@@ -1,8 +1,11 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { TOTAL_LV_POINTS_PER_MASTERY_CONFIG } from "../config/total-lv-points-per-mastery.config";
-import { CharacterAttribute, CharacterStats } from "src/modules/character/types/baseCharacterProps/character-stats.type";
-import { CharacterRace, CharacterSpeciality, LetterMasteryLv, MasteryLvRank, SkillAuraScaling, SkillBuffScaling, SkillDamageScaling, SkillManaCost, SkillScalingLv, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { Atributos, AttributesRefKeys, CharacterRace, CharacterSpeciality, LetterMasteryLv, MasteryLvRank, SkillManaCost, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { SKILL_SCALING_BY_RACE_CONFIG } from "../config/skillScaling/skill-scaling-by-race.const";
+import { SkillScalingLv } from "../types/scaling/escalado-lv.types";
+import { SkillAuraScaling } from "../types/scaling/aura/skill-aura-scaling.type";
+import { SkillDamageScaling } from "../types/scaling/damage/skill-damage-scaling.type";
+import { SkillBuffScaling } from "../types/scaling/buff/skill-buff-scaling.type";
 
 @Injectable()
 export class SharedSkillService {
@@ -99,19 +102,19 @@ export class SharedSkillService {
      *  - Si se tiene 100 puntos de VIT totales y la skill escala con 20% de VIT obtendra:
      *   1.20 = +20% de daño / aumento de effecto de aura
      *
-     * @param statsGeneral Estadísticas generales del personaje.
+     * @param atributos Estadísticas generales del personaje.
      * @param scaling Configuración de escalado de atributos.
      * @returns Multiplicador final de atributos.
      */
     getAttributeBonification(
-        statsGeneral: CharacterStats['atributos'],
-        attributeScaling: Partial<Record<CharacterAttribute, number>>
+        atributos: Atributos,
+        attributeScaling: Partial<Record<AttributesRefKeys, number>>
     ): number {
         if (!attributeScaling) return 1
         let bonification = 0
-        for (const [attribute, value] of Object.entries(attributeScaling) as [CharacterAttribute, number][]) {
+        for (const [attribute, value] of Object.entries(attributeScaling) as [AttributesRefKeys, number][]) {
 
-            const attributeCharacter = statsGeneral[attribute]
+            const attributeCharacter = atributos[attribute]
             const totalAttributeValue = attributeCharacter.bonusPoints + attributeCharacter.lvPoints
 
             bonification += totalAttributeValue * (value / 100)
@@ -178,12 +181,12 @@ export class SharedSkillService {
     }
 
     getAttributeMultiplier(
-        characterAttributes: CharacterStats['atributos'],
-        scaling: Partial<Record<CharacterAttribute, number>>
+        characterAttributes: Atributos,
+        scaling: Partial<Record<AttributesRefKeys, number>>
     ): number {
         let multiplier = 1
 
-        for (const [attribute, percentage] of Object.entries(scaling) as Array<[CharacterAttribute, number]>) {
+        for (const [attribute, percentage] of Object.entries(scaling) as Array<[AttributesRefKeys, number]>) {
             if (percentage === undefined) continue;
 
             const attributeValue = characterAttributes[attribute];

@@ -1,4 +1,4 @@
-import { ItemBonusQuality } from "src/modules/bonus/types/item-bonus-quaility.type";
+import { ItemBonusQuality } from "netim2-shared";
 
 /**
  * Configuración utilizada para generar las propiedades aleatorias

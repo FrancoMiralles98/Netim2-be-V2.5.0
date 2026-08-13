@@ -1,5 +1,4 @@
-import { AllTargetType, CharacterRace, FightConfig, SkillType, Stats } from "netim2-shared";
-import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
+import { AllTargetType, CharacterRace, FightConfig, SkillType, Stats, TypeWeapon } from "netim2-shared";
 
 export interface FighterCombatCreationInput {
     id: string;

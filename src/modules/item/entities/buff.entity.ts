@@ -1,4 +1,4 @@
-import { BuffType, EffecDescription } from '../types/entities-props/buff.type';
+import { BuffType, EffecDescription } from 'netim2-shared';
 import { UtilityBase } from './utility-base.entity';
 
 export class Buff extends UtilityBase {

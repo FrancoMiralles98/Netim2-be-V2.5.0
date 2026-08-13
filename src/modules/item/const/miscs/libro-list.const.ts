@@ -1,6 +1,6 @@
+import { IdItem, UtilityType } from "netim2-shared";
 import { createGenericUtilityItem } from "../../factories/item-builder";
-import { UtilityType } from "../../types/entities-props/utility.type";
-import { IdItem } from "../../types/iditems/id-item-list.type";
+
 
 export const LIBRO_LIST: UtilityType[] = [
  createGenericUtilityItem({

@@ -8,8 +8,8 @@ import { Montura } from '../entities/montura.entity';
 import { Piedra } from '../entities/piedra.entity';
 import { Pocion } from '../entities/pocion.entity';
 import { Utility } from '../entities/utility.entity';
-import { ItemDTO } from '../types/item-dto';
 import { Chest } from '../entities/chest.entity';
+import { ItemDTO } from 'netim2-shared';
 
 @Injectable()
 export class ItemFactory {

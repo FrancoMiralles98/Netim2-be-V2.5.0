@@ -1,4 +1,4 @@
-import { BonusType } from "../types/bonusListHelper/bonus.type";
+import { BonusType } from "netim2-shared";
 import { bonus6_7BonusList } from "./bonus6_7.const";
 import { CORRUPT_IMPLICIT_BONUS } from "./corrupt-implicit-bonus.const";
 import { tier1BonusList } from "./tier1.const";

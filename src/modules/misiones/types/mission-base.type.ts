@@ -1,6 +1,4 @@
-import { UpgradeLv } from "src/modules/item/types/config/general-implicit.type";
-import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type";
-import { ItemDTO } from "src/modules/item/types/item-dto";
+import { IdItemList, ItemDTO, UpgradeLv } from "netim2-shared";
 import { ActionMission } from "./action-mission.type";
 import { CollectMission } from "./collect-mission.type";
 import { HuntMission } from "./hunt-mission.type";

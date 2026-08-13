@@ -1,7 +1,7 @@
 import { IdMob } from "src/modules/mob/types/id-mob-list.enum";
 import { IdMissionsList } from "../types/idMissions/id-mission-list.enum";
 import { Missions } from "../types/mission-base.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+import { IdItem } from "netim2-shared";
 
 export const MAIN_MISSION: Missions[] = [
     {

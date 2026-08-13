@@ -1,6 +1,6 @@
-import { ItemDTO } from "src/modules/item/types/item-dto"
-import { InventoryItem, Position } from "../types/inventory-item.type"
+
 import { randomUUID } from "crypto"
+import { InventoryItem, ItemDTO, Position } from "netim2-shared"
 
 /**
  * Factory responsable de crear instancias de items dentro del inventario.

@@ -1,5 +1,4 @@
-import { AttributesRefKeys } from "netim2-shared";
-import { BonusRefKeys } from "../types/bonusListHelper/ref-bonus-name.type";
+import { AttributesRefKeys, BonusRefKeys } from "netim2-shared";
 
 /**
  * Configuración de los efectos que aporta cada atributo del personaje sobre las estadisticas

@@ -3,7 +3,7 @@ import { DamageSkillService } from './services/damage/damage-skill.service';
 import { AuraSkillService } from './services/aura/aura-skill.service';
 import { SkillFactory } from './factories/skill.factory';
 import { ALL_SKILLS } from './const/skills';
-import { CharacterRace, CharacterSpeciality, CharacterStats, SkillType } from 'netim2-shared';
+import { Atributos, CharacterRace, CharacterSpeciality, SkillType, Stats } from 'netim2-shared';
 import { BuffSkillService } from './services/buffo/buff-skill.service';
 import { SkillMapper } from './mapper/skill-mapper';
 
@@ -57,7 +57,8 @@ export class SkillService {
         skill: SkillType,
         race: CharacterRace,
         speciality: CharacterSpeciality,
-        stats: CharacterStats,
+        stats: Stats,
+        atributos:Atributos,
         lvUp: boolean = false
     ): SkillType {
         const skillEntity = SkillFactory.create(skill)
@@ -70,7 +71,7 @@ export class SkillService {
 
         const skillUpdated = skillEntity.toPrimitives()
 
-        return this.handleUpdateSkill(skillUpdated, race, speciality, stats)
+        return this.handleUpdateSkill(skillUpdated, race, speciality, stats,atributos)
     }
 
 
@@ -89,14 +90,14 @@ export class SkillService {
         skill: SkillType,
         race: CharacterRace,
         speciality: CharacterSpeciality,
-        stats: CharacterStats
+        stats: Stats,
+        atributos:Atributos
     ): SkillType {
         switch (skill.type) {
             case 'damage':
-            case 'heal':
-                return this.damageSkillService.getUpdatedSkill(skill, stats, race, speciality)
+                return this.damageSkillService.getUpdatedSkill(skill, stats, race, speciality,atributos)
             case 'aura':
-                return this.auraSkillService.getUpdatedAura(skill, stats, race, speciality)
+                return this.auraSkillService.getUpdatedAura(skill, stats, race, speciality,atributos)
             case 'buff':
                 return this.buffSkillService.getUpdatedSkill(skill, race, speciality)
             default:

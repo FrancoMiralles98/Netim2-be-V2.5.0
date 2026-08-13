@@ -3,7 +3,7 @@ import { RngService } from "src/modules/shared/services/rng.service";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { PeriodicStatusEffectConfig, ResolveSkillEffectsInput, StatusEffectApplicationResult, StatusEffectConfig, StatusEffectDurationConfig } from "./status-effect-application-resolver.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { CombatStatKey, DamageCondition, StatsScaling } from "netim2-shared";
+import {  DamageCondition, RoutStatKey, StatsScaling } from "netim2-shared";
 import { StatusEffectManager } from "../../manager/status-effect-manager";
 import { STATUS_EFFECTS_CONFIG } from "../../config/status-effects.config";
 import { ActiveStatusEffectData, PeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
@@ -356,7 +356,7 @@ export class StatusEffectApplicationResolverService {
 
     private calculateStatusEffectDamageBonus(input: {
         source: FighterCombatEntity;
-        bonusTargets?: readonly CombatStatKey[];
+        bonusTargets?: readonly RoutStatKey[];
     }): number {
         if (!input.bonusTargets?.length) {
             return 0;

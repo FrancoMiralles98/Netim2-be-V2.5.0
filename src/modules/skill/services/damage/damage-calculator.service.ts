@@ -1,7 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { SharedSkillService } from "../shared-skill.service";
-import { CharacterStats, DamageType, SkillDamage, SkillDamageScaling, SkillDamageStatScaling } from "netim2-shared";
 import { CharacterSharedService } from "src/modules/shared/services/character-shared.service";
+import { Atributos, DamageType, SkillDamage, Stats } from "netim2-shared";
+import { SkillDamageScaling, SkillDamageStatScaling } from "../../types/scaling/damage/skill-damage-scaling.type";
 
 @Injectable()
 export class DamageCalculatorService {
@@ -12,12 +13,13 @@ export class DamageCalculatorService {
     getDamage(
         skill: SkillDamage,
         scaling: SkillDamageScaling,
-        stats: CharacterStats
+        stats: Stats,
+        attributes: Atributos
     ): SkillDamage['components'] {
         return scaling.components.map(component => {
             const ranges = this.getRangesDamage(component.damageType, stats)
             const statsBonusDamage = this.calculateStatScalingBonus(skill, stats, component.statsScaling)
-            const attributeBonification = this.sharedSkillService.getAttributeBonification(stats.atributos, component.escaladoAtributos!)
+            const attributeBonification = this.sharedSkillService.getAttributeBonification(attributes, component.escaladoAtributos!)
 
             return {
                 damageType: component.damageType,
@@ -34,7 +36,7 @@ export class DamageCalculatorService {
 
     private getRangesDamage(
         damageType: DamageType,
-        stats: CharacterStats
+        stats: Stats
     ): { min: number, max: number } {
         if (damageType === 'true') {
             return { min: 0, max: 0 }
@@ -55,7 +57,7 @@ export class DamageCalculatorService {
 
     private calculateStatScalingBonus(
         skill: SkillDamage,
-        stats: CharacterStats,
+        stats: Stats,
         statsScaling?: SkillDamageStatScaling[],
     ): number {
         if (!statsScaling) return 0

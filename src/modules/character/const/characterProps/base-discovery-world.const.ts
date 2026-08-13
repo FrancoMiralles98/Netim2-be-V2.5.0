@@ -1,4 +1,4 @@
-import { DiscoveryWorld } from "../../types/baseCharacterProps/discovery-world.type";
+import { DiscoveryWorld } from "netim2-shared";
 
 /**
  * Estructura base del descubrimiento de mobs en cada zona al comenzar con un personaje

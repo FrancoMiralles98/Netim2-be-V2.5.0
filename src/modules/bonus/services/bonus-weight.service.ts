@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { WEIGHT_RARITY_MODIFIERS_CONFIG } from "../config/weight-rarity-modifiers.config";
 import { BONUS_LIST } from "../const/bonus-list.cons";
-import { BonusInItem } from "../types/bonus-in-item.type";
-import { BonusType } from "../types/bonusListHelper/bonus.type";
+import { BonusInItem, BonusType } from "netim2-shared";
+
 
 /**
  * Servicio encargado de calcular el peso total de los bonus de un ítem.

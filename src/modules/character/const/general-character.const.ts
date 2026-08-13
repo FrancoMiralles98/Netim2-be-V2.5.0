@@ -3,9 +3,8 @@ import { BASE_DUNGEON_IN_PROGRESS } from "./characterProps/base-dungeon-in-progr
 import { BASE_EQUIPO_OPTIONS } from "./characterProps/base-equipo-options.const";
 import { BASE_PVP_DATA } from "./characterProps/base-pvp-data-default.const";
 import { EXP_PER_LV } from "./exp-per-lv.const";
-import { CharacterRole } from "../types/baseCharacterProps/character-role.enum";
 import { GENERAL_CHARACTER_STATS } from "./characterProps/base-character-stats.const";
-import { CharacterPersistence } from "netim2-shared";
+import { CharacterPersistence, CharacterRole } from "netim2-shared";
 
 export const GENERAL_CHARACTER: CharacterPersistence = {
     beginning: true,

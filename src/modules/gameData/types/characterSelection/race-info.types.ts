@@ -1,5 +1,4 @@
-import { AttributesRefKeys } from "netim2-shared";
-import { CharacterRace, CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
+import { AttributesRefKeys, CharacterRace, CharacterSpeciality } from "netim2-shared";
 
 /**
  * @description Configuración enviada al cliente para la creación de personajes

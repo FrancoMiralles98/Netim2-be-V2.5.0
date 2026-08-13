@@ -1,6 +1,5 @@
+import { CañaType, IdItem } from "netim2-shared";
 import { createCañaItem } from "src/modules/item/factories/item-builder";
-import { CañaType } from "src/modules/item/types/entities-props/caña.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
 
 export const CAÑA_LIST: CañaType[] = [
     createCañaItem({

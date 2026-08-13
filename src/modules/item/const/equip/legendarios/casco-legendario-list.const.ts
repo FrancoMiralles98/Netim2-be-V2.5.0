@@ -1,6 +1,6 @@
+import { EquipType, IdItem } from "netim2-shared";
 import { createLegendaryEquipItem } from "src/modules/item/factories/item-builder";
-import { EquipType } from "src/modules/item/types/entities-props/equip.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+
 
 export const CASCO_LEGENDARIAS_LIST: EquipType[] = [
     createLegendaryEquipItem({

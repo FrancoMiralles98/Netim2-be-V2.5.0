@@ -1,5 +1,4 @@
-import { AttributesRefKeys } from "netim2-shared";
-import {  CharacterRace } from "../../types/baseCharacterProps/character-stats.type";
+import { AttributesRefKeys, CharacterRace } from "netim2-shared";
 
 /**
  * Límites máximos de atributos base por raza.

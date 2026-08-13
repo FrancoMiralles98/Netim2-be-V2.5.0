@@ -1,4 +1,4 @@
-import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type"
+import { IdItemList } from "netim2-shared";
 
 /**
  * Representa un drop específico del mob.

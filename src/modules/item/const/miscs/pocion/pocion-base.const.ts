@@ -1,4 +1,4 @@
-import { PocionType } from "src/modules/item/types/entities-props/pocion.type";
+import { PocionType } from "netim2-shared";
 
 export const POCION_BASE_ITEM = {
 acc:true,

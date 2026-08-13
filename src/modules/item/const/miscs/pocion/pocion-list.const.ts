@@ -1,6 +1,6 @@
+import { IdItem, PocionType } from "netim2-shared";
 import { createPocionItem } from "src/modules/item/factories/item-builder";
-import { PocionType } from "../../../types/entities-props/pocion.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+
 
 export const POCION_LIST: PocionType[] = [
     createPocionItem({

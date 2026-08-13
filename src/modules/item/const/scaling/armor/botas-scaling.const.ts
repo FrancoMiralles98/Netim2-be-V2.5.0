@@ -1,5 +1,5 @@
+import { IdItem } from "netim2-shared";
 import { CoreImplicitItem } from "src/modules/item/types/const/scaling/core-equip-item.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
 
 export const BOTAS_SCALING: CoreImplicitItem[] = [
     {

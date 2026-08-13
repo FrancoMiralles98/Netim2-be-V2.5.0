@@ -1,8 +1,4 @@
-import {
-  ItemBaseType,
-  Size,
-} from '../types/entities-props/item-base.type';
-import { IdItemList } from '../types/iditems/id-item-list.type';
+import { IdItemList, ItemBaseType, Size } from "netim2-shared";
 
 export abstract class ItemBase {
   protected readonly idItem: IdItemList;

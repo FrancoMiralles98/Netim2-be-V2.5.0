@@ -1,7 +1,6 @@
-import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { CHANGE_MASTERY_RANK_LV_VALUES } from "../config/change-rank-values.const";
 import { ALL_SKILLS_NAMES } from "../const/skillsNames";
-import { LetterMasteryLv, MasteryLvRank, SkillBase } from "netim2-shared";
+import { CharacterSpeciality, LetterMasteryLv, MasteryLvRank, SkillBase } from "netim2-shared";
 import { SkillNamesByGrade } from "../types/skills-names.type";
 
 export abstract class BaseSkillEntity<T extends SkillBase = SkillBase> {

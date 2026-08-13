@@ -1,4 +1,4 @@
-import { DropTag } from "src/modules/item/types/entities-props/item-drop.config.type";
+import { DropTag } from "netim2-shared";
 
 /**
  * Lista de categorías de drop consideradas "raras" por el sistema.

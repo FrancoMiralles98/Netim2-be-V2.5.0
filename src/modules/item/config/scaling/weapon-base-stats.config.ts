@@ -1,5 +1,5 @@
+import { TypeWeapon } from "netim2-shared";
 import { WeaponDamageScalingConfig } from "../../types/config/equip-base-stats.type";
-import { TypeWeapon } from "../../types/entities-props/equip.type";
 
 export const WEAPON_BASE_STAT_CONFIG: Record<TypeWeapon, WeaponDamageScalingConfig> = {
     flecha: { //Ya balanceado

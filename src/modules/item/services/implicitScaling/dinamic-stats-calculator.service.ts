@@ -1,11 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { WEAPON_BASE_STAT_CONFIG } from "../../config/scaling/weapon-base-stats.config";
-import { subTypeEquip, TypeWeapon } from "../../types/entities-props/equip.type";
 import { UPGRADE_MULTIPLIER } from "../../config/scaling/upgrade-multiplayer.config";
 import { ARMOR_BASE_STAT_CONFIG } from "../../config/scaling/armor-base-stats.config";
-import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
-import { UpgradeLv } from "../../types/config/general-implicit.type";
 import { StatScalingConfig } from "../../types/config/equip-base-stats.type";
+import { BonusRefKeys, subTypeEquip, TypeWeapon, UpgradeLv } from "netim2-shared";
 
 @Injectable()
 export class DinamicStatsCalculatorService {

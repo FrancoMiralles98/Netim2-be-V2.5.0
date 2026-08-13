@@ -1,4 +1,3 @@
-import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { CORPORAL_SKILLS } from "./guerrero/corporal-skills.const";
 import { DAGA_SKILLS } from "./ninja/daga-skills.const";
 import { DRAGON_SKILLS } from "./chaman/dragon-skills.const";
@@ -8,6 +7,7 @@ import { LUZ_SKILLS } from "./chaman/luz-skills.const";
 import { MAGIA_NEGRA_SKILLS } from "./sura/magia-negra-skills.const";
 import { MENTAL_SKILLS } from "./guerrero/mental-skills.const";
 import { SkillSummary } from "../../types/summary-skills.types";
+import { CharacterSpeciality } from "netim2-shared";
 
 export const ALL_SKILLS: Record<CharacterSpeciality, SkillSummary[]> = {
     Corporal: { ...CORPORAL_SKILLS },

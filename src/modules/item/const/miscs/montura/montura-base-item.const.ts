@@ -1,4 +1,4 @@
-import { MonturaDescription, MonturaType } from "src/modules/item/types/entities-props/montura.type";
+import { MonturaDescription, MonturaType } from "netim2-shared";
 
 export const LICENCIA_MONTURA_BASE_ITEM = {
     cantidad: 1,

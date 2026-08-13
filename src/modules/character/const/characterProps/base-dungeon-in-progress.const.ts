@@ -1,4 +1,4 @@
-import { DungeonInProgressType } from "../../types/baseCharacterProps/dungeon-in-progress.type";
+import { DungeonInProgressType } from "netim2-shared";
 
 export const BASE_DUNGEON_IN_PROGRESS: DungeonInProgressType = {
     dungeon_logic: undefined,

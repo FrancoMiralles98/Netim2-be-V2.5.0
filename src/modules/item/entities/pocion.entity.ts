@@ -1,5 +1,5 @@
-import { EffecDescription } from '../types/entities-props/buff.type';
-import { PocionType } from '../types/entities-props/pocion.type';
+
+import { EffecDescription, PocionType } from 'netim2-shared';
 import { UtilityBase } from './utility-base.entity';
 
 export class Pocion extends UtilityBase {

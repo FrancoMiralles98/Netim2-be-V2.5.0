@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Missions } from "../types/mission-base.type";
 import { MISSION_LIST } from "../const/mission-list.const";
 import { IdMissionsList } from "../types/idMissions/id-mission-list.enum";
-import { MissionInCharacter } from "src/modules/character/types/baseCharacterProps/mission-option.type";
+import { MissionInCharacter } from "netim2-shared";
 
 /**
  * Servicio encargado de consultar la información base de las misiones.

@@ -1,12 +1,10 @@
 import { IMPLICIT_BONUS_TIER_BY_LV_REQ, RANDOM_IMPLICIT_BONUS_CONFIG } from "../../config/equip-implicit-bonus.config"
 import { ImplicitBonusTierType } from "../../types/config/implicit-bonus-tier.type"
-import { PatternScaleType, UpgradeLv } from "../../types/config/general-implicit.type"
+import { PatternScaleType } from "../../types/config/general-implicit.type"
 import { PATTERN_SCALE_CONFIG } from "../../config/scaling/general-pattern-scale.config"
 import { Injectable } from "@nestjs/common"
-import { BonusInItem } from "src/modules/bonus/types/bonus-in-item.type"
 import { BonusSharedService } from "src/modules/shared/services/bonus-shared.service"
-import { subTypeEquip } from "../../types/entities-props/equip.type"
-import { BonusRefKeys } from "netim2-shared"
+import { BonusInItem, BonusRefKeys, subTypeEquip, UpgradeLv } from "netim2-shared"
 
 @Injectable()
 export class RandomImplicitBonusService {

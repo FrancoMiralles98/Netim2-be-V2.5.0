@@ -1,6 +1,7 @@
-import { GenericType } from '../types/entities-props/item-base.type';
-import { SpecificUtilityType, UtilityBaseType } from '../types/entities-props/utility-base.type';
+
+import { SpecificUtilityType, UtilityBaseType } from 'netim2-shared/dist/item/entities-props/utility-base.type';
 import { ItemBase } from './item-base.entity';
+import { GenericType } from 'netim2-shared';
 
 export class UtilityBase extends ItemBase {
   protected readonly lvUtility: number;

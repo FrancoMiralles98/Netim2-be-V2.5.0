@@ -1,3 +1,4 @@
+import { BuffType, CañaType, ChestType, EquipType, MonturaType, PiedraType, PocionType, UtilityType } from "netim2-shared";
 import { BASE_EQUIP_ITEM } from "../../const/equip/base-equip.const";
 import { BASE_LEGENDARIO_ITEM } from "../../const/equip/legendarios/base-legendario-item.const";
 import { BASE_BUFF_ITEM } from "../../const/miscs/buff/buff-item-base.const";
@@ -7,14 +8,6 @@ import { BASE_GENERIC_UTILITY } from "../../const/miscs/generic-utility-base.con
 import { LICENCIA_MONTURA_BASE_ITEM } from "../../const/miscs/montura/montura-base-item.const";
 import { BASE_PIEDRA_ITEM } from "../../const/miscs/piedra/piedra-item-base.const";
 import { POCION_BASE_ITEM } from "../../const/miscs/pocion/pocion-base.const";
-import { BuffType } from "../entities-props/buff.type";
-import { CañaType } from "../entities-props/caña.type";
-import { ChestType } from "../entities-props/chest.type";
-import { EquipType } from "../entities-props/equip.type";
-import { MonturaType } from "../entities-props/montura.type";
-import { PiedraType } from "../entities-props/piedra.type";
-import { PocionType } from "../entities-props/pocion.type";
-import { UtilityType } from "../entities-props/utility.type";
 
 export type RawEquipItem = Omit<EquipType,keyof typeof BASE_EQUIP_ITEM>;
 

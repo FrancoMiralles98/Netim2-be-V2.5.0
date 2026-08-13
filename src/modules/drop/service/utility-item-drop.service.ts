@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UtilityItemDTO } from "src/modules/item/types/item-dto";
+import { UtilityItemDTO } from "netim2-shared";
 import { MobModel } from "src/modules/mob/schema/mob.schema";
 import { RngService } from "src/modules/shared/services/rng.service";
 

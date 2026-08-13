@@ -1,7 +1,8 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { SharedSkillService } from "../shared-skill.service";
-import { BonusRefKeys, CharacterRace, CharacterSpeciality, DurationConfig, EscaladoStat, MasteryLvRank, SkillAura, SkillAuraScaling, Stats } from "netim2-shared";
+import { Atributos, BonusRefKeys, CharacterRace, CharacterSpeciality, DurationConfig, MasteryLvRank, SkillAura, Stats } from "netim2-shared";
 import { isSkillAuraScaling } from "../../types/skills.guards";
+import { EscaladoStat, SkillAuraScaling } from "../../types/scaling/aura/skill-aura-scaling.type";
 
 @Injectable()
 export class AuraSkillService {
@@ -14,24 +15,25 @@ export class AuraSkillService {
         skill: SkillAura,
         stats: Stats,
         race: CharacterRace,
-        speciality: CharacterSpeciality
+        speciality: CharacterSpeciality,
+        atributo: Atributos
     ): SkillAura {
         const scaling = this.sharedSkillService.getSkillScalingInfo(skill.id, race, speciality)
         if (!isSkillAuraScaling(scaling)) {
             throw new InternalServerErrorException(`La skill ${skill.id} no posee una configuración de escalado de aura válida`)
         }
-        return this.buildUpdatedAura(skill, scaling, stats)
+        return this.buildUpdatedAura(skill, scaling, stats, atributo)
 
     }
 
-    private buildUpdatedAura(skill: SkillAura, scaling: SkillAuraScaling, stats: CharacterStats): SkillAura {
+    private buildUpdatedAura(skill: SkillAura, scaling: SkillAuraScaling, stats: Stats, atributo: Atributos): SkillAura {
         const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
         return {
             ...skill,
             cd: scaling.cd,
             duration: this.calculateDurationSkill(skill, scaling, lvPoints),
             mana: this.sharedSkillService.getManaCost(skill.mana, scaling, skill.lv),
-            buffos: this.buildBuffos(skill, lvPoints, scaling, stats)
+            statsModifiers: []
         }
     }
 
@@ -39,12 +41,13 @@ export class AuraSkillService {
         skill: SkillAura,
         lvPoints: number,
         scaling: SkillAuraScaling,
-        stats: CharacterStats
+        stats: Stats,
+        atributos: Atributos
     ): Partial<Record<BonusRefKeys, number>> {
         const buffos: Partial<Record<BonusRefKeys, number>> = {}
 
-        Object.entries(scaling.escaladoBuffos).forEach(([bonusref, statEscalado]) => {
-            buffos[bonusref] = Math.floor(this.calculateBuff(statEscalado, lvPoints, skill.lv, stats.atributos, scaling))
+        Object.entries(scaling.escaladoStatsModifiers).forEach(([bonusref, statEscalado]) => {
+            buffos[bonusref] = Math.floor(this.calculateBuff(statEscalado.escalado, lvPoints, skill.lv, atributos, scaling))
         })
 
         return buffos
@@ -55,7 +58,7 @@ export class AuraSkillService {
         statEscalado: EscaladoStat,
         lvPoints: number,
         skillLv: number | MasteryLvRank,
-        characterAttributes: CharacterStats['atributos'],
+        characterAttributes: Atributos,
         scaling: SkillAuraScaling,
     ): number {
         const lvMultiplier = this.sharedSkillService.getScalingLvValue(skillLv, statEscalado.escaladoLv)

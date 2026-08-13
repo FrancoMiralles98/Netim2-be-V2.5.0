@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { BonusRefKeys } from "../types/bonusListHelper/ref-bonus-name.type";
 import { LIMIT_BONUS_CONFIG } from "../config/limit-bonus.config";
-import { Stats } from "netim2-shared";
+import { BonusRefKeys, Stats } from "netim2-shared";
 
 /**
  * Servicio encargado de aplicar límites máximos a los bonus

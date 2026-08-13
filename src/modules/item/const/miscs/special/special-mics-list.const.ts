@@ -1,6 +1,6 @@
+import { IdItem, UtilityType } from "netim2-shared";
 import { createGenericUtilityItem } from "src/modules/item/factories/item-builder";
-import { UtilityType } from "src/modules/item/types/entities-props/utility.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+
 
 export const SPECIAL_MISCS: UtilityType[] = [
     createGenericUtilityItem({

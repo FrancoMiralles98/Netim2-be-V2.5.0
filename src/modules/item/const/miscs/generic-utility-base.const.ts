@@ -1,4 +1,4 @@
-import { UtilityType } from "../../types/entities-props/utility.type";
+import { UtilityType } from "netim2-shared";
 
 export const BASE_GENERIC_UTILITY = {
     type: 'utility',

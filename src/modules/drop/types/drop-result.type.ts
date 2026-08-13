@@ -1,4 +1,4 @@
-import { ItemDTO } from "src/modules/item/types/item-dto";
+import { ItemDTO } from "netim2-shared";
 
 /**
  * Representa el resultado final de una recompensa obtenida

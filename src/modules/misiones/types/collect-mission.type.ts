@@ -1,5 +1,5 @@
+import { IdItemList } from "netim2-shared";
 import { MissionBase, TypeMission } from "./mission-base.type";
-import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type";
 
 /**
  * Representa una misión de recolección.

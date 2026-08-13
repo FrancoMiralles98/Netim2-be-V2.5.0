@@ -1,4 +1,5 @@
-import { CañaType } from '../types/entities-props/caña.type';
+
+import { CañaType } from 'netim2-shared';
 import { UtilityBase } from './utility-base.entity';
 
 export class Caña extends UtilityBase {

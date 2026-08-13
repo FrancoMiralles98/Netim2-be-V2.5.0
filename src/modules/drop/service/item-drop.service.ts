@@ -1,22 +1,19 @@
 import { Injectable } from "@nestjs/common";
 import { EquipItemDropService } from "./equipment-item-drop.service";
-import { ItemDTO } from "src/modules/item/types/item-dto";
 import { MobModel } from "src/modules/mob/schema/mob.schema";
 import { DROP_TAG_CHANCES_BY_DIFFICULTY } from "../config/drop/drop-tag-chance-by-difficulty.config";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { MicsBonusService } from "./miscs-bonus.service";
-import { DropTag, ItemSource } from "src/modules/item/types/entities-props/item-drop.config.type";
 import { ITEM_LIST } from "src/modules/item/const/items.const";
 import { EnemyType } from "src/modules/mob/types/mobProps/enemie-type.type";
 import { UtilityItemDropService } from "./utility-item-drop.service";
 import { DROP_WEIGHT } from "../config/drop/drop-weight.config";
-import { DropWeightType } from "../types/drop-weight.type";
 import { RARE_DROP_MULTIPLIER } from "../config/drop/rare-drop-bonus-multiplier.config";
 import { isEquipItem } from "src/modules/item/types/item-type-guard.type";
 import { EQUIP_DROP_LV_WEIGHT_CONFIG } from "../config/equip/equip-drop-lv.config";
-import { EquipType } from "src/modules/item/types/entities-props/equip.type";
 import { ItemService } from "src/modules/item/item.service";
-import { Stats } from "netim2-shared";
+import { DropTag, EquipType, ItemDTO, ItemSource, Stats } from "netim2-shared";
+import { DropWeightType } from "netim2-shared/dist/drop/drop-weight.type";
 
 @Injectable()
 export class ItemDropService {

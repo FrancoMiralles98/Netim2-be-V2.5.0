@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { BonusRefKeys } from "netim2-shared";
+import { BonusInItem, BonusRefKeys } from "netim2-shared";
 import { BONUS_LIST } from "src/modules/bonus/const/bonus-list.cons";
-import { BonusInItem } from "src/modules/bonus/types/bonus-in-item.type";
 
 @Injectable()
 export class BonusSharedService {

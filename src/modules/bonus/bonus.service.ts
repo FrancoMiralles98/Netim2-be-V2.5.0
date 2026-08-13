@@ -1,12 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { BonusWeightService } from "./services/bonus-weight.service";
 import { LimitBonusService } from "./services/limit-bonus.service";
-import { BonusInItem } from "./types/bonus-in-item.type";
-import { BonusCategory } from "./types/bonusListHelper/bonus.type";
-import { ItemBonusQuality } from "./types/item-bonus-quaility.type";
 import { GenerateItemBonusService } from "./services/generate-item-bonus.service";
-import { subTypeEquip } from "../item/types/entities-props/equip.type";
-import { Stats } from "netim2-shared";
+import { BonusCategory, BonusInItem, ItemBonusQuality, Stats, subTypeEquip } from "netim2-shared";
 
 @Injectable()
 export class BonusService {

@@ -1,3 +1,4 @@
+import { BuffType, CañaType, ChestType, EquipType, MonturaType, PiedraType, PocionType, UtilityType } from "netim2-shared";
 import { BASE_EQUIP_ITEM } from "../const/equip/base-equip.const";
 import { BASE_LEGENDARIO_ITEM } from "../const/equip/legendarios/base-legendario-item.const";
 import { BASE_BUFF_ITEM } from "../const/miscs/buff/buff-item-base.const";
@@ -9,14 +10,6 @@ import { MONTURAS_LIST } from "../const/miscs/montura/montura-list.const";
 import { BASE_PIEDRA_ITEM } from "../const/miscs/piedra/piedra-item-base.const";
 import { POCION_BASE_ITEM } from "../const/miscs/pocion/pocion-base.const";
 import { RawBuffItem, RawCañaItem, RawChestItem, RawEquipItem, RawGenericUtilityItem, RawLegendaryEquipItem, RawMonturaItem, RawPiedraItem, RawPocionItem } from "../types/const/raw-items.type";
-import { BuffType } from "../types/entities-props/buff.type";
-import { CañaType } from "../types/entities-props/caña.type";
-import { ChestType } from "../types/entities-props/chest.type";
-import { EquipType } from "../types/entities-props/equip.type";
-import { MonturaType } from "../types/entities-props/montura.type";
-import { PiedraType } from "../types/entities-props/piedra.type";
-import { PocionType } from "../types/entities-props/pocion.type";
-import { UtilityType } from "../types/entities-props/utility.type";
 
 export function createEquipItem(data: RawEquipItem): EquipType {
     return {

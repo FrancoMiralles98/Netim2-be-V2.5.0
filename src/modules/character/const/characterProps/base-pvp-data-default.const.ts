@@ -1,4 +1,4 @@
-import { PvpDataType } from "../../types/baseCharacterProps/pvp-data.type";
+import { PvpDataType } from "netim2-shared";
 
 export const BASE_PVP_DATA: PvpDataType = {
     battledCharacters: [],

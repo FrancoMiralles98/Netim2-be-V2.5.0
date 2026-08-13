@@ -1,4 +1,4 @@
-import { CeboType } from '../types/entities-props/cebo.type';
+import { CeboType } from 'netim2-shared';
 import { UtilityBase } from './utility-base.entity';
 
 export class Cebo extends UtilityBase {

@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
-import { DamageType, SkillDamage, StatusEffectsKeys } from "netim2-shared";
-import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
+import { DamageType, SkillDamage, StatusEffectsKeys, TypeWeapon } from "netim2-shared";
 import { ActiveStatusEffectId } from "../types/statusEffects/active-status-effect.types";
 
 @Injectable()

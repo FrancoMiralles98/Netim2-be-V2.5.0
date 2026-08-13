@@ -1,10 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { BonusCategory } from "../types/bonusListHelper/bonus.type";
-import { BonusInItem } from "../types/bonus-in-item.type";
-import { ItemBonusQuality } from "../types/item-bonus-quaility.type";
 import { GenerateBonusService } from "./generate-bonus.service";
 import { RngService } from "src/modules/shared/services/rng.service";
-import { subTypeEquip } from "src/modules/item/types/entities-props/equip.type";
+import { BonusCategory, BonusInItem, ItemBonusQuality, subTypeEquip } from "netim2-shared";
+
 
 @Injectable()
 export class GenerateItemBonusService {

@@ -1,4 +1,4 @@
-import { UpgradeLv } from "../../types/config/general-implicit.type";
+import { UpgradeLv } from "netim2-shared";
 
 /**
  * Multiplicadores aplicados a las estadísticas base de un equipamiento según su nivel de mejora.

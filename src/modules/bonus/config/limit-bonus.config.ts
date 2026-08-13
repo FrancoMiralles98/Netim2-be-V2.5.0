@@ -1,4 +1,4 @@
-import { BonusRefKeys } from "../types/bonusListHelper/ref-bonus-name.type";
+import { BonusRefKeys } from "netim2-shared";
 
 /**
  * Configuración de límites máximos para cada tipo de bonus

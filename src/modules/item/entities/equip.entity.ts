@@ -1,9 +1,9 @@
-import { BonusInItem, SpecialCorruptBonus } from 'src/modules/bonus/types/bonus-in-item.type';
-import { EquipType, } from '../types/entities-props/equip.type';
-import { PiedrasInItem } from '../types/entities-props/piedra.type';
+
 import { ItemBase } from './item-base.entity';
 import { EQUIP_RULES } from '../config/items-rule.const';
-import { PiedraIdItem } from '../types/iditems/miscs/piedra-id-item.enum';
+import { BonusInItem, EquipType, PiedrasInItem, SpecialCorruptBonus } from 'netim2-shared';
+import { PiedraIdItem } from 'netim2-shared/dist/item/iditems/miscs/piedra-id-item.enum';
+
 
 export class Equip extends ItemBase {
 

@@ -1,11 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { BonusType } from "../types/bonusListHelper/bonus.type";
-import { BonusInItem } from "../types/bonus-in-item.type";
 import { MEDIA_HABILIDAD_ROLL_CONFIG } from "../config/media-habilidad-roll.config.";
 import { SpecialBonus, TierConfigs } from "../types/media-habilidad-roll-config.type";
 import { BONUS_LIST } from "../const/bonus-list.cons";
 import { ItemLevelScalingService } from "./item-level-scaling.service";
 import { RngService } from "src/modules/shared/services/rng.service";
+import { BonusInItem, BonusType } from "netim2-shared";
 
 /**
  * Servicio encargado de gestionar la generación de bonus especiales.

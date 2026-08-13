@@ -1,17 +1,13 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { UbicationNames } from "src/modules/gameData/types/ubication-names.type";
-import { MobStats } from "../types/mobProps/mob-stats.type";
 import { SpawnConfig } from "../types/mobProps/spawn-config.type";
 import { HydratedDocument } from "mongoose";
 import { IdMobList } from "../types/id-mob-list.enum";
-import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { MobRace } from "../types/mobProps/mob-race.type";
-import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 import { MobDifficulty } from "../types/mobProps/mob-difficult.type";
 import { EnemyType } from "../types/mobProps/enemie-type.type";
-import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type";
-import { SkillType } from "netim2-shared";
+import { CharacterSpeciality, IdItemList, SkillType, Stats, TypeWeapon } from "netim2-shared";
 
 @Schema()
 export class MobModel {
@@ -43,7 +39,7 @@ export class MobModel {
     exp!: { min: number, max: number };
 
     @Prop({ type: Object, required: true })
-    stats!: MobStats;
+    stats!: Stats;
 
     @Prop({ type: String, default: 'desconocido' })
     raza!: MobRace;

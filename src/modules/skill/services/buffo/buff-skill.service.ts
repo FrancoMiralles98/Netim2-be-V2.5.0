@@ -1,7 +1,8 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { CharacterRace, CharacterSpeciality, SkillBuff, SkillBuffScaling } from "netim2-shared";
+import { CharacterRace, CharacterSpeciality, SkillBuff } from "netim2-shared";
 import { SharedSkillService } from "../shared-skill.service";
 import { isSkillBuffScaling } from "../../types/skills.guards";
+import { SkillBuffScaling } from "../../types/scaling/buff/skill-buff-scaling.type";
 
 @Injectable()
 export class BuffSkillService {

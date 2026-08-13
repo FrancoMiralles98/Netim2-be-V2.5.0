@@ -1,12 +1,7 @@
-import { ItemDTO, UtilityItemDTO } from "src/modules/item/types/item-dto";
-import { InventoryItem, Position } from "../types/inventory-item.type";
 import { isEquipItem, isUtilityItem } from "src/modules/item/types/item-type-guard.type";
-import { InventoryChangeResult } from "../types/item-to-update.types";
 import { InventoryItemFactory } from "../factories/inventory-item.factory";
-import { AddItemResult } from "../types/inventory-result.types";
-import { ItemsToConsumeType } from "../types/items-to-consume.types";
-import { IdItemList } from "src/modules/item/types/iditems/id-item-list.type";
 import { randomUUID } from "crypto";
+import { AddItemResult, IdItemList, InventoryChangeResult, InventoryItem, ItemDTO, ItemsToConsumeType, Position, UtilityItemDTO } from "netim2-shared";
 
 export class Inventory {
     //espacio total del inventario tanto eje x como y

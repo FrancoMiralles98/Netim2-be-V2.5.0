@@ -1,5 +1,5 @@
+import { EquipType } from "netim2-shared";
 import { EQUIP_RULES } from "../../config/items-rule.const";
-import { EquipType } from "../../types/entities-props/equip.type";
 
 export const BASE_EQUIP_ITEM = {
   upgradeLv: 0,

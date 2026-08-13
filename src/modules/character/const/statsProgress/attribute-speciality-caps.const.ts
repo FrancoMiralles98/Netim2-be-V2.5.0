@@ -1,5 +1,4 @@
-import { AttributesRefKeys } from "netim2-shared";
-import {  CharacterSpeciality } from "../../types/baseCharacterProps/character-stats.type";
+import { AttributesRefKeys, CharacterSpeciality } from "netim2-shared";
 
 /**
  * Límites máximos de atributos por especialidad.

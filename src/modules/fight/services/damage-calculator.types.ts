@@ -1,4 +1,4 @@
-import { BonusRefKeys, CombatStatKey, DamageTag, DamageType, SkillDamageFlags, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { BonusRefKeys, DamageTag, DamageType, RoutStatKey, SkillDamageFlags, UNIQUE_ID_SKILLS } from "netim2-shared";
 
 export interface PreparedSkillDamageComponent {
     componentIndex: number;
@@ -35,7 +35,7 @@ export interface RuntimeDamageScalingResult {
 
 export interface RuntimeDamageScalingDetail {
     stat: BonusRefKeys;
-    target: CombatStatKey;
+    target: RoutStatKey;
 
     ratio: number;
 

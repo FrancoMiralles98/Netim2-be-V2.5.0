@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { EquipType } from "src/modules/item/types/entities-props/equip.type";
 import { MobModel } from "src/modules/mob/schema/mob.schema";
 import { RARE_BONUS_QUANTITY_MULTIPLIER, RARE_QUALITY_MULTIPLIER } from "../config/equip/equip-item-rarity-multiplier.config";
 import { RngService } from "src/modules/shared/services/rng.service";
@@ -7,6 +6,7 @@ import { EQUIP_ITEM_DROP_GENERATION_CONFIG } from "../config/equip/equip-item-dr
 import { BonusService } from "src/modules/bonus/bonus.service";
 import { EQUIP_RULES } from "src/modules/item/config/items-rule.const";
 import { ItemService } from "src/modules/item/item.service";
+import { EquipType } from "netim2-shared";
 
 @Injectable()
 export class EquipItemDropService {

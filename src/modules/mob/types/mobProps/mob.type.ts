@@ -2,14 +2,12 @@ import { UbicationNames } from "src/modules/gameData/types/ubication-names.type"
 import { SpawnConfig } from "./spawn-config.type";
 import { MobStats } from "./mob-stats.type";
 import { IdMobList } from "../id-mob-list.enum";
-import { CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
 import { MobRace } from "./mob-race.type";
 import { SpecificDrop } from "./drop-config.type";
-import { TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
 import { MobDifficulty } from "./mob-difficult.type";
 import { EnemyType } from "./enemie-type.type";
-import { SkillType } from "netim2-shared";
+import { CharacterSpeciality, SkillType, TypeWeapon } from "netim2-shared";
 
 /**
  * Representa la estructura completa de un mob

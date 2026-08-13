@@ -1,7 +1,4 @@
-import { ValueBonusType } from "../types/bonus-in-item.type";
-import { allFullNameBonusList } from "../types/bonusListHelper/bonus-list-full-name.enum";
-import { BonusType } from "../types/bonusListHelper/bonus.type";
-
+import { allFullNameBonusList, BonusType, ValueBonusType } from "netim2-shared";
 export const tier1BonusList: BonusType[] = [
   {
     tier: 1,

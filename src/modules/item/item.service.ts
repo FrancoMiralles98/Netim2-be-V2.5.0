@@ -3,19 +3,13 @@ import { EQUIP_RULES } from './config/items-rule.const';
 import { ITEM_LV_REROLL_CONFIG } from './config/item-lv-reroll.config';
 import { TierReroll } from './types/item-lv-reroll.type';
 import { RngService } from '../shared/services/rng.service';
-import { IdItemList } from './types/iditems/id-item-list.type';
-import { ItemDTO } from './types/item-dto';
 import { ITEM_LIST } from './const/items.const';
-import { InventoryItem } from '../inventory/types/inventory-item.type';
 import { ItemImplicitBonusService } from './services/implicitScaling/item-implicit-bonus.service';
 import { ItemHydrationService } from './services/item-hydration.service';
 import { RandomImplicitBonusService } from './services/implicitScaling/random-implicit-bonus.service';
-import { BonusInItem } from '../bonus/types/bonus-in-item.type';
-import { UpgradeLv } from './types/config/general-implicit.type';
-import { subTypeEquip } from './types/entities-props/equip.type';
-import { Reward } from './types/entities-props/chest.type';
 import { ItemFactory } from './factories/item-factory';
 import { Chest } from './entities/chest.entity';
+import { BonusInItem, IdItemList, InventoryItem, ItemDTO, Reward, subTypeEquip, UpgradeLv } from 'netim2-shared';
 
 @Injectable()
 export class ItemService {

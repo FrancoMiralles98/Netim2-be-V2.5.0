@@ -1,6 +1,6 @@
+import { IdItem, MonturaDescription } from "netim2-shared";
 import { EXP_MONTURA_X_LV, MONTURA_RULES } from "src/modules/item/config/montura.config";
-import { MonturaDescription } from "src/modules/item/types/entities-props/montura.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+
 
 export const MONTURAS_LIST: MonturaDescription[] = [
     {

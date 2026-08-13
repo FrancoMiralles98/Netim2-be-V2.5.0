@@ -1,10 +1,11 @@
 import { Injectable, InternalServerErrorException } from "@nestjs/common";
 import { SharedSkillService } from "../shared-skill.service";
-import { CharacterRace, CharacterSpeciality, CharacterStats, SkillDamage, SkillDamageScaling } from "netim2-shared";
+import { Atributos, CharacterRace, CharacterSpeciality, SkillDamage, Stats } from "netim2-shared";
 import { isSkillDamageScaling } from "../../types/skills.guards";
 import { DamageCalculatorService } from "./damage-calculator.service";
 import { EffectsCalculatorService } from "./effects-calculator.service";
 import { ModifiersCalculatorService } from "./modifiers-calculator.service";
+import { SkillDamageScaling } from "../../types/scaling/damage/skill-damage-scaling.type";
 
 @Injectable()
 export class DamageSkillService {
@@ -18,23 +19,24 @@ export class DamageSkillService {
 
     getUpdatedSkill(
         skill: SkillDamage,
-        stats: CharacterStats,
+        stats: Stats,
         race: CharacterRace,
-        speciality: CharacterSpeciality
+        speciality: CharacterSpeciality,
+        atributos: Atributos
     ): SkillDamage {
         const scalingSkillInfo = this.sharedSkillService.getSkillScalingInfo(skill.id, race, speciality)
         if (!isSkillDamageScaling(scalingSkillInfo)) {
             throw new InternalServerErrorException(`La skill ${skill.id} no posee una configuración de escalado de daño válida`)
         }
-        return this.buildUpdatedSkill(skill,scalingSkillInfo,stats)
+        return this.buildUpdatedSkill(skill, scalingSkillInfo, stats, atributos)
     }
 
-    private buildUpdatedSkill(skill: SkillDamage, scaling: SkillDamageScaling, stats: CharacterStats): SkillDamage {
+    private buildUpdatedSkill(skill: SkillDamage, scaling: SkillDamageScaling, stats: Stats, atributos: Atributos): SkillDamage {
         const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
         return {
             ...skill,
             cd: scaling.cd,
-            components: this.damageCalculatorService.getDamage(skill, scaling, stats),
+            components: this.damageCalculatorService.getDamage(skill, scaling, stats,atributos),
             mana: this.sharedSkillService.getManaCost(skill.mana, scaling, skill.lv),
             mechanicsEffects: this.effectsCalculatorService.getMechanicsEffects(lvPoints, scaling),
             statusEffects: this.effectsCalculatorService.getStatusEffects(lvPoints, scaling),

@@ -14,6 +14,7 @@ export const MOB_BASE_STATS: MobStats = {
     bonus: {
         daño: {
             animales: 0,
+            electrico: 0,
             chaman: 0,
             critico: 0,
             demonios: 0,
@@ -42,6 +43,9 @@ export const MOB_BASE_STATS: MobStats = {
         defensa: {
             bloquear_ataques: 0,
             def_campana: 0,
+            def_electrico: 0,
+            mana_cost: 0,
+            porcentage_mana_cost: 0,
             def_daga: 0,
             vampirismo_hechizo: 0,
             damage_taken: 0,

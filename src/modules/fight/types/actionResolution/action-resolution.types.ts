@@ -3,7 +3,6 @@ import { CombatAction } from "../combatAction/combat-action.types";
 import { TurnContext } from "../fight/fight-context.types";
 import { AppliedStatusEffectResolution, DamageHitResolution } from "../../services/resolvers/dama-skill-action-resolver.types";
 import { HealingResolution } from "../../services/resolvers/healing-resolver.types";
-import { PeriodicDamageEffectData } from "../statusEffects/effect-data.types";
 import { DamageResolutionResult } from "../../services/resolvers/damage-resolver.types";
 import { ActiveStatusEffectId } from "../statusEffects/active-status-effect.types";
 

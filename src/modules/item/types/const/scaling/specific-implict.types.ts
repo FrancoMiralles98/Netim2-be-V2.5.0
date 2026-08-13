@@ -1,4 +1,4 @@
-import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type"
+import { BonusRefKeys } from "netim2-shared"
 import { DamageScalingConfig, StatScalingConfig } from "../../config/equip-base-stats.type"
 import { BaseImplicitConfig } from "./core-equip-item.type"
 

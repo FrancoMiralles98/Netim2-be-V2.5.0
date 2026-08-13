@@ -1,5 +1,5 @@
+import { CharacterRace } from "netim2-shared";
 import { CharacterStatsProgress } from "../../types/character-stats-progress.type";
-import { CharacterRace } from "../../types/baseCharacterProps/character-stats.type";
 
 /**
  * Define la progresión de estadísticas base y por nivel para cada raza del personaje.

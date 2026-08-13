@@ -1,6 +1,6 @@
+import { IdItem, ItemDTO } from "netim2-shared";
 import { createEquipItem } from "../factories/item-builder";
-import { IdItem } from "../types/iditems/id-item-list.type";
-import { ItemDTO } from "../types/item-dto";
+
 
 export const ITEM_LIST: ItemDTO[] = [
     createEquipItem({

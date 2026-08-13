@@ -1,4 +1,4 @@
-import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
+import { InventoryItem } from "netim2-shared";
 import { UserEntityProps } from "./base-user-props.type";
 
 export interface UserPersistence extends UserEntityProps {

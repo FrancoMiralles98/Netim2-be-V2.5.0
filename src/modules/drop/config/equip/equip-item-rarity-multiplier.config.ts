@@ -1,4 +1,3 @@
-import { ItemBonusQuality } from "src/modules/bonus/types/item-bonus-quaility.type"
 
 /**
  * Multiplicadores utilizados por el bonus de frecuencia de objetos raros de ítems.
@@ -19,6 +18,8 @@ import { ItemBonusQuality } from "src/modules/bonus/types/item-bonus-quaility.ty
  * Frecuencia rara = 100%
  * → Se aplica el multiplicador completo.
  */
+
+import { ItemBonusQuality } from "netim2-shared"
 
 export const RARE_QUALITY_MULTIPLIER: Partial<Record<ItemBonusQuality, number>> = {
     rare: 1.3,

@@ -1,7 +1,6 @@
-import { InventoryItem, Position } from "src/modules/inventory/types/inventory-item.type";
+import { InventoryItem, ItemDTO, Position } from "netim2-shared";
 import { UserDomain } from "../types/user-domain.type";
 import { UserPersistence } from "../types/user-persistence.type";
-import { ItemDTO } from "src/modules/item/types/item-dto";
 
 export class UserEntity {
     constructor(private props: UserDomain) { }

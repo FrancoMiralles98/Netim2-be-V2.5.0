@@ -1,4 +1,4 @@
-import { BuffType } from "src/modules/item/types/entities-props/buff.type";
+import { BuffType } from "netim2-shared";
 
 export const BASE_BUFF_ITEM = {
     type_utility: 'buff',
