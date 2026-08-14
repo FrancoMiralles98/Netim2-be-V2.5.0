@@ -6,15 +6,18 @@ import { MobModel } from "src/modules/mob/schema/mob.schema";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 import { FightEntity } from "../entities/fight.entity";
 import { randomUUID } from "crypto";
+import { InitiativeResolverService } from "../services/resolvers/initiative-resolver.service";
+import { FightProcessedResult } from "../services/processors/fight-result-processor.types";
 
 @Injectable()
 export class FightEngine {
     constructor(
         private readonly fightFactory: FightFactory,
-        private readonly fightManager: FightManager
+        private readonly fightManager: FightManager,
+        private readonly initiativeResolverService: InitiativeResolverService,
     ) { }
 
-    executeLab(allies: FighterCombatEntity[], enemies: FighterCombatEntity[]) {
+    executeLab(allies: FighterCombatEntity[], enemies: FighterCombatEntity[]):FightProcessedResult {
         const fight = new FightEntity({
             allies,
             enemies,
@@ -23,18 +26,13 @@ export class FightEngine {
             maxTurns: 1
         })
 
-        fight.start()
+        const initiativeResults = this.initiativeResolverService.resolve(fight.getFighters())
 
-        while (!fight.isFinished) {
-            this.fightManager.executeFight(fight);
-        }
+        fight.setInitiative(initiativeResults)
 
-        return {
-            result: fight.result,
-            turns: fight.turnNumber
-        };
+        const result = this.fightManager.executeFight(fight);
 
-
+        return result
     }
 
     executeAgainstMobs(fighters: CharacterPersistenceWithId[], mobs: MobModel[]) {

@@ -44,6 +44,8 @@ import { SideTurnManager } from './manager/side-turn-manger';
 import { SkillDamageSelectorService } from './services/action/skill-damage-selector.service';
 import { LabFightService } from './lab/lab-fight.service';
 import { FightEngine } from './engine/fight-engine';
+import { InitiativeResolverService } from './services/resolvers/initiative-resolver.service';
+import { FightResultProcessorService } from './services/processors/fight-result-processor.service';
 
 @Module({
   imports: [
@@ -65,6 +67,8 @@ import { FightEngine } from './engine/fight-engine';
     AuraActionResolverService,
     LabFightService,
     FightEngine,
+    FightResultProcessorService,
+    InitiativeResolverService,
     BasicAttackActionResolverService,
     BasicAttackHitResolverService,
     BuffActionResolver,

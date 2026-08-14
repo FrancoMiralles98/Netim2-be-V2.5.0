@@ -43,14 +43,20 @@ export class SideTurnManager {
              *
              * Ally B ya no debe actuar.
              */
-            fight.tryFinish()
+            const fightResult = fight.tryFinish();
 
-            if (fight.isFinished) {
-                break
+            if (fightResult) {
+                return {
+                    turnNumber,
+                    side,
+                    actions,
+                    fightFinished: true,
+                    fightResult
+                };
             }
         }
 
-        fight.completeCurrentTurn()
+        fight.completeCurrentTurn();
 
         return {
             turnNumber,

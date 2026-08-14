@@ -1,0 +1,2 @@
+export const DODGE_CHANCE_PER_MOVEMENT_SPEED = 0.3;
+export const CD_REDUCTION_PER_VH = 0.5;

@@ -27,7 +27,7 @@ export class LifeStealResolverService {
             this.contextualBonusService.getSkillLifeSteal(input.attacker) +
             skillVampirismoEffect
 
-        const baseHealing = Math.floor(input.damageDealt * (1 + totalLifeStealPorcentual / 100))
+        const baseHealing = Math.floor(input.damageDealt * (totalLifeStealPorcentual / 100))
 
         return this.healingResolverService.resolve({
             baseAmount: baseHealing,
@@ -42,7 +42,7 @@ export class LifeStealResolverService {
         damageDealt: number,
     }): HealingResolution {
         const totalLifeStealPorcentual = this.contextualBonusService.getBasicAttackLifeSteal(input.attacker)
-        const baseHealing = Math.floor(input.damageDealt * (1 + totalLifeStealPorcentual / 100))
+        const baseHealing = Math.floor(input.damageDealt * (totalLifeStealPorcentual / 100))
 
         return this.healingResolverService.resolve({
             baseAmount: baseHealing,

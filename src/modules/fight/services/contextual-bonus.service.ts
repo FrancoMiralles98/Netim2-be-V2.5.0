@@ -2,6 +2,8 @@ import { Injectable } from "@nestjs/common";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 import { DamageType, SkillDamage, StatusEffectsKeys, TypeWeapon } from "netim2-shared";
 import { ActiveStatusEffectId } from "../types/statusEffects/active-status-effect.types";
+import { DODGE_CHANCE_PER_MOVEMENT_SPEED } from "src/modules/shared/config/character-stats.config";
+import { LIMIT_BONUS_CONFIG } from "src/modules/bonus/config/limit-bonus.config";
 
 @Injectable()
 export class ContextualBonusService {
@@ -31,7 +33,9 @@ export class ContextualBonusService {
     }
 
     getDodgeChance(target: FighterCombatEntity): number {
-        return target.effectiveStats.bonus.defensa.esquivar_ataques
+        const mv = target.effectiveStats.general.vm
+        return Math.min(LIMIT_BONUS_CONFIG.esquivar_ataques ?? 100,
+            mv * DODGE_CHANCE_PER_MOVEMENT_SPEED)
     }
 
     getBlockChance(target: FighterCombatEntity): number {

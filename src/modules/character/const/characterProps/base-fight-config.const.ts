@@ -10,6 +10,14 @@ export const BASE_FIGHT_CONFIG: FightConfig = {
         HealingSkillHpThresholdPercent: 60,
         priorityBassicAttack: false,
         reactiveAuras: true,
-        skillPriority: ['control']
+        skillPriority: [
+            'more_damage',
+            'more_cd',
+            'less_damage',
+            'control',
+            'has_periodicDamage',
+            'less_cd',
+            'stat_modifier'
+        ]
     }
 }

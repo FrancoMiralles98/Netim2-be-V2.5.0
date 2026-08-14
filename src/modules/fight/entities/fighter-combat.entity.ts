@@ -1,4 +1,4 @@
-import { AllTargetType, CharacterRace, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { AllTargetType, BonusRefKeys, CharacterRace, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
 import { CombatStatKey, CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
@@ -10,6 +10,8 @@ import { SkillCooldownReductionResult } from "../types/fighter/cooldown.types";
 import { HealingReductionResult, HealingReductionSource } from "../types/fighter/healing-reduction.types";
 import { FightConfig } from "netim2-shared/dist/character/character-fight-config.type";
 import { ActiveStatusEffectId } from "../types/statusEffects/active-status-effect.types";
+import { CD_REDUCTION_PER_VH } from "src/modules/shared/config/character-stats.config";
+import { COMBAT_STAT_TO_BONUS_REF, LIMIT_BONUS_CONFIG } from "src/modules/bonus/config/limit-bonus.config";
 
 export class FighterCombatEntity {
     private props: FighterCombatProps;
@@ -88,8 +90,16 @@ export class FighterCombatEntity {
         return this.props.race;
     }
 
+    get name(): string {
+        return this.props.name;
+    }
+
     getCurrentHp(): number {
         return this.props.resources.hp.current
+    }
+
+    getCurrentMana(): number {
+        return this.props.resources.mana.current
     }
 
     setFocusedEnemyId(targetId: string) {
@@ -235,8 +245,10 @@ export class FighterCombatEntity {
         this.props.statsDirty = false;
     }
 
-    get effectiveStats(): FighterBaseStats {
-        return this.props.effectiveStats
+    get effectiveStats(): Readonly<FighterBaseStats> {
+        this.ensureEffectiveStatsUpdated();
+
+        return this.props.effectiveStats;
     }
 
     receiveDamage(amount: number) {
@@ -484,6 +496,14 @@ export class FighterCombatEntity {
     startSkillCooldown(skillId: UNIQUE_ID_SKILLS, turns: number): SkillCooldownState {
         const normalizedTurns = Math.max(0, Math.floor(turns));
 
+        const vh = this.effectiveStats.general.vh;
+
+        const cooldownReduction = vh * CD_REDUCTION_PER_VH;
+
+        const cooldownMultiplier = 1 - (cooldownReduction / 100);
+
+        const finalTurns = Math.max(0, Math.ceil(turns * cooldownMultiplier));
+
         if (normalizedTurns === 0) {
             this.props.cooldowns.delete(skillId);
 
@@ -494,8 +514,8 @@ export class FighterCombatEntity {
         }
 
         const cooldown: SkillCooldownState = {
-            initialTurns: normalizedTurns,
-            remainingTurns: normalizedTurns
+            initialTurns: finalTurns,
+            remainingTurns: finalTurns
         };
 
         this.props.cooldowns.set(skillId, cooldown);
@@ -587,6 +607,157 @@ export class FighterCombatEntity {
 
         return current;
     }
+
+    /**
+ * Garantiza que las estadísticas efectivas estén actualizadas
+ * antes de ser utilizadas.
+ */
+    private ensureEffectiveStatsUpdated(): void {
+        if (!this.props.statsDirty) {
+            return;
+        }
+
+        this.recalculateEffectiveStats();
+    }
+
+    /**
+ * Reconstruye todas las estadísticas efectivas a partir de las
+ * estadísticas base y de los modificadores actualmente activos.
+ *
+ * Los modificadores flat se aplican primero y los porcentuales
+ * se acumulan entre sí antes de aplicarse.
+ */
+    private recalculateEffectiveStats(): void {
+        const effectiveStats = structuredClone(this.props.baseStats);
+
+        const modifiersByStat = this.groupStatModifiersByTarget();
+
+        for (const [target, modifiers] of modifiersByStat) {
+            const baseValue = this.getStatValue(this.props.baseStats, target);
+
+            const effectiveValue = this.calculateEffectiveStat(target, baseValue, modifiers);
+
+            this.setStatValue(effectiveStats, target, effectiveValue);
+        }
+
+        this.props.effectiveStats = effectiveStats;
+
+        this.props.statsDirty = false;
+    }
+
+    /**
+ * Agrupa los modificadores activos según la estadística
+ * sobre la que actúan.
+ */
+    private groupStatModifiersByTarget(): Map<CombatStatKey, CombatStatModifier[]> {
+
+        const grouped = new Map<CombatStatKey, CombatStatModifier[]>();
+
+        for (const modifier of this.props.statModifiers.values()) {
+            const modifiers = grouped.get(modifier.target);
+
+            if (modifiers) {
+                modifiers.push(modifier);
+                continue;
+            }
+
+            grouped.set(modifier.target, [modifier]);
+        }
+
+        return grouped;
+    }
+
+
+    /**
+ * Calcula el valor efectivo de una estadística.
+ *
+ * Orden:
+ *
+ * 1. Se suman/restan todos los modificadores flat.
+ * 2. Se acumulan los aumentos porcentuales.
+ * 3. Se acumulan las reducciones porcentuales.
+ * 4. Se aplica el porcentaje resultante sobre
+ *    el valor resultante del flat.
+ */
+    private calculateEffectiveStat(
+        target: CombatStatKey,
+        baseValue: number,
+        modifiers: CombatStatModifier[]
+    ): number {
+        let flat = 0;
+        let increased = 0;
+        let reduced = 0;
+
+        for (const modifier of modifiers) {
+            switch (modifier.operation) {
+                case 'flat':
+                    flat += modifier.value;
+                    break;
+
+                case 'increased':
+                    increased += modifier.value;
+                    break;
+
+                case 'reduced':
+                    reduced += modifier.value;
+                    break;
+            }
+        }
+
+        const valueWithFlat = baseValue + flat;
+
+        const percentageModifier = increased - reduced;
+
+        const calculatedValue =
+            valueWithFlat +
+            Math.abs(valueWithFlat) *
+            (percentageModifier / 100);
+
+        /*
+         * Finalmente se aplica el límite de la stat,
+         * si existe uno configurado.
+         */
+        return this.applyStatLimit(
+            target,
+            calculatedValue
+        );
+    }
+
+
+    private getStatValue(
+        stats: FighterBaseStats,
+        target: CombatStatKey
+    ): number {
+        return stats[target];
+    }
+
+    private setStatValue(
+        stats: FighterBaseStats,
+        target: CombatStatKey,
+        value: number
+    ): void {
+        stats[target] = value;
+    }
+
+    private applyStatLimit(
+        target: CombatStatKey,
+        value: number
+    ): number {
+        const bonusRefKey = COMBAT_STAT_TO_BONUS_REF[target];
+
+        if (!bonusRefKey) {
+            return value;
+        }
+
+        const limit = LIMIT_BONUS_CONFIG[target as BonusRefKeys];
+
+        if (limit === undefined) {
+            return value;
+        }
+
+        return Math.min(value, limit);
+    }
+
 
 
 }

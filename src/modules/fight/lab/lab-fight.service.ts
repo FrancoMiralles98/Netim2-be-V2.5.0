@@ -12,9 +12,20 @@ export class LabFightService {
     ) { }
 
     fightLab() {
-        const { fighterA, fighterB } = this.getFighter()
-        const result = this.fightEngine.executeLab([fighterA], [fighterB])
-        console.log('resultado de la pelea', result);
+        try {
+            console.log('llego pelea');
+            
+            const { fighterA, fighterB } = this.getFighter()
+            const result = this.fightEngine.executeLab([fighterA], [fighterB])
+            console.dir(result.fighters,{
+                depth: null,
+                colors: true
+            })
+            
+        } catch (error) {
+            console.log('error de pelea',error);
+            
+        }
 
     }
 

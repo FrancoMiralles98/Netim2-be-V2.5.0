@@ -15,7 +15,7 @@ export interface FighterTurnExecutionResult {
     endTurnResult: TurnEndResult;
     side: FightSide
 
-    events: FightEvent[]; /**FightEvent */
+    events: FightEvent[];
 
     fightFinished: boolean;
     fightResult?: FightResult;

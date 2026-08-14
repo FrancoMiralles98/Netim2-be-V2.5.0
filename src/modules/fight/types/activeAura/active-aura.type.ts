@@ -1,4 +1,4 @@
-import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys, BonusGeneralRefKeys, SkillAura, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys, BonusGeneralRefKeys, SkillAura, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { ActiveStatusEffectId } from "../statusEffects/active-status-effect.types";
 
 export interface CreateActiveAuraProps {
@@ -36,17 +36,11 @@ export type CombatStatKey =
  * flat       Suma o resta una cantidad fija
  * increased  Aumento porcentual acumulativo
  * reduced    Reducción porcentual acumulativa
- * more       Multiplicador porcentual independiente
- * less       Reducción multiplicativa independiente
- * override   Reemplaza el valor
  */
 export type CombatStatModifierOperation =
     | 'flat'
     | 'increased'
     | 'reduced'
-    | 'more'
-    | 'less'
-    | 'override';
 
 export type CombatStatModifierSource =
     | AuraStatModifierSource
