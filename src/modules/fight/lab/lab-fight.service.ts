@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { FightEngine } from "../engine/fight-engine";
 import { FighterCombatFactory } from "../factories/fighter-combat-entity.factory";
 import { BASE_FIGHT_CONFIG } from "src/modules/character/const/characterProps/base-fight-config.const";
-import { GENERAL_CHARACTER_STATS } from "src/modules/character/const/characterProps/base-character-stats.const";
+import { GENERAL_CHARACTER_STATS, GENERAL_MOB_STATS } from "src/modules/character/const/characterProps/base-character-stats.const";
 
 @Injectable()
 export class LabFightService {
@@ -17,11 +17,9 @@ export class LabFightService {
             
             const { fighterA, fighterB } = this.getFighter()
             const result = this.fightEngine.executeLab([fighterA], [fighterB])
-            console.dir(result.fighters,{
-                depth: null,
-                colors: true
-            })
-            
+            console.dir(result.result,{depth: null});
+            console.dir(result.fighters,{depth: null});
+        
         } catch (error) {
             console.log('error de pelea',error);
             
@@ -38,15 +36,15 @@ export class LabFightService {
             skills: [],
             stats: GENERAL_CHARACTER_STATS,
             targetType: 'medio_humanos',
-            race: 'guerrero',
-            weaponType: 'espada'
+            race: 'chaman',
+            weaponType: 'campana'
         })
         const fighterB = this.fighterCombatFactory.createFighter({
             fightConfig: BASE_FIGHT_CONFIG,
             id: 'mob-id',
             name: 'Perro Salvaje',
             skills: [],
-            stats: GENERAL_CHARACTER_STATS,
+            stats: GENERAL_MOB_STATS,
             targetType: 'animales',
         })
         return { fighterA, fighterB }

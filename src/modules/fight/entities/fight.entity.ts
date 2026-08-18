@@ -94,7 +94,7 @@ export class FightEntity {
     }
 
     getAliveFightersOfSide(side: FightSide): FighterCombatEntity[] {
-        return this.getFightersOfSide(side).filter(fighter => fighter.isAlive);
+        return this.getFightersOfSide(side).filter(fighter => fighter.isAlive());
     }
 
     getAliveOpponentsOf(fighterId: string): FighterCombatEntity[] {
@@ -234,6 +234,7 @@ export class FightEntity {
         }
 
         const currentSide = this.state.currentSide
+
 
         if (!currentSide) {
             throw new Error('Fight has no current side.')

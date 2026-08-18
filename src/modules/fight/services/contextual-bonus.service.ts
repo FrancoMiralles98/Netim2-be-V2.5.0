@@ -85,9 +85,10 @@ export class ContextualBonusService {
         dmgType: DamageType
     ): number {
 
-        let generalMitigationPercent = this.getWeaponDefenseBonus(target, dmgType) +
+        let generalMitigationPercent = this.getWeaponDefenseBonus(target, dmgType, attacker.weaponType) +
             this.getSkillDmgTypeDefenseBonus(target, dmgType) +
             target.effectiveStats.bonus.defensa.def_hab
+
 
         const finalMitigationPercent =
             (
@@ -104,7 +105,7 @@ export class ContextualBonusService {
         target: FighterCombatEntity,
         dmgType: DamageType
     ): number {
-        let generalMitigationPercent = this.getWeaponDefenseBonus(target, dmgType) +
+        let generalMitigationPercent = this.getWeaponDefenseBonus(target, dmgType, attacker.weaponType) +
             target.effectiveStats.bonus.defensa.def_media
 
         const finalMitigationPercent =

@@ -1,4 +1,4 @@
-import { AllTargetType, BonusRefKeys, CharacterRace, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { AllTargetType, BonusRefKeys, CharacterRace, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, TypeWeapon, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
 import { CombatStatKey, CombatStatModifier } from "../types/activeAura/active-aura.type";
 import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
@@ -64,6 +64,10 @@ export class FighterCombatEntity {
 
     get id(): string {
         return this.props.id
+    }
+
+    get weaponType(): TypeWeapon | undefined {
+        return this.props.weaponType
     }
 
     get baseStats(): FighterBaseStats {
@@ -261,7 +265,7 @@ export class FighterCombatEntity {
 
         this.props.resources.hp.current -= effectiveDamage;
 
-        if (this.props.resources.hp.current === 0) {
+        if (this.props.resources.hp.current <= 0) {
             this.props.alive = false;
         }
 

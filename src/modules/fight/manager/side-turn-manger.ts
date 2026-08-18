@@ -12,7 +12,7 @@ export class SideTurnManager {
     ) { }
 
     executeNextTurn(fight: FightEntity): SideTurnExecutionResult {
-        const { side, turnNumber } = fight.beginNextTurn()
+        const { side, turnNumber } = fight.beginNextTurn()   
 
         const fighters = fight.getFightersOfSide(side)
 
@@ -28,7 +28,7 @@ export class SideTurnManager {
              * una acción anterior del mismo
              * turno.
              */
-            if (!fighter.isAlive) {
+            if (!fighter.isAlive()) {
                 continue
             }
 
@@ -46,6 +46,8 @@ export class SideTurnManager {
             const fightResult = fight.tryFinish();
 
             if (fightResult) {
+                console.log('llego finish');
+                
                 return {
                     turnNumber,
                     side,

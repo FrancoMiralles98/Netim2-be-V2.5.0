@@ -23,7 +23,7 @@ export class FightEngine {
             enemies,
             id: randomUUID(),
             randomSeed: randomUUID(),
-            maxTurns: 1
+            maxTurns: 2
         })
 
         const initiativeResults = this.initiativeResolverService.resolve(fight.getFighters())

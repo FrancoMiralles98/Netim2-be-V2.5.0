@@ -132,13 +132,17 @@ export class BasicAttackActionResolverService {
         target: FighterCombatEntity
     ) {
 
+        actor.statistics.registerHealing({
+            type: 'basic_attack',
+            amount: lifeStealResult.effectiveHealing
+        })
+
         actor.statistics.registerAttackHits({
             doubleHitTriggered: extraAttackTriggered,
             hits: [] //no se pone nada porque luego por hit se pondran las estadisticas
         })
 
         hits.forEach(hit => {
-
             actor.statistics.registerDamageDealt({
                 source: { type: 'basic_attack' },
                 amount: hit.appliedDamage,

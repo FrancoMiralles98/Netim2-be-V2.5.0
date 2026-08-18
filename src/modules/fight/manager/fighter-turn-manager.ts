@@ -52,8 +52,6 @@ export class FighterTurnManager {
             startTurnResult
         })
 
-        fight.completeCurrentTurn()
-
         return {
             action,
             actorId: context.actor.id,
