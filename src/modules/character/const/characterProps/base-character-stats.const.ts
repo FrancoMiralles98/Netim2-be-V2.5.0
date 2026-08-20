@@ -5,16 +5,16 @@ import { Stats } from "netim2-shared";
  */
 export const GENERAL_CHARACTER_STATS: Stats = {
     general: {
-        ad: { min: 20, max: 20 },
+        ad: { min: 10, max: 10 },
         ap: { min: 20, max: 20 },
-        mana: { actual: 50, max: 100 },
+        mana: { actual: 100, max: 100 },
         regen_mana: 5,
         def: 10,
-        hp: { actual: 50, max: 100 },
-        regen_hp: 5,
+        hp: { actual: 1000, max: 1000 },
+        regen_hp: 10,
         va: 0,
         vh: 0,
-        vm: 10
+        vm: 0
     },
     bonus: {
         daño: {
@@ -32,6 +32,7 @@ export const GENERAL_CHARACTER_STATS: Stats = {
             habilidad: 0,
             bonus_sangrado: 0,
             duracion_estado: 0,
+            bonus_electrico: 0,
             electrico: 0,
             sangrado: 0,
             incendio: 0,
@@ -48,12 +49,12 @@ export const GENERAL_CHARACTER_STATS: Stats = {
         defensa: {
             bloquear_ataques: 0,
             def_campana: 0,
-            def_electrico: 0,
+            def_electrico: 100,
             mana_cost: 0,
             porcentage_mana_cost: 0,
             def_daga: 0,
             damage_taken: 0,
-            robo_vida: 50,
+            robo_vida: 100,
             vampirismo_hechizo: 0,
             def_desmayo: 0,
             def_hab: 0,
@@ -61,7 +62,7 @@ export const GENERAL_CHARACTER_STATS: Stats = {
             corta_curacion: 0,
             def_sangrado: 0,
             def_media: 0,
-            def_retardo: 0,
+            def_retardo: 100,
             def_chaman: 0,
             def_guerrero: 0,
             def_ninja: 0,
@@ -93,11 +94,11 @@ export const GENERAL_CHARACTER_STATS: Stats = {
 
 export const GENERAL_MOB_STATS: Stats = {
     general: {
-        ad: { min: 20, max: 20 },
+        ad: { min: 40, max: 40 },
         ap: { min: 20, max: 20 },
         mana: { actual: 50, max: 100 },
         regen_mana: 5,
-        def: 10,
+        def: 0,
         hp: { actual: 100, max: 100 },
         regen_hp: 5,
         va: 0,
@@ -108,12 +109,13 @@ export const GENERAL_MOB_STATS: Stats = {
         daño: {
             animales: 0,
             chaman: 0,
-            critico: 0,
+            critico: 100,
+            bonus_electrico: 0,
             demonios: 0,
             bonus_estado: 0,
             bonus_fuego: 0,
             bonus_veneno: 0,
-            daño_critico: 0,
+            daño_critico: 2,
             penetracion_habilidad: 0,
             doble_golpe: 0,
             guerrero: 0,
@@ -165,7 +167,7 @@ export const GENERAL_MOB_STATS: Stats = {
         },
         cc: {
             desmayo: 0,
-            retardo: 0
+            retardo: 100
         },
         miscs: {
             chances_exp: 0,

@@ -307,7 +307,13 @@ export class FighterCombatEntity {
     }
 
     spendMana(amount: number) {
-        const normalizedAmount = Math.max(0, Math.floor(amount))
+        const flatReduction = this.getEffectiveStatValue('bonus.defensa.mana_cost')
+        const porcentualReduction = this.getEffectiveStatValue('bonus.defensa.porcentage_mana_cost')
+
+        const amountAfterFlatReduction = amount - flatReduction
+        const amountAfterPorcentualReduction = amountAfterFlatReduction * (1 - porcentualReduction / 100)
+
+        const normalizedAmount = Math.max(0, Math.floor(amountAfterPorcentualReduction))
 
         if (!this.hasEnoughMana(normalizedAmount)) {
             throw new Error(`Se quiere usar mana cuando no se tiene`)
@@ -632,21 +638,25 @@ export class FighterCombatEntity {
  * se acumulan entre sí antes de aplicarse.
  */
     private recalculateEffectiveStats(): void {
+        console.log('antes', this.name, this.props.effectiveStats.general.va);
+
         const effectiveStats = structuredClone(this.props.baseStats);
 
         const modifiersByStat = this.groupStatModifiersByTarget();
 
         for (const [target, modifiers] of modifiersByStat) {
-            const baseValue = this.getStatValue(this.props.baseStats, target);
+            const baseValue = this.getBaseStatValue(target);
 
             const effectiveValue = this.calculateEffectiveStat(target, baseValue, modifiers);
 
-            this.setStatValue(effectiveStats, target, effectiveValue);
+            this.setNumericStatByPath(effectiveStats, target, effectiveValue);
         }
 
         this.props.effectiveStats = effectiveStats;
 
         this.props.statsDirty = false;
+
+        console.log('despues', this.name, this.props.effectiveStats.general.va);
     }
 
     /**
@@ -717,6 +727,7 @@ export class FighterCombatEntity {
             Math.abs(valueWithFlat) *
             (percentageModifier / 100);
 
+
         /*
          * Finalmente se aplica el límite de la stat,
          * si existe uno configurado.
@@ -727,20 +738,62 @@ export class FighterCombatEntity {
         );
     }
 
-
-    private getStatValue(
+    private setNumericStatByPath(
         stats: FighterBaseStats,
-        target: CombatStatKey
-    ): number {
-        return stats[target];
-    }
-
-    private setStatValue(
-        stats: FighterBaseStats,
-        target: CombatStatKey,
+        path: CombatStatKey,
         value: number
     ): void {
-        stats[target] = value;
+        if (!Number.isFinite(value)) {
+            throw new Error(
+                `El valor ${value} no es un número válido para la estadística ${path}.`
+            );
+        }
+
+        const segments = path.split('.');
+
+        let current: unknown = stats;
+
+        for (let i = 0; i < segments.length - 1; i++) {
+            const segment = segments[i];
+
+            if (
+                current === null ||
+                typeof current !== 'object' ||
+                !(segment in current)
+            ) {
+                throw new Error(
+                    `No se encontró la estadística ${path}.`
+                );
+            }
+
+            current = (current as Record<string, unknown>)[segment];
+        }
+
+        const lastSegment = segments[segments.length - 1];
+
+        if (
+            current === null ||
+            typeof current !== 'object' ||
+            !(lastSegment in current)
+        ) {
+            throw new Error(
+                `No se encontró la estadística ${path}.`
+            );
+        }
+
+        const currentValue =
+            (current as Record<string, unknown>)[lastSegment];
+
+        if (
+            typeof currentValue !== 'number' ||
+            !Number.isFinite(currentValue)
+        ) {
+            throw new Error(
+                `La estadística ${path} no contiene un valor numérico válido.`
+            );
+        }
+
+        (current as Record<string, unknown>)[lastSegment] = value;
     }
 
     private applyStatLimit(

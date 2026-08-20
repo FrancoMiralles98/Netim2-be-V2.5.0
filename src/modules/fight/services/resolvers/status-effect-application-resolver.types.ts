@@ -129,7 +129,7 @@ export interface ResolveSkillEffectsInput {
     target: FighterCombatEntity;
     triggeringDamage: number
     effect: Partial<Record<ActiveStatusEffectId, number>> | undefined;
-
+    isCritic: boolean
     appliedOnTurn: number;
 
 }

@@ -14,6 +14,7 @@ export const MOB_BASE_STATS: MobStats = {
     bonus: {
         daño: {
             animales: 0,
+            bonus_electrico: 0,
             electrico: 0,
             chaman: 0,
             critico: 0,

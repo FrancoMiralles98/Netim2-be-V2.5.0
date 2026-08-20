@@ -11,7 +11,6 @@ export class HealingResolverService {
         const reductionsPorcentage = reductionsDetails.totalReductionPercent
 
         const preventedAmount = Math.floor(amountBeforeReduction * reductionsPorcentage)
-
         const reductions =
             this.resolveReductionDetails({
                 amountBeforeReduction,

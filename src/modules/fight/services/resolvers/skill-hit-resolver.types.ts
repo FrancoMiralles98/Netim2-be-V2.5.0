@@ -6,7 +6,6 @@ export interface SkillHitResolverInput {
     attacker: FighterCombatEntity;
 
     target: FighterCombatEntity;
-
     skill: SkillDamage;
 
     hitIndex: number;

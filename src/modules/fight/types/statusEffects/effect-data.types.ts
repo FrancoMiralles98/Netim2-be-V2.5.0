@@ -13,37 +13,37 @@ export type PeriodicDamageEffectData =
     | BleedingEffectData
     | ElectricEffectData;
 
+export interface basePeriodicDamageEffectData {
+    type: 'periodic_damage';
+    damagePerTick: number;
+    refreshOptions?: {
+        refreshExtraBonusDamageAvailable: boolean;
+        refreshExtraBonusRatio: number;
+    }
+}
+
 export interface HealingReductionEffectData {
     effectId: 'corta_curacion',
     type: 'healing_reduction';
     healReductionPorcent: number;
 }
 
-export interface PoisonEffectData {
+export interface PoisonEffectData extends basePeriodicDamageEffectData {
     effectId: 'veneno';
-    damagePerTick: number;
-    type: 'periodic_damage'
     healReductionPorcent: number
 }
 
-export interface FireEffectData {
+export interface FireEffectData extends basePeriodicDamageEffectData {
     effectId: 'incendio';
-    damagePerTick: number;
-    type: 'periodic_damage'
-    extraDamagePerRefresh: number;
 }
 
-export interface BleedingEffectData {
+export interface BleedingEffectData extends basePeriodicDamageEffectData {
     effectId: 'sangrado';
-    damagePerTick: number;
-    type: 'periodic_damage'
     extraDamagePerMovementSpeed: number;
 }
 
-export interface ElectricEffectData {
+export interface ElectricEffectData extends basePeriodicDamageEffectData {
     effectId: 'electrico';
-    damagePerTick: number;
-    type: 'periodic_damage'
     extraDamageToApplyStacks: number;
 }
 

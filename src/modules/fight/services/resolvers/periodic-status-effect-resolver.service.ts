@@ -109,6 +109,9 @@ export class PeriodicStatusEffectResolverService {
 
         const totalRequestedDamage = damagePerProc * stackResult.procCount
 
+        console.log('totalRequestedDamageProcStack',totalRequestedDamage);
+        
+        
         const damage = this.damageResolverService.resolve({
             sourceType: 'status_effect',
             attacker: input.source,

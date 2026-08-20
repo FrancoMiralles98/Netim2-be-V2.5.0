@@ -76,6 +76,10 @@ export class FightEntity {
         return this.state.status === 'in_progress';
     }
 
+    get initiativeResult(): FighterInitiativeResult[] {
+        return this.state.initiativeResults
+    }
+
     getSideOf(fighterId: string): FightSide {
         this.getFighter(fighterId);
         if (this.state.sides.allies.includes(fighterId)) {
@@ -195,7 +199,7 @@ export class FightEntity {
         return this.state.sides[side].includes(fighterId)
     }
 
-    private getStartingSide(): FightSide {
+    getStartingSide(): FightSide {
         const first = this.state.initiativeResults[0]
 
         return this.getSideOf(first.fighterId)

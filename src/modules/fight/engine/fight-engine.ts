@@ -17,13 +17,13 @@ export class FightEngine {
         private readonly initiativeResolverService: InitiativeResolverService,
     ) { }
 
-    executeLab(allies: FighterCombatEntity[], enemies: FighterCombatEntity[]):FightProcessedResult {
+    executeLab(allies: FighterCombatEntity[], enemies: FighterCombatEntity[], turns?: number): FightProcessedResult {
         const fight = new FightEntity({
             allies,
             enemies,
             id: randomUUID(),
             randomSeed: randomUUID(),
-            maxTurns: 2
+            maxTurns: turns || 1
         })
 
         const initiativeResults = this.initiativeResolverService.resolve(fight.getFighters())

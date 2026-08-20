@@ -19,7 +19,7 @@ export interface DamageComponentResolution {
 
 export interface DamageHitResolution {
     hitIndex: number;
-
+    critical: boolean;
     components: DamageComponentResolution[];
 
     totalAppliedDamage: number;

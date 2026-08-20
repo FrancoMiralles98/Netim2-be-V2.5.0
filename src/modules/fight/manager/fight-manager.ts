@@ -30,6 +30,11 @@ export class FightManager {
             });
         }
 
+        const fighters = fight.getFighters()
+        const effects = fighters.forEach(f => f.getActiveStatusEffects())
+        console.log('effects', effects);
+
+
 
         return this.fightResultProcessorService.process(
             fight,

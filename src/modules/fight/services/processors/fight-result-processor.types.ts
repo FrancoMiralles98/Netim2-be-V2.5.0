@@ -1,10 +1,11 @@
-import { FightResult, FightSide } from "../../types/fight/fight.type";
+import { FighterInitiativeResult, FightResult, FightSide } from "../../types/fight/fight.type";
 import { FightEvent } from "../../types/fightEvents/fight-event.types";
 import { SideTurnExecutionResult } from "../../types/side/side.types";
 import { FighterCombatStatisticsState } from "../../types/statistics/fighter-combat-statistics.type";
 
 export interface FightProcessedResult {
     result: FightResult;
+    initiativeResults: FighterInitiativeResult[]
     turns: SideTurnExecutionResult[];
     fighters: FighterFightSummary[];
     events: FightEvent[];

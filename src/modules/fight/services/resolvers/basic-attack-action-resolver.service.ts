@@ -25,6 +25,7 @@ export class BasicAttackActionResolverService {
         { action, context }: ResolveActionInput<BasicAttackAction>
     ): BasicAttackActionResolution {
 
+        console.log(context.actor.name, context.actor.getAllStatModifiers())
         const attackSequence = this.resolveAttackSequence(
             context.actor.effectiveStats.general.va)
 
@@ -68,6 +69,7 @@ export class BasicAttackActionResolverService {
                     effect: this.contextualBonusSerivce.getBasicAttackStatusEffectsChances(context.actor),
                     target,
                     triggeringDamage: hitResult.baseDamage,
+                    isCritic: hitResult.critical
                 })
                 statusEffects.push(...hitStatusEffects)
             }

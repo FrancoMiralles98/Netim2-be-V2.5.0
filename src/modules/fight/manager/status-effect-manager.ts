@@ -128,6 +128,15 @@ export class StatusEffectManager {
             if (incomingData.damagePerTick > existingData.damagePerTick) {
                 this.replaceEffectApplication(existingEffect, input)
             }
+            if (existingData.refreshOptions &&
+                existingData.refreshOptions.refreshExtraBonusDamageAvailable
+            ) {
+
+                const newTickDamage = existingData.damagePerTick *
+                    (1 + existingData.refreshOptions.refreshExtraBonusRatio)
+
+                existingEffect.replaceDamage(newTickDamage)
+            }
             return existingEffect
         }
 

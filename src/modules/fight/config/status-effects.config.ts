@@ -15,18 +15,11 @@ export const STATUS_EFFECTS_CONFIG: Record<StatusEffectsKeys | 'corta_curacion',
         healReduction: 0.3,
         damageBonusTarget: ['bonus.daño.bonus_veneno', 'bonus.daño.bonus_estado'],
     },
-    incendio: {
+    incendio: { //balanceado
         type: 'periodic_damage',
         effectId: 'incendio',
         extraDamageRatioPerRefresh: 0.2,
         baseDamageRatio: 0.20,
-        bonusDamageCondition: {
-            condition: {
-                effectId: 'incendio',
-                type: 'target_has_effect'
-            },
-            bonusDamageRatio: 0.2
-        },
         resistible: false,
         duration: {
             baseTurns: 7,
@@ -35,22 +28,23 @@ export const STATUS_EFFECTS_CONFIG: Record<StatusEffectsKeys | 'corta_curacion',
         },
         damageBonusTarget: ['bonus.daño.bonus_fuego', 'bonus.daño.bonus_estado'],
     },
-    sangrado: {
+    sangrado: { //balanceado
         type: 'periodic_damage',
         effectId: 'sangrado',
         baseDamageRatio: 0.05,
         resistible: false,
         duration: {
-            baseTurns: 9,
+            baseTurns: 7,
             canStackDuration: true,
             bonusTarget: ['bonus.daño.duracion_estado'],
         },
         damageBonusTarget: ['bonus.daño.bonus_sangrado', 'bonus.daño.bonus_estado'],
-        damagePerMovementSpeedPoint: 1,
+        damagePerMovementSpeedPoint: 1, //verificar para que se usa
         statsScaling: [{
             stat: 'vm',
-            ratio: 1,
-            target: 'general.vm'
+            ratio: 0.3,
+            target: 'general.vm',   
+            power: 1.5
         }],
     },
     electrico: {
@@ -63,8 +57,8 @@ export const STATUS_EFFECTS_CONFIG: Record<StatusEffectsKeys | 'corta_curacion',
             canStackDuration: false,
             bonusTarget: ['bonus.daño.duracion_estado'],
         },
-        damageBonusTarget: ['bonus.daño.bonus_estado'],
-        extraDamageRatioPerStackThreshold: 1,
+        damageBonusTarget: ['bonus.daño.bonus_estado','bonus.daño.bonus_electrico'],
+        extraDamageRatioPerStackThreshold: 4.2,
         stacks: {
             initial: 1,
             max: 3,
@@ -88,25 +82,25 @@ export const STATUS_EFFECTS_CONFIG: Record<StatusEffectsKeys | 'corta_curacion',
             baseTurns: 6,
             canStackDuration: false,
             bonusTarget: ['bonus.daño.duracion_estado'],
-            maxTurns: 3
+            maxTurns: 6
         },
         statsModifiers: [{
             bonusRefKey: 'vm',
-            operation: 'reduced',
+            operation: 'flat',
             target: 'general.vm',
-            value: 25
+            value: -25
         },
         {
             bonusRefKey: 'vh',
-            operation: 'reduced',
+            operation: 'flat',
             target: 'general.vh',
-            value: 25
+            value: -25
         },
         {
             bonusRefKey: 'va',
-            operation: 'reduced',
+            operation: 'flat',
             target: 'general.va',
-            value: 25
+            value: -25
         }
         ]
     },

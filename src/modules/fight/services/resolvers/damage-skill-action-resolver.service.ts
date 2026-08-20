@@ -104,8 +104,8 @@ export class DamageSkillActionResolver {
                     source: context.actor,
                     effect: skill.statusEffects,
                     target,
+                    isCritic: hitResult.critical,
                     triggeringDamage: hitResult.totalBaseDamage,
-
                 })
                 statusEffects.push(...hitStatusEffects)
             }

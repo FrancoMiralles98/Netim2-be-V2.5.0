@@ -25,7 +25,6 @@ export class StatusEffectProcessorService {
             if (!context.actor.isAlive()) {
                 break;
             }
-
             if (!statusEffect.isActive()) continue;
 
             if (statusEffect.getTargetFighterId() !== context.actor.id) continue;
@@ -42,10 +41,6 @@ export class StatusEffectProcessorService {
 
             results.push(result)
 
-            const source = context.fight.getFighter(result.sourceFighterId)
-
-            this.statisticsRegister(source, context.actor, result)
-
             totalAppliedDamage += result.totalAppliedDamage
         }
 
@@ -54,37 +49,5 @@ export class StatusEffectProcessorService {
             actorDefeated: !context.actor.isAlive(),
             totalAppliedDamage
         }
-    }
-
-
-    private statisticsRegister(
-        source: FighterCombatEntity,
-        actor: FighterCombatEntity,
-        result: PeriodicStatusEffectResolution
-    ): void {
-
-        source.statistics.registerEffects({
-            appliedByType: { [result.effectId]: 1 },
-        })
-
-        source.statistics.registerDamageDealt({
-            delivery: 'periodic',
-            source: {
-                type: 'status_effect',
-                effectId: result.effectId
-            },
-            amount: result.totalAppliedDamage,
-            damageType: 'ad' //se añade pero no se usa, deberia tener un return para evitar que register mitigacion de ad
-        })
-
-        actor.statistics.registerEffects({
-            receivedByType: { [result.effectId]: 1 },
-        })
-
-        actor.statistics.registerDamageMitigated({
-            amount: result.tickDamage.mitigatedAmount,
-            damageType: 'ad',
-            statusEffectId: result.effectId
-        })
     }
 }

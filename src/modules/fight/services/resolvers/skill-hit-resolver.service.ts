@@ -85,6 +85,7 @@ export class SkillHitResolver {
 
         return {
             components,
+            critical: criticalResult.critical,
             hitIndex,
             totalAppliedDamage,
             totalBaseDamage,

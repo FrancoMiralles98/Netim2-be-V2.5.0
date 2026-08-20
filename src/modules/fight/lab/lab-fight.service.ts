@@ -14,15 +14,15 @@ export class LabFightService {
     fightLab() {
         try {
             console.log('llego pelea');
-            
+
             const { fighterA, fighterB } = this.getFighter()
-            const result = this.fightEngine.executeLab([fighterA], [fighterB])
-            console.dir(result.result,{depth: null});
-            console.dir(result.fighters,{depth: null});
-        
+            const result = this.fightEngine.executeLab([fighterA], [fighterB],4)
+            console.dir(result.result, { depth: null });
+            console.dir(result.initiativeResults, { depth: null });
+            console.dir(result.fighters, { depth: null });
         } catch (error) {
-            console.log('error de pelea',error);
-            
+            console.log('error de pelea', error);
+
         }
 
     }
@@ -45,7 +45,8 @@ export class LabFightService {
             name: 'Perro Salvaje',
             skills: [],
             stats: GENERAL_MOB_STATS,
-            targetType: 'animales',
+            targetType: 'monstruos',
+            race: 'chaman'
         })
         return { fighterA, fighterB }
     }

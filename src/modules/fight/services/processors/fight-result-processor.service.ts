@@ -25,6 +25,7 @@ export class FightResultProcessorService {
         return {
             result,
             turns,
+            initiativeResults: fight.initiativeResult,
             fighters: this.processFighters(fight),
             events
         };

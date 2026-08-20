@@ -11,8 +11,6 @@ export class DamageResolverService {
 
     resolve(input: ResolveDmgMitigationInput): DamageResolutionResult {
         const mitigationResult = this.mitigationResolverService.resolve(input)
-        console.log(mitigationResult);
-        
         const applicationResult = input.target.receiveDamage(mitigationResult.damageAfterMitigation)
 
         return {

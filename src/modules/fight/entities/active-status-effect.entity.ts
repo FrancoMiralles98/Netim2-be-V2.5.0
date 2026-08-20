@@ -1,7 +1,7 @@
 import { StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { ActiveStatusEffectId, CreateActiveStatusEffectProps, StatusEffectStackProcResult } from "../types/statusEffects/active-status-effect.types";
 import { ActiveDurationEntity } from "./active-duration.entity";
-import { ActiveStatusEffectData } from "../types/statusEffects/effect-data.types";
+import { ActiveStatusEffectData, isPeriodicDamageEffectData } from "../types/statusEffects/effect-data.types";
 import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 
 export class ActiveStatusEffectEntity {
@@ -226,5 +226,11 @@ export class ActiveStatusEffectEntity {
         }
 
         this.statsModifier = [...modifiers];
+    }
+
+    replaceDamage(damage: number) {
+        if (isPeriodicDamageEffectData(this.data)) {
+            this.data.damagePerTick = damage
+        }
     }
 }

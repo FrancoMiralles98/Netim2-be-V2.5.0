@@ -3,7 +3,7 @@ import { RngService } from "src/modules/shared/services/rng.service";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { PeriodicStatusEffectConfig, ResolveSkillEffectsInput, StatusEffectApplicationResult, StatusEffectConfig, StatusEffectDurationConfig } from "./status-effect-application-resolver.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import {  DamageCondition, RoutStatKey, StatsScaling } from "netim2-shared";
+import { DamageCondition, RoutStatKey, StatsScaling } from "netim2-shared";
 import { StatusEffectManager } from "../../manager/status-effect-manager";
 import { STATUS_EFFECTS_CONFIG } from "../../config/status-effects.config";
 import { ActiveStatusEffectData, PeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
@@ -38,6 +38,7 @@ export class StatusEffectApplicationResolverService {
                 target: input.target,
                 effectId, baseChance: chance,
                 triggeringDamage: input.triggeringDamage,
+                isCritic: input.isCritic,
                 appliedOnTurn: input.appliedOnTurn
             });
 
@@ -54,14 +55,14 @@ export class StatusEffectApplicationResolverService {
         target: FighterCombatEntity;
 
         effectId: ActiveStatusEffectId;
-
+        isCritic: boolean;
         baseChance: number;
 
         triggeringDamage: number;
 
         appliedOnTurn: number;
     }): StatusEffectApplicationResult {
-        const config = STATUS_EFFECTS_CONFIG[input.effectId];
+        const config = structuredClone(STATUS_EFFECTS_CONFIG[input.effectId])
 
         if (!config) {
             throw new Error(`No se encontró la configuración del efecto ${input.effectId}.`);
@@ -86,13 +87,6 @@ export class StatusEffectApplicationResolverService {
 
             const resisted = this.rngService.rollChance(resistanceChance)
             if (resisted) {
-
-                input.target.statistics.registerEffects({
-                    resistedByType: {
-                        [input.effectId]: 1
-                    }
-                })
-
                 return {
                     applied: false,
                     resisted: true,
@@ -114,37 +108,25 @@ export class StatusEffectApplicationResolverService {
             target: input.target,
             triggeringDamage: input.triggeringDamage,
             config,
+            isCritic: input.isCritic,
             effectId: input.effectId
         });
 
-        const activeEffect =
-            this.statusEffectManager.apply({
-                source: input.source,
-                target: input.target,
-                effectId: input.effectId,
-                appliedOnTurn: input.appliedOnTurn,
-                canStackDuration: config.duration.canStackDuration,
-                duration: {
-                    type: 'turns',
-                    turns: duration
-                },
-                data,
-                modifiers: config.statsModifiers ?? [],
-                stacks: config.type === 'periodic_damage'
-                    ? config.stacks
-                    : undefined
-            });
-
-        input.source.statistics.registerEffects({
-            appliedByType: {
-                [input.effectId]: 1
-            }
-        });
-
-        input.target.statistics.registerEffects({
-            receivedByType: {
-                [input.effectId]: 1
-            }
+        const activeEffect = this.statusEffectManager.apply({
+            source: input.source,
+            target: input.target,
+            effectId: input.effectId,
+            appliedOnTurn: input.appliedOnTurn,
+            canStackDuration: config.duration.canStackDuration,
+            duration: {
+                type: 'turns',
+                turns: duration
+            },
+            data,
+            modifiers: config.statsModifiers ?? [],
+            stacks: config.type === 'periodic_damage'
+                ? config.stacks
+                : undefined
         });
 
         return {
@@ -171,19 +153,23 @@ export class StatusEffectApplicationResolverService {
 
 
     private resolveDuration(input: {
-        source: FighterCombatEntity,
-        effectId: ActiveStatusEffectId,
-        config: StatusEffectDurationConfig
+        source: FighterCombatEntity;
+        effectId: ActiveStatusEffectId;
+        config: StatusEffectDurationConfig;
     }): number {
-        let totalBonusDuration = 0
-        input.config.bonusTarget.forEach(rout => {
-            totalBonusDuration += input.source.effectiveStats[rout] ?? 0
-        })
+        let totalBonusDuration = 0;
 
-        return Math.max(
-            input.config.maxTurns ?? 1,
-            Math.floor(input.config.baseTurns * (1 + totalBonusDuration / 100))
-        )
+        input.config.bonusTarget.forEach(route => {
+            totalBonusDuration += input.source.getEffectiveStatValue(route) ?? 0;
+        });
+
+        const calculatedTurns = Math.floor(input.config.baseTurns * (1 + totalBonusDuration / 100));
+
+        const value = input.config.maxTurns !== undefined
+            ? Math.min(calculatedTurns, input.config.maxTurns)
+            : calculatedTurns;
+
+        return Math.max(1, value);
     }
 
     private createActiveStatusEffectData(input: {
@@ -191,7 +177,7 @@ export class StatusEffectApplicationResolverService {
         target: FighterCombatEntity;
         effectId: ActiveStatusEffectId
         triggeringDamage: number;
-
+        isCritic: boolean;
         config: StatusEffectConfig;
     }): ActiveStatusEffectData {
         switch (input.config.type) {
@@ -200,21 +186,26 @@ export class StatusEffectApplicationResolverService {
                     source: input.source,
                     target: input.target,
                     triggeringDamage: input.triggeringDamage,
+                    isCritic: input.isCritic,
                     config: input.config,
                     effectId: input.effectId
                 });
-
             case 'control':
                 return {
                     effectId: 'desmayo',
                     type: 'control'
                 };
-
             case 'stat_modifier':
                 return {
                     effectId: 'retardo',
                     type: 'stat_modifier'
                 };
+            case "healing_reduction":
+                return {
+                    type: 'healing_reduction',
+                    healReductionPorcent: input.config.reductionPercent,
+                    effectId: 'corta_curacion'
+                }
 
             default:
                 throw new Error(`No se encuentra supporteado el createActiveStatusEffectData`);
@@ -225,22 +216,27 @@ export class StatusEffectApplicationResolverService {
         source: FighterCombatEntity,
         target: FighterCombatEntity,
         triggeringDamage: number,
+        isCritic: boolean;
         effectId: ActiveStatusEffectId,
         config: PeriodicStatusEffectConfig
     }): PeriodicDamageEffectData {
-        const baseDamage = input.triggeringDamage * input.config.baseDamageRatio
-
+        let baseDamage = input.triggeringDamage * input.config.baseDamageRatio
+        if (input.isCritic) {
+            baseDamage *= input.source.getEffectiveStatValue('bonus.daño.daño_critico')
+        }
         const damageFromCondition = this.calculateConditionalBonusDamage({
             source: input.source,
             target: input.target,
-            triggeringDamage: input.triggeringDamage,
+            triggeringDamage: baseDamage,
             conditionConfig: input.config.bonusDamageCondition
         });
 
         const damageFromTargetStats = this.calculateTargetStatsScalingDamage({
             target: input.target,
+            baseDamage,
             statsScaling: input.config.statsScaling
         });
+
 
         const damageBonusPercent = this.calculateStatusEffectDamageBonus({
             source: input.source,
@@ -273,7 +269,10 @@ export class StatusEffectApplicationResolverService {
                     type: 'periodic_damage',
                     effectId: 'incendio',
                     damagePerTick: baseTickDamage,
-                    extraDamagePerRefresh: input.config.extraDamageRatioPerRefresh
+                    refreshOptions: {
+                        refreshExtraBonusDamageAvailable: true,
+                        refreshExtraBonusRatio: input.config.extraDamageRatioPerRefresh
+                    }
                 }
             case 'sangrado':
                 return {
@@ -308,6 +307,9 @@ export class StatusEffectApplicationResolverService {
             return 0;
         }
 
+        console.log('triggeringDamage', input.triggeringDamage);
+
+
         return (
             input.triggeringDamage * input.conditionConfig.bonusDamageRatio
         );
@@ -335,6 +337,7 @@ export class StatusEffectApplicationResolverService {
 
     private calculateTargetStatsScalingDamage(input: {
         target: FighterCombatEntity;
+        baseDamage: number;
         statsScaling?: readonly StatsScaling[];
     }): number {
         if (!input.statsScaling?.length) {
@@ -344,11 +347,24 @@ export class StatusEffectApplicationResolverService {
         return input.statsScaling.reduce((total, scaling) => {
             const statValue = input.target.getEffectiveStatValue(scaling.target);
 
-            return (
-                total +
-                statValue *
-                scaling.ratio
-            );
+            const normalizedStat = Math.max(0, statValue);
+
+            const power = scaling.power ?? 1;
+
+            /*
+             * Determina cuánto % extra aporta
+             * la stat.
+             */
+            const bonusPercent = Math.pow(normalizedStat, power) * scaling.ratio;
+            console.log('porcentage de boni', bonusPercent);
+
+            /*
+             * Ese porcentaje se aplica sobre
+             * el daño propio del efecto.
+             */
+            const bonusDamage = input.baseDamage * (bonusPercent / 100);
+
+            return total + bonusDamage;
         },
             0
         );
