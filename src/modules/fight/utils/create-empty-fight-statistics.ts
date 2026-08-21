@@ -41,6 +41,7 @@ export const createEmptyFighterCombatStatisticsState =
             successful: 0,
             missed: 0,
             blocked: 0,
+            reflected: 0,
             critical: 0,
             penetrating: 0,
             doubleHitsTriggered: 0,

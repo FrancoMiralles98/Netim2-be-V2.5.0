@@ -10,6 +10,9 @@ import { LifeStealResolverService } from "./life-steal-resolver.service";
 import { HealingResolution } from "./healing-resolver.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { FightEntity } from "../../entities/fight.entity";
+import { ReflectionResolverService } from "./reflection-resolver.service";
+import { DamageResolverService } from "./damage-resolver.service";
+import { DamageResolutionResult } from "./damage-resolver.types";
 
 @Injectable()
 export class BasicAttackActionResolverService {
@@ -17,7 +20,9 @@ export class BasicAttackActionResolverService {
         private basicAttackHitResolver: BasicAttackHitResolverService,
         private statusEffectsApplicationResolver: StatusEffectApplicationResolverService,
         private contextualBonusSerivce: ContextualBonusService,
+        private reflectionResolverService: ReflectionResolverService,
         private lifeStealResolverService: LifeStealResolverService,
+        private damageResolver: DamageResolverService,
         private rngService: RngService
     ) { }
 
@@ -25,7 +30,6 @@ export class BasicAttackActionResolverService {
         { action, context }: ResolveActionInput<BasicAttackAction>
     ): BasicAttackActionResolution {
 
-        console.log(context.actor.name, context.actor.getAllStatModifiers())
         const attackSequence = this.resolveAttackSequence(
             context.actor.effectiveStats.general.va)
 
@@ -81,6 +85,32 @@ export class BasicAttackActionResolverService {
             target,
         })
 
+        const reflectionResult = this.reflectionResolverService.resolve({
+            attacker: context.actor,
+            target,
+            delivery: 'direct',
+            receivedDamage: totalAppliedDamage
+        })
+
+        let reflectedDmgResult: DamageResolutionResult | null = null
+
+        if (reflectionResult) {
+            reflectedDmgResult = this.damageResolver.resolve({
+                attacker: reflectionResult.source,
+                target: reflectionResult.target,
+                damage: reflectionResult.damage,
+                damageType: reflectionResult.damageType,
+                sourceType: 'reflected',
+                reflectedFromDamageType: 'true'
+            })
+
+            this.reflectionResolverService.reflectionDmgResultRegister(
+                reflectionResult.source,
+                reflectedDmgResult)
+        }
+
+
+
         this.BasicAttackActionStatisticRegister(
             context.actor,
             context.fight,
@@ -95,6 +125,7 @@ export class BasicAttackActionResolverService {
             extraAttackTriggered: attackSequence.extraAttackTriggered,
             hitCount: attackSequence.hitCount,
             hits,
+            reflectedDmgResult,
             lifeSteal: lifeStealResult,
             success: true,
             statusEffects,

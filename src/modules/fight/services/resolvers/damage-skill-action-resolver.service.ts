@@ -15,6 +15,9 @@ import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { FightEntity } from "../../entities/fight.entity";
 import { SkillDamage } from "netim2-shared";
 import { HealingResolution } from "./healing-resolver.types";
+import { DamageResolutionResult } from "./damage-resolver.types";
+import { ReflectionResolverService } from "./reflection-resolver.service";
+import { DamageResolverService } from "./damage-resolver.service";
 
 @Injectable()
 export class DamageSkillActionResolver {
@@ -25,9 +28,11 @@ export class DamageSkillActionResolver {
         private damageCalculatorService: DamageCalculatorService,
         private contextualBonusService: ContextualBonusService,
         private skillHitResolver: SkillHitResolver,
+        private reflectionResolverService: ReflectionResolverService,
         private buffManager: BuffManager,
         private statusEffectsApplicationResolver: StatusEffectApplicationResolverService,
         private lifeStealResolverService: LifeStealResolverService,
+        private damageResolverService: DamageResolverService,
     ) { }
 
     resolve({ action, context }: ResolveActionInput<UseDamageSkillAction>): DamageSkillActionResolution {
@@ -118,6 +123,30 @@ export class DamageSkillActionResolver {
             target,
         })
 
+        const reflectionResult = this.reflectionResolverService.resolve({
+            attacker: context.actor,
+            target,
+            delivery: 'direct',
+            receivedDamage: totalAppliedDamage
+        })
+
+        let reflectedDmgResult: DamageResolutionResult | null = null
+
+        if (reflectionResult) {
+            reflectedDmgResult = this.damageResolverService.resolve({
+                attacker: reflectionResult.source,
+                target: reflectionResult.target,
+                damage: reflectionResult.damage,
+                damageType: reflectionResult.damageType,
+                sourceType: 'reflected',
+                reflectedFromDamageType: 'true'
+            })
+
+            this.reflectionResolverService.reflectionDmgResultRegister(
+                reflectionResult.source,
+                reflectedDmgResult)
+        }
+
 
         if (skill.cd.onActivate) {
             context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
@@ -141,6 +170,7 @@ export class DamageSkillActionResolver {
             hitCount: hitModifierResult.hitCount,
             hits,
             lifeSteal: lifeStealResult,
+            reflectedDmgResult,
             manaSpent: manaSpent.amount,
             remainingMana: manaSpent.manaAfter,
             skillId: skill.id,
@@ -166,6 +196,12 @@ export class DamageSkillActionResolver {
     ) {
         actor.statistics.registerResources({ manaSpent })
         actor.statistics.registerSkillUsed()
+
+        actor.statistics.registerHealing({
+            type: 'skill',
+            idSkill: skill.id,
+            amount: lifeStealResult.effectiveHealing
+        })
 
         hits.forEach(hit => hit.components.forEach(component => {
             actor.statistics.registerDamageDealt({

@@ -5,6 +5,7 @@ import { ContextualBonusService } from "../contextual-bonus.service";
 import { DmgMitigationResult, ResolveBasicAttackMitigationInput, ResolveDmgMitigationInput, ResolveSkillMitigationInput, ResolveStatusEffectMitigationInput } from "./dmg-mitigation-resolver.types";
 import { isPeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
 import { BONUS_EFFECTS_CONFIG } from "../../config/bonus-effects.config";
+import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 
 @Injectable()
 export class DmgMitigationResolverService {
@@ -111,6 +112,7 @@ export class DmgMitigationResolverService {
             getPossibbleSkillBonusMitigationPorcent(attacker, target, damageType)
 
         const effectiveBonusDefensePercent = this.calculateEffectiveSkillBonusDefense(
+            attacker,
             rawBonusDefensePercent,
             skill)
 
@@ -150,11 +152,16 @@ export class DmgMitigationResolverService {
         };
     }
 
-    private calculateEffectiveSkillBonusDefense(rawBonusDefensePercent: number, skill: SkillDamage): number {
-        if (!skill.mechanicsEffects) return rawBonusDefensePercent
-        if (!skill.mechanicsEffects.penetracion_habilidad) return rawBonusDefensePercent
+    private calculateEffectiveSkillBonusDefense(atttacker: FighterCombatEntity, rawBonusDefensePercent: number, skill: SkillDamage): number {
+        const characterPenetracion = atttacker.getEffectiveStatValue('bonus.daño.penetracion_habilidad')
+
+        let skillPenetracion = 0
+        if (skill.mechanicsEffects && skill.mechanicsEffects.penetracion_habilidad) {
+            skillPenetracion = skill.mechanicsEffects.penetracion_habilidad
+        }
+        const totalPenetration = characterPenetracion + skillPenetracion
         return Math.max(0, Math.floor(
-            rawBonusDefensePercent * (1 - skill.mechanicsEffects.penetracion_habilidad)
+            rawBonusDefensePercent * (1 - (totalPenetration / 100))
         )
         )
     }

@@ -46,6 +46,7 @@ import { LabFightService } from './lab/lab-fight.service';
 import { FightEngine } from './engine/fight-engine';
 import { InitiativeResolverService } from './services/resolvers/initiative-resolver.service';
 import { FightResultProcessorService } from './services/processors/fight-result-processor.service';
+import { ReflectionResolverService } from './services/resolvers/reflection-resolver.service';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { FightResultProcessorService } from './services/processors/fight-result-
     AuraActionResolverService,
     LabFightService,
     FightEngine,
+    ReflectionResolverService,
     FightResultProcessorService,
     InitiativeResolverService,
     BasicAttackActionResolverService,

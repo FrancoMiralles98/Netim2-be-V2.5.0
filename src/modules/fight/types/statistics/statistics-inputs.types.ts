@@ -61,6 +61,9 @@ export type RegisterDefensiveHitInput =
         result: 'received';
     }
     | {
+        result: 'reflected';
+    }
+    | {
         result: 'dodged';
     }
     | {
@@ -68,7 +71,7 @@ export type RegisterDefensiveHitInput =
         blockType: 'full' | 'partial';
     };
 
-export type RegisterHealingInput = GenericHealingInput | SkillHealingInput 
+export type RegisterHealingInput = GenericHealingInput | SkillHealingInput
 
 export interface GenericHealingInput {
     type: 'regeneration' | 'prevented' | 'basic_attack'

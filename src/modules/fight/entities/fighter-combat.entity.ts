@@ -310,7 +310,7 @@ export class FighterCombatEntity {
         const flatReduction = this.getEffectiveStatValue('bonus.defensa.mana_cost')
         const porcentualReduction = this.getEffectiveStatValue('bonus.defensa.porcentage_mana_cost')
 
-        const amountAfterFlatReduction = amount - flatReduction
+        const amountAfterFlatReduction = amount + flatReduction
         const amountAfterPorcentualReduction = amountAfterFlatReduction * (1 - porcentualReduction / 100)
 
         const normalizedAmount = Math.max(0, Math.floor(amountAfterPorcentualReduction))
@@ -527,6 +527,7 @@ export class FighterCombatEntity {
             initialTurns: finalTurns,
             remainingTurns: finalTurns
         };
+        
 
         this.props.cooldowns.set(skillId, cooldown);
 

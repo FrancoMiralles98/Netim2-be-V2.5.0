@@ -84,7 +84,7 @@ export class FightCombatStatisticsTracker {
         }
 
         if (input.damageType === undefined) {
-            throw new Error ('a la hora de registrar el daño mitigado se tiene que espeficiar el tipo de daño')
+            throw new Error('a la hora de registrar el daño mitigado se tiene que espeficiar el tipo de daño')
         }
 
 
@@ -118,6 +118,10 @@ export class FightCombatStatisticsTracker {
 
             case 'dodged':
                 this.state.hits.dodged += 1;
+                return;
+
+            case 'reflected':
+                this.state.hits.reflected += 1;
                 return;
 
             case 'blocked':

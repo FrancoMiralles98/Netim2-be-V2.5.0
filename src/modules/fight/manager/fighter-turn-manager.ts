@@ -39,6 +39,7 @@ export class FighterTurnManager {
         const startTurnResult = this.turnStartProcessor.process(context)
 
         const action = this.combatActionSelector.select(context, startTurnResult.canAct)
+
         const resolution = this.actionResolution.resolve(action, context, startTurnResult.canAct)
 
         /**

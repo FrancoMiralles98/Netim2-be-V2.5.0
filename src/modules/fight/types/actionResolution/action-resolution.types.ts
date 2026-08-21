@@ -84,6 +84,7 @@ export interface DamageSkillActionResolution
     cooldownRemainingTurns: number;
 
     lifeSteal: HealingResolution
+    reflectedDmgResult: DamageResolutionResult | null 
 
     hitCount: number;
     hits: DamageHitResolution[];
@@ -109,6 +110,7 @@ export interface BasicAttackActionResolution
     hitCount: number;
 
     lifeSteal: HealingResolution
+    reflectedDmgResult: DamageResolutionResult | null
 
     hits: BasicAttackHitResolution[];
     statusEffects: AppliedStatusEffectResolution[]

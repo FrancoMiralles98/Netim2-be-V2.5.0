@@ -12,13 +12,14 @@ export class SideTurnManager {
     ) { }
 
     executeNextTurn(fight: FightEntity): SideTurnExecutionResult {
-        const { side, turnNumber } = fight.beginNextTurn()   
+        const { side, turnNumber } = fight.beginNextTurn()
 
         const fighters = fight.getFightersOfSide(side)
 
         const actions: FighterTurnExecutionResult[] = []
 
         for (const fighter of fighters) {
+
             if (fight.isFinished) {
                 break
             }
@@ -33,7 +34,6 @@ export class SideTurnManager {
             }
 
             const result = this.figherTurnManager.execute(fight, fighter, turnNumber)
-
             actions.push(result)
 
             /*
@@ -46,8 +46,6 @@ export class SideTurnManager {
             const fightResult = fight.tryFinish();
 
             if (fightResult) {
-                console.log('llego finish');
-                
                 return {
                     turnNumber,
                     side,
