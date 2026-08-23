@@ -79,7 +79,7 @@ export class BasicAttackHitResolverService {
 
         const contextualBonusDamage = this.contextualBonusService.getPossibleBasicAttakBonusMultiplier(
             input.attacker, input.target
-        )
+        )        
 
         const criticalResult = this.criticalDamageResolverService.resolve(input.attacker);
 

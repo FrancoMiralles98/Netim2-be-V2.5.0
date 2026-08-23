@@ -58,7 +58,7 @@ export const STATUS_EFFECTS_CONFIG: Record<StatusEffectsKeys | 'corta_curacion',
             bonusTarget: ['bonus.daño.duracion_estado'],
         },
         damageBonusTarget: ['bonus.daño.bonus_estado','bonus.daño.bonus_electrico'],
-        extraDamageRatioPerStackThreshold: 4.2,
+        extraDamageRatioPerStackThreshold: 5.5,
         stacks: {
             initial: 1,
             max: 3,

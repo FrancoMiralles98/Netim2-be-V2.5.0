@@ -1,4 +1,4 @@
-import { DamageTag, DamageType, SkillDamage, SkillDamageFlags, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { DamageTag, DamageType, SkillDamage, SkillDamageFlags } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 
 export interface ResolveDamageInput {

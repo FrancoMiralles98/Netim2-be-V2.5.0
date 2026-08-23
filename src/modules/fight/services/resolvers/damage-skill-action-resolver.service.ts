@@ -56,6 +56,8 @@ export class DamageSkillActionResolver {
             target: target
         })
 
+        
+        
         const buffDamageMultiplier = this.buffManager.getSkillDamageMultiplier(context.actor, skill.id)
         const contextualBonusDmgMultiplier = this.contextualBonusService.getPossibleSkillBonusMultiplier(
             context.actor, target, skill)

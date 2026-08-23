@@ -13,7 +13,7 @@ export const GENERAL_CHARACTER_STATS: Stats = {
         hp: { actual: 900, max: 1000 },
         regen_hp: 10,
         va: 0,
-        vh: 100,
+        vh: 0,
         vm: 0
     },
     bonus: {

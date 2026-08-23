@@ -17,7 +17,7 @@ export class LabFightService {
             console.log('llego pelea');
 
             const { fighterA, fighterB, fighterC } = this.getFighter()
-            const result = this.fightEngine.executeLab([fighterA], [fighterB], 2)
+            const result = this.fightEngine.executeLab([fighterA], [fighterB], 10)
             console.dir(result.result, { depth: null });
             console.dir(result.initiativeResults, { depth: null });
             console.dir(result.fighters, { depth: null });
@@ -36,19 +36,24 @@ export class LabFightService {
             name: 'Guerrero',
             skills: [
                 {
-                    id: UNIQUE_ID_SKILLS.GIRO_DE_ESPADA,
-                    type: 'damage',
-                    cd: { onActivate: 10 },
-                    components: [{
-                        damageType: 'ad',
-                        range: { min: 100, max: 100 },
-                        tags: ['ad', 'skill'],
-                    }],
-                    description: 'gira gira',
+                    type: 'aura',
+                    cd: { onActivate: 30 },
+                    duration: {
+                        turns: 4,
+                        type: 'turns'
+                    },
+                    description: '',
+                    id: UNIQUE_ID_SKILLS.AURA_DE_ESPADA,
                     lv: 1,
-                    mana: {type:'instant',amount: 20},
-                    nombre: 'Sigue girando',
-                    weaponRestricted: ['espada','dos_manos'],
+                    mana: { initialAmount: 10, amountPerTurn: 3, type: 'upkeep' },
+                    nombre: 'aura',
+                    statsModifiers: [{
+                        bonusRefKey: 'media',
+                        target: 'bonus.daño.media',
+                        operation: 'flat',
+                        value: 1
+                    }],
+                    tags: []
                 }
             ],
             stats: GENERAL_CHARACTER_STATS,

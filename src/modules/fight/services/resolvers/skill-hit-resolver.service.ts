@@ -49,9 +49,6 @@ export class SkillHitResolver {
                 criticalResult.multiplier
             ))
 
-            console.log('bonus', dmgMultiplierPerHit, skillDamageMultiplier, contextualBonusDamageMultiplier, buffDamageMultiplier, buffDamageMultiplier, criticalResult.multiplier);
-
-
             const damageResult = this.damageResolverService.resolve({
                 sourceType: 'skill',
                 attacker,
