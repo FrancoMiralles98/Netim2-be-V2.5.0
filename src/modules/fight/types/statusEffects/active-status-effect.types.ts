@@ -1,6 +1,5 @@
-import { DurationConfig, StatusEffectsKeys } from "netim2-shared";
+import { CombatStatModifier, DurationConfig, StatusEffectsKeys } from "netim2-shared";
 import { ActiveStatusEffectData } from "./effect-data.types";
-import { CombatStatModifier } from "../activeAura/active-aura.type";
 
 export interface CreateActiveStatusEffectProps {
     instanceId: string;

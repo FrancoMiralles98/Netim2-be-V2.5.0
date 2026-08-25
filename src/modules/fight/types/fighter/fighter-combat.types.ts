@@ -1,11 +1,9 @@
-import { AllTargetType, CharacterRace, SkillType, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { AllTargetType, CharacterRace, CombatStatModifier, FighterBaseStats, SkillType, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { TypeWeapon } from "netim2-shared/dist/item/entities-props/equip.type";
-import { FighterBaseStats } from "./fight-base-stats.type";
 import { ActiveAuraEntity } from "../../entities/active-aura.entity";
 import { ActiveBuffEntity } from "../../entities/active-buff.entity";
 import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
 import { FightCombatStatisticsTracker } from "../../statistics/fight-combat-statistics.tracker";
-import { CombatStatModifier } from "../activeAura/active-aura.type";
 import { FightConfig } from "netim2-shared/dist/character/character-fight-config.type";
 
 export interface CreateFighterCombatProps {

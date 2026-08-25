@@ -1,43 +1,7 @@
+import { FightPhase, FightResult, FightSide, FightStatus } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { SideTurnExecutionResult } from "../side/side.types";
 
-export type FightPhase =
-    | 'setup'
-    | 'between_turns'
-    | 'turn_started'
-    | 'cooldowns'
-    | 'aura_upkeep'
-    | 'periodic_effects'
-    | 'regeneration'
-    | 'action_selection'
-    | 'action_resolution'
-    | 'turn_end'
-    | 'finished';
-
-export type FightEndReason =
-    | 'fighter_defeated'
-    | 'simultaneous_defeat'
-    | 'team_defeated'
-    | 'max_turns_reached'
-    | 'stalemate';
-
-export interface FightResult {
-    outcome: 'winner' | 'draw';
-
-    winnerFighterId?: string;
-
-    survivingFighterIds: string[];
-
-    winnerSide?: FightSide;
-
-    winnerFighterIds?: string[];
-
-    defeatedFighterIds: string[];
-
-    reason: FightEndReason;
-
-    finishedOnTurn: number;
-}
 
 export interface FighterInitiativeResult {
     fighterId: string;
@@ -76,16 +40,6 @@ export interface FightRuntimeState {
     result?: FightResult;
 }
 
-export type FightStatus =
-    | 'pending'
-    | 'in_progress'
-    | 'finished';
-
-export interface FightIdentity {
-    id: string;
-    randomSeed: string;
-    maxTurns: number;
-}
 
 export interface FightExecutionResult {
     fightId: string;
@@ -94,7 +48,3 @@ export interface FightExecutionResult {
 
     result: FightResult;
 }
-
-export type FightSide =
-    | 'allies'
-    | 'enemies';

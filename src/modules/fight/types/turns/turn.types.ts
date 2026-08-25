@@ -1,7 +1,5 @@
+import { CombatAction, FightEvent, FightResult, FightSide } from "netim2-shared";
 import { ActionResolution, PeriodicStatusEffectResolution } from "../actionResolution/action-resolution.types";
-import { CombatAction } from "../combatAction/combat-action.types";
-import { FightResult, FightSide } from "../fight/fight.type";
-import { FightEvent } from "../fightEvents/fight-event.types";
 
 export interface FighterTurnExecutionResult {
     turnNumber: number;

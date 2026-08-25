@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { TurnContext } from "../../types/fight/fight-context.types";
-import { UseDamageSkillAction } from "../../types/combatAction/combat-action.types";
 import { SharedFightService } from "../shared-fight.service";
 import { DamageCalculatorService } from "../damage-calculator.service";
-import { SkillDamage, SkillPriorityType, StatusEffectsKeys, TypeWeapon } from "netim2-shared";
+import { SkillDamage, SkillPriorityType, StatusEffectsKeys, TypeWeapon, UseDamageSkillAction } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { PERIODIC_DAMAGE_EFFECTS, REFRESHABLE_PRIORITY_EFFECTS } from "../../config/priority-effects.config";
 

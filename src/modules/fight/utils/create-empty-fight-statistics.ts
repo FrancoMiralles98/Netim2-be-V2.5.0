@@ -1,4 +1,4 @@
-import { FighterCombatStatisticsState } from "../types/statistics/fighter-combat-statistics.type";
+import { FighterCombatStatisticsState } from "netim2-shared";
 
 export const createEmptyFighterCombatStatisticsState =
     (): FighterCombatStatisticsState => ({

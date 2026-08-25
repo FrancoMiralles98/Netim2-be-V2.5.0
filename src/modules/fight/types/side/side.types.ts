@@ -1,4 +1,4 @@
-import { FightResult, FightSide } from "../fight/fight.type";
+import { FightResult, FightSide } from "netim2-shared";
 import { FighterTurnExecutionResult } from "../turns/turn.types";
 
 export interface SideTurnExecutionResult {

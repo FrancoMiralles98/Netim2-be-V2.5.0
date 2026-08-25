@@ -1,5 +1,4 @@
-import { DamageCondition, SkillDamage, StatsModifiers, StatsScaling, StatusEffectsKeys } from "netim2-shared";
-import { CombatStatKey } from "../../types/activeAura/active-aura.type";
+import { CombatStatKey, DamageCondition, SkillDamage, StatsModifiers, StatsScaling, StatusEffectsKeys } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
 

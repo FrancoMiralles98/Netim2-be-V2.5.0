@@ -1,4 +1,5 @@
-import { CreateFightProps, FighterInitiativeResult, FightIdentity, FightPhase, FightResult, FightRuntimeState, FightSide, FightStatus } from "../types/fight/fight.type";
+import { FightIdentity, FightPhase, FightResult, FightSide, FightStatus } from "netim2-shared";
+import { CreateFightProps, FighterInitiativeResult, FightRuntimeState } from "../types/fight/fight.type";
 import { FighterCombatEntity } from "./fighter-combat.entity";
 
 export class FightEntity {

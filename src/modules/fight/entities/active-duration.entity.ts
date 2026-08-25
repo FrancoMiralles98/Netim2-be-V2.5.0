@@ -1,5 +1,4 @@
-import { DurationConfig } from "netim2-shared";
-import { ActiveDurationAdvanceResult } from "../types/activeDuration/activeDuration.types";
+import { ActiveDurationAdvanceResult, DurationConfig } from "netim2-shared";
 
 export class ActiveDurationEntity {
     private constructor(

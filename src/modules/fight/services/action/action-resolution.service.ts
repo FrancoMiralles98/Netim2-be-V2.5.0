@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { CombatAction } from "../../types/combatAction/combat-action.types";
 import { TurnContext } from "../../types/fight/fight-context.types";
 import { ActionResolution } from "../../types/actionResolution/action-resolution.types";
 import { AuraActionResolverService } from "../resolvers/aura-action-resolver.service";
@@ -7,6 +6,7 @@ import { BuffActionResolver } from "../resolvers/buff-action-resolver.service";
 import { HealingSkillActionResolverService } from "../resolvers/healing-skill-action-resolver.service";
 import { DamageSkillActionResolver } from "../resolvers/damage-skill-action-resolver.service";
 import { BasicAttackActionResolverService } from "../resolvers/basic-attack-action-resolver.service";
+import { CombatAction } from "netim2-shared";
 
 @Injectable()
 export class ActionResolutionService {

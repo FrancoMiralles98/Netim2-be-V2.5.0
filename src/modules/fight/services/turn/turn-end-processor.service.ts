@@ -1,11 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { TurnEndResult } from "../../types/turns/turn.types";
-import { CombatAction } from "../../types/combatAction/combat-action.types";
 import { ActionResolution } from "../../types/actionResolution/action-resolution.types";
 import { TurnContext } from "../../types/fight/fight-context.types";
 import { AuraManager } from "../../manager/aura-manager";
 import { StatusEffectManager } from "../../manager/status-effect-manager";
 import { BuffManager } from "../../manager/buff-manager";
+import { CombatAction } from "netim2-shared";
 
 @Injectable()
 export class TurnEndProcessorService {

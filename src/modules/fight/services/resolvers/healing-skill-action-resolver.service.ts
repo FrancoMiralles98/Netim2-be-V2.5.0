@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { HealingSkillActionResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
-import { UseHealingSkillAction } from "../../types/combatAction/combat-action.types";
 import { SharedFightService } from "../shared-fight.service";
-import { SkillHeal, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { SkillHeal, UNIQUE_ID_SKILLS, UseHealingSkillAction } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { HealingResolverService } from "./healing-resolver.service";

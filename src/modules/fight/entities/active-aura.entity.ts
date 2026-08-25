@@ -1,5 +1,4 @@
-import { SkillAura, UNIQUE_ID_SKILLS } from "netim2-shared";
-import { CombatStatModifier, CreateActiveAuraProps } from "../types/activeAura/active-aura.type";
+import { CombatStatModifier, CreateActiveAuraProps, SkillAura, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { ActiveDurationEntity } from "./active-duration.entity";
 
 export class ActiveAuraEntity {

@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { TurnContext } from "../../types/fight/fight-context.types";
-import { CastAuraAction, CastBuffAction, CombatAction, UseHealingSkillAction } from "../../types/combatAction/combat-action.types";
 import { SharedFightService } from "../shared-fight.service";
 import { TargetSelectorService } from "./target-selector.service";
 import { SkillDamageSelectorService } from "./skill-damage-selector.service";
+import { CastAuraAction, CastBuffAction, CombatAction, UseHealingSkillAction } from "netim2-shared";
 
 @Injectable()
 export class CombatActionSelectorService {

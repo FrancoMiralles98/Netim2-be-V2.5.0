@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { AuraActionResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
-import { CastAuraAction } from "../../types/combatAction/combat-action.types";
 import { SharedFightService } from "../shared-fight.service";
-import { SkillAura } from "netim2-shared";
+import { CastAuraAction, SkillAura } from "netim2-shared";
 import { AuraStatModifierInput } from "../../types/auraManager/auraManager.types";
 import { AuraManager } from "../../manager/aura-manager";
 

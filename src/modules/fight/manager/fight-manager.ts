@@ -2,9 +2,9 @@ import { Injectable } from "@nestjs/common";
 import { FightEntity } from "../entities/fight.entity";
 import { SideTurnExecutionResult } from "../types/side/side.types";
 import { SideTurnManager } from "./side-turn-manger";
-import { FightEvent } from "../types/fightEvents/fight-event.types";
 import { FightResultProcessorService } from "../services/processors/fight-result-processor.service";
 import { FightProcessedResult } from "../services/processors/fight-result-processor.types";
+import { FightEvent } from "netim2-shared";
 
 @Injectable()
 export class FightManager {

@@ -1,4 +1,4 @@
-import { DurationConfig, StatsModifiers, StatusEffectsKeys } from "netim2-shared";
+import { DurationConfig, StatsModifiers } from "netim2-shared";
 import { ActiveStatusEffectData } from "../statusEffects/effect-data.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { ActiveStatusEffectId } from "../statusEffects/active-status-effect.types";

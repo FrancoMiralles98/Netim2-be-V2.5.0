@@ -1,8 +1,5 @@
-import { UNIQUE_ID_SKILLS } from "netim2-shared";
-import { CombatStatModifier } from "../types/activeAura/active-aura.type";
-import { ActiveBuffEffect, ActiveNextSkillDamageMultiplier, ConsumeBuffForSkillResult, CreateActiveBuffProps } from "../types/activeBuff/activeBuff.type";
+import { ActiveBuffEffect, ActiveDurationAdvanceResult, ActiveNextSkillDamageMultiplier, CombatStatModifier, ConsumeBuffForSkillResult, CreateActiveBuffProps, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { ActiveDurationEntity } from "./active-duration.entity";
-import { ActiveDurationAdvanceResult } from "../types/activeDuration/activeDuration.types";
 
 export class ActiveBuffEntity {
     private readonly instanceId: string;

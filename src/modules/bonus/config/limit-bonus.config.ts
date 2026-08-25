@@ -1,5 +1,4 @@
-import { BonusRefKeys } from "netim2-shared";
-import { CombatStatKey } from "src/modules/fight/types/activeAura/active-aura.type";
+import { BonusRefKeys, CombatStatKey } from "netim2-shared";
 
 /**
  * Configuración de límites máximos para cada tipo de bonus

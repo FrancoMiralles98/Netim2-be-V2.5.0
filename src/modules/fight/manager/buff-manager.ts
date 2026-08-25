@@ -3,8 +3,7 @@ import { ActiveBuffEntity } from "../entities/active-buff.entity";
 import { randomUUID } from "crypto";
 import { ActivateBuffInput, BuffDeactivationResult, ConsumeBuffsForSkillInput, ConsumeBuffsForSkillResult, ConsumedBuffResult, DeactivateBuffInput } from "../types/buffmanager/buff-manager.types";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
-import { StatsModifiers, UNIQUE_ID_SKILLS } from "netim2-shared";
-import { CombatStatModifier } from "../types/activeAura/active-aura.type";
+import { CombatStatModifier, StatsModifiers, UNIQUE_ID_SKILLS } from "netim2-shared";
 
 @Injectable()
 export class BuffManager {

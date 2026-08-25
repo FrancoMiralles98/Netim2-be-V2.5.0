@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { DamageDelivery } from "../../types/statistics/damage-statistics.types";
 import { ReflectionResult } from "./reflection-resolver.types";
 import { BONUS_EFFECTS_CONFIG } from "../../config/bonus-effects.config";
 import { DamageResolutionResult } from "./damage-resolver.types";
+import { DamageDelivery } from "netim2-shared";
 
 @Injectable()
 export class ReflectionResolverService {

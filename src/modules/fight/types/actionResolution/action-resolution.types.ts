@@ -1,5 +1,4 @@
-import { UNIQUE_ID_SKILLS } from "netim2-shared";
-import { CombatAction } from "../combatAction/combat-action.types";
+import { CombatAction, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { TurnContext } from "../fight/fight-context.types";
 import { AppliedStatusEffectResolution, DamageHitResolution } from "../../services/resolvers/dama-skill-action-resolver.types";
 import { HealingResolution } from "../../services/resolvers/healing-resolver.types";

@@ -1,7 +1,4 @@
-import { DamageType, UNIQUE_ID_SKILLS } from "netim2-shared";
-import { DamageDealStatistics } from "../types/statistics/damage-statistics.types";
-import { FighterCombatStatisticsState } from "../types/statistics/fighter-combat-statistics.type";
-import { RegisterAttackHitsInput, RegisterDamageDealtInput, RegisterDamageMitigatedInput, RegisterDefensiveHitInput, RegisteredDamageSource, RegisterEffectsInput, RegisterHealingInput, RegisterOffensiveHitInput, RegisterResourceInput } from "../types/statistics/statistics-inputs.types";
+import { DamageDealStatistics, DamageType, FighterCombatStatisticsState, RegisterAttackHitsInput, RegisterDamageDealtInput, RegisterDamageMitigatedInput, RegisterDefensiveHitInput, RegisteredDamageSource, RegisterEffectsInput, RegisterHealingInput, RegisterOffensiveHitInput, RegisterResourceInput, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { createEmptyFighterCombatStatisticsState } from "../utils/create-empty-fight-statistics";
 
 export class FightCombatStatisticsTracker {

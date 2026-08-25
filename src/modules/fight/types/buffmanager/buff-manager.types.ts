@@ -1,6 +1,5 @@
-import { SkillBuff, StatsModifiers, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { ActiveBuffEffect, ActiveNextSkillDamageMultiplier, SkillBuff, StatsModifiers, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { ActiveBuffEffect, ActiveNextSkillDamageMultiplier } from "../activeBuff/activeBuff.type";
 import { ActiveBuffEntity } from "../../entities/active-buff.entity";
 
 export interface ConsumedBuffResult {

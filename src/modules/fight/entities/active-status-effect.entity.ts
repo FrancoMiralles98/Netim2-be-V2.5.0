@@ -1,8 +1,7 @@
-import { StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { CombatStatModifier, StatusEffectsKeys, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { ActiveStatusEffectId, CreateActiveStatusEffectProps, StatusEffectStackProcResult } from "../types/statusEffects/active-status-effect.types";
 import { ActiveDurationEntity } from "./active-duration.entity";
 import { ActiveStatusEffectData, isPeriodicDamageEffectData } from "../types/statusEffects/effect-data.types";
-import { CombatStatModifier } from "../types/activeAura/active-aura.type";
 
 export class ActiveStatusEffectEntity {
     private readonly instanceId: string;

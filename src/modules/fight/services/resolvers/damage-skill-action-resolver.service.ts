@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { DamageSkillActionResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
-import { UseDamageSkillAction } from "../../types/combatAction/combat-action.types";
 import { AppliedStatusEffectResolution, DamageHitResolution } from "./dama-skill-action-resolver.types";
 import { SharedFightService } from "../shared-fight.service";
 import { HitModifiersResolverService } from "./hit-modifiers-resolver.service";
@@ -13,7 +12,7 @@ import { StatusEffectApplicationResolverService } from "./status-effect-applicat
 import { LifeStealResolverService } from "./life-steal-resolver.service";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { FightEntity } from "../../entities/fight.entity";
-import { SkillDamage } from "netim2-shared";
+import { SkillDamage, UseDamageSkillAction } from "netim2-shared";
 import { HealingResolution } from "./healing-resolver.types";
 import { DamageResolutionResult } from "./damage-resolver.types";
 import { ReflectionResolverService } from "./reflection-resolver.service";

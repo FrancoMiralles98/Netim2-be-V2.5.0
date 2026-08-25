@@ -1,6 +1,5 @@
-import { SkillAura, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { CombatStatKey, CombatStatModifierOperation, SkillAura, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { CombatStatKey, CombatStatModifierOperation } from "../activeAura/active-aura.type";
 import { ActiveAuraEntity } from "../../entities/active-aura.entity";
 
 export interface ActivateAuraInput {

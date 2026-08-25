@@ -1,7 +1,5 @@
-import { AllTargetType, BonusRefKeys, CharacterRace, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, TypeWeapon, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { AllTargetType, BonusRefKeys, CharacterRace, CombatStatKey, CombatStatModifier, FighterBaseStats, SkillAura, SkillBuff, SkillDamage, SkillHeal, SkillType, StatusEffectsKeys, TypeWeapon, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FightCombatStatisticsTracker } from "../statistics/fight-combat-statistics.tracker";
-import { CombatStatKey, CombatStatModifier } from "../types/activeAura/active-aura.type";
-import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
 import { CreateFighterCombatProps, FighterCombatProps, FighterResources, RestoreManaResult, SkillCooldownState } from "../types/fighter/fighter-combat.types";
 import { ActiveAuraEntity } from "./active-aura.entity";
 import { ActiveBuffEntity } from "./active-buff.entity";

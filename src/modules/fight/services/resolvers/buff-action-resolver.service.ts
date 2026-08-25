@@ -1,10 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { SharedFightService } from "../shared-fight.service";
 import { BuffActionResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
-import { CastBuffAction } from "../../types/combatAction/combat-action.types";
 import { BuffManager } from "../../manager/buff-manager";
-import { ActiveBuffEffect } from "../../types/activeBuff/activeBuff.type";
-import { SkillBuff } from "netim2-shared";
+import { ActiveBuffEffect, CastBuffAction, SkillBuff } from "netim2-shared";
 
 @Injectable()
 export class BuffActionResolver {

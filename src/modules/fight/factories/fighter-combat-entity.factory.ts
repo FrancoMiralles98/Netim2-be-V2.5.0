@@ -1,8 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { FighterCombatCreationInput } from "./fighter-combat-factory.types";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
-import { FighterBaseStats } from "../types/fighter/fight-base-stats.type";
-import { CharacterPersistence, CharacterPersistenceWithId, Stats, TypeWeapon } from "netim2-shared";
+import { CharacterPersistence, CharacterPersistenceWithId, FighterBaseStats, Stats, TypeWeapon } from "netim2-shared";
 import { MobModel } from "src/modules/mob/schema/mob.schema";
 import { randomUUID } from "crypto";
 

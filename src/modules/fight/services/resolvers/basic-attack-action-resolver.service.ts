@@ -1,6 +1,5 @@
 import { Injectable } from "@nestjs/common";
 import { BasicAttackActionResolution, BasicAttackHitResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
-import { BasicAttackAction } from "../../types/combatAction/combat-action.types";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { BasicAttackHitResolverService } from "./basic-attack-hit-resolver.service";
 import { StatusEffectApplicationResolverService } from "./status-effect-application-resolver.service";
@@ -13,6 +12,7 @@ import { FightEntity } from "../../entities/fight.entity";
 import { ReflectionResolverService } from "./reflection-resolver.service";
 import { DamageResolverService } from "./damage-resolver.service";
 import { DamageResolutionResult } from "./damage-resolver.types";
+import { BasicAttackAction } from "netim2-shared";
 
 @Injectable()
 export class BasicAttackActionResolverService {

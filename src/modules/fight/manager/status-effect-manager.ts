@@ -3,8 +3,7 @@ import { ApplyStatusEffectInput } from "../types/statusEffectManager/status-Effe
 import { ActiveStatusEffectEntity } from "../entities/active-status-effect.entity";
 import { randomUUID } from "crypto";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
-import { StatsModifiers, StatusEffectsKeys } from "netim2-shared";
-import { CombatStatModifier } from "../types/activeAura/active-aura.type";
+import { CombatStatModifier, StatsModifiers, StatusEffectsKeys } from "netim2-shared";
 import { isPeriodicDamageEffectData } from "../types/statusEffects/effect-data.types";
 import { ActiveStatusEffectId } from "../types/statusEffects/active-status-effect.types";
 

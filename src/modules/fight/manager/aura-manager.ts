@@ -2,8 +2,7 @@ import { randomUUID } from "crypto";
 import { ActiveAuraEntity } from "../entities/active-aura.entity";
 import { ActivateAuraInput, AuraDeactivationResult, AuraStatModifierInput, DeactivateAllOwnedAurasInput, DeactivateAuraBySkillIdInput, DeactivateAuraInput } from "../types/auraManager/auraManager.types";
 import { Injectable } from "@nestjs/common";
-import { UNIQUE_ID_SKILLS } from "netim2-shared";
-import { CombatStatModifier } from "../types/activeAura/active-aura.type";
+import { CombatStatModifier, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 
 @Injectable()
