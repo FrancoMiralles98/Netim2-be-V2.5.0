@@ -27,7 +27,6 @@ export class FighterTurnManager {
             events: []
         }
 
-        //tipo de evento agragado: Inicio del Turno"
         context.events.push({
             type: 'turn_started',
             actorId: context.actor.id,
@@ -51,6 +50,17 @@ export class FighterTurnManager {
             context,
             resolution,
             startTurnResult
+        })
+
+        context.events.push({
+            type: 'turn_ended',
+            actorAlive: actor.isAlive(),
+            actorCurrentHp: actor.getCurrentHp(),
+            actorCurrentMana: actor.getCurrentMana(),
+            actorId: actor.id,
+            eventId: randomUUID(),
+            fightId: fight.id,
+            turnNumber
         })
 
         return {

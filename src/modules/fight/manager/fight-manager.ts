@@ -24,12 +24,11 @@ export class FightManager {
         while (!fight.isFinished) {
             const turn = this.sideTurnManager.executeNextTurn(fight);
             turns.push(turn);
-
             turn.actions.forEach(action => {
                 events.push(...action.events)
             });
         }
-            
+
         return this.fightResultProcessorService.process(
             fight,
             turns,

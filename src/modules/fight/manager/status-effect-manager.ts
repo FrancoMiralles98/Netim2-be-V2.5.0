@@ -74,7 +74,7 @@ export class StatusEffectManager {
     }
 
     advanceTurn(target: FighterCombatEntity, currentTurn: number): ActiveStatusEffectEntity[] {
-        const expired: ActiveStatusEffectEntity[] = [];
+        const updatedStatus: ActiveStatusEffectEntity[] = [];
 
         const activeEffects = target.getActiveStatusEffects();
 
@@ -96,11 +96,11 @@ export class StatusEffectManager {
 
             if (durationResult.expired) {
                 this.deactivate(target, effect);
-                expired.push(effect);
             }
+            updatedStatus.push(effect);
         }
 
-        return expired;
+        return updatedStatus;
     }
 
     private handleReapplication(

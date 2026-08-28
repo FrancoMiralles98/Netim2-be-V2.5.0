@@ -8,6 +8,8 @@ import { DamageResolverService } from "./damage-resolver.service";
 import { PeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
 import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
 import { DamageResolutionResult } from "./damage-resolver.types";
+import { TurnContext } from "../../types/fight/fight-context.types";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class PeriodicStatusEffectResolverService {
@@ -18,7 +20,8 @@ export class PeriodicStatusEffectResolverService {
     resolve(input: {
         fight: FightEntity,
         target: FighterCombatEntity,
-        effect: ActiveStatusEffectEntity
+        effect: ActiveStatusEffectEntity,
+        context: TurnContext
     }): PeriodicStatusEffectResolution {
 
         if (!input.effect.isActive()) {
@@ -44,6 +47,20 @@ export class PeriodicStatusEffectResolverService {
             //esta prop (damageType) no se usa.
         })
 
+        input.context.events.push({
+            type: 'status_effect_ticked',
+            effectId: input.effect.getEffectId(),
+            appliedDamage: tickDamage.effectiveDamage,
+            effectInstanceId: input.effect.getInstanceId(),
+            eventId: randomUUID(),
+            fightId: input.fight.id,
+            remainingTurns: input.effect.getRemainingTurns() ?? 0,
+            sourceFighterId: source.id,
+            targetCurrentHp: tickDamage.hpAfter,
+            targetFighterId: input.target.id,
+            turnNumber: input.context.turnNumber
+        })
+
         let totalAppliedDamage = tickDamage.effectiveDamage
 
         let stackProc: PeriodicStatusEffectResolution['stackProc'];
@@ -58,6 +75,20 @@ export class PeriodicStatusEffectResolverService {
 
             if (stackProc) {
                 totalAppliedDamage += stackProc.damage.effectiveDamage;
+
+                input.context.events.push({
+                    type: 'status_effect_stack_proc',
+                    appliedDamage: stackProc.damage.effectiveDamage,
+                    currentStacks: stackProc.remainingStacks,
+                    effectId: input.effect.getEffectId(),
+                    effectInstanceId: input.effect.getInstanceId(),
+                    eventId: randomUUID(),
+                    fightId: input.context.fight.id,
+                    sourceFighterId: source.id,
+                    targetCurrentHp: stackProc.damage.hpAfter,
+                    targetFighterId: input.target.id,
+                    turnNumber: input.context.turnNumber
+                })
             }
         }
 

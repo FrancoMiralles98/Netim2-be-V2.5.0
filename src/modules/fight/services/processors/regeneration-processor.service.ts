@@ -5,6 +5,7 @@ import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { FightEntity } from "../../entities/fight.entity";
 import { HealingResolution } from "../resolvers/healing-resolver.types";
 import { RestoreManaResult } from "../../types/fighter/fighter-combat.types";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class RegenerationProcessorService {
@@ -20,10 +21,42 @@ export class RegenerationProcessorService {
             source: 'regeneration'
         })
 
+        if (healingResult.effectiveHealing > 0) {
+            context.events.push({
+                type: 'resource_changed',
+                resource: 'hp',
+                previousValue: healingResult.hpBefore,
+                currentValue: healingResult.hpAfter,
+                amount: healingResult.effectiveHealing,
+                eventId: randomUUID(),
+                fighterId: context.actor.id,
+                fightId: context.fight.id,
+                reason: 'hp_regeneration',
+                turnNumber: context.turnNumber
+            })
+        }
+
         const manaResult = context.actor.restoreMana(regenValues.mana)
+
+        if (manaResult.effectiveRestoration > 0) {
+            context.events.push({
+                type: 'resource_changed',
+                resource: 'mana',
+                previousValue: manaResult.manaBefore,
+                currentValue: manaResult.manaAfter,
+                amount: manaResult.effectiveRestoration,
+                eventId: randomUUID(),
+                fighterId: context.actor.id,
+                fightId: context.fight.id,
+                reason: 'mana_regeneration',
+                turnNumber: context.turnNumber
+            })
+        }
+
 
         this.regenerationStatisticRegister(context.actor, context.fight, healingResult, manaResult)
     }
+
 
     private regenerationStatisticRegister(
         actor: FighterCombatEntity,

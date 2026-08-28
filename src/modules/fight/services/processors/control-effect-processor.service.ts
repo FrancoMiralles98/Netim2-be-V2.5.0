@@ -12,7 +12,7 @@ export class ControlEffectProcessorService {
 
     constructor(
         private statusEffectManager: StatusEffectManager
-    ){}
+    ) { }
 
     process(context: TurnContext): ControlEffectProcessorResult {
         const result: ControlEffectProcessorResult = {
@@ -30,11 +30,25 @@ export class ControlEffectProcessorService {
 
             if (!isControlDamageEffectData(data)) continue
 
-            const processedEffect = this.processControlEffect(context.actor, effect, data, context)
+            const processedEffect = this.processControlEffect(context.actor, effect)
 
-            if (processedEffect.preventedAction) {
+            if (processedEffect.preventedAction && !processedEffect.expired) {
                 result.canAct = false;
                 context.actor.statistics.registerSkippedTurnByStun()
+
+                context.events.push({
+                    type: 'control_effect_processed',
+                    controlType: 'stun',
+                    effectId: effect.getEffectId(),
+                    effectInstanceId: effect.getInstanceId(),
+                    eventId: randomUUID(),
+                    expired: false,
+                    fighterId: context.actor.id,
+                    fightId: context.fight.id,
+                    preventedAction: processedEffect.preventedAction,
+                    turnNumber: context.turnNumber,
+                    remainingTurns: processedEffect.remainingTurns ?? 0
+                })
             }
         }
 
@@ -44,8 +58,6 @@ export class ControlEffectProcessorService {
     private processControlEffect(
         actor: FighterCombatEntity,
         effect: ActiveStatusEffectEntity,
-        data: ControlEffect,
-        context: TurnContext,
     ): ProcessedControlEffect {
 
         effect.consumeTurn()
@@ -54,22 +66,8 @@ export class ControlEffectProcessorService {
 
         const remainingTurns = effect.getRemainingTurns();
 
-        context.events.push({
-            type: 'control_effect_processed',
-            turnNumber: context.turnNumber,
-            fighterId: actor.id,
-            effectInstanceId: effect.getInstanceId(),
-            effectId: effect.getEffectId(),
-            controlType: "stun",
-            expired,
-            eventId: randomUUID(),
-            fightId: context.fight.id,
-            preventedAction: !effect.isExpired(),
-            remainingTurns,
-        })
-
         if (expired) {
-            this.statusEffectManager.deactivate(actor,effect)
+            this.statusEffectManager.deactivate(actor, effect)
         }
 
         return {

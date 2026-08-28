@@ -34,3 +34,8 @@ export interface DeactivateAuraBySkillIdInput {
     owner: FighterCombatEntity;
     skillId: UNIQUE_ID_SKILLS;
 }
+
+export interface ProcessAuraDuration {
+    aura: ActiveAuraEntity
+    remainingTurns?: number
+}

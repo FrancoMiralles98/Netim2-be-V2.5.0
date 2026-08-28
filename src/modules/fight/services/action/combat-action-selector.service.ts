@@ -4,6 +4,7 @@ import { SharedFightService } from "../shared-fight.service";
 import { TargetSelectorService } from "./target-selector.service";
 import { SkillDamageSelectorService } from "./skill-damage-selector.service";
 import { CastAuraAction, CastBuffAction, CombatAction, UseHealingSkillAction } from "netim2-shared";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class CombatActionSelectorService {
@@ -22,21 +23,67 @@ export class CombatActionSelectorService {
         }
         const healingAction = this.selectAvailableHealingSkill(context)
         if (healingAction) {
+            context.events.push({
+                type: 'action_selected',
+                action: {
+                    type: 'use_healing_skill',
+                    skillId: healingAction.skillId,
+                    targetId: healingAction.targetId
+                },
+                actorId: context.actor.id,
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                turnNumber: context.turnNumber
+            })
             return healingAction
         }
 
         const auraAction = this.selectAvailableAura(context)
         if (auraAction) {
+            context.events.push({
+                type: 'action_selected',
+                action: {
+                    type: 'cast_aura',
+                    skillId: auraAction.skillId,
+                },
+                actorId: context.actor.id,
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                turnNumber: context.turnNumber
+            })
             return auraAction
         }
         const buffAction = this.selectAvailableBuff(context)
         if (buffAction) {
+            context.events.push({
+                type: 'action_selected',
+                action: {
+                    type: 'cast_buff',
+                    skillId: buffAction.skillId,
+                    targetId: buffAction.targetId
+                },
+                actorId: context.actor.id,
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                turnNumber: context.turnNumber
+            })
             return buffAction
         }
 
         const targetId = this.targetSelectorService.selectTarget(context)
 
         if (context.actor.fightConfig.self.priorityBassicAttack) {
+            context.events.push({
+                type: 'action_selected',
+                action: {
+                    type: 'basic_attack',
+                    targetId: targetId
+                },
+                actorId: context.actor.id,
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                turnNumber: context.turnNumber
+            })
             return {
                 type: 'basic_attack',
                 targetId
@@ -45,8 +92,32 @@ export class CombatActionSelectorService {
 
         const skillAction = this.skillDamageSelectorService.trySelectAvailableDamageSkill(context, targetId)
         if (skillAction) {
+            context.events.push({
+                type: 'action_selected',
+                action: {
+                    type: 'use_damage_skill',
+                    skillId: skillAction.skillId,
+                    targetId: skillAction.targetId
+                },
+                actorId: context.actor.id,
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                turnNumber: context.turnNumber
+            })
             return skillAction
         }
+
+        context.events.push({
+            type: 'action_selected',
+            action: {
+                type: 'basic_attack',
+                targetId: targetId
+            },
+            actorId: context.actor.id,
+            eventId: randomUUID(),
+            fightId: context.fight.id,
+            turnNumber: context.turnNumber
+        })
 
         return {
             type: 'basic_attack',

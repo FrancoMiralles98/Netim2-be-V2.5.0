@@ -4,6 +4,7 @@ import { SkillHitResolverInput } from "./skill-hit-resolver.types";
 import { CriticalDamageResolverService } from "./critical-damage-resolver.service";
 import { DamageCalculatorService } from "../damage-calculator.service";
 import { DamageResolverService } from "./damage-resolver.service";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class SkillHitResolver {
@@ -21,6 +22,7 @@ export class SkillHitResolver {
         hitIndex,
         preparedDamage,
         skill,
+        context,
         skillDamageMultiplier,
         contextualBonusDamageMultiplier,
         target
@@ -56,6 +58,25 @@ export class SkillHitResolver {
                 damage: modifiedDamage,
                 damageType: component.damageType,
                 skill
+            })
+
+            context.events.push({
+                type: 'damage_resolved',
+                critical: criticalResult.critical,
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                penetrating: false,
+                resolution: {
+                    appliedDamage: damageResult.effectiveDamage,
+                    damageType: component.damageType,
+                    delivery: 'direct'
+                },
+                source: {type: 'skill',skillId: skill.id,sourceFighterId:attacker.id},
+                targetCurrentHp: damageResult.hpAfter,
+                targetPreviousHp: damageResult.hpBefore,
+                targetDefeated: damageResult.hpAfter <= 0,
+                targetFighterId: target.id,
+                turnNumber: context.turnNumber
             })
 
             components.push({

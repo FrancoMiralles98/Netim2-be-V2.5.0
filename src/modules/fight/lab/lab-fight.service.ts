@@ -4,6 +4,7 @@ import { FighterCombatFactory } from "../factories/fighter-combat-entity.factory
 import { BASE_FIGHT_CONFIG } from "src/modules/character/const/characterProps/base-fight-config.const";
 import { GENERAL_CHARACTER_STATS, GENERAL_MOB_STATS } from "src/modules/character/const/characterProps/base-character-stats.const";
 import { UNIQUE_ID_SKILLS } from "netim2-shared";
+import { groupFightEventsByTurn } from "../optiization-events";
 
 @Injectable()
 export class LabFightService {
@@ -14,13 +15,21 @@ export class LabFightService {
 
     fightLab() {
         try {
-            console.log('llego pelea');
-
             const { fighterA, fighterB, fighterC } = this.getFighter()
-            const result = this.fightEngine.executeLab([fighterA], [fighterB], 10)
-            console.dir(result.result, { depth: null });
-            console.dir(result.initiativeResults, { depth: null });
-            console.dir(result.fighters, { depth: null });
+            const result = this.fightEngine.executeLab([fighterA], [fighterB, fighterC], 500)
+
+            const json = JSON.stringify(result.events);
+            const bytes = Buffer.byteLength(json, 'utf8');
+            console.log(result.events.length);
+
+            const json1 = JSON.stringify(groupFightEventsByTurn(result.events))
+            const bytes1 = Buffer.byteLength(json1, 'utf8');
+
+
+            console.log(`malo KB: ${(bytes / 1024).toFixed(2)} KB`);
+            console.log(`bueno KB: ${(bytes1 / 1024).toFixed(2)} KB`);
+
+            console.log('result', result.result);
         } catch (error) {
             console.log('error de pelea', error);
 
@@ -39,13 +48,13 @@ export class LabFightService {
                     type: 'aura',
                     cd: { onActivate: 30 },
                     duration: {
-                        turns: 4,
+                        turns: 20,
                         type: 'turns'
                     },
                     description: '',
                     id: UNIQUE_ID_SKILLS.AURA_DE_ESPADA,
                     lv: 1,
-                    mana: { initialAmount: 10, amountPerTurn: 3, type: 'upkeep' },
+                    mana: { initialAmount: 20, amountPerTurn: 3, type: 'upkeep' },
                     nombre: 'aura',
                     statsModifiers: [{
                         bonusRefKey: 'media',

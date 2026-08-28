@@ -3,11 +3,14 @@ import { RngService } from "src/modules/shared/services/rng.service";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { PeriodicStatusEffectConfig, ResolveSkillEffectsInput, StatusEffectApplicationResult, StatusEffectConfig, StatusEffectDurationConfig } from "./status-effect-application-resolver.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
-import { DamageCondition, RoutStatKey, StatsScaling } from "netim2-shared";
+import { DamageCondition, isPeriodicDamageEffectData, RoutStatKey, StatsScaling } from "netim2-shared";
 import { StatusEffectManager } from "../../manager/status-effect-manager";
 import { STATUS_EFFECTS_CONFIG } from "../../config/status-effects.config";
 import { ActiveStatusEffectData, PeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
 import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
+import { TurnContext } from "../../types/fight/fight-context.types";
+import { reportUnhandledError } from "rxjs/internal/util/reportUnhandledError";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class StatusEffectApplicationResolverService {
@@ -39,10 +42,40 @@ export class StatusEffectApplicationResolverService {
                 effectId, baseChance: chance,
                 triggeringDamage: input.triggeringDamage,
                 isCritic: input.isCritic,
-                appliedOnTurn: input.appliedOnTurn
+                appliedOnTurn: input.appliedOnTurn,
             });
 
-            results.push(result);
+            if (result.resisted) {
+                input.context.events.push({
+                    type: 'status_effect_resisted',
+                    effectId: result.effectId,
+                    eventId: randomUUID(),
+                    fightId: input.context.fight.id,
+                    sourceFighterId: input.source.id,
+                    targetFighterId: input.target.id,
+                    turnNumber: input.context.turnNumber
+                })
+            }
+
+            if (result.applied) {
+                results.push(result);
+                input.context.events.push({
+                    type: 'status_effect_applied',
+                    effect: {
+                        effectId: result.effectId,
+                        instanceId: result.instanceId ?? '',
+                        remainingTurns: result.remainingTurns ?? 1,
+                        sourceFighterId: input.source.id,
+                        targetFighterId: input.target.id,
+                        damagePerTick: result.damageTick,
+                        stacks: result.stacks
+                    },
+                    eventId: randomUUID(),
+                    fightId: input.context.fight.id,
+                    turnNumber: input.context.turnNumber,
+                })
+            }
+
         }
 
         this.statusEffectAplicationStatisticRegister(input.source, input.target, results)
@@ -53,7 +86,6 @@ export class StatusEffectApplicationResolverService {
     private resolveSingleEffect(input: {
         source: FighterCombatEntity;
         target: FighterCombatEntity;
-
         effectId: ActiveStatusEffectId;
         isCritic: boolean;
         baseChance: number;
@@ -129,12 +161,26 @@ export class StatusEffectApplicationResolverService {
                 : undefined
         });
 
+        const tickDamage = isPeriodicDamageEffectData(data) ? data.damagePerTick : undefined
+
+        let stacks: StatusEffectApplicationResult['stacks']
+
+        const activeStacks = activeEffect.getStacks();
+
+        if (activeStacks) {
+            stacks = {
+                current: activeStacks.current,
+                toApplyExtraDamage: activeStacks.toApplyExtraDamage
+            };
+        }
+
         return {
             effectId:
                 input.effectId,
-
+            damageTick: tickDamage,
             applied: true,
             resisted: false,
+
 
             baseChance:
                 input.baseChance,
@@ -145,9 +191,7 @@ export class StatusEffectApplicationResolverService {
             remainingTurns:
                 activeEffect.getRemainingTurns(),
 
-            stacks:
-                activeEffect.getStacks()
-                    ?.current
+            stacks
         };
     }
 
@@ -307,9 +351,6 @@ export class StatusEffectApplicationResolverService {
             return 0;
         }
 
-        console.log('triggeringDamage', input.triggeringDamage);
-
-
         return (
             input.triggeringDamage * input.conditionConfig.bonusDamageRatio
         );
@@ -356,7 +397,6 @@ export class StatusEffectApplicationResolverService {
              * la stat.
              */
             const bonusPercent = Math.pow(normalizedStat, power) * scaling.ratio;
-            console.log('porcentage de boni', bonusPercent);
 
             /*
              * Ese porcentaje se aplica sobre

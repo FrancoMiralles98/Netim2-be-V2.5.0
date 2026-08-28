@@ -141,8 +141,8 @@ export class BuffManager {
         };
     }
 
-    advanceTurn(target: FighterCombatEntity, currentTurn: number): ActiveBuffEntity[] {
-        const expired: ActiveBuffEntity[] = [];
+    advanceTurn(target: FighterCombatEntity, currentTurn: number) {
+        const updatedBuffs: ActiveBuffEntity[] = [];
 
         const activeBuffs = target.getActiveBuffs();
 
@@ -164,11 +164,11 @@ export class BuffManager {
 
             if (durationResult.expired) {
                 this.deactivate({ buff, target });
-                expired.push(buff);
             }
+            updatedBuffs.push(buff);
         }
 
-        return expired;
+        return updatedBuffs
     }
 
     private createAppliedModifiers(input: {

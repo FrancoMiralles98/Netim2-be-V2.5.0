@@ -13,6 +13,7 @@ import { ReflectionResolverService } from "./reflection-resolver.service";
 import { DamageResolverService } from "./damage-resolver.service";
 import { DamageResolutionResult } from "./damage-resolver.types";
 import { BasicAttackAction } from "netim2-shared";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class BasicAttackActionResolverService {
@@ -47,6 +48,18 @@ export class BasicAttackActionResolverService {
         let totalMitigatedDamage = 0;
         let totalAppliedDamage = 0;
 
+        if (attackSequence.hitCount > 1) {
+            context.events.push({
+                type: 'double_hit_triggered',
+                attackerId: context.actor.id,
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                generatedHitCount: attackSequence.hitCount,
+                targetId: action.targetId,
+                turnNumber: context.turnNumber
+            })
+        }
+
         for (let index = 0; index < attackSequence.hitCount; index++) {
             if (!target.isAlive()) {
                 break;
@@ -55,6 +68,7 @@ export class BasicAttackActionResolverService {
             const hitResult = this.basicAttackHitResolver.resolveHit({
                 attacker: context.actor,
                 target,
+                context,
                 missChance: attackSequence.missChance,
                 hitIndex: index
             })
@@ -73,7 +87,8 @@ export class BasicAttackActionResolverService {
                     effect: this.contextualBonusSerivce.getBasicAttackStatusEffectsChances(context.actor),
                     target,
                     triggeringDamage: hitResult.baseDamage,
-                    isCritic: hitResult.critical
+                    isCritic: hitResult.critical,
+                    context
                 })
                 statusEffects.push(...hitStatusEffects)
             }

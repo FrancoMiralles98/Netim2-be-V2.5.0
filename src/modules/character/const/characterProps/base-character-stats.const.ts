@@ -5,13 +5,13 @@ import { Stats } from "netim2-shared";
  */
 export const GENERAL_CHARACTER_STATS: Stats = {
     general: {
-        ad: { min: 10, max: 10 },
+        ad: { min: 15, max: 20 },
         ap: { min: 20, max: 20 },
         mana: { actual: 100, max: 100 },
-        regen_mana: 5,
-        def: 10,
-        hp: { actual: 900, max: 1000 },
-        regen_hp: 10,
+        regen_mana: 10,
+        def: 20,
+        hp: { actual: 1000, max: 1000 },
+        regen_hp: 5,
         va: 0,
         vh: 0,
         vm: 0
@@ -94,13 +94,13 @@ export const GENERAL_CHARACTER_STATS: Stats = {
 
 export const GENERAL_MOB_STATS: Stats = {
     general: {
-        ad: { min: 40, max: 40 },
+        ad: { min: 20, max: 30 },
         ap: { min: 20, max: 20 },
         mana: { actual: 50, max: 100 },
         regen_mana: 5,
         def: 0,
         hp: { actual: 1000, max: 1000 },
-        regen_hp: 5,
+        regen_hp: 2,
         va: 0,
         vh: 0,
         vm: 0

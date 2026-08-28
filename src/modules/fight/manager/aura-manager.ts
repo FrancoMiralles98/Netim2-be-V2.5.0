@@ -1,8 +1,8 @@
 import { randomUUID } from "crypto";
 import { ActiveAuraEntity } from "../entities/active-aura.entity";
-import { ActivateAuraInput, AuraDeactivationResult, AuraStatModifierInput, DeactivateAllOwnedAurasInput, DeactivateAuraBySkillIdInput, DeactivateAuraInput } from "../types/auraManager/auraManager.types";
+import { ActivateAuraInput, AuraDeactivationResult, AuraStatModifierInput, DeactivateAllOwnedAurasInput, DeactivateAuraBySkillIdInput, DeactivateAuraInput, ProcessAuraDuration } from "../types/auraManager/auraManager.types";
 import { Injectable } from "@nestjs/common";
-import { CombatStatModifier, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { ActiveDurationAdvanceResult, CombatStatModifier, UNIQUE_ID_SKILLS } from "netim2-shared";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 
 @Injectable()
@@ -91,8 +91,8 @@ export class AuraManager {
         );
     }
 
-    advanceTurn(target: FighterCombatEntity, currentTurn: number): ActiveAuraEntity[] {
-        const expired: ActiveAuraEntity[] = [];
+    advanceTurn(target: FighterCombatEntity, currentTurn: number) {
+        const updatedAuras: ActiveAuraEntity[] = [];
 
         const activeAuras = target.getActiveAuras();
 
@@ -114,11 +114,11 @@ export class AuraManager {
 
             if (durationResult.expired) {
                 this.deactivate({ aura, owner: target });
-                expired.push(aura);
             }
+            updatedAuras.push(aura);
         }
 
-        return expired;
+        return updatedAuras
     }
 
 

@@ -1,6 +1,7 @@
 import { CombatStatKey, DamageCondition, SkillDamage, StatsModifiers, StatsScaling, StatusEffectsKeys } from "netim2-shared";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
+import { TurnContext } from "../../types/fight/fight-context.types";
 
 export interface StatusEffectDurationConfig {
     baseTurns: number;
@@ -130,7 +131,7 @@ export interface ResolveSkillEffectsInput {
     effect: Partial<Record<ActiveStatusEffectId, number>> | undefined;
     isCritic: boolean
     appliedOnTurn: number;
-
+    context: TurnContext
 }
 
 export interface StatusEffectApplicationResult {
@@ -145,8 +146,12 @@ export interface StatusEffectApplicationResult {
 
     remainingTurns?: number;
     resistanceChance?: number;
+    damageTick?: number;
 
-    stacks?: number;
+    stacks?: {
+        current: number;
+        toApplyExtraDamage: number;
+    }
 }
 
 export interface HealingReductionEffectData {

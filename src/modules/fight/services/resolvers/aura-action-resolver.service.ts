@@ -4,6 +4,7 @@ import { SharedFightService } from "../shared-fight.service";
 import { CastAuraAction, SkillAura } from "netim2-shared";
 import { AuraStatModifierInput } from "../../types/auraManager/auraManager.types";
 import { AuraManager } from "../../manager/aura-manager";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class AuraActionResolverService {
@@ -26,6 +27,19 @@ export class AuraActionResolverService {
 
         const manaSpent = context.actor.spendMana(this.sharedFightService.getInitialManaCost(skill))
 
+        context.events.push({
+            type: 'resource_changed',
+            amount: manaSpent.amount,
+            currentValue: manaSpent.manaAfter,
+            previousValue: manaSpent.manaBefore,
+            eventId: randomUUID(),
+            fighterId: context.actor.id,
+            fightId: context.fight.id,
+            reason: 'mana_spent',
+            resource: 'mana',
+            turnNumber: context.turnNumber
+        })
+
         const aura = this.auraManager.activate({
             skill,
             activatedOnTurn: context.turnNumber,
@@ -33,9 +47,31 @@ export class AuraActionResolverService {
             source: context.actor
         })
 
+        context.events.push({
+            type: 'aura_activated',
+            appliedModifiers: [],
+            auraInstanceId: aura.getInstanceId(),
+            eventId: randomUUID(),
+            fighterId: context.actor.id,
+            fightId: context.fight.id,
+            skillId: aura.getSkillId(),
+            turnNumber: context.turnNumber,
+            remainingTurns: aura.getDuration.getRemainingTurns()
+        })
+
 
         if (skill.cd.onActivate) {
-            context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
+            const result = context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
+            context.events.push({
+                type: 'cooldown_updated',
+                eventId: randomUUID(),
+                fighterId: context.actor.id,
+                fightId: context.fight.id,
+                previousRemainingTurns: result.initialTurns,
+                remainingTurns: result.remainingTurns,
+                skillId: aura.getSkillId(),
+                turnNumber: context.turnNumber
+            })
         }
 
         context.actor.statistics.registerResources({

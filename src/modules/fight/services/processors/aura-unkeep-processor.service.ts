@@ -50,6 +50,19 @@ export class AuraUnkeepProcessorService {
 
                 result.deactivatedAuraIds.push(aura.getInstanceId());
 
+                context.events.push({
+                    type:'aura_duration_updated',
+                    auraInstanceId: aura.getInstanceId(),
+                    eventId: randomUUID(),
+                    fighterId: owner.id,
+                    fightId: context.fight.id,
+                    previousRemainingTurns: 0,
+                    remainingTurns: aura.getDuration.getRemainingTurns() ?? 0,
+                    skillId: aura.getSkillId(),
+                    turnNumber: context.turnNumber,
+
+                })
+
                 continue;
             }
 
@@ -57,6 +70,21 @@ export class AuraUnkeepProcessorService {
              * Consume el maná de mantenimiento.
              */
             const manaSpent = owner.spendMana(upkeepMana);
+
+            if (manaSpent.amount > 0) {
+                context.events.push({
+                    type:'resource_changed',
+                    amount: manaSpent.amount,
+                    currentValue: manaSpent.manaAfter,
+                    previousValue: manaSpent.manaBefore,
+                    eventId: randomUUID(),
+                    fighterId: owner.id,
+                    fightId: context.fight.id,
+                    reason: 'aura_upkeep',
+                    resource: 'mana',
+                    turnNumber: context.turnNumber
+                })
+            }
 
             aura.registerManaPayment(manaSpent.amount);
 
@@ -67,18 +95,6 @@ export class AuraUnkeepProcessorService {
             result.manaSpent += manaSpent.amount;
 
             result.maintainedAuraIds.push(aura.getInstanceId());
-
-            context.events.push({
-                type: 'aura_upkeep_paid',
-                turnNumber: context.turnNumber,
-                fighterId: owner.id,
-                auraInstanceId: aura.getInstanceId(),
-                skillId: aura.getSkillId(),
-                manaSpent: manaSpent.amount,
-                remainingMana: manaSpent.manaAfter,
-                fightId: context.fight.id,
-                eventId: randomUUID()
-            });
         }
 
         return result;

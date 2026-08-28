@@ -5,6 +5,8 @@ import { RngService } from "src/modules/shared/services/rng.service";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { CriticalDamageResolverService } from "./critical-damage-resolver.service";
 import { DamageResolverService } from "./damage-resolver.service";
+import { TurnContext } from "../../types/fight/fight-context.types";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class BasicAttackHitResolverService {
@@ -18,7 +20,7 @@ export class BasicAttackHitResolverService {
     resolveHit(input: {
         attacker: FighterCombatEntity;
         target: FighterCombatEntity;
-
+        context: TurnContext,
         hitIndex: number;
 
         missChance: number;
@@ -27,9 +29,21 @@ export class BasicAttackHitResolverService {
         const hpBefore = input.target.getCurrentHp();
 
         if (input.missChance > 0 && this.rngService.rollChance(input.missChance)) {
-            /**
-             * registro de la estadiscitca de errado el basico ?
-             */
+
+            input.context.events.push({
+                type: 'hit_resolved',
+                attackerId: input.attacker.id,
+                eventId: randomUUID(),
+                fightId: input.context.fight.id,
+                hitIndex: input.hitIndex,
+                resolution: {
+                    result: 'missed'
+                },
+                source: { type: 'basic_attack' },
+                targetId: input.target.id,
+                turnNumber: input.context.turnNumber
+            })
+
             return this.createUnsuccessfulHit({
                 hitIndex: input.hitIndex,
                 dodgeChance: 0,
@@ -43,9 +57,21 @@ export class BasicAttackHitResolverService {
         const dodgeChance = this.contextualBonusService.getDodgeChance(input.target)
 
         if (this.rngService.rollChance(dodgeChance)) {
-            /**
-             * registro de la estadiscitca de esquivado el basico ?
-             */
+
+            input.context.events.push({
+                type: 'hit_resolved',
+                attackerId: input.attacker.id,
+                eventId: randomUUID(),
+                fightId: input.context.fight.id,
+                hitIndex: input.hitIndex,
+                resolution: {
+                    result: 'dodged'
+                },
+                source: { type: 'basic_attack' },
+                targetId: input.target.id,
+                turnNumber: input.context.turnNumber
+            })
+
             return this.createUnsuccessfulHit({
                 hitIndex: input.hitIndex,
                 dodgeChance: dodgeChance,
@@ -59,9 +85,21 @@ export class BasicAttackHitResolverService {
         const blockChance = this.contextualBonusService.getBlockChance(input.target)
 
         if (this.rngService.rollChance(blockChance)) {
-            /**
-             * registro de la estadiscitca de bloqueo el basico ?
-             */
+
+            input.context.events.push({
+                type: 'hit_resolved',
+                attackerId: input.attacker.id,
+                eventId: randomUUID(),
+                fightId: input.context.fight.id,
+                hitIndex: input.hitIndex,
+                resolution: {
+                    result: 'blocked'
+                },
+                source: { type: 'basic_attack' },
+                targetId: input.target.id,
+                turnNumber: input.context.turnNumber
+            })
+
             return this.createUnsuccessfulHit({
                 hitIndex: input.hitIndex,
                 dodgeChance: dodgeChance,
@@ -79,7 +117,7 @@ export class BasicAttackHitResolverService {
 
         const contextualBonusDamage = this.contextualBonusService.getPossibleBasicAttakBonusMultiplier(
             input.attacker, input.target
-        )        
+        )
 
         const criticalResult = this.criticalDamageResolverService.resolve(input.attacker);
 
@@ -100,6 +138,43 @@ export class BasicAttackHitResolverService {
             damageType: 'ad',
             damage: modifiedDamage,
             penetracion
+        })
+
+        input.context.events.push({
+            type: 'hit_resolved',
+            attackerId: input.attacker.id,
+            eventId: randomUUID(),
+            fightId: input.context.fight.id,
+            hitIndex: input.hitIndex,
+            resolution: {
+                result: 'hit',
+                critical: criticalResult.critical,
+                doble_trigged: false,
+                penetrating: penetracion
+            },
+            source: { type: 'basic_attack' },
+            targetId: input.target.id,
+            turnNumber: input.context.turnNumber
+        })
+
+        input.context.events.push({
+            type: 'damage_resolved',
+            critical: criticalResult.critical,
+            eventId: randomUUID(),
+            fightId: input.context.fight.id,
+            penetrating: penetracion,
+            resolution: {
+                appliedDamage: damageResult.effectiveDamage,
+                damageType: 'ad',
+                delivery: 'direct'
+            },
+            source: { type: 'basic_attack', sourceFighterId: input.attacker.id },
+            targetCurrentHp: damageResult.hpAfter,
+            targetPreviousHp: damageResult.hpBefore,
+            targetDefeated: !input.target.isAlive(),
+            targetFighterId: input.target.id,
+            turnNumber: input.context.turnNumber,
+            hitIndex: input.hitIndex
         })
 
         return {

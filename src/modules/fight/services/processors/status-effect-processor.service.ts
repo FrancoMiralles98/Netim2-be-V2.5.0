@@ -36,12 +36,14 @@ export class StatusEffectProcessorService {
             const result = this.periodicStatusEffectService.resolve({
                 effect: statusEffect,
                 fight: context.fight,
-                target: context.actor
+                target: context.actor,
+                context: context
             })
 
             results.push(result)
 
             totalAppliedDamage += result.totalAppliedDamage
+
         }
 
         return {

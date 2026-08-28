@@ -7,6 +7,7 @@ import { RngService } from "src/modules/shared/services/rng.service";
 import { HealingResolverService } from "./healing-resolver.service";
 import { FightEntity } from "../../entities/fight.entity";
 import { HealingResolution } from "./healing-resolver.types";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class HealingSkillActionResolverService {
@@ -30,6 +31,19 @@ export class HealingSkillActionResolverService {
         const manaSpent = context.actor.spendMana(this.sharedFightService.getInitialManaCost(skill))
         const { critical, heal } = this.calculateHealing(skill, context.actor)
 
+        context.events.push({
+            type: 'resource_changed',
+            amount: manaSpent.amount,
+            currentValue: manaSpent.manaAfter,
+            previousValue: manaSpent.manaBefore,
+            eventId: randomUUID(),
+            fighterId: context.actor.id,
+            fightId: context.fight.id,
+            reason: 'mana_spent',
+            resource: 'mana',
+            turnNumber: context.turnNumber
+        })
+
 
         const healingResult = this.healingResolver.resolve({
             baseAmount: heal,
@@ -37,8 +51,35 @@ export class HealingSkillActionResolverService {
             source: 'skill'
         })
 
+        context.events.push({
+            type: 'healing_resolved',
+            eventId: randomUUID(),
+            fightId: context.fight.id,
+            resolution: {
+                appliedHealing: healingResult.effectiveHealing,
+                critical: critical,
+                totalPrevented: healingResult.preventedAmount
+            },
+            source: {type: 'skill',skillId: skill.id},
+            sourceFighterId: context.actor.id,
+            targetFighterId: action.targetId,
+            targetPreviousHp: healingResult.hpBefore,
+            targetCurrentHp: healingResult.hpAfter,
+            turnNumber: context.turnNumber
+        })
+
         if (skill.cd.onActivate) {
-            context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
+            const result = context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
+            context.events.push({
+                type: 'cooldown_updated',
+                eventId: randomUUID(),
+                fighterId: context.actor.id,
+                fightId: context.fight.id,
+                previousRemainingTurns: result.initialTurns,
+                remainingTurns: result.remainingTurns,
+                skillId: skill.id,
+                turnNumber: context.turnNumber
+            })
         }
 
         this.healingSkillActionStatisticRegister(
@@ -78,7 +119,7 @@ export class HealingSkillActionResolverService {
         const isCritic = this.rngService.rollChance(actor.effectiveStats.bonus.daño.critico)
 
         if (isCritic) {
-            totalHealing *= 1 + actor.effectiveStats.bonus.daño.daño_critico / 100
+            totalHealing *=  actor.effectiveStats.bonus.daño.daño_critico
         }
 
         return { heal: Math.floor(totalHealing), critical: isCritic }

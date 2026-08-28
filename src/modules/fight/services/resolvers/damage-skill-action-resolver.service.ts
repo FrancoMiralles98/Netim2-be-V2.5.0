@@ -17,6 +17,7 @@ import { HealingResolution } from "./healing-resolver.types";
 import { DamageResolutionResult } from "./damage-resolver.types";
 import { ReflectionResolverService } from "./reflection-resolver.service";
 import { DamageResolverService } from "./damage-resolver.service";
+import { randomUUID } from "crypto";
 
 @Injectable()
 export class DamageSkillActionResolver {
@@ -55,13 +56,26 @@ export class DamageSkillActionResolver {
             target: target
         })
 
-        
-        
+
+
         const buffDamageMultiplier = this.buffManager.getSkillDamageMultiplier(context.actor, skill.id)
         const contextualBonusDmgMultiplier = this.contextualBonusService.getPossibleSkillBonusMultiplier(
             context.actor, target, skill)
 
         const manaSpent = context.actor.spendMana(manaCost)
+
+        context.events.push({
+            type: 'resource_changed',
+            amount: manaSpent.amount,
+            currentValue: manaSpent.manaAfter,
+            previousValue: manaSpent.manaBefore,
+            eventId: randomUUID(),
+            fighterId: context.actor.id,
+            fightId: context.fight.id,
+            reason: 'mana_spent',
+            resource: 'mana',
+            turnNumber: context.turnNumber
+        })
 
         this.buffManager.consumeForSkill({
             skillId: skill.id,
@@ -77,10 +91,34 @@ export class DamageSkillActionResolver {
         let totalMitigatedDamage = 0;
         let totalAppliedDamage = 0;
 
+        if (hitModifierResult.hitCount > 1) {
+            context.events.push({
+                type: 'double_hit_triggered',
+                generatedHitCount: hitModifierResult.hitCount,
+                attackerId: context.actor.id,
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                targetId: action.targetId,
+                turnNumber: context.turnNumber
+            })
+        }
+
         for (let hitIndex = 0; hitIndex < hitModifierResult.hitCount; hitIndex++) {
             if (!target.isAlive()) {
                 break;
             }
+
+            context.events.push({
+                type: 'hit_resolved',
+                attackerId: context.actor.id,
+                hitIndex,
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                resolution: { result: "hit", critical: false, doble_trigged: false, penetrating: false },
+                source: { type: 'skill', skillId: skill.id },
+                targetId: action.targetId,
+                turnNumber: context.turnNumber
+            })
 
             const hitResult = this.skillHitResolver.resolveHit({
                 attacker: context.actor,
@@ -91,8 +129,11 @@ export class DamageSkillActionResolver {
                 preparedDamage: PreparedSkillDamage,
                 skill,
                 skillDamageMultiplier: dmgModifierResult.multiplier,
-                target
+                target,
+                context
             })
+
+
 
             hits.push(hitResult)
 
@@ -112,6 +153,7 @@ export class DamageSkillActionResolver {
                     target,
                     isCritic: hitResult.critical,
                     triggeringDamage: hitResult.totalBaseDamage,
+                    context
                 })
                 statusEffects.push(...hitStatusEffects)
             }
@@ -123,6 +165,25 @@ export class DamageSkillActionResolver {
             damageDealt: totalAppliedDamage,
             target,
         })
+
+        if (lifeStealResult.effectiveHealing > 0) {
+            context.events.push({
+                type: 'healing_resolved',
+                eventId: randomUUID(),
+                fightId: context.fight.id,
+                resolution: {
+                    appliedHealing: lifeStealResult.effectiveHealing,
+                    critical: false,
+                    totalPrevented: lifeStealResult.preventedAmount
+                },
+                source: { type: 'spell_vampirism',skillId: skill.id },
+                sourceFighterId: context.actor.id,
+                targetCurrentHp: lifeStealResult.hpAfter,
+                targetFighterId: context.actor.id,
+                targetPreviousHp: lifeStealResult.hpBefore,
+                turnNumber: context.turnNumber
+            })
+        }
 
         const reflectionResult = this.reflectionResolverService.resolve({
             attacker: context.actor,
@@ -150,7 +211,17 @@ export class DamageSkillActionResolver {
 
 
         if (skill.cd.onActivate) {
-            context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
+            const result = context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
+            context.events.push({
+                type: 'cooldown_updated',
+                eventId: randomUUID(),
+                fighterId: context.actor.id,
+                fightId: context.fight.id,
+                previousRemainingTurns: result.initialTurns,
+                remainingTurns: result.remainingTurns,
+                skillId: skill.id,
+                turnNumber: context.turnNumber
+            })
         }
 
 

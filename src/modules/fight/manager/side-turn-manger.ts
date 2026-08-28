@@ -3,6 +3,7 @@ import { FighterTurnManager } from "./fighter-turn-manager";
 import { FightEntity } from "../entities/fight.entity";
 import { FighterTurnExecutionResult } from "../types/turns/turn.types";
 import { SideTurnExecutionResult } from "../types/side/side.types";
+import { FightEvent } from "netim2-shared";
 
 @Injectable()
 export class SideTurnManager {
@@ -17,6 +18,7 @@ export class SideTurnManager {
         const fighters = fight.getFightersOfSide(side)
 
         const actions: FighterTurnExecutionResult[] = []
+        const events: FightEvent[] = []
 
         for (const fighter of fighters) {
 
@@ -49,6 +51,7 @@ export class SideTurnManager {
                 return {
                     turnNumber,
                     side,
+                    events,
                     actions,
                     fightFinished: true,
                     fightResult
@@ -62,6 +65,7 @@ export class SideTurnManager {
             turnNumber,
             side,
             actions,
+            events,
             fightFinished: fight.isFinished,
             fightResult: fight.result
         }
