@@ -5,10 +5,11 @@ import { LabFightService } from './lab/lab-fight.service';
 export class FightController {
   constructor(
     private readonly labFightService: LabFightService
-  ) {}
+  ) { }
 
   @Get('lab')
   fightLab() {
-    const result = this.labFightService.fightLab()
+    const data = this.labFightService.fightLab()
+    return { data }
   }
 }

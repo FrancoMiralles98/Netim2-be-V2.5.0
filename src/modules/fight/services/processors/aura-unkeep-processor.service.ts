@@ -3,7 +3,6 @@ import { AuraManager } from "../../manager/aura-manager";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { TurnContext } from "../../types/fight/fight-context.types";
 import { AuraUpkeepResult } from "./aura-unkeep-processor.types";
-import { randomUUID } from "crypto";
 
 @Injectable()
 export class AuraUnkeepProcessorService {
@@ -52,15 +51,8 @@ export class AuraUnkeepProcessorService {
 
                 context.events.push({
                     type:'aura_duration_updated',
-                    auraInstanceId: aura.getInstanceId(),
-                    eventId: randomUUID(),
-                    fighterId: owner.id,
-                    fightId: context.fight.id,
-                    previousRemainingTurns: 0,
                     remainingTurns: aura.getDuration.getRemainingTurns() ?? 0,
                     skillId: aura.getSkillId(),
-                    turnNumber: context.turnNumber,
-
                 })
 
                 continue;
@@ -77,12 +69,7 @@ export class AuraUnkeepProcessorService {
                     amount: manaSpent.amount,
                     currentValue: manaSpent.manaAfter,
                     previousValue: manaSpent.manaBefore,
-                    eventId: randomUUID(),
-                    fighterId: owner.id,
-                    fightId: context.fight.id,
-                    reason: 'aura_upkeep',
                     resource: 'mana',
-                    turnNumber: context.turnNumber
                 })
             }
 

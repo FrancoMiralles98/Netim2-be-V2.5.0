@@ -11,13 +11,8 @@ export class CooldownProcessorService {
         for (const result of results) {
             context.events.push({
                 type: 'cooldown_updated',
-                fighterId: context.actor.id,
                 skillId: result.skillId,
-                turnNumber: context.turnNumber,
-                previousRemainingTurns: result.previousTurns,
                 remainingTurns: result.remainingTurns,
-                fightId: context.fight.id,
-                eventId: randomUUID(),
             });
         }
 

@@ -30,12 +30,7 @@ export class BuffActionResolver {
             amount: manaSpent.amount,
             currentValue: manaSpent.manaAfter,
             previousValue: manaSpent.manaBefore,
-            eventId: randomUUID(),
-            fighterId: context.actor.id,
-            fightId: context.fight.id,
-            reason: 'mana_spent',
             resource: 'mana',
-            turnNumber: context.turnNumber
         })
 
         const buff = this.buffManager.activate({
@@ -49,13 +44,7 @@ export class BuffActionResolver {
 
         context.events.push({
             type: 'buff_applied',
-            buffInstanceId: buff.getInstanceId(),
-            eventId: randomUUID(),
-            fightId: context.fight.id,
             skillId: buff.getSkillId(),
-            sourceFighterId: context.actor.id,
-            targetFighterId: action.targetId,
-            turnNumber: context.turnNumber,
             remainingTurns: buff.getRemainingTurns()
         })
 
@@ -64,13 +53,8 @@ export class BuffActionResolver {
             const result = context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
             context.events.push({
                 type: 'cooldown_updated',
-                eventId: randomUUID(),
-                fighterId: context.actor.id,
-                fightId: context.fight.id,
-                previousRemainingTurns: result.initialTurns,
                 remainingTurns: result.remainingTurns,
                 skillId: buff.getSkillId(),
-                turnNumber: context.turnNumber
             })
         }
 

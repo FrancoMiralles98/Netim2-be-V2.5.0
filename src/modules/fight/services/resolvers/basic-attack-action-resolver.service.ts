@@ -51,12 +51,7 @@ export class BasicAttackActionResolverService {
         if (attackSequence.hitCount > 1) {
             context.events.push({
                 type: 'double_hit_triggered',
-                attackerId: context.actor.id,
-                eventId: randomUUID(),
-                fightId: context.fight.id,
                 generatedHitCount: attackSequence.hitCount,
-                targetId: action.targetId,
-                turnNumber: context.turnNumber
             })
         }
 

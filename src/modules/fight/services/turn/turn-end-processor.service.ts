@@ -52,42 +52,25 @@ export class TurnEndProcessorService {
         for (const aura of auras) {
             context.events.push({
                 type: 'aura_duration_updated',
-                auraInstanceId: aura.getInstanceId(),
-                eventId: randomUUID(),
-                fighterId: context.actor.id,
-                fightId: context.fight.id,
-                previousRemainingTurns: aura.getDuration.getRemainingTurns() ?? 0,
                 remainingTurns: aura.getDuration.getRemainingTurns() ?? 0,
                 skillId: aura.getSkillId(),
-                turnNumber: context.turnNumber
             })
         }
 
         for (const effect of effects) {
             context.events.push({
                 type: 'status_effect_duration_updated',
-                effectInstanceId: effect.getInstanceId(),
-                eventId: randomUUID(),
-                targetFighterId: context.actor.id,
-                fightId: context.fight.id,
                 previousRemainingTurns: effect.getRemainingTurns() ?? 0,
                 remainingTurns: effect.getRemainingTurns() ?? 0,
                 effectId: effect.getEffectId(),
-                turnNumber: context.turnNumber
             })
         }
 
         for (const buff of buffs) {
             context.events.push({
                 type: 'buff_duration_updated',
-                buffInstanceId: buff.getInstanceId(),
-                eventId: randomUUID(),
-                fighterId: context.actor.id,
-                fightId: context.fight.id,
-                previousRemainingTurns: buff.getRemainingTurns() ?? 0,
                 remainingTurns: buff.getRemainingTurns() ?? 0,
                 skillId: buff.getSkillId(),
-                turnNumber: context.turnNumber
             })
         }
     }

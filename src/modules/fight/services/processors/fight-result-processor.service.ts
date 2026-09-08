@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { FightEntity } from "../../entities/fight.entity";
 import { FighterFightSummary, FightProcessedResult } from "./fight-result-processor.types";
 import { SideTurnExecutionResult } from "../../types/side/side.types";
-import { FightEvent } from "netim2-shared";
+import { FightEvent, FightPlaybackPayload } from "netim2-shared";
 
 @Injectable()
 export class FightResultProcessorService {
@@ -10,7 +10,7 @@ export class FightResultProcessorService {
     process(
         fight: FightEntity,
         turns: SideTurnExecutionResult[],
-        events: FightEvent[]
+        events: FightPlaybackPayload
     ): FightProcessedResult {
         const result = fight.result;
 

@@ -40,13 +40,9 @@ export class ControlEffectProcessorService {
                     type: 'control_effect_processed',
                     controlType: 'stun',
                     effectId: effect.getEffectId(),
-                    effectInstanceId: effect.getInstanceId(),
-                    eventId: randomUUID(),
                     expired: false,
                     fighterId: context.actor.id,
-                    fightId: context.fight.id,
                     preventedAction: processedEffect.preventedAction,
-                    turnNumber: context.turnNumber,
                     remainingTurns: processedEffect.remainingTurns ?? 0
                 })
             }

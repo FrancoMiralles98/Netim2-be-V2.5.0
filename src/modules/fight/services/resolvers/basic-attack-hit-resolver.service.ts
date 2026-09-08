@@ -32,16 +32,11 @@ export class BasicAttackHitResolverService {
 
             input.context.events.push({
                 type: 'hit_resolved',
-                attackerId: input.attacker.id,
-                eventId: randomUUID(),
-                fightId: input.context.fight.id,
                 hitIndex: input.hitIndex,
                 resolution: {
                     result: 'missed'
                 },
                 source: { type: 'basic_attack' },
-                targetId: input.target.id,
-                turnNumber: input.context.turnNumber
             })
 
             return this.createUnsuccessfulHit({
@@ -60,16 +55,11 @@ export class BasicAttackHitResolverService {
 
             input.context.events.push({
                 type: 'hit_resolved',
-                attackerId: input.attacker.id,
-                eventId: randomUUID(),
-                fightId: input.context.fight.id,
                 hitIndex: input.hitIndex,
                 resolution: {
                     result: 'dodged'
                 },
                 source: { type: 'basic_attack' },
-                targetId: input.target.id,
-                turnNumber: input.context.turnNumber
             })
 
             return this.createUnsuccessfulHit({
@@ -88,16 +78,11 @@ export class BasicAttackHitResolverService {
 
             input.context.events.push({
                 type: 'hit_resolved',
-                attackerId: input.attacker.id,
-                eventId: randomUUID(),
-                fightId: input.context.fight.id,
                 hitIndex: input.hitIndex,
                 resolution: {
                     result: 'blocked'
                 },
                 source: { type: 'basic_attack' },
-                targetId: input.target.id,
-                turnNumber: input.context.turnNumber
             })
 
             return this.createUnsuccessfulHit({
@@ -142,26 +127,16 @@ export class BasicAttackHitResolverService {
 
         input.context.events.push({
             type: 'hit_resolved',
-            attackerId: input.attacker.id,
-            eventId: randomUUID(),
-            fightId: input.context.fight.id,
             hitIndex: input.hitIndex,
             resolution: {
                 result: 'hit',
-                critical: criticalResult.critical,
-                doble_trigged: false,
-                penetrating: penetracion
             },
             source: { type: 'basic_attack' },
-            targetId: input.target.id,
-            turnNumber: input.context.turnNumber
         })
 
         input.context.events.push({
             type: 'damage_resolved',
             critical: criticalResult.critical,
-            eventId: randomUUID(),
-            fightId: input.context.fight.id,
             penetrating: penetracion,
             resolution: {
                 appliedDamage: damageResult.effectiveDamage,
@@ -170,10 +145,7 @@ export class BasicAttackHitResolverService {
             },
             source: { type: 'basic_attack', sourceFighterId: input.attacker.id },
             targetCurrentHp: damageResult.hpAfter,
-            targetPreviousHp: damageResult.hpBefore,
             targetDefeated: !input.target.isAlive(),
-            targetFighterId: input.target.id,
-            turnNumber: input.context.turnNumber,
             hitIndex: input.hitIndex
         })
 

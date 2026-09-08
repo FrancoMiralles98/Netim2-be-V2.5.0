@@ -96,7 +96,7 @@ export const GENERAL_MOB_STATS: Stats = {
     general: {
         ad: { min: 20, max: 30 },
         ap: { min: 20, max: 20 },
-        mana: { actual: 50, max: 100 },
+        mana: { actual: 100, max: 100 },
         regen_mana: 5,
         def: 0,
         hp: { actual: 1000, max: 1000 },

@@ -32,12 +32,7 @@ export class AuraActionResolverService {
             amount: manaSpent.amount,
             currentValue: manaSpent.manaAfter,
             previousValue: manaSpent.manaBefore,
-            eventId: randomUUID(),
-            fighterId: context.actor.id,
-            fightId: context.fight.id,
-            reason: 'mana_spent',
             resource: 'mana',
-            turnNumber: context.turnNumber
         })
 
         const aura = this.auraManager.activate({
@@ -49,13 +44,7 @@ export class AuraActionResolverService {
 
         context.events.push({
             type: 'aura_activated',
-            appliedModifiers: [],
-            auraInstanceId: aura.getInstanceId(),
-            eventId: randomUUID(),
-            fighterId: context.actor.id,
-            fightId: context.fight.id,
             skillId: aura.getSkillId(),
-            turnNumber: context.turnNumber,
             remainingTurns: aura.getDuration.getRemainingTurns()
         })
 
@@ -64,13 +53,8 @@ export class AuraActionResolverService {
             const result = context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
             context.events.push({
                 type: 'cooldown_updated',
-                eventId: randomUUID(),
-                fighterId: context.actor.id,
-                fightId: context.fight.id,
-                previousRemainingTurns: result.initialTurns,
                 remainingTurns: result.remainingTurns,
                 skillId: aura.getSkillId(),
-                turnNumber: context.turnNumber
             })
         }
 

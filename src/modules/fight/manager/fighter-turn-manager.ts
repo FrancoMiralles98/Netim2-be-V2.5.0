@@ -30,9 +30,6 @@ export class FighterTurnManager {
         context.events.push({
             type: 'turn_started',
             actorId: context.actor.id,
-            eventId: randomUUID(),
-            fightId: context.fight.id,
-            turnNumber: context.turnNumber
         })
 
         const startTurnResult = this.turnStartProcessor.process(context)
@@ -57,10 +54,6 @@ export class FighterTurnManager {
             actorAlive: actor.isAlive(),
             actorCurrentHp: actor.getCurrentHp(),
             actorCurrentMana: actor.getCurrentMana(),
-            actorId: actor.id,
-            eventId: randomUUID(),
-            fightId: fight.id,
-            turnNumber
         })
 
         return {

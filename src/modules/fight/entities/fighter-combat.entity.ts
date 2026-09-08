@@ -525,7 +525,7 @@ export class FighterCombatEntity {
             initialTurns: finalTurns,
             remainingTurns: finalTurns
         };
-        
+
 
         this.props.cooldowns.set(skillId, cooldown);
 
@@ -591,6 +591,10 @@ export class FighterCombatEntity {
 
     getEffectiveStatValue(target: CombatStatKey): number {
         return this.getNumericStatByPath(this.effectiveStats, target);
+    }
+
+    getSkills(): readonly SkillType[] {
+        return this.props.skills;
     }
 
     private getNumericStatByPath(stats: FighterBaseStats, path: CombatStatKey): number {

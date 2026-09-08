@@ -30,10 +30,6 @@ export class CombatActionSelectorService {
                     skillId: healingAction.skillId,
                     targetId: healingAction.targetId
                 },
-                actorId: context.actor.id,
-                eventId: randomUUID(),
-                fightId: context.fight.id,
-                turnNumber: context.turnNumber
             })
             return healingAction
         }
@@ -46,10 +42,6 @@ export class CombatActionSelectorService {
                     type: 'cast_aura',
                     skillId: auraAction.skillId,
                 },
-                actorId: context.actor.id,
-                eventId: randomUUID(),
-                fightId: context.fight.id,
-                turnNumber: context.turnNumber
             })
             return auraAction
         }
@@ -62,10 +54,6 @@ export class CombatActionSelectorService {
                     skillId: buffAction.skillId,
                     targetId: buffAction.targetId
                 },
-                actorId: context.actor.id,
-                eventId: randomUUID(),
-                fightId: context.fight.id,
-                turnNumber: context.turnNumber
             })
             return buffAction
         }
@@ -79,10 +67,6 @@ export class CombatActionSelectorService {
                     type: 'basic_attack',
                     targetId: targetId
                 },
-                actorId: context.actor.id,
-                eventId: randomUUID(),
-                fightId: context.fight.id,
-                turnNumber: context.turnNumber
             })
             return {
                 type: 'basic_attack',
@@ -99,10 +83,6 @@ export class CombatActionSelectorService {
                     skillId: skillAction.skillId,
                     targetId: skillAction.targetId
                 },
-                actorId: context.actor.id,
-                eventId: randomUUID(),
-                fightId: context.fight.id,
-                turnNumber: context.turnNumber
             })
             return skillAction
         }
@@ -113,10 +93,6 @@ export class CombatActionSelectorService {
                 type: 'basic_attack',
                 targetId: targetId
             },
-            actorId: context.actor.id,
-            eventId: randomUUID(),
-            fightId: context.fight.id,
-            turnNumber: context.turnNumber
         })
 
         return {

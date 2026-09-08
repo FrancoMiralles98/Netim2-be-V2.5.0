@@ -36,12 +36,7 @@ export class HealingSkillActionResolverService {
             amount: manaSpent.amount,
             currentValue: manaSpent.manaAfter,
             previousValue: manaSpent.manaBefore,
-            eventId: randomUUID(),
-            fighterId: context.actor.id,
-            fightId: context.fight.id,
-            reason: 'mana_spent',
             resource: 'mana',
-            turnNumber: context.turnNumber
         })
 
 
@@ -53,32 +48,20 @@ export class HealingSkillActionResolverService {
 
         context.events.push({
             type: 'healing_resolved',
-            eventId: randomUUID(),
-            fightId: context.fight.id,
             resolution: {
                 appliedHealing: healingResult.effectiveHealing,
                 critical: critical,
                 totalPrevented: healingResult.preventedAmount
             },
-            source: {type: 'skill',skillId: skill.id},
-            sourceFighterId: context.actor.id,
-            targetFighterId: action.targetId,
-            targetPreviousHp: healingResult.hpBefore,
             targetCurrentHp: healingResult.hpAfter,
-            turnNumber: context.turnNumber
         })
 
         if (skill.cd.onActivate) {
             const result = context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
             context.events.push({
                 type: 'cooldown_updated',
-                eventId: randomUUID(),
-                fighterId: context.actor.id,
-                fightId: context.fight.id,
-                previousRemainingTurns: result.initialTurns,
                 remainingTurns: result.remainingTurns,
                 skillId: skill.id,
-                turnNumber: context.turnNumber
             })
         }
 

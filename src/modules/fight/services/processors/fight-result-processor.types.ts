@@ -1,4 +1,4 @@
-import { FighterCombatStatisticsState, FighterInitiativeResult, FightEvent, FightResult, FightSide } from "netim2-shared";
+import { FighterCombatStatisticsState, FighterInitiativeResult, FightEvent, FightPlaybackPayload, FightResult, FightSide } from "netim2-shared";
 import { SideTurnExecutionResult } from "../../types/side/side.types";
 
 export interface FightProcessedResult {
@@ -6,7 +6,7 @@ export interface FightProcessedResult {
     initiativeResults: FighterInitiativeResult[]
     turns: SideTurnExecutionResult[];
     fighters: FighterFightSummary[];
-    events: FightEvent[];
+    events: FightPlaybackPayload;
 }
 
 export interface FighterFightSummary {

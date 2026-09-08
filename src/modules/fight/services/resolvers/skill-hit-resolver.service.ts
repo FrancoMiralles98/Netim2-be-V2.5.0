@@ -63,8 +63,6 @@ export class SkillHitResolver {
             context.events.push({
                 type: 'damage_resolved',
                 critical: criticalResult.critical,
-                eventId: randomUUID(),
-                fightId: context.fight.id,
                 penetrating: false,
                 resolution: {
                     appliedDamage: damageResult.effectiveDamage,
@@ -73,10 +71,7 @@ export class SkillHitResolver {
                 },
                 source: {type: 'skill',skillId: skill.id,sourceFighterId:attacker.id},
                 targetCurrentHp: damageResult.hpAfter,
-                targetPreviousHp: damageResult.hpBefore,
                 targetDefeated: damageResult.hpAfter <= 0,
-                targetFighterId: target.id,
-                turnNumber: context.turnNumber
             })
 
             components.push({

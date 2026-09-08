@@ -28,11 +28,6 @@ export class RegenerationProcessorService {
                 previousValue: healingResult.hpBefore,
                 currentValue: healingResult.hpAfter,
                 amount: healingResult.effectiveHealing,
-                eventId: randomUUID(),
-                fighterId: context.actor.id,
-                fightId: context.fight.id,
-                reason: 'hp_regeneration',
-                turnNumber: context.turnNumber
             })
         }
 
@@ -45,11 +40,6 @@ export class RegenerationProcessorService {
                 previousValue: manaResult.manaBefore,
                 currentValue: manaResult.manaAfter,
                 amount: manaResult.effectiveRestoration,
-                eventId: randomUUID(),
-                fighterId: context.actor.id,
-                fightId: context.fight.id,
-                reason: 'mana_regeneration',
-                turnNumber: context.turnNumber
             })
         }
 

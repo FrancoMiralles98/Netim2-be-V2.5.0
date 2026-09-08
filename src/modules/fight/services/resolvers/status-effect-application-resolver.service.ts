@@ -49,11 +49,6 @@ export class StatusEffectApplicationResolverService {
                 input.context.events.push({
                     type: 'status_effect_resisted',
                     effectId: result.effectId,
-                    eventId: randomUUID(),
-                    fightId: input.context.fight.id,
-                    sourceFighterId: input.source.id,
-                    targetFighterId: input.target.id,
-                    turnNumber: input.context.turnNumber
                 })
             }
 
@@ -63,16 +58,10 @@ export class StatusEffectApplicationResolverService {
                     type: 'status_effect_applied',
                     effect: {
                         effectId: result.effectId,
-                        instanceId: result.instanceId ?? '',
                         remainingTurns: result.remainingTurns ?? 1,
-                        sourceFighterId: input.source.id,
-                        targetFighterId: input.target.id,
                         damagePerTick: result.damageTick,
                         stacks: result.stacks
                     },
-                    eventId: randomUUID(),
-                    fightId: input.context.fight.id,
-                    turnNumber: input.context.turnNumber,
                 })
             }
 

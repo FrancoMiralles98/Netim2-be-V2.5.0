@@ -51,14 +51,8 @@ export class PeriodicStatusEffectResolverService {
             type: 'status_effect_ticked',
             effectId: input.effect.getEffectId(),
             appliedDamage: tickDamage.effectiveDamage,
-            effectInstanceId: input.effect.getInstanceId(),
-            eventId: randomUUID(),
-            fightId: input.fight.id,
             remainingTurns: input.effect.getRemainingTurns() ?? 0,
-            sourceFighterId: source.id,
             targetCurrentHp: tickDamage.hpAfter,
-            targetFighterId: input.target.id,
-            turnNumber: input.context.turnNumber
         })
 
         let totalAppliedDamage = tickDamage.effectiveDamage
@@ -81,13 +75,7 @@ export class PeriodicStatusEffectResolverService {
                     appliedDamage: stackProc.damage.effectiveDamage,
                     currentStacks: stackProc.remainingStacks,
                     effectId: input.effect.getEffectId(),
-                    effectInstanceId: input.effect.getInstanceId(),
-                    eventId: randomUUID(),
-                    fightId: input.context.fight.id,
-                    sourceFighterId: source.id,
                     targetCurrentHp: stackProc.damage.hpAfter,
-                    targetFighterId: input.target.id,
-                    turnNumber: input.context.turnNumber
                 })
             }
         }
