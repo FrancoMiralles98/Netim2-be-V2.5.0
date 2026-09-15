@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { FightEntity } from "../../entities/fight.entity";
-import { FighterFightSummary, FightProcessedResult } from "./fight-result-processor.types";
+import { FightProcessedResult } from "./fight-result-processor.types";
 import { SideTurnExecutionResult } from "../../types/side/side.types";
-import { FightEvent, FightPlaybackPayload } from "netim2-shared";
+import { FighterFightSummary, FightEvent, FightPlaybackPayload } from "netim2-shared";
 
 @Injectable()
 export class FightResultProcessorService {

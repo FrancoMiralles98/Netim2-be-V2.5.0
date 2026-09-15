@@ -14,12 +14,13 @@ export class LabFightService {
 
     fightLab(): FightResponse {
         const { fighterA, fighterB, fighterC } = this.getFighter()
-        const { fightResult, initialFighters } = this.fightEngine.executeLab([fighterA], [fighterB, fighterC], 500)
+        const { fightResult, initialFighters } = this.fightEngine.executeLab([fighterA], [fighterB, fighterC], 15)
         return {
             result: fightResult.result,
             initiativeResults: fightResult.initiativeResults,
             fightPlaybackPayload: fightResult.events,
-            initialFighters
+            initialFighters,
+            fighterFightSummary: fightResult.fighters
         }
     }
 

@@ -170,7 +170,7 @@ export class CharacterEntity {
         if (typeof skill.lv === 'number') {
             this.props.puntos_habilidad -= 1
         }
-        skill.upgradeRankLv()
+        //skill.upgradeRankLv()
         return skill
     }
 

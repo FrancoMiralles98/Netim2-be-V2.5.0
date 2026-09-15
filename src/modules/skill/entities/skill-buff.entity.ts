@@ -16,6 +16,7 @@ export class SkillBuffEntity extends BaseSkillEntity<SkillBuff> {
             stats: [],
             duration: {turns:0,type:'turns'},
             ...summary,
+            mastery: 'N',
             lv: 1,
             effects: [],
             cd: {},

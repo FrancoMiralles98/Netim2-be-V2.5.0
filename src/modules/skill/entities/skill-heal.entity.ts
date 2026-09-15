@@ -16,6 +16,7 @@ export class SkillHealEntity extends BaseSkillEntity<SkillHeal> {
             components: [],
             ...summary,
             lv: 1,
+            mastery: 'N',
             cd: {},
             nombre: '',
         }

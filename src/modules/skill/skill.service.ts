@@ -64,10 +64,10 @@ export class SkillService {
         const skillEntity = SkillFactory.create(skill)
 
         if (lvUp) {
-            skillEntity.upgradeRankLv()
+            //skillEntity.upgradeRankLv()
         }
 
-        skillEntity.updateSkillName(speciality)
+        //skillEntity.updateSkillName(speciality)
 
         const skillUpdated = skillEntity.toPrimitives()
 

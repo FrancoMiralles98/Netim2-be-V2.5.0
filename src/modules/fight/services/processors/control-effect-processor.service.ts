@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { TurnContext } from "../../types/fight/fight-context.types";
 import { ControlEffectProcessorResult, ProcessedControlEffect } from "./control-effect-process.types";
-import { ControlEffect, isControlDamageEffectData } from "./status-effect-processor.types";
+import {  isControlDamageEffectData } from "./status-effect-processor.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
-import { randomUUID } from "crypto";
 import { StatusEffectManager } from "../../manager/status-effect-manager";
 
 @Injectable()

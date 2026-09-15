@@ -5,7 +5,7 @@ import { Stats } from "netim2-shared";
  */
 export const GENERAL_CHARACTER_STATS: Stats = {
     general: {
-        ad: { min: 15, max: 20 },
+        ad: { min: 10, max: 10 },
         ap: { min: 20, max: 20 },
         mana: { actual: 100, max: 100 },
         regen_mana: 10,
@@ -34,7 +34,7 @@ export const GENERAL_CHARACTER_STATS: Stats = {
             duracion_estado: 0,
             bonus_electrico: 0,
             electrico: 0,
-            sangrado: 0,
+            sangrado: 100,
             incendio: 0,
             media: 0,
             medio_humanos: 0,
@@ -99,9 +99,9 @@ export const GENERAL_MOB_STATS: Stats = {
         mana: { actual: 100, max: 100 },
         regen_mana: 5,
         def: 0,
-        hp: { actual: 1000, max: 1000 },
+        hp: { actual: 50, max: 50 },
         regen_hp: 2,
-        va: 0,
+        va: -50,
         vh: 0,
         vm: 0
     },

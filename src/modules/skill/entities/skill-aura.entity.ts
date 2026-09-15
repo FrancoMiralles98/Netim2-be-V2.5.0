@@ -15,6 +15,7 @@ export class SkillAuraEntity extends BaseSkillEntity<SkillAura> {
         return {
             ...summary,
             lv: 1,
+            mastery: 'N',
             statsModifiers: [],
             cd: {},
             nombre: '',
