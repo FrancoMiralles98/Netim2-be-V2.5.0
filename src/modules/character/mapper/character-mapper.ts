@@ -5,7 +5,8 @@ import { SkillFactory } from "src/modules/skill/factories/skill.factory";
 import { GENERAL_CHARACTER } from "../const/general-character.const";
 import { CreateCharacterDto } from "../dto/create-character.dto";
 import { Injectable } from "@nestjs/common";
-import { CharacterPersistence, CharacterSummary } from "netim2-shared";
+import { Atributos, CharacterPersistence, CharacterRace, CharacterSummary } from "netim2-shared";
+import { ATTRIBUTE_BASE_BY_RACE } from "../const/statsProgress/attribute-base-by-race.const";
 
 /**
  * Mapper encargado de transformar datos entre las distintas capas:
@@ -49,7 +50,7 @@ export class CharacterMapper {
             reino: doc.reino,
             role: doc.role,
             stars_discovery: doc.stars_discovery,
-            stats: doc.baseStats,
+            stats: doc.stats,
             target_type: doc.target_type,
             time_played: doc.time_played,
             timer_boss: doc.timer_boss,
@@ -103,21 +104,23 @@ export class CharacterMapper {
         baseCharacterCopy.genero = props.genero!
         baseCharacterCopy.raza = props.raza!
         baseCharacterCopy.reino = props.reino!
+        baseCharacterCopy.atributos = this.asignAttributesByRace(props.raza)
 
         return baseCharacterCopy
     }
 
-/**
- * Convierte un documento de personaje de MongoDB a un resumen seguro para el cliente.
- *
- * Este mapper reduce la información del personaje a los datos necesarios para
- * mostrarlo en la pantalla de selección de personajes.
- *
- *
- * @param character Documento completo del personaje obtenido desde MongoDB.
- * @returns Resumen del personaje preparado para ser enviado al cliente.
- */
+    /**
+     * Convierte un documento de personaje de MongoDB a un resumen seguro para el cliente.
+     *
+     * Este mapper reduce la información del personaje a los datos necesarios para
+     * mostrarlo en la pantalla de selección de personajes.
+     *
+     *
+     * @param character Documento completo del personaje obtenido desde MongoDB.
+     * @returns Resumen del personaje preparado para ser enviado al cliente.
+     */
     toSummary(character: CharacterDocument): CharacterSummary {
+
         return {
             id: character._id.toString(),
             nombre: character.nombre,
@@ -131,5 +134,15 @@ export class CharacterMapper {
             gremio_options: character.gremio_options
 
         };
+    }
+
+    private asignAttributesByRace(raza: CharacterRace): Atributos {
+        const baseAttributes = ATTRIBUTE_BASE_BY_RACE[raza]
+        return {
+            DEX: { lvPoints: baseAttributes.DEX, bonusPoints: 0 },
+            INT: { lvPoints: baseAttributes.INT, bonusPoints: 0 },
+            STR: { lvPoints: baseAttributes.DEX, bonusPoints: 0 },
+            VIT: { lvPoints: baseAttributes.VIT, bonusPoints: 0 },
+        }
     }
 }

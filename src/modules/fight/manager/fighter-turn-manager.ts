@@ -38,6 +38,14 @@ export class FighterTurnManager {
 
         const resolution = this.actionResolution.resolve(action, context, startTurnResult.canAct)
 
+        actor.statistics.registerTurnPlayed()
+
+        if (resolution.type === 'skip_turn' && resolution.reason === 'no_available_action') {
+            console.log('action',action);
+            
+            actor.statistics.registerSkippedTurnByStun()
+        }
+
         /**
          * evento de action_resolved
          */

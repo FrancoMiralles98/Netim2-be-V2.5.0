@@ -17,6 +17,8 @@ export class GameDatasService {
     async getCharacterSelectionData(userId: string): Promise<CharacterSelectionDataType> {
         const characters = await this.characterService.getCharactersByUserId(userId)
         const summaryCharacters = characters.map(c => this.characterMapper.toSummary(c))
+        console.log(summaryCharacters[0]);
+        
         return {
             maxCharacters: MAX_CHARACTERS,
             reinoBuff: ReinosBuff,

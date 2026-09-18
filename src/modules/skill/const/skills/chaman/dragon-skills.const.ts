@@ -7,7 +7,6 @@ export const DRAGON_SKILLS: SkillSummary[] = [
     description: 'Dispara una figura de dragón para atacar frontalmente a tus enemigos.',
     id: UNIQUE_ID_SKILLS.DISPARO_DEL_DRAGON,
     type: 'damage',
-    mastery: 'N'
     mana: { type: 'instant', amount: 0 },
     weaponRestricted: ['campana','fan']
   },

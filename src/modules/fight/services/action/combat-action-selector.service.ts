@@ -15,7 +15,13 @@ export class CombatActionSelectorService {
     ) { }
 
     select(context: TurnContext, canAct: boolean): CombatAction {
-        if (!context.actor.isAlive() || !canAct) {
+        if (!context.actor.isAlive()) {
+            return {
+                type: 'skip_turn',
+                reason: 'no_valid_target'
+            }
+        }
+        if (!canAct) {
             return {
                 type: 'skip_turn',
                 reason: 'no_available_action'

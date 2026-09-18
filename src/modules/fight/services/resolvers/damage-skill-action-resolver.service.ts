@@ -181,6 +181,24 @@ export class DamageSkillActionResolver {
                 reflectedFromDamageType: 'true'
             })
 
+            context.events.push({
+                type: 'damage_resolved',
+                critical: false,
+                penetrating: false,
+                source: {
+                    type: 'reflected',
+                    originalAttackerId: context.actor.id,
+                    sourceFighterId: target.id
+                },
+                resolution: {
+                    appliedDamage: reflectedDmgResult.effectiveDamage,
+                    damageType: 'true',
+                    delivery: 'reflected'
+                },
+                targetCurrentHp: reflectedDmgResult.hpAfter,
+                targetDefeated: !target.isAlive()
+            })
+
             this.reflectionResolverService.reflectionDmgResultRegister(
                 reflectionResult.source,
                 reflectedDmgResult)

@@ -91,7 +91,7 @@ export class CharacterModel {
     time_played!: number;
 
     @Prop({ type: Object, required: true })
-    baseStats!: Stats;
+    stats!: Stats;
 
     @Prop({ type: Object, required: true })
     atributos!: Atributos;
