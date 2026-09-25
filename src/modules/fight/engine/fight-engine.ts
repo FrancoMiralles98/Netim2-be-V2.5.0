@@ -79,14 +79,13 @@ export class FightEngine {
                 skills:
                     fighter.getSkills().map(
                         skill => ({
+                            mastery: skill.mastery,
+                            description: skill.description,
                             skillId:
                                 skill.id,
-
                             name:
                                 skill.nombre,
-
-                            icon:
-                                ''
+                                
                         })
                     ),
 

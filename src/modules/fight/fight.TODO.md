@@ -1,0 +1,1 @@
+//Falta agregar en los eventos cuando se consume el Buff tiene que desaparecer, verificar que funcione bien el tema de las reducciones y quitado de los buffos en el funcionamiento interno de la pelea

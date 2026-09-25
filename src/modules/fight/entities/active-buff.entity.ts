@@ -149,12 +149,14 @@ export class ActiveBuffEntity {
             consumedEffects += 1;
         }
 
+        
+
         const remainingUses =
             this.getTotalRemainingUses();
 
         const depleted =
             !this.hasAvailableEffects();
-
+        
         if (depleted) {
             this.deactivate();
         }

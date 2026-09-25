@@ -14,6 +14,7 @@ import { LetterMasteryLv } from "netim2-shared";
  * - `P` = 37 puntos efectivos
  */
 export const TOTAL_LV_POINTS_PER_MASTERY_CONFIG:Record<LetterMasteryLv,number> = {
+    'N': 0,
     'M': 16,
     'G': 26,
     'P': 37,

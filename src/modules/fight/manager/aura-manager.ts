@@ -115,6 +115,11 @@ export class AuraManager {
             if (durationResult.expired) {
                 this.deactivate({ aura, owner: target });
             }
+
+            if (durationResult.type === 'until_no_mana') {
+                continue;
+            }
+            
             updatedAuras.push(aura);
         }
 

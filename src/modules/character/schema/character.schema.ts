@@ -21,19 +21,19 @@ export class CharacterModel {
     @Prop({ type: Array, default: [] })
     stars_discovery!: StarDiscovery[];
 
-    @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
+    @Prop({ type: Number, default: () => Date.now()})
     timer_mob!: number;
 
-    @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
+    @Prop({ type: Number, default: () => Date.now()  })
     timer_metin!: number;
 
-    @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
+    @Prop({ type: Number, default: () => Date.now()})
     timer_pvp!: number;
 
-    @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
+    @Prop({ type: Number, default: () => Date.now() })
     timer_boss!: number;
 
-    @Prop({ type: Number, default: 0 })
+    @Prop({ type: Number, default: 15 })
     timer_lv!: number;
 
     @Prop({ type: String, required: true })

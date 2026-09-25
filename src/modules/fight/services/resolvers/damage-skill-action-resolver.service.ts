@@ -71,11 +71,20 @@ export class DamageSkillActionResolver {
             resource: 'mana',
         })
 
-        this.buffManager.consumeForSkill({
+        const buffConsumeResult = this.buffManager.consumeForSkill({
             skillId: skill.id,
             target: context.actor,
             trigger: 'skill_use'
         })
+
+        if (buffConsumeResult.consumed) {
+            buffConsumeResult.buffs.forEach(buffConsumed=> {
+                context.events.push({
+                    type: 'buff_deactivated',
+                    skillId: buffConsumed.skillId
+                })
+            })
+        }
 
         const hits: DamageHitResolution[] = [];
         const statusEffects: AppliedStatusEffectResolution[] = []

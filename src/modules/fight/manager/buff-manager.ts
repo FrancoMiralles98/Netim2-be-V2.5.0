@@ -92,7 +92,8 @@ export class BuffManager {
         skillId: UNIQUE_ID_SKILLS
     ): number {
         return target.getActiveBuffs().reduce((multiplier, buff) => {
-            return (multiplier * buff.getSkillDamageMultiplier(skillId)
+            const dmgMultiplier = buff.getSkillDamageMultiplier(skillId)
+            return (multiplier * dmgMultiplier
             );
         },
             1

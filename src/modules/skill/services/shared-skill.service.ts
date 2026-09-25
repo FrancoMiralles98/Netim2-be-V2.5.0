@@ -155,6 +155,7 @@ export class SharedSkillService {
     ): boolean {
         if (!skillMastery) return false
         const masteryRank: Record<LetterMasteryLv, number> = {
+            N: 0,
             M: 1,
             G: 2,
             P: 3,

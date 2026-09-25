@@ -50,10 +50,24 @@ export class AuraUnkeepProcessorService {
                 result.deactivatedAuraIds.push(aura.getInstanceId());
 
                 context.events.push({
-                    type:'aura_duration_updated',
-                    remainingTurns: aura.getDuration.getRemainingTurns() ?? 0,
+                    type: 'aura_deactivated',
                     skillId: aura.getSkillId(),
                 })
+
+                const infoOfSkill = owner.getSkillById(aura.getSkillId())
+
+                if (infoOfSkill && infoOfSkill.cd.onDeactivate) {
+                    const result = context.actor.startSkillCooldown(infoOfSkill.id, infoOfSkill.cd.onDeactivate)
+                    context.events.push({
+                        type: 'aura_deactivated',
+                        skillId: aura.getSkillId(),
+                    })
+                    context.events.push({
+                        type: 'cooldown_updated',
+                        remainingTurns: result.remainingTurns,
+                        skillId: infoOfSkill.id,
+                    })
+                }
 
                 continue;
             }
@@ -65,7 +79,7 @@ export class AuraUnkeepProcessorService {
 
             if (manaSpent.amount > 0) {
                 context.events.push({
-                    type:'resource_changed',
+                    type: 'resource_changed',
                     amount: manaSpent.amount,
                     currentValue: manaSpent.manaAfter,
                     previousValue: manaSpent.manaBefore,

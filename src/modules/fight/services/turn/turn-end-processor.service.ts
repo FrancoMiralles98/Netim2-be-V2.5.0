@@ -5,12 +5,10 @@ import { TurnContext } from "../../types/fight/fight-context.types";
 import { AuraManager } from "../../manager/aura-manager";
 import { StatusEffectManager } from "../../manager/status-effect-manager";
 import { BuffManager } from "../../manager/buff-manager";
-import { ActiveDurationAdvanceResult, CombatAction } from "netim2-shared";
+import {  CombatAction } from "netim2-shared";
 import { ActiveAuraEntity } from "../../entities/active-aura.entity";
-import { ProcessAuraDuration } from "../../types/auraManager/auraManager.types";
 import { ActiveBuffEntity } from "../../entities/active-buff.entity";
 import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
-import { randomUUID } from "crypto";
 
 @Injectable()
 export class TurnEndProcessorService {
@@ -67,11 +65,19 @@ export class TurnEndProcessorService {
         }
 
         for (const buff of buffs) {
-            context.events.push({
-                type: 'buff_duration_updated',
-                remainingTurns: buff.getRemainingTurns() ?? 0,
-                skillId: buff.getSkillId(),
-            })
+            if (buff.getTotalRemainingUses() <= 0)
+                context.events.push({
+                    type: 'buff_duration_updated',
+                    remainingTurns: 0,
+                    skillId: buff.getSkillId(),
+                })
+            else {
+                context.events.push({
+                    type: 'buff_duration_updated',
+                    remainingTurns: buff.getRemainingTurns() ?? 0,
+                    skillId: buff.getSkillId(),
+                })
+            }
         }
     }
 

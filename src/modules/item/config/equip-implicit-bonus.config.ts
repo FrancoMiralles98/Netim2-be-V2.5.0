@@ -32,9 +32,9 @@ export const RANDOM_IMPLICIT_BONUS_CONFIG: EquipImplictBonusConfig = {
         {
             bonusRef: 'critico',
             tierValue: [
-                { tier: 1, pattern: 'scale_to_10' },
-                { tier: 2, pattern: 'scale_to_15' },
-                { tier: 3, pattern: 'scale_to_20' },
+                { tier: 1, pattern: 'scale_to_7' },
+                { tier: 2, pattern: 'scale_to_12' },
+                { tier: 3, pattern: 'scale_to_15' },
             ]
         },
         {
