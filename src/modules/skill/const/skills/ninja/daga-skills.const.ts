@@ -47,6 +47,8 @@ export const DAGA_SKILLS: SkillSummary[] = [
       'Camufalte para que el enemigo no te vea y aumenta tu daño en tu siguiente habilidad.',
     id: UNIQUE_ID_SKILLS.CAMUFLAJE,
     effects: [{
+      consumeOn: 'skill_use',
+      uses: 1,
       multiplier: 1,
       type: 'next_skill_damage_multiplier',
       allowedSkillIds: [

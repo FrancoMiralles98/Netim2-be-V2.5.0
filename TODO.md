@@ -62,3 +62,4 @@ MODULO
         drop:
             - Falta terminar el retorno del item en 'equipment-item-drop" todavia en el modulo de item no esta listo o no hay un metodo que retorne el item actualizado, con sus respectios daños segun el upgradeLv y agregado de bonus
         mob: falta hacer el mergeStats para la craacion de los mobs, y asignarle los sstas que progresan segun lv o tipo de enemigo en 'mob-factory'
+        historial: completar el historial, debido a que se cambio el sistema de fightModule, hay cosas que quedaron comentadas o sueltas sin resolver

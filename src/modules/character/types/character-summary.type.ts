@@ -1,4 +1,4 @@
-import { BaseCharacterProps } from "./baseCharacterProps/base-character-props.type";
+import { BaseCharacterProps } from "netim2-shared";
 
 /**
  * Define la base de datos que se utiliza para construir el resumen de un personaje.
@@ -36,5 +36,5 @@ type CharacterSummaryBase = Pick<
  */
 export type CharacterSummary = Omit<CharacterSummaryBase, 'stats'> & {
   id: string;
-  stats: Pick<BaseCharacterProps['stats'], 'atributos'>;
+  stats: BaseCharacterProps['atributos']
 };

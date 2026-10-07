@@ -1,6 +1,6 @@
+import { CañaType } from "netim2-shared";
 import { CAÑA_EXP_X_LV } from "src/modules/item/config/caña.config";
 import { EQUIP_RULES } from "src/modules/item/config/items-rule.const";
-import { CañaType } from "src/modules/item/types/entities-props/caña.type";
 
 export const CAÑA_BASE_ITEM = {
     acc: true,

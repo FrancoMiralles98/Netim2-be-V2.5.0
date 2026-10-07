@@ -1,0 +1,170 @@
+import { CombatStatKey, DamageCondition, SkillDamage, StatsModifiers, StatsScaling, StatusEffectsKeys } from "netim2-shared";
+import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
+import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
+import { TurnContext } from "../../types/fight/fight-context.types";
+
+export interface StatusEffectDurationConfig {
+    baseTurns: number;
+    /**
+     * Stat efectiva que aumenta la duración.
+     */
+    bonusTarget: CombatStatKey[];
+
+    canStackDuration: boolean
+
+    maxTurns?: number;
+}
+
+export interface PeriodicStatusEffectBaseConfig {
+    type: 'periodic_damage';
+    resistible: boolean;
+    duration: StatusEffectDurationConfig;
+
+    /**
+     * Ratio del daño que aplicó el efecto.
+     *
+     * 0.13 representa 13 %.
+     */
+    baseDamageRatio: number;
+
+    bonusDamageCondition?: {
+        condition: DamageCondition,
+        bonusDamageRatio: number
+    };
+
+    /**
+     * Escalado con estadísticas efectivas del objetivo.
+     */
+    statsScaling?: StatsScaling[];
+
+    /**
+     * Bonificaciones porcentuales del atacante.
+     */
+    damageBonusTarget?: CombatStatKey[];
+
+    statsModifiers?: StatsModifiers[];
+
+    stacks?: {
+        initial: number;
+        max: number;
+        toApplyExtraDamage: number;
+    };
+}
+
+export interface PoisonStatusEffectConfig
+    extends PeriodicStatusEffectBaseConfig {
+    effectId: 'veneno';
+
+    healReduction: number;
+}
+
+export interface FireStatusEffectConfig
+    extends PeriodicStatusEffectBaseConfig {
+    effectId: 'incendio';
+
+    /**
+     * Ratio adicional cuando se reaplica.
+     *
+     * 0.10 representa +10 %.
+     */
+    extraDamageRatioPerRefresh: number;
+}
+
+export interface BleedingStatusEffectConfig
+    extends PeriodicStatusEffectBaseConfig {
+    effectId: 'sangrado';
+
+    /**
+     * Daño agregado por cada punto de velocidad
+     * de movimiento del objetivo.
+     */
+    damagePerMovementSpeedPoint: number;
+}
+
+export interface ElectricStatusEffectConfig
+    extends PeriodicStatusEffectBaseConfig {
+    effectId: 'electrico';
+
+    /**
+     * Ratio extra al alcanzar la cantidad
+     * configurada de stacks.
+     */
+    extraDamageRatioPerStackThreshold: number;
+}
+
+export interface ControlStatusEffectConfig {
+    type: 'control';
+    resistible: boolean;
+    duration: StatusEffectDurationConfig;
+
+    statsModifiers?: StatsModifiers[];
+}
+
+export interface StatModifierStatusEffectConfig {
+    type: 'stat_modifier';
+    resistible: boolean;
+    duration: StatusEffectDurationConfig;
+
+    statsModifiers: StatsModifiers[];
+}
+
+export type PeriodicStatusEffectConfig =
+    | PoisonStatusEffectConfig
+    | FireStatusEffectConfig
+    | BleedingStatusEffectConfig
+    | ElectricStatusEffectConfig;
+
+
+export type StatusEffectConfig =
+    | PoisonStatusEffectConfig
+    | FireStatusEffectConfig
+    | BleedingStatusEffectConfig
+    | ElectricStatusEffectConfig
+    | ControlStatusEffectConfig
+    | StatModifierStatusEffectConfig
+    | HealingReductionEffectData
+
+export interface ResolveSkillEffectsInput {
+    source: FighterCombatEntity;
+    target: FighterCombatEntity;
+    triggeringDamage: number
+    effect: Partial<Record<ActiveStatusEffectId, number>> | undefined;
+    isCritic: boolean
+    appliedOnTurn: number;
+    context: TurnContext
+}
+
+export interface StatusEffectApplicationResult {
+    effectId: ActiveStatusEffectId;
+
+    applied: boolean;
+    resisted: boolean;
+
+    baseChance: number;
+
+    instanceId?: string;
+
+    remainingTurns?: number;
+    resistanceChance?: number;
+    damageTick?: number;
+
+    stacks?: {
+        current: number;
+        toApplyExtraDamage: number;
+    }
+}
+
+export interface HealingReductionEffectData {
+    type: 'healing_reduction';
+
+    effectId: 'corta_curacion';
+    resistible: boolean;
+    duration: StatusEffectDurationConfig;
+    statsModifiers?: StatsModifiers[];
+
+    /**
+     * 50 significa reducir un 50% toda
+     * curación recibida.
+     */
+    reductionPercent: number;
+}

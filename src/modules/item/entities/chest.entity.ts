@@ -1,4 +1,4 @@
-import { ChestType, Reward } from "../types/entities-props/chest.type";
+import { ChestType, Reward } from "netim2-shared";
 import { UtilityBase } from "./utility-base.entity";
 
 export class Chest extends UtilityBase {

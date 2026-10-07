@@ -1,8 +1,5 @@
-import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
-import { ItemDTO, UtilityItemDTO } from "./item-dto";
-import { EquipType } from "./entities-props/equip.type";
-import { PiedraType } from "./entities-props/piedra.type";
-import { MonturaType } from "./entities-props/montura.type";
+import { EquipType, InventoryItem, ItemDTO, MonturaType, PiedraType, UtilityItemDTO } from "netim2-shared"
+
 
 export const isUtilityItem = (item: InventoryItem | ItemDTO): item is UtilityItemDTO => {
     return item.type === 'utility' && 'cantidad' in item

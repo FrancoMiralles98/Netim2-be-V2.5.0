@@ -83,19 +83,7 @@ export const SURA_SKILLS_SCALING: StructureSkillScaling = {
             cd: { onDeactivate: 5 },
             mana: { base: 1, perLv: 1 },
             duration: { base: 1, perLv: 1 },
-            escaladoBuffos: {
-                def_hab: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.27,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-            },
+            escaladoStatsModifiers:[]
         },
     },
     Espejo: {
@@ -150,30 +138,7 @@ export const SURA_SKILLS_SCALING: StructureSkillScaling = {
             mana: { base: 1, perLv: 1 },
             duration: { base: 1, perLv: 1 },
             escaladoAtributos: { INT: 1.5, VIT: 0.5 },
-            escaladoBuffos: {
-                media: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.7,
-                        basicMulti: 1,
-                        masterMulti: 1.05,
-                        granMasterMulti: 1.1,
-                        perfectMulti: 1.15,
-                    },
-                    scaleWithAttribute: true
-                },
-                robo_vida: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.27,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-            },
+            escaladoStatsModifiers: []
         },
         [UNIQUE_ID_SKILLS.ARMADURA_ENCANTADA]: {
             type: "aura",
@@ -181,30 +146,7 @@ export const SURA_SKILLS_SCALING: StructureSkillScaling = {
             mana: { base: 1, perLv: 1 },
             duration: { base: 1, perLv: 1 },
             escaladoAtributos: {},
-            escaladoBuffos: {
-                def_media: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.22,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-                reflectar: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.55,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-            },
+            escaladoStatsModifiers: []
         },
         [UNIQUE_ID_SKILLS.MIEDO]: {
             type: "aura",
@@ -212,30 +154,7 @@ export const SURA_SKILLS_SCALING: StructureSkillScaling = {
             mana: { base: 1, perLv: 1 },
             duration: { base: 1, perLv: 1 },
             escaladoAtributos: {},
-            escaladoBuffos: {
-                bloquear_ataques: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.4,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-                esquivar_ataques: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.4,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-            },
+            escaladoStatsModifiers: []
         },
     },
 }

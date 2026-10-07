@@ -1,4 +1,4 @@
-import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys, BonusMiscsRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
+import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys } from "netim2-shared";
 
 export interface MobStats {
   general: {

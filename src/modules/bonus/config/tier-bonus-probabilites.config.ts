@@ -1,5 +1,4 @@
-import { ItemBonusQuality } from "src/modules/bonus/types/item-bonus-quaility.type";
-import { BonusTierLv } from "../types/bonusListHelper/bonus.type";
+import { BonusTierLv, ItemBonusQuality } from "netim2-shared";
 
 /**
  * Probabilidades de aparición de cada tier de bonus genérico segun la calidad.

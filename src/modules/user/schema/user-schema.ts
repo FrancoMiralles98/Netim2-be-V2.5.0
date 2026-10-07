@@ -1,8 +1,7 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { UserRole } from "../types/user-roles.enum";
 import { HydratedDocument } from "mongoose";
-import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
-import { ReinosNames } from "netim2-shared";
+import { InventoryItem, ReinosNames } from "netim2-shared";
 
 @Schema({ timestamps: true })
 export class UserModel {

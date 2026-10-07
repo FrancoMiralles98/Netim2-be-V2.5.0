@@ -1,7 +1,6 @@
 import { IsIn, IsString, Matches, MaxLength, MinLength } from "class-validator";
-import { CharacterRace } from "../types/baseCharacterProps/character-stats.type";
 import { ReinosNames } from "src/modules/gameData/reinos/reinos-names.type";
-import { CharacterCreationValues } from "netim2-shared";
+import { CharacterCreationValues, CharacterRace } from "netim2-shared";
 
 export class CreateCharacterDto implements CharacterCreationValues {
 

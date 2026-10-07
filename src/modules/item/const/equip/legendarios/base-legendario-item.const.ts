@@ -1,5 +1,6 @@
+import { EquipType } from "netim2-shared";
 import { EQUIP_RULES } from "src/modules/item/config/items-rule.const";
-import { EquipType } from "src/modules/item/types/entities-props/equip.type";
+
 
 export const BASE_LEGENDARIO_ITEM = {
     upgradeLv: 0,

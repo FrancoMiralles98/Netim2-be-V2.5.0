@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { AppService } from './app.service';
-import { ItemDTO } from './modules/item/types/item-dto';
 import { ItemService } from './modules/item/item.service';
+import { ItemDTO } from 'netim2-shared';
 
 @Controller()
 export class AppController {

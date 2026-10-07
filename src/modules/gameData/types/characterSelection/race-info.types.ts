@@ -1,4 +1,4 @@
-import { CharacterAttribute, CharacterRace, CharacterSpeciality } from "src/modules/character/types/baseCharacterProps/character-stats.type";
+import { AttributesRefKeys, CharacterRace, CharacterSpeciality } from "netim2-shared";
 
 /**
  * @description Configuración enviada al cliente para la creación de personajes
@@ -21,4 +21,4 @@ export interface CharacterStatsSpeciality {
     statsLimit: StatsLimit;
 }
 
-export type StatsLimit = Record<CharacterAttribute, number>;
+export type StatsLimit = Record<AttributesRefKeys, number>;

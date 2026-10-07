@@ -1,6 +1,6 @@
+import { BuffType, IdItem } from "netim2-shared";
 import { createBuffItem } from "src/modules/item/factories/item-builder";
-import { BuffType } from "src/modules/item/types/entities-props/buff.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+
 
 export const BUFF_LIST: BuffType[] = [
     createBuffItem({

@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { LetterMasteryLv, SkillDamage, SkillDamageScaling, WeightedDamageModifier, WeightedDamageModifierScaling, WeightedHitCountModifier, WeightedHitCountScaling } from "netim2-shared";
+import { LetterMasteryLv, SkillDamage, WeightedDamageModifier, WeightedHitCountModifier } from "netim2-shared";
 import { SharedSkillService } from "../shared-skill.service";
+import { SkillDamageScaling, WeightedDamageModifierScaling, WeightedHitCountScaling } from "../../types/scaling/damage/skill-damage-scaling.type";
 
 @Injectable()
 export class ModifiersCalculatorService {

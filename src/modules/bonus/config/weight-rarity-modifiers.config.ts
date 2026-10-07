@@ -1,4 +1,4 @@
-import { BonusTierLv } from "../types/bonusListHelper/bonus.type";
+import { BonusTierLv } from "netim2-shared";
 
 /**
  * Modificadores de peso según el tier del bonus.

@@ -1,6 +1,6 @@
+import { IdItem, MonturaType } from "netim2-shared";
 import { createMonturaItem } from "src/modules/item/factories/item-builder";
-import { MonturaType } from "src/modules/item/types/entities-props/montura.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+
 
 export const LICENCIA_MONTURA_LIST: MonturaType[] = [
     createMonturaItem({

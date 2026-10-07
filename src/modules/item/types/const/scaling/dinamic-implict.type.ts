@@ -1,4 +1,4 @@
-import { subTypeEquip, TypeWeapon } from "../../entities-props/equip.type"
+import { subTypeEquip, TypeWeapon } from "netim2-shared"
 import { BaseImplicitConfig } from "./core-equip-item.type"
 
 export type DinamicImplicitConfig = DinamicWeaponConfig | DinamicArmorConfig

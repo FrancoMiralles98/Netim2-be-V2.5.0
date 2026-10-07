@@ -1,4 +1,4 @@
-import { BonusRefKeys } from "./bonusListHelper/ref-bonus-name.type";
+import { BonusRefKeys } from "netim2-shared";
 
 export type SpecialBonus = Extract<BonusRefKeys,'media' | 'habilidad'>
 

@@ -52,6 +52,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
                     DEX: 1
                 },
                 statsScaling: [{
+                    target: 'general.vm',
                     stat: 'vm',
                     base: 1,
                     perLv: 0.1
@@ -88,19 +89,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
             duration: { base: 1, perLv: 1 },
             mana: { base: 1, perLv: 1 },
             escaladoAtributos: { STR: 1.5 },
-            escaladoBuffos: {
-                media: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 1.05,
-                        basicMulti: 1,
-                        masterMulti: 1.1,
-                        granMasterMulti: 1.2,
-                        perfectMulti: 1.3,
-                    },
-                    scaleWithAttribute: true
-                },
-            },
+            escaladoStatsModifiers: []
         },
         [UNIQUE_ID_SKILLS.BERSEK]: {
             type: "aura",
@@ -108,30 +97,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
             duration: { base: 1, perLv: 1 },
             mana: { base: 1, perLv: 1 },
             escaladoAtributos: {},
-            escaladoBuffos: {
-                va: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 1,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-                vm: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 1,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-            },
+            escaladoStatsModifiers: []
         },
     },
     Mental: {
@@ -205,63 +171,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
             duration: { base: 1, perLv: 1 },
             mana: { base: 1, perLv: 1 },
             escaladoAtributos: { VIT: 1.5, STR: 0.5 },
-            escaladoBuffos: {
-                def_veneno: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 1,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-                def_electrico: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 1,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-                def_sangrado: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 1,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-                def_incendio: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 1,
-                        basicMulti: 1,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: false
-                },
-                regen_hp: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.2,
-                        basicMulti: 1.5,
-                        masterMulti: 3,
-                        granMasterMulti: 4.5,
-                        perfectMulti: 6,
-                    },
-                    scaleWithAttribute: true
-                },
-            },
+            escaladoStatsModifiers: []
         },
     },
 }

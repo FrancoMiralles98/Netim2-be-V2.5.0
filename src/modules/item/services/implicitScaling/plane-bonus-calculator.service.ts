@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { PatternScaleType, UpgradeLv } from "../../types/config/general-implicit.type";
+import { PatternScaleType } from "../../types/config/general-implicit.type";
 import { PATTERN_SCALE_CONFIG } from "../../config/scaling/general-pattern-scale.config";
+import { UpgradeLv } from "netim2-shared";
 
 @Injectable()
 export class PlaneBonusCalculator {

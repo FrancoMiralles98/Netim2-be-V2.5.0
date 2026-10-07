@@ -1,18 +1,10 @@
-import { ItemDTO } from "src/modules/item/types/item-dto";
 import { CharacterDomain } from "../types/character-domain.type";
-import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
-import { ItemsToConsumeType } from "src/modules/inventory/types/items-to-consume.types";
-import { InventoryChangeResult } from "src/modules/inventory/types/item-to-update.types";
-import { Position } from "src/modules/item/types/entities-props/item-base.type";
-import { CharacterAttribute, CharacterRace, CharacterSpeciality } from "../types/baseCharacterProps/character-stats.type";
 import { ATTRIBUTE_SPECIALITY_CAPS } from "../const/statsProgress/attribute-speciality-caps.const";
 import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.const";
-import { AddItemResult } from "src/modules/inventory/types/inventory-result.types";
 import { ATTRIBUTE_POINT_PROGRESSION } from "../const/statsProgress/attribute-point-progression.const";
 import { EXP_PER_LV } from "../const/exp-per-lv.const";
-import { CharacterPersistence } from "../types/character-persistence.type";
 import { isUtilityItem } from "src/modules/item/types/item-type-guard.type";
-import { MasteryLvRank } from "netim2-shared";
+import {  AddItemResult, AttributesRefKeys, CharacterPersistence, CharacterRace, CharacterSpeciality, InventoryChangeResult, InventoryItem, ItemDTO, ItemsToConsumeType, MasteryLvRank, Position } from "netim2-shared";
 import { SkillAuraEntity } from "src/modules/skill/entities/skill-aura.entity";
 import { SkillDamageEntity } from "src/modules/skill/entities/skill-damage.entity";
 import { SkillBuffEntity } from "src/modules/skill/entities/skill-buff.entity";
@@ -162,11 +154,11 @@ export class CharacterEntity {
         return this.props.stats.general.hp.actual > 0
     }
 
-    increaseAttribute(attribute: CharacterAttribute): void {
+    increaseAttribute(attribute: AttributesRefKeys): void {
         if (!this.canIncreaseAttribute(attribute)) {
             throw new Error(`No es posible incrementar el atributo: ${attribute}`)
         }
-        this.props.stats.atributos[attribute].lvPoints += 1
+        this.props.atributos[attribute].lvPoints += 1
         this.props.puntos_atributos -= 1
     }
 
@@ -178,7 +170,7 @@ export class CharacterEntity {
         if (typeof skill.lv === 'number') {
             this.props.puntos_habilidad -= 1
         }
-        skill.upgradeRankLv()
+        //skill.upgradeRankLv()
         return skill
     }
 
@@ -186,10 +178,10 @@ export class CharacterEntity {
         return this.props.yang >= value
     }
 
-    private canIncreaseAttribute(attribute: CharacterAttribute): boolean {
+    private canIncreaseAttribute(attribute: AttributesRefKeys): boolean {
         const cap = this.getAttributeCap(attribute, this.props.raza, this.props.especialidad)
         return (
-            this.props.stats.atributos[attribute].lvPoints < cap &&
+            this.props.atributos[attribute].lvPoints < cap &&
             this.props.puntos_atributos > 0
         )
     }
@@ -209,7 +201,7 @@ export class CharacterEntity {
      * @returns 
      */
     private getAttributeCap(
-        attribute: CharacterAttribute,
+        attribute: AttributesRefKeys,
         race: CharacterRace,
         speciality?: CharacterSpeciality): number {
 

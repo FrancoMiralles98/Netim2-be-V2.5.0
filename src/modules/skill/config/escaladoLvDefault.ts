@@ -1,4 +1,4 @@
-import { SkillScalingLv } from "netim2-shared";
+import { SkillScalingLv } from "../types/scaling/escalado-lv.types";
 
 export const ESCALADO_LV_DEFAULT = {
     perLv: 2,

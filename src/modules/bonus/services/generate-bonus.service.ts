@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { BonusCategory, BonusTierLv, BonusType } from '../types/bonusListHelper/bonus.type';
 import { BONUS_LIST } from '../const/bonus-list.cons';
 import { TIER_BONUS_PROBABILITIES_X_QUALITY } from '../config/tier-bonus-probabilites.config';
-import { BonusInItem } from '../types/bonus-in-item.type';
+
 import { SpecialBonusService } from './special-bonus.service';
 import { ItemLevelScalingService } from './item-level-scaling.service';
 import { RngService } from 'src/modules/shared/services/rng.service';
-import { ItemBonusQuality } from 'src/modules/bonus/types/item-bonus-quaility.type';
-import { subTypeEquip } from 'src/modules/item/types/entities-props/equip.type';
+import { BonusCategory, BonusInItem, BonusTierLv, BonusType, ItemBonusQuality, subTypeEquip } from 'netim2-shared';
+
 
 /**
  * Servicio encargado de la generación de bonus para ítems.

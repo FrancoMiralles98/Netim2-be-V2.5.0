@@ -1,4 +1,4 @@
-import { ChestType } from "src/modules/item/types/entities-props/chest.type";
+import { ChestType } from "netim2-shared";
 
 export const BASE_CHEST_ITEM = {
     acc: true,

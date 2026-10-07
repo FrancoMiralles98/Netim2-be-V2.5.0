@@ -1,4 +1,4 @@
-import { BonusDefensaRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
+import { BonusDefensaRefKeys } from "netim2-shared";
 
 /**
  * Progresiones base de defensa para mobs segun nivel.

@@ -15,6 +15,7 @@ export class SkillDamageEntity extends BaseSkillEntity<SkillDamage> {
         return {
             ...summary,
             lv: 1,
+            mastery: 'N',
             components: [],
             cd: {},
             nombre: '',

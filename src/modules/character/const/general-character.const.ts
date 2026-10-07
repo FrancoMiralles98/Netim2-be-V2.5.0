@@ -1,11 +1,10 @@
-import { CharacterPersistence } from "../types/character-persistence.type";
 import { BASE_DISCOVERY_WORLD } from "./characterProps/base-discovery-world.const";
 import { BASE_DUNGEON_IN_PROGRESS } from "./characterProps/base-dungeon-in-progress.const";
 import { BASE_EQUIPO_OPTIONS } from "./characterProps/base-equipo-options.const";
 import { BASE_PVP_DATA } from "./characterProps/base-pvp-data-default.const";
 import { EXP_PER_LV } from "./exp-per-lv.const";
-import { CharacterRole } from "../types/baseCharacterProps/character-role.enum";
 import { GENERAL_CHARACTER_STATS } from "./characterProps/base-character-stats.const";
+import { CharacterPersistence, CharacterRole } from "netim2-shared";
 
 export const GENERAL_CHARACTER: CharacterPersistence = {
     beginning: true,
@@ -15,6 +14,33 @@ export const GENERAL_CHARACTER: CharacterPersistence = {
     dungeon_in_progress: BASE_DUNGEON_IN_PROGRESS,
     equipo_1: [],
     equipo_2: [],
+    atributos: {
+        DEX: {lvPoints:0,bonusPoints:0},
+        INT: {lvPoints:0,bonusPoints:0},
+        STR: {lvPoints:0,bonusPoints:0},
+        VIT: {lvPoints:0,bonusPoints:0},
+    },
+    fightConfig: {
+        allies: {},
+        enemies: {
+            focus: true,
+            selector: 'less_max_hp'
+        },
+        self: {
+            HealingSkillHpThresholdPercent: 60,
+            priorityBassicAttack: false,
+            reactiveAuras: true,
+            skillPriority: [
+            'more_damage',
+            'more_cd',
+            'less_damage',
+            'control',
+            'has_periodicDamage',
+            'less_cd',
+            'stat_modifier'
+        ]
+        }
+    },
     equipo_3: [],
     equipo_options: BASE_EQUIPO_OPTIONS,
     equipo_selected: 1,

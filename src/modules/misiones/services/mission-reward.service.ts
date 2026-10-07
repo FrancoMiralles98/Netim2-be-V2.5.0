@@ -3,9 +3,9 @@ import { IdMissionsList } from "../types/idMissions/id-mission-list.enum";
 import { EXP_PER_LV } from "src/modules/character/const/exp-per-lv.const";
 import { EXP_MISSION_CONFIG } from "../config/exp-mission.config";
 import { ItemsConfig } from "../types/mission-base.type";
-import { ItemDTO } from "src/modules/item/types/item-dto";
 import { isEquipItem, isPiedraItem, isUtilityItem } from "src/modules/item/types/item-type-guard.type";
 import { ItemService } from "src/modules/item/item.service";
+import { ItemDTO } from "netim2-shared";
 
 @Injectable()
 export class MissionRewardService {

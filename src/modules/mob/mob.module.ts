@@ -3,14 +3,18 @@ import { MobService } from './mob.service';
 import { MobController } from './mob.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MobModel, mobSchema } from './schema/mob.schema';
+import { MobRepository } from './repository/mob.repository';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
-      {name: MobModel.name, schema:mobSchema}
+      { name: MobModel.name, schema: mobSchema }
     ])
   ],
   controllers: [MobController],
-  providers: [MobService],
+  providers: [MobService, MobRepository],
+  exports: [
+    MobService
+  ]
 })
-export class MobModule {}
+export class MobModule { }

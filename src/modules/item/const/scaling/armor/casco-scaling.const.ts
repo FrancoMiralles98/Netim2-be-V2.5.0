@@ -1,5 +1,5 @@
+import { IdItem } from "netim2-shared";
 import { CoreImplicitItem } from "../../../types/const/scaling/core-equip-item.type";
-import { IdItem } from "../../../types/iditems/id-item-list.type";
 
 export const CASCO_SCALING: CoreImplicitItem[] = [
     {

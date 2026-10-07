@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { SkillDamage, SkillDamageScaling } from "netim2-shared";
+import { SkillDamage } from "netim2-shared";
+import { SkillDamageScaling } from "../../types/scaling/damage/skill-damage-scaling.type";
 
 @Injectable()
 export class EffectsCalculatorService {

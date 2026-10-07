@@ -1,18 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { DiscoveryWorld } from "../types/baseCharacterProps/discovery-world.type";
-import { StarDiscovery } from "../types/baseCharacterProps/stars-discovery.type";
 import { ReinosNames } from "src/modules/gameData/reinos/reinos-names.type";
-import { AppliedBuffos } from "../types/baseCharacterProps/buffos-in-character.type";
-import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
-import { EquipType, TypeWeapon } from "src/modules/item/types/entities-props/equip.type";
-import { EquipoOptions } from "../types/baseCharacterProps/equipo-options.type";
-import { GremioOptions } from "../types/baseCharacterProps/gremio-options.type";
-import { CharacterRace, CharacterSpeciality, CharacterStats } from "../types/baseCharacterProps/character-stats.type";
-import { CharacterRole } from "../types/baseCharacterProps/character-role.enum";
-import { MonturaType } from "src/modules/item/types/entities-props/montura.type";
-import { MissionOption } from "../types/baseCharacterProps/mission-option.type";
-import { DungeonInProgressType } from "../types/baseCharacterProps/dungeon-in-progress.type";
-import { PvpDataType } from "../types/baseCharacterProps/pvp-data.type";
 import { BASE_DISCOVERY_WORLD } from "../const/characterProps/base-discovery-world.const";
 import { BASE_EQUIPO_OPTIONS } from "../const/characterProps/base-equipo-options.const";
 import { EXP_PER_LV } from "../const/exp-per-lv.const";
@@ -21,7 +8,7 @@ import { BASE_DUNGEON_IN_PROGRESS } from "../const/characterProps/base-dungeon-i
 import { BASE_MISSION_IN_PROGRESS } from "../const/characterProps/base-mission-in-progress.const";
 import { HydratedDocument } from "mongoose";
 import { AllTargetType } from "src/modules/gameData/types/all-races.type";
-import { SkillType } from "netim2-shared";
+import { AppliedBuffos, Atributos, CharacterRace, CharacterRole, CharacterSpeciality, DiscoveryWorld, DungeonInProgressType, EquipoOptions, EquipType, FightConfig, GremioOptions, InventoryItem, MissionOption, MonturaType, PvpDataType, SkillType, StarDiscovery, Stats, TypeWeapon } from "netim2-shared";
 
 @Schema({ timestamps: true })
 export class CharacterModel {
@@ -34,19 +21,19 @@ export class CharacterModel {
     @Prop({ type: Array, default: [] })
     stars_discovery!: StarDiscovery[];
 
-    @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
+    @Prop({ type: Number, default: () => Date.now()})
     timer_mob!: number;
 
-    @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
+    @Prop({ type: Number, default: () => Date.now()  })
     timer_metin!: number;
 
-    @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
+    @Prop({ type: Number, default: () => Date.now()})
     timer_pvp!: number;
 
-    @Prop({ type: Number, default: () => Date.now() - 5 * 60 * 1000 })
+    @Prop({ type: Number, default: () => Date.now() })
     timer_boss!: number;
 
-    @Prop({ type: Number, default: 0 })
+    @Prop({ type: Number, default: 15 })
     timer_lv!: number;
 
     @Prop({ type: String, required: true })
@@ -104,7 +91,10 @@ export class CharacterModel {
     time_played!: number;
 
     @Prop({ type: Object, required: true })
-    stats!: CharacterStats;
+    stats!: Stats;
+
+    @Prop({ type: Object, required: true })
+    atributos!: Atributos;
 
     @Prop({ type: String, default: CharacterRole.USER })
     role!: CharacterRole
@@ -144,6 +134,9 @@ export class CharacterModel {
 
     @Prop({ type: String, required: true })
     user_owner!: string;
+
+    @Prop({ type: Object, required: true })
+    fightConfig!: FightConfig
 }
 
 export type CharacterDocument = HydratedDocument<CharacterModel>

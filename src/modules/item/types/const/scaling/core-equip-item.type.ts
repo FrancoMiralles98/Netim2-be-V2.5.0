@@ -1,8 +1,6 @@
-import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type"
+import { BonusOrigin, BonusRefKeys, IdItemList } from "netim2-shared";
 import { PatternScaleType } from "../../config/general-implicit.type"
-import { BonusOrigin } from "src/modules/bonus/types/bonus-in-item.type";
 import { DinamicImplicitConfig, } from "./dinamic-implict.type";
-import { IdItemList } from "../../iditems/id-item-list.type";
 import { SpecificImplicitConfig } from "./specific-implict.types";
 
 /**

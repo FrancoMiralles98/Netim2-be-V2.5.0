@@ -1,12 +1,12 @@
 import { Inventory } from "src/modules/inventory/entities/inventory.entity";
-import { CharacterPersistence } from "../types/character-persistence.type";
 import { CharacterEntity } from "../entity/character-entity";
 import { CharacterDocument, CharacterModel } from "../schema/character.schema";
 import { SkillFactory } from "src/modules/skill/factories/skill.factory";
 import { GENERAL_CHARACTER } from "../const/general-character.const";
 import { CreateCharacterDto } from "../dto/create-character.dto";
 import { Injectable } from "@nestjs/common";
-import { CharacterSummary } from "../types/character-summary.type";
+import { Atributos, CharacterPersistence, CharacterRace, CharacterSummary } from "netim2-shared";
+import { ATTRIBUTE_BASE_BY_RACE } from "../const/statsProgress/attribute-base-by-race.const";
 
 /**
  * Mapper encargado de transformar datos entre las distintas capas:
@@ -26,6 +26,8 @@ export class CharacterMapper {
         return {
             atribute_per_lv: doc.atribute_per_lv,
             beginning: doc.beginning,
+            atributos: doc.atributos,
+            fightConfig: doc.fightConfig,
             buffos: doc.buffos,
             discovery_world: doc.discovery_world,
             dungeon_in_progress: doc.dungeon_in_progress,
@@ -102,21 +104,23 @@ export class CharacterMapper {
         baseCharacterCopy.genero = props.genero!
         baseCharacterCopy.raza = props.raza!
         baseCharacterCopy.reino = props.reino!
+        baseCharacterCopy.atributos = this.asignAttributesByRace(props.raza)
 
         return baseCharacterCopy
     }
 
-/**
- * Convierte un documento de personaje de MongoDB a un resumen seguro para el cliente.
- *
- * Este mapper reduce la información del personaje a los datos necesarios para
- * mostrarlo en la pantalla de selección de personajes.
- *
- *
- * @param character Documento completo del personaje obtenido desde MongoDB.
- * @returns Resumen del personaje preparado para ser enviado al cliente.
- */
+    /**
+     * Convierte un documento de personaje de MongoDB a un resumen seguro para el cliente.
+     *
+     * Este mapper reduce la información del personaje a los datos necesarios para
+     * mostrarlo en la pantalla de selección de personajes.
+     *
+     *
+     * @param character Documento completo del personaje obtenido desde MongoDB.
+     * @returns Resumen del personaje preparado para ser enviado al cliente.
+     */
     toSummary(character: CharacterDocument): CharacterSummary {
+
         return {
             id: character._id.toString(),
             nombre: character.nombre,
@@ -125,12 +129,20 @@ export class CharacterMapper {
             lv: character.lv,
             reino: character.reino,
             time_played: character.time_played,
-            stats: {
-                atributos: character.stats.atributos
-            },
+            stats: character.atributos,
             especialidad: character.especialidad,
             gremio_options: character.gremio_options
 
         };
+    }
+
+    private asignAttributesByRace(raza: CharacterRace): Atributos {
+        const baseAttributes = ATTRIBUTE_BASE_BY_RACE[raza]
+        return {
+            DEX: { lvPoints: baseAttributes.DEX, bonusPoints: 0 },
+            INT: { lvPoints: baseAttributes.INT, bonusPoints: 0 },
+            STR: { lvPoints: baseAttributes.DEX, bonusPoints: 0 },
+            VIT: { lvPoints: baseAttributes.VIT, bonusPoints: 0 },
+        }
     }
 }

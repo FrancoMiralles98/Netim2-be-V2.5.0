@@ -1,7 +1,7 @@
+import { IdItem, PiedraType } from "netim2-shared";
 import { EQUIP_RULES } from "src/modules/item/config/items-rule.const";
 import { createPiedraItem } from "src/modules/item/factories/item-builder";
-import { PiedraType } from "src/modules/item/types/entities-props/piedra.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+
 
 export const PIEDRA_LIST: PiedraType[] = [
     createPiedraItem({

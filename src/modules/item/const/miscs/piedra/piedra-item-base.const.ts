@@ -1,4 +1,4 @@
-import { PiedraType } from "src/modules/item/types/entities-props/piedra.type";
+import { PiedraType } from "netim2-shared";
 
 export const BASE_PIEDRA_ITEM = {
     type_utility: 'piedra',

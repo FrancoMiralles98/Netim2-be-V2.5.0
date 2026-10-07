@@ -1,9 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { ConfiguredItemBonusCalculatorService } from "./configured-item-bonus-calculator.service";
 import { RandomImplicitBonusService } from "./random-implicit-bonus.service";
-import { ItemDTO } from "../../types/item-dto";
-import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
 import { isEquipItem, isMonturaItem, isPiedraItem } from "../../types/item-type-guard.type";
+import { InventoryItem, ItemDTO } from "netim2-shared";
 
 
 @Injectable()

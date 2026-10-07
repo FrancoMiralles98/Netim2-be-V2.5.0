@@ -1,11 +1,7 @@
 
-import { BonusInItem } from 'src/modules/bonus/types/bonus-in-item.type';
-import {
-  MonturaDescription,
-  MonturaType,
-} from '../types/entities-props/montura.type';
 import { UtilityBase } from './utility-base.entity';
 import { MONUTRA_RULES } from '../config/items-rule.const';
+import { BonusInItem, MonturaDescription, MonturaType } from 'netim2-shared';
 
 export class Montura extends UtilityBase {
   protected monturaLv: number;

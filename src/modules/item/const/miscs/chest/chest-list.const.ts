@@ -1,6 +1,6 @@
+import { ChestType, IdItem } from "netim2-shared";
 import { createChestItem } from "src/modules/item/factories/item-builder";
-import { ChestType } from "src/modules/item/types/entities-props/chest.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+
 
 export const CHEST_LIST: ChestType[] = [
     createChestItem({

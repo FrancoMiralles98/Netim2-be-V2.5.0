@@ -1,4 +1,4 @@
-import { DropWeightType } from "../../types/drop-weight.type";
+import { DropWeightType } from "netim2-shared/dist/drop/drop-weight.type";
 
 /**
  * Multiplicadores utilizados por el bonus de frecuencia de objetos raros.

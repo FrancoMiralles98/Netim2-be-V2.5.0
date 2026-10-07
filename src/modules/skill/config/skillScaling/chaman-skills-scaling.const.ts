@@ -8,9 +8,8 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
         [UNIQUE_ID_SKILLS.CURACION]: {
             type: 'heal',
             cd: { onActivate: 1 },
-            components: [{
-                damageType: 'true',
-                tags: ['heal', 'ap', 'skill'],
+            components: {
+                tags: ['heal', 'skill '],
                 escaladoMain: {
                     min: 1,
                     max: 2
@@ -20,8 +19,7 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                     VIT: 20,
                     INT: 20
                 },
-                statsScaling: []
-            }],
+            },
             mana: {
                 base: 100,
                 perLv: 5
@@ -123,30 +121,24 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                 STR: 1,
                 INT: 1
             },
-            escaladoBuffos: {
-                vm: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.3,
-                        basicMulti: 1.2,
-                        masterMulti: 1.4,
-                        granMasterMulti: 1.6,
-                        perfectMulti: 1.8,
-                    },
-                    scaleWithAttribute: true
+            escaladoStatsModifiers: [
+                {
+                    bonusRefKey: 'vm',
+                    operation: 'increased',
+                    target: 'general.vm',
+                    escalado: {
+                        scaleWithAttribute: true,
+                        base: 1,
+                        escaladoLv: {
+                            perLv: 0.3,
+                            basicMulti: 1.2,
+                            masterMulti: 1.4,
+                            granMasterMulti: 1.6,
+                            perfectMulti: 1.8,
+                        },
+                    }
                 },
-                vh: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.3,
-                        basicMulti: 1.2,
-                        masterMulti: 1.4,
-                        granMasterMulti: 1.6,
-                        perfectMulti: 1.8,
-                    },
-                    scaleWithAttribute: true
-                },
-            },
+            ]
         },
         [UNIQUE_ID_SKILLS.REMOLINOS]: {
             type: "aura",
@@ -157,30 +149,7 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                 DEX: 1,
                 INT: 1
             },
-            escaladoBuffos: {
-                vm: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.3,
-                        basicMulti: 1.2,
-                        masterMulti: 1.4,
-                        granMasterMulti: 1.6,
-                        perfectMulti: 1.8,
-                    },
-                    scaleWithAttribute: true
-                },
-                vh: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.3,
-                        basicMulti: 1.2,
-                        masterMulti: 1.4,
-                        granMasterMulti: 1.6,
-                        perfectMulti: 1.8,
-                    },
-                    scaleWithAttribute: true
-                },
-            }
+            escaladoStatsModifiers: []
         },
     },
     Dragon: {
@@ -259,19 +228,7 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
             duration: { base: 1, perLv: 1 },
             mana: { base: 1, perLv: 1 },
             escaladoAtributos: { INT: 1, STR: 1 },
-            escaladoBuffos: {
-                critico: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.2,
-                        basicMulti: 1.1,
-                        masterMulti: 1.2,
-                        granMasterMulti: 1.3,
-                        perfectMulti: 1.4,
-                    },
-                    scaleWithAttribute: true
-                },
-            },
+            escaladoStatsModifiers: []
         },
         [UNIQUE_ID_SKILLS.BENDICION]: {
             type: "aura",
@@ -279,19 +236,7 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
             duration: { base: 1, perLv: 1 },
             mana: { base: 1, perLv: 1 },
             escaladoAtributos: { INT: 0.5, VIT: 0.5 },
-            escaladoBuffos: {
-                def_media: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.2,
-                        basicMulti: 0.9,
-                        masterMulti: 1,
-                        granMasterMulti: 1,
-                        perfectMulti: 1,
-                    },
-                    scaleWithAttribute: true
-                },
-            },
+            escaladoStatsModifiers: []
         },
         [UNIQUE_ID_SKILLS.REFLECTAR]: {
             type: "aura",
@@ -299,19 +244,7 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
             duration: { base: 1, perLv: 1 },
             mana: { base: 1, perLv: 1 },
             escaladoAtributos: { INT: 1, DEX: 1 },
-            escaladoBuffos: {
-                reflectar: {
-                    base: 1,
-                    escaladoLv: {
-                        perLv: 0.4,
-                        basicMulti: 1,
-                        masterMulti: 1.05,
-                        granMasterMulti: 1.1,
-                        perfectMulti: 1.2,
-                    },
-                    scaleWithAttribute: true
-                },
-            },
+            escaladoStatsModifiers: []
         },
     },
 }

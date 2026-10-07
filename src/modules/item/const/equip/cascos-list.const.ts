@@ -1,6 +1,6 @@
+import { EquipType, IdItem } from "netim2-shared";
 import { createEquipItem } from "../../factories/item-builder";
-import { EquipType } from "../../types/entities-props/equip.type";
-import { IdItem } from "../../types/iditems/id-item-list.type";
+
 
 export const CHAMAN_HELMET: EquipType[] = [
     createEquipItem({

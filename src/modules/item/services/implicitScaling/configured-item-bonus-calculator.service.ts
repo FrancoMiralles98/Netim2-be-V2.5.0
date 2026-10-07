@@ -1,14 +1,11 @@
 import { Injectable } from "@nestjs/common";
 import { CoreImplicitItem, ImplicitBonusConfig } from "../../types/const/scaling/core-equip-item.type";
-import { BonusInItem } from "src/modules/bonus/types/bonus-in-item.type";
 import { DinamicStatsCalculatorService } from "./dinamic-stats-calculator.service";
 import { PlaneBonusCalculator } from "./plane-bonus-calculator.service";
 import { BonusSharedService } from "src/modules/shared/services/bonus-shared.service";
-import { UpgradeLv } from "../../types/config/general-implicit.type";
 import { ITEM_SCALING_CONST } from "../../const/scaling/item-scaling.const";
-import { IdItemList } from "../../types/iditems/id-item-list.type";
 import { SpecificImplicitBonusService } from "./specific-implicit-bonus.service";
-import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
+import { BonusInItem, BonusRefKeys, IdItemList, UpgradeLv } from "netim2-shared";
 
 @Injectable()
 export class ConfiguredItemBonusCalculatorService {

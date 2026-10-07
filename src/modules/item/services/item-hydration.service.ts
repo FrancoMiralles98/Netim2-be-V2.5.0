@@ -1,11 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { InventoryItem } from "src/modules/inventory/types/inventory-item.type";
 import { isEquipItem, isPiedraItem, isUtilityItem } from "../types/item-type-guard.type";
-import { EquipType } from "../types/entities-props/equip.type";
-import { ItemDTO, UtilityItemDTO } from "../types/item-dto";
-import { PiedraType } from "../types/entities-props/piedra.type";
-import { CañaType } from "../types/entities-props/caña.type";
-import { MonturaType } from "../types/entities-props/montura.type";
+import { CañaType, EquipType, InventoryItem, ItemDTO, MonturaType, PiedraType, UtilityItemDTO } from "netim2-shared";
+
 
 /**
  * Servicio encargado de rehidratar ítems persistidos en inventario

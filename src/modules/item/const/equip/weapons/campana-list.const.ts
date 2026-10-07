@@ -1,6 +1,6 @@
+import { EquipType, IdItem } from "netim2-shared";
 import { createEquipItem } from "src/modules/item/factories/item-builder";
-import { EquipType } from "src/modules/item/types/entities-props/equip.type";
-import { IdItem } from "src/modules/item/types/iditems/id-item-list.type";
+
 
 export const CAMPANA_LIST: EquipType[] = [
     createEquipItem({

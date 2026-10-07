@@ -4,7 +4,7 @@ import { ClientSession, Model } from "mongoose";
 import { InjectModel } from "@nestjs/mongoose";
 import { CharacterEntity } from "../entity/character-entity";
 import { CharacterMapper } from "../mapper/character-mapper";
-import { CharacterPersistence } from "../types/character-persistence.type";
+import { CharacterPersistence } from "netim2-shared";
 
 /**
  * Repositorio encargado de acceder y modificar los datos de personajes
@@ -36,7 +36,7 @@ export class CharacterRepository {
         return this.characterMapper.toDomain(characterPersistence)
     }
 
-    async getCharacterById(id: string): Promise<CharacterDocument> {  
+    async getCharacterById(id: string): Promise<CharacterDocument> {
         const character = await this.characterModel.findById(id)
         if (!character) {
             throw new NotFoundException('character not found')

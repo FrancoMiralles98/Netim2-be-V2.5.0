@@ -1,10 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { IdItem, IdItemList } from "../../types/iditems/id-item-list.type";
-import { UpgradeLv } from "../../types/config/general-implicit.type";
-import { BonusRefKeys } from "src/modules/bonus/types/bonusListHelper/ref-bonus-name.type";
 import { SPECIFIC_BASE_STATS } from "../../config/scaling/specific-base-stats.config";
 import { DamageScalingConfig, StatScalingConfig } from "../../types/config/equip-base-stats.type";
 import { UPGRADE_MULTIPLIER } from "../../config/scaling/upgrade-multiplayer.config";
+import { BonusRefKeys, IdItemList, UpgradeLv } from "netim2-shared";
 
 @Injectable()
 export class SpecificImplicitBonusService {
@@ -35,7 +33,7 @@ export class SpecificImplicitBonusService {
     ): { min: number, max: number } | number {
         const config = SPECIFIC_BASE_STATS[idItem]
         if (!config) {
-            throw new Error(`No se encuentra una configuracion para el idItem: ${IdItem}`)
+            throw new Error(`No se encuentra una configuracion para el idItem: ${idItem}`)
         }
 
         const statScaling = config[bonus_ref]
