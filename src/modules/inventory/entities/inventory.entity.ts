@@ -5,8 +5,8 @@ import { AddItemResult, IdItemList, InventoryChangeResult, InventoryItem, ItemDT
 
 export class Inventory {
     //espacio total del inventario tanto eje x como y
-    private readonly DEFAULT_ROWS = 8;
-    private readonly DEFAULT_COLS = 14;
+    private readonly DEFAULT_ROWS = 6;
+    private readonly DEFAULT_COLS = 19;
 
     protected items: InventoryItem[]
 
