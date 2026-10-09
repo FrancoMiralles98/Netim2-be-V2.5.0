@@ -20,11 +20,12 @@ export const LIMIT_BONUS_CONFIG: Partial<Record<BonusRefKeys, number>> = {
     def_magia: 70,
     def_media: 14,
     def_hab: 14,
-    vh: 100,
+    vh: 300,
     bloquear_ataques: 40,
-    def_incendio: 80,
-    def_sangrado: 80,
-    def_veneno: 80,
+    def_incendio: 75,
+    def_sangrado: 75,
+    def_veneno: 75,
+    def_electrico: 75,
     esquivar_ataques: 50,
 }
 

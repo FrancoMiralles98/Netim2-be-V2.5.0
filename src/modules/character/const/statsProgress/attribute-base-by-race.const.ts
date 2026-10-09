@@ -1,28 +1,31 @@
 import { AttributesRefKeys, CharacterRace } from "netim2-shared";
 
-export const ATTRIBUTE_BASE_BY_RACE: Record<CharacterRace, Record<AttributesRefKeys, number>> = {
+export const ATTRIBUTE_BASE_BY_RACE: Record<CharacterRace,Record<AttributesRefKeys, number>> = {
     ninja: {
-        DEX: 12,
-        INT: 6,
-        STR: 8,
-        VIT: 6
+        DEX: 6,
+        INT: 3,
+        STR: 4,
+        VIT: 3
     },
+
     chaman: {
-        DEX: 8,
-        INT: 12,
-        STR: 6,
-        VIT: 6,
+        DEX: 4,
+        INT: 6,
+        STR: 3,
+        VIT: 3,
     },
+
     guerrero: {
-        DEX: 6,
-        INT: 4,
-        STR: 12,
-        VIT: 10,
+        DEX: 3,
+        INT: 2,
+        STR: 6,
+        VIT: 5,
     },
+
     sura: {
-        DEX: 6,
-        INT: 10,
-        STR: 10,
-        VIT: 6,
+        DEX: 3,
+        INT: 5,
+        STR: 5,
+        VIT: 3,
     }
-}
+};

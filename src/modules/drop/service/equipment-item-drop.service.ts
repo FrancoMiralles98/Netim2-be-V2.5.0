@@ -58,7 +58,7 @@ export class EquipItemDropService {
         )
 
         const explicitBonus = this.bonusService.generatorBonus(
-            'generic',
+            { type: 'generic', tier: 1 },
             [...baseItem.randomImplicitBonus,...baseItem.implicitBonus],
             baseItem.itemLv,
             quality,
