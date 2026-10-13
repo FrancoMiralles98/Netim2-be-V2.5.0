@@ -1,8 +1,15 @@
-import { GENERAL_CHARACTER_STATS } from '../../const/characterProps/base-character-stats.const';
+import { GENERAL_CHARACTER_STATS as BASE_CHARACTER_STATS } from '../../../const/characterProps/base-character-stats.const';
 import { CharacterLevelScalingService } from './character-level-scaling.service';
 
 describe('CharacterLevelScalingService', () => {
   const service = new CharacterLevelScalingService();
+  const GENERAL_CHARACTER_STATS = structuredClone(BASE_CHARACTER_STATS);
+  GENERAL_CHARACTER_STATS.general.ad = { min: 10, max: 10 };
+  GENERAL_CHARACTER_STATS.general.ap = { min: 20, max: 20 };
+  GENERAL_CHARACTER_STATS.general.hp = { actual: 500, max: 1000 };
+  GENERAL_CHARACTER_STATS.general.mana = { actual: 100, max: 100 };
+  GENERAL_CHARACTER_STATS.general.regen_hp = 5;
+  GENERAL_CHARACTER_STATS.general.regen_mana = 10;
 
   it('adds only race base values at level one, preserving current HP and mana', () => {
     const result = service.applyLevelScaling(GENERAL_CHARACTER_STATS, 'guerrero', 1);

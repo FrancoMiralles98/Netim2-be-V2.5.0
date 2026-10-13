@@ -12,9 +12,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 4,
         description: 'Aumenta tu VIT en 3 puntos.',
         duration: 15,
-        iconBuff: '/iconos/atributos_icon.png',
-        effect: [{ bonusRef: 'VIT', bonusValue: 3 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.LUCIOPERCA_COMUN,
     }),
 
@@ -27,9 +27,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 4,
         description: 'Aumenta tu VIT en 6 puntos.',
         duration: 30,
-        iconBuff: '/iconos/atributos_icon.png',
-        effect: [{ bonusRef: 'VIT', bonusValue: 6 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.LUCIOPERCA_INUSUAL,
     }),
 
@@ -42,9 +42,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 4,
         description: 'Aumenta tu VIT en 12 puntos.',
         duration: 60,
-        iconBuff: '/iconos/atributos_icon.png',
-        effect: [{ bonusRef: 'VIT', bonusValue: 12 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.LUCIOPERCA_RARO,
     }),
 
@@ -57,9 +57,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 5,
         description: 'Aumenta tu DEX en 3 puntos.',
         duration: 15,
-        iconBuff: '/iconos/atributos_icon.png',
-        effect: [{ bonusRef: 'DEX', bonusValue: 3 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_MANDARIN_COMUN,
     }),
 
@@ -72,9 +72,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 5,
         description: 'Aumenta tu DEX en 6 puntos.',
         duration: 30,
-        iconBuff: '/iconos/atributos_icon.png',
-        effect: [{ bonusRef: 'DEX', bonusValue: 6 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_MANDARIN_INUSUAL,
     }),
 
@@ -87,9 +87,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 5,
         description: 'Aumenta tu DEX en 12 puntos.',
         duration: 60,
-        iconBuff: '/iconos/atributos_icon.png',
-        effect: [{ bonusRef: 'DEX', bonusValue: 12 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_MANDARIN_RARO,
     }),
 
@@ -102,9 +102,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 6,
         description: 'Aumenta tu INT en 3 puntos.',
         duration: 15,
-        iconBuff: '/iconos/atributos_icon.png',
-        effect: [{ bonusRef: 'INT', bonusValue: 3 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.LUCIOPERCA_GRANDE_COMUN,
     }),
 
@@ -117,9 +117,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 6,
         description: 'Aumenta tu INT en 6 puntos.',
         duration: 30,
-        iconBuff: '/iconos/atributos_icon.png',
-        effect: [{ bonusRef: 'INT', bonusValue: 6 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.LUCIOPERCA_GRANDE_INUSUAL,
     }),
 
@@ -132,9 +132,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 6,
         description: 'Aumenta tu INT en 12 puntos.',
         duration: 60,
-        iconBuff: '/iconos/atributos_icon.png',
-        effect: [{ bonusRef: 'INT', bonusValue: 12 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.LUCIOPERCA_GRANDE_RARO,
     }),
     createBuffItem({
@@ -146,10 +146,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 7,
         description: 'Aumenta tu STR en 3 puntos.',
         duration: 15,
-        iconBuff: '/iconos/atributos_icon.png',
 
-        effect: [{ bonusRef: 'STR', bonusValue: 3 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.CARPA_COMUN,
     }),
 
@@ -162,10 +162,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 7,
         description: 'Aumenta tu STR en 6 puntos.',
         duration: 30,
-        iconBuff: '/iconos/atributos_icon.png',
 
-        effect: [{ bonusRef: 'STR', bonusValue: 6 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.CARPA_INUSUAL,
     }),
 
@@ -178,10 +178,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 7,
         description: 'Aumenta tu STR en 12 puntos.',
         duration: 60,
-        iconBuff: '/iconos/atributos_icon.png',
 
-        effect: [{ bonusRef: 'STR', bonusValue: 12 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.CARPA_RARO,
     }),
 
@@ -194,10 +194,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 8,
         description: 'Aumenta tu AD en 10 puntos.',
         duration: 15,
-        iconBuff: '/iconos/Icono-daño.png',
 
-        effect: [{ bonusRef: 'ad', bonusValue: 10 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.SALMON_COMUN,
     }),
 
@@ -210,10 +210,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 8,
         description: 'Aumenta tu AD en 20 puntos.',
         duration: 30,
-        iconBuff: '/iconos/Icono-daño.png',
 
-        effect: [{ bonusRef: 'ad', bonusValue: 20 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.SALMON_INUSUAL,
     }),
 
@@ -226,10 +226,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 8,
         description: 'Aumenta tu AD en 40 puntos.',
         duration: 60,
-        iconBuff: '/iconos/Icono-daño.png',
 
-        effect: [{ bonusRef: 'ad', bonusValue: 40 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.SALMON_RARO,
     }),
 
@@ -242,10 +242,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 9,
         description: 'Aumenta tu AP en 10 puntos.',
         duration: 15,
-        iconBuff: '/iconos/Icono-daño.png',
 
-        effect: [{ bonusRef: 'ap', bonusValue: 10 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.CARPA_HERBIVORA_COMUN,
     }),
 
@@ -258,10 +258,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 9,
         description: 'Aumenta tu AP en 20 puntos.',
         duration: 30,
-        iconBuff: '/iconos/Icono-daño.png',
 
-        effect: [{ bonusRef: 'ap', bonusValue: 20 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.CARPA_HERBIVORA_INUSUAL,
     }),
 
@@ -274,10 +274,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 9,
         description: 'Aumenta tu AP en 40 puntos.',
         duration: 60,
-        iconBuff: '/iconos/Icono-daño.png',
 
-        effect: [{ bonusRef: 'ap', bonusValue: 40 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.CARPA_HERBIVORA_RARO,
     }),
 
@@ -290,10 +290,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 10,
         description: 'Aumenta tu Velocidad de Movimiento en 10 puntos.',
         duration: 15,
-        iconBuff: '/iconos/vm_Icon.png',
 
-        effect: [{ bonusRef: 'vm', bonusValue: 10 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TRUCHA_DE_ARROYO_COMUN,
     }),
 
@@ -306,10 +306,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 10,
         description: 'Aumenta tu Velocidad de Movimiento en 20 puntos.',
         duration: 30,
-        iconBuff: '/iconos/vm_Icon.png',
 
-        effect: [{ bonusRef: 'vm', bonusValue: 20 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TRUCHA_DE_ARROYO_INUSUAL,
     }),
 
@@ -322,10 +322,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 10,
         description: 'Aumenta tu Velocidad de Movimiento en 40 puntos.',
         duration: 60,
-        iconBuff: '/iconos/vm_Icon.png',
 
-        effect: [{ bonusRef: 'vm', bonusValue: 40 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TRUCHA_DE_ARROYO_RARO,
     }),
 
@@ -338,10 +338,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 11,
         description: 'Aumenta tu Velocidad de Ataque en 5 puntos.',
         duration: 15,
-        iconBuff: '/iconos/va_Icon.png',
 
-        effect: [{ bonusRef: 'va', bonusValue: 5 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.ANGUILA_COMUN,
     }),
 
@@ -354,10 +354,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 11,
         description: 'Aumenta tu Velocidad de Ataque en 7 puntos.',
         duration: 30,
-        iconBuff: '/iconos/va_Icon.png',
 
-        effect: [{ bonusRef: 'va', bonusValue: 7 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.ANGUILA_INUSUAL,
     }),
 
@@ -370,10 +370,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 11,
         description: 'Aumenta tu Velocidad de Ataque en 10 puntos.',
         duration: 60,
-        iconBuff: '/iconos/va_Icon.png',
 
-        effect: [{ bonusRef: 'va', bonusValue: 10 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.ANGUILA_RARO,
     }),
 
@@ -386,10 +386,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 12,
         description: 'Aumenta tu Velocidad de Hechizo en 10 puntos.',
         duration: 15,
-        iconBuff: '/iconos/Icono-Prisa.png',
 
-        effect: [{ bonusRef: 'vh', bonusValue: 10 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TRUCHA_ARCOIRIS_COMUN,
     }),
 
@@ -402,10 +402,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 12,
         description: 'Aumenta tu Velocidad de Hechizo en 20 puntos.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Prisa.png',
 
-        effect: [{ bonusRef: 'vh', bonusValue: 15 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TRUCHA_ARCOIRIS_INUSUAL,
     }),
 
@@ -418,10 +418,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 12,
         description: 'Aumenta tu Velocidad de Hechizo en 30 puntos.',
         duration: 60,
-        iconBuff: '/iconos/Icono-Prisa.png',
 
-        effect: [{ bonusRef: 'vh', bonusValue: 20 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TRUCHA_ARCOIRIS_RARO,
     }),
 
@@ -434,10 +434,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 13,
         description: 'Aumenta la Regeneración de HP en un 25%.',
         duration: 15,
-        iconBuff: '/iconos/Icono-Restauración.png',
 
-        effect: [{ bonusRef: 'regen_hp', bonusValue: 25 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TRUCHA_DE_RIO_COMUN,
     }),
 
@@ -450,10 +450,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 13,
         description: 'Aumenta la Regeneración de HP en un 50%.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Restauración.png',
 
-        effect: [{ bonusRef: 'regen_hp', bonusValue: 50 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TRUCHA_DE_RIO_INUSUAL,
     }),
 
@@ -466,10 +466,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 13,
         description: 'Aumenta la Regeneración de HP en un 75%.',
         duration: 60,
-        iconBuff: '/iconos/Icono-Restauración.png',
 
-        effect: [{ bonusRef: 'regen_hp', bonusValue: 75 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TRUCHA_DE_RIO_RARO,
     }),
 
@@ -482,10 +482,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 14,
         description: 'Aumenta tu HP en 1000 puntos.',
         duration: 15,
-        iconBuff: '/iconos/Icono-Restauración.png',
 
-        effect: [{ bonusRef: 'hp', bonusValue: 500 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.RUDD_COMUN,
     }),
 
@@ -498,10 +498,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 14,
         description: 'Aumenta tu HP en 2500 puntos.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Restauración.png',
 
-        effect: [{ bonusRef: 'hp', bonusValue: 1000 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.RUDD_INUSUAL,
     }),
 
@@ -514,10 +514,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 14,
         description: 'Aumenta tu HP en 4000 puntos.',
         duration: 60,
-        iconBuff: '/iconos/Icono-Restauración.png',
 
-        effect: [{ bonusRef: 'hp', bonusValue: 2000 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.RUDD_RARO
     }),
 
@@ -530,10 +530,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 15,
         description: 'Aumenta los daños de Efecto de Estado un 10%.',
         duration: 15,
-        iconBuff: '/iconos/Icono-Panacea.png',
 
-        effect: [{ bonusRef: 'bonus_estado', bonusValue: 10 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PERCA_COMUN,
     }),
 
@@ -546,10 +546,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 15,
         description: 'Aumenta los daños de Efecto de Estado un 15%.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Panacea.png',
 
-        effect: [{ bonusRef: 'bonus_estado', bonusValue: 15 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PERCA_INUSUAL,
     }),
 
@@ -562,10 +562,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 15,
         description: 'Aumenta los daños de Efecto de Estado un 20%.',
         duration: 60,
-        iconBuff: '/iconos/Icono-Panacea.png',
 
-        effect: [{ bonusRef: 'bonus_estado', bonusValue: 20 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PERCA_RARO,
     }),
 
@@ -578,10 +578,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 16,
         description: 'Aumenta el daño contra Monstruos un 10%.',
         duration: 15,
-        iconBuff: '/iconos/Icono-Inmortal.png',
 
-        effect: [{ bonusRef: 'monstruos', bonusValue: 10 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TENCHI_COMUN,
     }),
 
@@ -594,10 +594,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 16,
         description: 'Aumenta el daño contra Monstruos un 15%.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Inmortal.png',
 
-        effect: [{ bonusRef: 'monstruos', bonusValue: 15 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TENCHI_INUSUAL,
     }),
 
@@ -610,10 +610,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 16,
         description: 'Aumenta el daño contra Monstruos un 20%.',
         duration: 60,
-        iconBuff: '/iconos/Icono-Inmortal.png',
 
-        effect: [{ bonusRef: 'monstruos', bonusValue: 20 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.TENCHI_RARO,
     }),
 
@@ -626,10 +626,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 17,
         description: 'Aumenta el Daño contra Medio Humanos un 10%.',
         duration: 15,
-        iconBuff: '/iconos/Icono-Inmortal.png',
 
-        effect: [{ bonusRef: 'medio_humanos', bonusValue: 10 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.BAGRE_COMUN,
     }),
 
@@ -642,10 +642,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 17,
         description: 'Aumenta el Daño contra Medio Humanos un 15%.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Inmortal.png',
 
-        effect: [{ bonusRef: 'medio_humanos', bonusValue: 15 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.BAGRE_INUSUAL,
     }),
 
@@ -658,10 +658,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 17,
         description: 'Aumenta el Daño contra Medio Humanos un 20%.',
         duration: 60,
-        iconBuff: '/iconos/Icono-Inmortal.png',
 
-        effect: [{ bonusRef: 'medio_humanos', bonusValue: 20 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.BAGRE_RARO,
     }),
 
@@ -674,10 +674,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 18,
         description: 'Aumenta la Chances de Reflectar un 10%.',
         duration: 15,
-        iconBuff: '/iconos/Icono-Reflectar.png',
 
-        effect: [{ bonusRef: 'reflectar', bonusValue: 10 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_LOTO_COMUN,
     }),
 
@@ -690,10 +690,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 18,
         description: 'Aumenta la Chances de Reflectar un 20%.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Reflectar.png',
 
-        effect: [{ bonusRef: 'reflectar', bonusValue: 15 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_LOTO_INUSUAL,
     }),
 
@@ -706,10 +706,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 18,
         description: 'Aumenta la Chances de Reflectar un 30%.',
         duration: 60,
-        iconBuff: '/iconos/Icono-Reflectar.png',
 
-        effect: [{ bonusRef: 'reflectar', bonusValue: 20 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_DE_COLORES_RARO,
     }),
 
@@ -722,10 +722,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 19,
         description: 'Aumenta la EXP ganada en un 10%.',
         duration: 15,
-        iconBuff: '/iconos/Anillo_de_EXP.png',
 
-        effect: [{ bonusRef: 'bonus_exp', bonusValue: 10 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_DULCE_COMUN,
     }),
 
@@ -738,10 +738,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 19,
         description: 'Aumenta la EXP ganada en un 10%.',
         duration: 30,
-        iconBuff: '/iconos/Anillo_de_EXP.png',
 
-        effect: [{ bonusRef: 'bonus_exp', bonusValue: 10 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_DULCE_INUSUAL,
     }),
 
@@ -754,10 +754,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 19,
         description: 'Aumenta la EXP ganada en un 10%.',
         duration: 60,
-        iconBuff: '/iconos/Anillo_de_EXP.png',
 
-        effect: [{ bonusRef: 'bonus_exp', bonusValue: 10 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_DULCE_RARO,
     }),
 
@@ -770,10 +770,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 19,
         description: 'Aumenta la EXP ganada en un 50%.',
         duration: 15,
-        iconBuff: '/iconos/Anillo_de_EXP.png',
 
-        effect: [{ bonusRef: 'bonus_exp', bonusValue: 50 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_DE_COLORES_COMUN,
     }),
 
@@ -786,10 +786,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 19,
         description: 'Aumenta la EXP ganada en un 50%.',
         duration: 30,
-        iconBuff: '/iconos/Anillo_de_EXP.png',
 
-        effect: [{ bonusRef: 'bonus_exp', bonusValue: 50 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_DE_COLORES_INUSUAL,
     }),
 
@@ -802,10 +802,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 19,
         description: 'Aumenta la EXP ganada en un 50%.',
         duration: 60,
-        iconBuff: '/iconos/Anillo_de_EXP.png',
 
-        effect: [{ bonusRef: 'bonus_exp', bonusValue: 50 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.PEZ_DE_COLORES_RARO,
     }),
 
@@ -818,10 +818,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 19,
         description: 'Aumenta la EXP ganada en un 100%.',
         duration: 15,
-        iconBuff: '/iconos/Anillo_de_EXP.png',
 
-        effect: [{ bonusRef: 'bonus_exp', bonusValue: 100 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.YABBY_COMUN,
     }),
 
@@ -834,10 +834,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 19,
         description: 'Aumenta la EXP ganada en un 100%.',
         duration: 30,
-        iconBuff: '/iconos/Anillo_de_EXP.png',
 
-        effect: [{ bonusRef: 'bonus_exp', bonusValue: 100 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.YABBY_INUSUAL,
     }),
 
@@ -850,10 +850,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 19,
         description: 'Aumenta la EXP ganada en un 100%.',
         duration: 60,
-        iconBuff: '/iconos/Anillo_de_EXP.png',
 
-        effect: [{ bonusRef: 'bonus_exp', bonusValue: 100 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.YABBY_RARO,
     }),
 
@@ -866,10 +866,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 20,
         description: 'Disminuye el daño recibido en un 3%.',
         duration: 15,
-        iconBuff: '/iconos/Icono-Baluarte.png',
 
-        effect: [{ bonusRef: 'damage_taken', bonusValue: -3 }],
         price: 1000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.CANGREJO_REY_ROJO_COMUN,
     }),
 
@@ -882,10 +882,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 20,
         description: 'Disminuye el daño recibido en un 5%.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Baluarte.png',
 
-        effect: [{ bonusRef: 'damage_taken', bonusValue: -5 }],
         price: 2000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.CANGREJO_REY_ROJO_INUSUAL,
     }),
 
@@ -898,10 +898,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 20,
         description: 'Disminuye el daño recibido en un 7%.',
         duration: 60,
-        iconBuff: '/iconos/Icono-Baluarte.png',
 
-        effect: [{ bonusRef: 'damage_taken', bonusValue: -7 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.CANGREJO_REY_ROJO_RARO,
     }),
 
@@ -914,9 +914,9 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 21,
         description: 'Disminuye el daño de Fuego recibido en un 15%.',
         duration: 20,
-        iconBuff: '/iconos/Icono-Baluarte.png',
-        effect: [{ bonusRef: 'def_incendio', bonusValue: 15 }],
         price: 600,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.JUGO_RAIZ_GANGO,
     }),
 
@@ -929,10 +929,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 22,
         description: 'Disminuye el daño de Veneno recibido en un 15%.',
         duration: 20,
-        iconBuff: '/iconos/Icono-Baluarte.png',
 
-        effect: [{ bonusRef: 'def_veneno', bonusValue: 15 }],
         price: 600,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.JUGO_FLOR_KAKI,
     }),
 
@@ -945,10 +945,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 23,
         description: 'Disminuye el daño de Sangrado recibido en un 15%.',
         duration: 20,
-        iconBuff: '/iconos/Icono-Baluarte.png',
 
-        effect: [{ bonusRef: 'def_sangrado', bonusValue: 15 }],
         price: 600,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.JUGO_HAREBELL,
     }),
 
@@ -961,10 +961,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 24,
         description: 'Aumenta tu Hp en 800 puntos.',
         duration: 20,
-        iconBuff: '/iconos/Lectura_Concentrada.png',
 
-        effect: [{ bonusRef: 'hp', bonusValue: 800 }],
         price: 600,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.JUGO_FLOR_MELOCOTON,
     }),
 
@@ -977,10 +977,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 25,
         description: 'Aumenta la Fuerza contra Animales en un 20%',
         duration: 20,
-        iconBuff: '/iconos/Icono_daño_esp.png',
 
-        effect: [{ bonusRef: 'animales', bonusValue: 20 }],
         price: 1250,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.AGUA_SIM,
     }),
 
@@ -993,10 +993,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 26,
         description: 'Aumenta la Fuerza contra Orcos en un 20%',
         duration: 20,
-        iconBuff: '/iconos/Icono_daño_esp.png',
 
-        effect: [{ bonusRef: 'orcos', bonusValue: 20 }],
         price: 1250,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.AGUA_DOK,
     }),
 
@@ -1009,10 +1009,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 27,
         description: 'Aumenta la Fuerza contra Misticos en un 20%',
         duration: 20,
-        iconBuff: '/iconos/Icono_daño_esp.png',
 
-        effect: [{ bonusRef: 'misticos', bonusValue: 20 }],
         price: 1250,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.AGUA_BO,
     }),
 
@@ -1025,10 +1025,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 28,
         description: 'Aumenta la Fuerza contra Demonios en un 20%',
         duration: 20,
-        iconBuff: '/iconos/Icono_daño_esp.png',
 
-        effect: [{ bonusRef: 'demonios', bonusValue: 20 }],
         price: 1250,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.AGUA_JOVEN,
     }),
 
@@ -1041,10 +1041,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 29,
         description: 'Aumenta la Fuerza contra Medio Humanos en un 20%',
         duration: 20,
-        iconBuff: '/iconos/Icono_daño_esp.png',
 
-        effect: [{ bonusRef: 'medio_humanos', bonusValue: 20 }],
         price: 2500,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.AGUA_ZIN,
     }),
 
@@ -1057,10 +1057,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 30,
         description: 'Aumenta la Fuerza contra Monstruos en un 20%',
         duration: 20,
-        iconBuff: '/iconos/Icono_daño_esp.png',
 
-        effect: [{ bonusRef: 'monstruos', bonusValue: 20 }],
         price: 2500,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.AGUA_SAMBO,
     }),
 
@@ -1073,10 +1073,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 31,
         description: 'Aumenta la Velocidad de Ataque en un 10%',
         duration: 20,
-        iconBuff: '/iconos/va_Icon.png',
 
-        effect: [{ bonusRef: 'va', bonusValue: 10 }],
         price: 2500,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.AGUA_MONG,
     }),
 
@@ -1089,10 +1089,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 32,
         description: 'Aumenta la Velocidad de Hechizo en 20 puntos.',
         duration: 20,
-        iconBuff: '/iconos/Icono-Prisa.png',
 
-        effect: [{ bonusRef: 'vh', bonusValue: 20 }],
         price: 2500,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.AGUA_HWAL,
     }),
 
@@ -1105,10 +1105,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 33,
         description: 'Aumenta las chances de hacer criticos en un 15%.',
         duration: 30,
-        iconBuff: '/iconos/Icono_critico.png',
 
-        effect: [{ bonusRef: 'critico', bonusValue: 15 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.ROCIO_ROJO,
     }),
 
@@ -1121,10 +1121,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 34,
         description: 'Aumenta las chances de hacer golpes penetrantes en un 15%.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Penetración.png',
 
-        effect: [{ bonusRef: 'penetracion', bonusValue: 15 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.ROCIO_NARANJA,
     }),
 
@@ -1137,10 +1137,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 35,
         description: 'Aumenta el daño crítico un 25%.',
         duration: 30,
-        iconBuff: '/iconos/Icono_critico.png',
 
-        effect: [{ bonusRef: 'daño_critico', bonusValue: 25 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.ROCIO_AMARILLO,
     }),
 
@@ -1153,10 +1153,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 36,
         description: 'Aumenta el AD en 40 puntos.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Berserker.png',
 
-        effect: [{ bonusRef: 'ad', bonusValue: 40 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.ROCIO_VERDE,
     }),
 
@@ -1169,10 +1169,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 37,
         description: 'Aumenta el AP en 40 puntos.',
         duration: 30,
-        iconBuff: '/iconos/Icono-Berserker.png',
 
-        effect: [{ bonusRef: 'ap', bonusValue: 40 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.ROCIO_AZUL,
     }),
 
@@ -1185,10 +1185,10 @@ export const BUFF_LIST: BuffType[] = [
         idBuff: 38,
         description: 'Aumenta Robo de vida en un 3%.',
         duration: 30,
-        iconBuff: '/iconos/Icono_robo_vida.png',
 
-        effect: [{ bonusRef: 'robo_vida', bonusValue: 3 }],
         price: 5000,
+        implicitBonus: [],
+        corruptBonus: [],
         idItem: IdItem.ROCIO_BLANCO,
     }),
 ]

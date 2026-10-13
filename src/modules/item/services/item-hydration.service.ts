@@ -102,7 +102,7 @@ export class ItemHydrationService {
         }
         const mergedItem: PiedraType = {
             ...baseItem,
-            specialCorruptBonus: savedItem.specialCorruptBonus,
+            corruptExplicitBonus: savedItem.corruptExplicitBonus,
             corrupt: savedItem.corrupt,
             implicitBonus: savedItem.implicitBonus,
             upgradeLv: savedItem.upgradeLv,

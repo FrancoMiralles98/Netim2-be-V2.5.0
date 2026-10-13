@@ -3,10 +3,13 @@ import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
 import { CharacterDocument } from './schema/character.schema';
-import {  CharacterPersistence, CharacterPersistenceWithId, CharacterSummary } from 'netim2-shared';
+import { AppliedBuffos, Atributos, CharacterPersistence, CharacterPersistenceWithId, CharacterRace, CharacterSpeciality, CharacterSummary, EquipType, Stats } from 'netim2-shared';
 import { UserService } from '../user/user.service';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
+import { UpdatedStatsResult, UpdateStatsService } from './services/stats/update-stats.service';
+import { CharacterBuffService } from './services/buffos/character-buff.service';
+import { ATTRIBUTE_BASE_BY_RACE } from './const/statsProgress/attribute-base-by-race.const';
 
 @Injectable()
 export class CharacterService {
@@ -14,9 +17,23 @@ export class CharacterService {
         private characterRepository: CharacterRepository,
         private characterMapper: CharacterMapper,
         private userService: UserService,
+        private characterBuffService: CharacterBuffService,
+        private updateStatsService: UpdateStatsService,
         @InjectConnection()
         private readonly connection: Connection,
     ) { }
+
+    updateStatsAndAtributtes(
+        stats: Stats,
+        race: CharacterRace,
+        equipment: EquipType[],
+        attributes: Atributos,
+        buffs: AppliedBuffos[],
+        level: number,
+        speciality?: CharacterSpeciality): UpdatedStatsResult {
+        const updatedBuffos = this.characterBuffService.removeExpiredBuffs(buffs)
+        return this.updateStatsService.updateStats(stats, race, equipment, attributes, updatedBuffos, level, speciality)
+    }
 
     async validateCharacterOwnership(characterId: string, accountId: string): Promise<boolean> {
         const character = await this.characterRepository.getCharacterById(characterId)
@@ -25,10 +42,29 @@ export class CharacterService {
 
     async getCharacterById(characterId: string, userId: string): Promise<CharacterPersistenceWithId> {
         const character = await this.characterRepository.getCharacterById(characterId)
-     
+
         if (character.user_owner !== userId) {
             throw new ConflictException('No puedes conectarte con este personaje.')
         }
+
+        const equipSelected = this.selecteEquip(character.equipo_1,
+            character.equipo_2,
+            character.equipo_3,
+            character.equipo_selected)
+
+        const { attributes, stats } = this.updateStatsAndAtributtes(
+            character.stats,
+            character.raza,
+            equipSelected,
+            character.atributos,
+            character.buffos,
+            character.lv,
+            character.especialidad
+        )
+
+
+        character.stats = stats
+        character.atributos = attributes
 
         return { ...this.characterMapper.fromDb(character), id: character._id.toString() }
     }
@@ -90,6 +126,8 @@ export class CharacterService {
                 reino: reinoFinal,
             });
 
+            this.InicializateBaseValues(baseCharacter)
+
             const characterCreated = await this.characterRepository.createCharacter(
                 baseCharacter,
                 userId,
@@ -100,13 +138,60 @@ export class CharacterService {
             };
         } catch (error) {
             console.log(error);
-            
+
             if (this.isDuplicateKeyError(error)) {
                 throw new ConflictException('Ya existe un personaje con ese nombre.');
             }
 
             throw error;
         }
+    }
+
+    private selecteEquip(
+        equipo1: EquipType[],
+        equipo2: EquipType[],
+        equipo3: EquipType[],
+        equipo_selected: 1 | 2 | 3
+    ): EquipType[] {
+        if (equipo_selected === 1) {
+            return equipo1
+        }
+        if (equipo_selected === 2) {
+            return equipo2
+        }
+        return equipo3
+    }
+
+    private InicializateBaseValues(baseCharacter: CharacterPersistence) {
+        const equipSelected = this.selecteEquip(baseCharacter.equipo_1,
+            baseCharacter.equipo_2,
+            baseCharacter.equipo_3,
+            baseCharacter.equipo_selected)
+
+        const baseAtributes = ATTRIBUTE_BASE_BY_RACE[baseCharacter.raza]
+
+        baseCharacter.atributos = {
+            DEX: { lvPoints: baseAtributes.DEX, bonusPoints: 0 },
+            INT: { lvPoints: baseAtributes.INT, bonusPoints: 0 },
+            STR: { lvPoints: baseAtributes.STR, bonusPoints: 0 },
+            VIT: { lvPoints: baseAtributes.VIT, bonusPoints: 0 }
+        }
+
+        const { attributes, stats } = this.updateStatsAndAtributtes(
+            baseCharacter.stats,
+            baseCharacter.raza,
+            equipSelected,
+            baseCharacter.atributos,
+            baseCharacter.buffos,
+            baseCharacter.lv,
+            baseCharacter.especialidad
+        )
+
+        baseCharacter.stats = stats
+        baseCharacter.atributos = attributes
+
+        baseCharacter.stats.general.hp.actual = baseCharacter.stats.general.hp.max
+        baseCharacter.stats.general.mana.actual = baseCharacter.stats.general.mana.max
     }
 
 

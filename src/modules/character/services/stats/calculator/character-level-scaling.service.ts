@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CharacterRace, Stats } from 'netim2-shared';
-import { STATS_PROGRESS_BY_RACE } from '../../const/statsProgress/stats-progress-by-race.const';
+import { STATS_PROGRESS_BY_RACE } from '../../../const/statsProgress/stats-progress-by-race.const';
 
 @Injectable()
 export class CharacterLevelScalingService {

@@ -1,5 +1,5 @@
 import { allFullNameBonusList, Atributos, BonusCategory, BonusInItem, EquipType, RoutStatKey, ValueBonusType } from 'netim2-shared';
-import { GENERAL_CHARACTER_STATS } from '../../const/characterProps/base-character-stats.const';
+import { GENERAL_CHARACTER_STATS } from '../../../const/characterProps/base-character-stats.const';
 import { EquipStatsCalculatorService } from './equip-stats-calculator.service';
 
 describe('EquipStatsCalculatorService', () => {
@@ -11,6 +11,8 @@ describe('EquipStatsCalculatorService', () => {
     result.general.ad = { min: 100, max: 200 };
     result.general.ap = { min: 50, max: 100 };
     result.general.def = 100;
+    result.general.hp = { actual: 500, max: 1000 };
+    result.general.mana = { actual: 100, max: 100 };
     return result;
   }
 

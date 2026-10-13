@@ -23,7 +23,8 @@ import { GenerateBonusService } from './services/generateBonus/generate-bonus.se
     GenerateItemBonusService
   ],
   exports:[
-    BonusService
+    BonusService,
+    LimitBonusService
   ]
 })
 export class BonusModule {}

@@ -17,8 +17,8 @@ export const STATS_PROGRESS_BY_RACE: Record<CharacterRace, CharacterStatsProgres
         base: {
             hp: 900,
             mana: 250,
-            ap: 5,
-            ad: 12,
+            ap: 3,
+            ad: 7,
             regen_hp: 8,
             regen_mana: 3,
         },
@@ -39,8 +39,8 @@ export const STATS_PROGRESS_BY_RACE: Record<CharacterRace, CharacterStatsProgres
         base: {
             hp: 650,
             mana: 600,
-            ap: 13,
-            ad: 5,
+            ap: 7,
+            ad: 3,
             regen_hp: 4,
             regen_mana: 10,
         },
@@ -59,8 +59,8 @@ export const STATS_PROGRESS_BY_RACE: Record<CharacterRace, CharacterStatsProgres
         base: {
             hp: 720,
             mana: 350,
-            ap: 7,
-            ad: 11,
+            ap: 4,
+            ad: 6,
             regen_hp: 6,
             regen_mana: 6,
         },
@@ -79,8 +79,8 @@ export const STATS_PROGRESS_BY_RACE: Record<CharacterRace, CharacterStatsProgres
         base: {
             hp: 780,
             mana: 500,
-            ap: 10,
-            ad: 9,
+            ap: 5,
+            ad: 5,
             regen_hp: 7,
             regen_mana: 8,
         },

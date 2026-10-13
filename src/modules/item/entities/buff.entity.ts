@@ -1,17 +1,15 @@
-import { BuffType, EffecDescription } from 'netim2-shared';
+import { BonusInItem, BuffType } from 'netim2-shared';
 import { UtilityBase } from './utility-base.entity';
 
 export class Buff extends UtilityBase {
   protected readonly duration: number;
-  protected readonly iconBuff: string;
   protected readonly idBUff: number;
-  protected readonly effect: EffecDescription[];
+  protected readonly implicitBonus: BonusInItem[];
 
   constructor(props: BuffType) {
     super(props);
     this.duration = props.duration;
-    this.iconBuff = props.iconBuff;
     this.idBUff = props.idBuff;
-    this.effect = props.effect;
+    this.implicitBonus = props.implicitBonus;
   }
 }

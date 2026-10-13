@@ -1,9 +1,15 @@
 import { allFullNameBonusList, Atributos, AttributesRefKeys, BonusCategory, BonusInItem, EquipType, ValueBonusType } from 'netim2-shared';
-import { GENERAL_CHARACTER_STATS } from '../../const/characterProps/base-character-stats.const';
+import { GENERAL_CHARACTER_STATS as BASE_CHARACTER_STATS } from '../../../const/characterProps/base-character-stats.const';
 import { CharacterAttributesService } from './character-attributes.service';
 
 describe('CharacterAttributesService', () => {
   const service = new CharacterAttributesService();
+  const GENERAL_CHARACTER_STATS = structuredClone(BASE_CHARACTER_STATS);
+  GENERAL_CHARACTER_STATS.general.ad = { min: 10, max: 10 };
+  GENERAL_CHARACTER_STATS.general.ap = { min: 20, max: 20 };
+  GENERAL_CHARACTER_STATS.general.hp = { actual: 500, max: 1000 };
+  GENERAL_CHARACTER_STATS.general.va = 50;
+  GENERAL_CHARACTER_STATS.general.vh = 0;
 
   function attributes(overrides: Partial<Atributos> = {}): Atributos {
     return {
@@ -80,75 +86,91 @@ describe('CharacterAttributesService', () => {
 
   it('uses race caps without changing either point field', () => {
     const attrs = attributes({ STR: { lvPoints: 50, bonusPoints: 30 } });
-    expect(service.capAttributes(attrs, [], 'guerrero').STR).toBe(67);
-    expect(service.capAttributes(attrs, [], 'chaman').STR).toBe(30);
+    expect(service.capAttributes(attrs, [], 'guerrero').STR).toBe(80);
+    expect(service.capAttributes(attrs, [], 'chaman').STR).toBe(60);
     expect(attrs.STR).toEqual({ lvPoints: 50, bonusPoints: 30 });
   });
 
   it('uses speciality caps instead of race caps', () => {
-    const attrs = attributes({ STR: { lvPoints: 50, bonusPoints: 80 } });
+    const attrs = attributes({ STR: { lvPoints: 150, bonusPoints: 10 } });
     expect(service.capAttributes(attrs, [], 'guerrero', 'Corporal').STR)
-      .toBe(117);
+      .toBe(127);
+    expect(service.capAttributes(attrs, [], 'guerrero').STR).toBe(77);
   });
 
   it('accumulates cap increases and decreases, then applies summed percentages once', () => {
-    const attrs = attributes({ STR: { lvPoints: 60, bonusPoints: 50 } });
+    const attrs = attributes({ STR: { lvPoints: 60, bonusPoints: 500 } });
     const equip = [
       item({ implicitBonus: [capBonus('STR', 5)], explicitBonus: [capBonus('STR', 10, 'porcentage')] }),
       item({ bonus6_7: [capBonus('STR', -2)], corruptImplicitBonus: [capBonus('STR', 20, 'porcentage')] }),
     ];
-    // (67 + 5 - 2) * 1.30 = 91, lvPoints = 60.
-    expect(service.capAttributes(attrs, equip, 'guerrero').STR).toBe(91);
+    // (200 + 5 - 2) * 1.30 = 263.9.
+    expect(service.capAttributes(attrs, equip, 'guerrero').STR).toBeCloseTo(263.9);
   });
 
   it('reads cap modifiers from every BonusInItem array', () => {
-    const attrs = attributes({ STR: { lvPoints: 60, bonusPoints: 40 } });
+    const attrs = attributes({ STR: { lvPoints: 60, bonusPoints: 400 } });
     const equip = [item({
       implicitBonus: [capBonus('STR', 2)], randomImplicitBonus: [capBonus('STR', 2)],
       explicitBonus: [capBonus('STR', 2)], bonus6_7: [capBonus('STR', 2)],
       corruptExplicitBonus: [capBonus('STR', 2)], corruptImplicitBonus: [capBonus('STR', 2)],
     })];
-    expect(service.capAttributes(attrs, equip, 'guerrero').STR).toBe(79);
+    expect(service.capAttributes(attrs, equip, 'guerrero').STR).toBe(212);
   });
 
   it('applies corruption accumulation to cap modifiers', () => {
-    const attrs = attributes({ STR: { lvPoints: 60, bonusPoints: 40 } });
+    const attrs = attributes({ STR: { lvPoints: 60, bonusPoints: 400 } });
     const equip = [
       item({ corrupt: true, corruptImplicitBonus: [
         capBonus('STR', 5, 'flat', { type: 'corrupt', sub_type: 'corrupt_item_acc' }),
       ] }),
       item({ corrupt: true }), item({ corrupt: false }), item(),
     ];
-    expect(service.capAttributes(attrs, equip, 'guerrero').STR).toBe(77);
+    expect(service.capAttributes(attrs, equip, 'guerrero').STR).toBe(210);
   });
 
   it('supports percentage cap reductions', () => {
-    const attrs = attributes({ STR: { lvPoints: 20, bonusPoints: 40 } });
+    const attrs = attributes({ STR: { lvPoints: 20, bonusPoints: 400 } });
     const equip = [item({ explicitBonus: [capBonus('STR', -50, 'porcentage')] })];
-    expect(service.capAttributes(attrs, equip, 'guerrero').STR).toBe(33.5);
+    expect(service.capAttributes(attrs, equip, 'guerrero').STR).toBe(100);
   });
 
-  it('preserves lvPoints and uses only the lowered cap for benefits when lvPoints exceeds it', () => {
-    const attrs = attributes({ STR: { lvPoints: 30, bonusPoints: 10 } });
+  it('applies a lowered general cap to benefits without changing either point field', () => {
+    const attrs = attributes({ STR: { lvPoints: 30, bonusPoints: 200 } });
     const equip = [item({ explicitBonus: [capBonus('STR', -50)] })];
     const result = service.applyAttributeBenefits(GENERAL_CHARACTER_STATS, attrs, equip, 'guerrero');
-    expect(result.atributos.STR).toEqual({ lvPoints: 30, bonusPoints: 10 });
-    expect(result.stats.general.ad).toEqual({ min: 44, max: 44 });
+    expect(result.atributos.STR).toEqual({ lvPoints: 30, bonusPoints: 200 });
+    expect(result.stats.general.ad).toEqual({ min: 310, max: 310 });
   });
 
-  it('limits HP benefits to the race cap while preserving excess level points', () => {
+  it('limits only level points to the race cap before adding bonus points for HP', () => {
     const attrs = attributes({ VIT: { lvPoints: 100, bonusPoints: 20 } });
     const result = service.applyAttributeBenefits(GENERAL_CHARACTER_STATS, attrs, [], 'guerrero');
     expect(result.atributos.VIT).toEqual({ lvPoints: 100, bonusPoints: 20 });
-    expect(result.stats.general.hp.max).toBeCloseTo(1670);
+    expect(result.stats.general.hp.max).toBeCloseTo(1870);
     expect(attrs.VIT).toEqual({ lvPoints: 100, bonusPoints: 20 });
   });
 
-  it('limits benefits while preserving excess bonusPoints', () => {
+  it('allows bonus points to exceed the race cap up to the general cap', () => {
     const attrs = attributes({ VIT: { lvPoints: 60, bonusPoints: 40 } });
     const result = service.applyAttributeBenefits(GENERAL_CHARACTER_STATS, attrs, [], 'guerrero');
     expect(result.atributos.VIT).toEqual({ lvPoints: 60, bonusPoints: 40 });
-    expect(result.stats.general.hp.max).toBeCloseTo(1670);
+    expect(result.stats.general.hp.max).toBeCloseTo(2000);
+  });
+
+  it('limits total benefits to the general cap after limiting level points separately', () => {
+    const attrs = attributes({ STR: { lvPoints: 150, bonusPoints: 400 } });
+    const result = service.applyAttributeBenefits(GENERAL_CHARACTER_STATS, attrs, [], 'guerrero');
+    expect(service.capAttributes(attrs, [], 'guerrero').STR).toBe(200);
+    expect(result.stats.general.ad).toEqual({ min: 410, max: 410 });
+    expect(result.atributos).toEqual(attrs);
+  });
+
+  it('equipment cap increases change the general cap without raising the level point cap', () => {
+    const attrs = attributes({ STR: { lvPoints: 150, bonusPoints: 50 } });
+    const equip = [item({ explicitBonus: [capBonus('STR', 100)] })];
+    expect(service.capAttributes(attrs, equip, 'guerrero').STR).toBe(117);
+    expect(service.capAttributes(attrs, equip, 'guerrero', 'Corporal').STR).toBe(167);
   });
 
   it('does not increase bonuses when attributes are already below their cap', () => {
@@ -161,7 +183,7 @@ describe('CharacterAttributesService', () => {
     const unrelated = capBonus('STR', 100);
     unrelated.effects = { type: 'attribute_modifier', target: 'atribute.STR.bonusPoints', operation: 'flat' };
     const attrs = attributes({ STR: { lvPoints: 60, bonusPoints: 40 } });
-    expect(service.capAttributes(attrs, [item({ explicitBonus: [unrelated] })], 'guerrero').STR).toBe(67);
+    expect(service.capAttributes(attrs, [item({ explicitBonus: [unrelated] })], 'guerrero').STR).toBe(100);
   });
 
   it('returns modified stats and unchanged attributes without mutating any inputs', () => {

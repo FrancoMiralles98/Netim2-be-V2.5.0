@@ -1,5 +1,5 @@
 import { allFullNameBonusList, AppliedBuffos, Atributos, BonusInItem, RoutStatKey, ValueBonusType } from 'netim2-shared';
-import { GENERAL_CHARACTER_STATS } from '../../const/characterProps/base-character-stats.const';
+import { GENERAL_CHARACTER_STATS } from '../../../const/characterProps/base-character-stats.const';
 import { BuffStatsCalculatorService } from './buff-stats-calculator.service';
 
 describe('BuffStatsCalculatorService', () => {
@@ -8,6 +8,9 @@ describe('BuffStatsCalculatorService', () => {
     const result = structuredClone(GENERAL_CHARACTER_STATS);
     result.general.def = 100;
     result.general.ad = { min: 100, max: 200 };
+    result.general.ap = { min: 20, max: 20 };
+    result.general.hp = { actual: 500, max: 1000 };
+    result.general.mana = { actual: 100, max: 100 };
     return result;
   }
   function attributes(): Atributos {
