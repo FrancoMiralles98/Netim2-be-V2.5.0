@@ -20,20 +20,21 @@ export class BonusSharedService {
     */
     transformToBonusInItem(
         bonusRefKey: BonusRefKeys,
-        bonusValue: number | { min: number, max: number },
+        bonusValue: BonusInItem['bonusValue'],
         origin: BonusInItem['origin']
     ): BonusInItem {
-        const bonusInfo = BONUS_LIST.find(bonus => bonus.name.bonus_ref_name === bonusRefKey)
+        const bonusInfo = BONUS_LIST.find(bonus => bonus.bonus_ref_name === bonusRefKey)
 
         if (!bonusInfo) {
             throw new Error(`No se encuentra la informacion del bonus ref: ${bonusRefKey}`)
         }
 
         return {
-            bonusFullName: bonusInfo.name.full_name,
+            bonusFullName: bonusInfo.full_name,
             bonusRef: bonusRefKey,
             bonusValue,
-            bonusValueType: bonusInfo.name.type_value,
+            category: structuredClone(bonusInfo.category),
+            effects: structuredClone(bonusInfo.effects),
             origin
         }
     }

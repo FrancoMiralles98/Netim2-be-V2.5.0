@@ -8,9 +8,17 @@ import { SharedModule } from '../shared/shared.module';
 import { CharacterMapper } from './mapper/character-mapper';
 import { AuthModule } from '../auth/auth.module';
 import { UserModule } from '../user/user.module';
+import { EquipStatsCalculatorService } from './services/stats/calculator/equip-stats-calculator.service';
+import { CharacterAttributesService } from './services/stats/calculator/character-attributes.service';
+import { CharacterLevelScalingService } from './services/stats/calculator/character-level-scaling.service';
+import { BuffStatsCalculatorService } from './services/stats/calculator/buff-stats-calculator.service';
+import { UpdateStatsService } from './services/stats/update-stats.service';
+import { BonusModule } from '../bonus/bonus.module';
+import { CharacterBuffService } from './services/buffos/character-buff.service';
 
 @Module({
   imports: [
+    BonusModule,
     SharedModule,
     AuthModule,
     UserModule,
@@ -19,10 +27,16 @@ import { UserModule } from '../user/user.module';
     ])
   ],
   controllers: [CharacterController],
-  providers: [CharacterService, CharacterRepository,CharacterMapper],
+  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterBuffService],
   exports: [
     CharacterService,
-    CharacterMapper
+    CharacterMapper,
+    EquipStatsCalculatorService,
+    CharacterAttributesService,
+    CharacterLevelScalingService,
+    BuffStatsCalculatorService,
+    UpdateStatsService,
+    CharacterBuffService
   ]
 })
 export class CharacterModule { }

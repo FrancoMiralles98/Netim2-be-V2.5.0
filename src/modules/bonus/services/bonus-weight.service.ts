@@ -1,17 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { WEIGHT_RARITY_MODIFIERS_CONFIG } from "../config/weight-rarity-modifiers.config";
 import { BONUS_LIST } from "../const/bonus-list.cons";
-import { BonusInItem, BonusType } from "netim2-shared";
+import { BonusInItem, BonusTierLv, BonusType } from "netim2-shared";
 
 
 /**
  * Servicio encargado de calcular el peso total de los bonus de un ítem.
  * 
- * El peso representa qué tan bueno son sus bonus en un ítem sgun:
+ * El peso representa qué tan buenos son sus bonus en un ítem según:
  * - El valor máximo posible de ese bonus.
  * - El tier del bonus
  * 
- * @note - este peso unicamente se calcula en los bonus explicitos de los items
+ * Solo se consideran bonus genéricos. El valor puede superar el máximo base
+ * por el escalado de nivel del ítem, sin limitar su peso al 100 %.
  */
 @Injectable()
 export class BonusWeightService {
@@ -25,8 +26,13 @@ export class BonusWeightService {
     getBonusWeight(explicitBonus:BonusInItem[]): number {
         let totalWeight = 0
         for (const bonus of explicitBonus) {
-            const baseInfo = this.getBaseInfoOfBonus(bonus)
-            const value = this.calculateWeightValue(bonus,baseInfo)
+            if (bonus.category.type !== 'generic') {
+                continue
+            }
+
+            const tier = bonus.category.tier
+            const baseInfo = this.getBaseInfoOfBonus(bonus, tier)
+            const value = this.calculateWeightValue(bonus, baseInfo, tier)
             totalWeight += value
         }
 
@@ -42,12 +48,14 @@ export class BonusWeightService {
      * @returns {BonusType} Información base del bonus.
      *
      */
-    private getBaseInfoOfBonus (bonus:BonusInItem):BonusType {
+    private getBaseInfoOfBonus (bonus:BonusInItem, tier: BonusTierLv):BonusType {
         const bonusToSearch = BONUS_LIST.find(bonusInList => 
-            bonusInList.name.bonus_ref_name === bonus.bonusRef)
+            bonusInList.bonus_ref_name === bonus.bonusRef &&
+            bonusInList.category.type === 'generic' &&
+            bonusInList.category.tier === tier)
         
         if (!bonusToSearch) {
-            throw new Error('Bonus not found')
+            throw new Error(`Bonus genérico no encontrado: ${bonus.bonusRef}, tier ${tier}`)
         }
         return bonusToSearch
     }
@@ -64,16 +72,12 @@ export class BonusWeightService {
      * @returns {number} Peso del bonus.
      * 
      */
-    private calculateWeightValue(actualBonus:BonusInItem,baseBonusInfo: BonusType): number {
+    private calculateWeightValue(actualBonus:BonusInItem,baseBonusInfo: BonusType, tier: BonusTierLv): number {
         if (typeof actualBonus.bonusValue !== 'number') {
             throw new Error ('El valor del bonus debe ser de tipo number')
         }
-        if (!baseBonusInfo.tier) {
-            throw new Error ('El bonus debe de ser tipo generico y tener un tier asignado')
-        }
+        const multiplierTierLv = WEIGHT_RARITY_MODIFIERS_CONFIG[tier]
 
-        const multiplayerTierLv = WEIGHT_RARITY_MODIFIERS_CONFIG[baseBonusInfo.tier]
-
-        return (actualBonus.bonusValue / baseBonusInfo.values.max) * multiplayerTierLv
+        return (actualBonus.bonusValue / baseBonusInfo.values.max) * multiplierTierLv
     }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { GenerateBonusService } from "./generate-bonus.service";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { BonusCategory, BonusInItem, ItemBonusQuality, subTypeEquip } from "netim2-shared";
+import { GenerateBonusService } from "./generateBonus/generate-bonus.service";
 
 
 @Injectable()
@@ -16,9 +16,10 @@ export class GenerateItemBonusService {
     *
     * Acciones soportadas:
     * - add: añade nuevos bonus respetando el límite máximo.
-    * - change: reemplaza completamente los bonus existentes por nuevos.
+    * - change: reemplaza los bonus actuales conservando su cantidad, hasta el límite.
+    * - random: genera quantity bonus; bonusUsed solo contiene exclusiones.
     *
-    * @param bonusUsed Bonus actuales del ítem.
+    * @param bonusUsed Bonus actuales en add/change; exclusiones en random.
     * @param bonusCategory Categoría de bonus a generar.
     * @param type Tipo de operación a realizar.
     * @param itemLv Nivel interno del ítem utilizado para escalar valores.
@@ -38,15 +39,19 @@ export class GenerateItemBonusService {
         quantity?:number
     ): BonusInItem[] {
 
+        if (!Number.isInteger(maxQuantity) || maxQuantity < 0) {
+            throw new Error('El límite de bonus debe ser un entero no negativo')
+        }
+
         if (type === 'add') {
             return this.executeAddBonus(bonusUsed, bonusCategory, itemLv, quaility, maxQuantity,sub_type_equip)
         }
 
         if (type === 'random') {
-            if (!quantity) {
-                throw new Error('No hay una cantidad valida de para ejecutar')
+            if (quantity === undefined || !Number.isInteger(quantity) || quantity < 0) {
+                throw new Error('La cantidad de bonus debe ser un entero no negativo')
             }
-            this.executeChangeBonus(quantity, bonusCategory, itemLv, quaility, maxQuantity,sub_type_equip)
+            return this.executeChangeBonus(quantity, bonusCategory, itemLv, quaility, maxQuantity,sub_type_equip, bonusUsed)
         }
 
         return this.executeChangeBonus(bonusUsed.length, bonusCategory, itemLv, quaility, maxQuantity,sub_type_equip)
@@ -56,7 +61,7 @@ export class GenerateItemBonusService {
      * Añade uno o más bonus al ítem.
      *
      * Si el ítem ya alcanzó la cantidad máxima permitida,
-     * no realiza ninguna modificación.
+     * no genera más bonus. Si ya excedía el límite, ajusta la lista devuelta.
      *
      * En caso de que el bonus generado haga que se supere
      * el límite permitido (por ejemplo bonus especiales que
@@ -80,24 +85,21 @@ export class GenerateItemBonusService {
         sub_type_equip: subTypeEquip
     ) {
         if (bonusUsed.length >= maxQuantity) {
-            return bonusUsed
-        }
-        const bonus = this.generateBonusService.generateBonus(bonusCategory, bonusUsed, itemLv, quaility,sub_type_equip)
-        bonusUsed.push(...bonus)
-        if (bonusUsed.length > maxQuantity) {
             return this.adjustBonusQuantityCap(bonusUsed, maxQuantity)
         }
-        return bonusUsed
+        const bonus = this.generateBonusService.generateBonus(bonusCategory, bonusUsed, itemLv, quaility,sub_type_equip)
+        return this.adjustBonusQuantityCap([...bonusUsed, ...bonus], maxQuantity)
     }
 
     /**
-    * Reemplaza completamente los bonus actuales del ítem.
+    * Genera la cantidad solicitada, contando cada integrante del par como un bonus.
     *
     * Genera una nueva lista de bonus utilizando la misma
     * cantidad de bonus que poseía originalmente el ítem,
     * respetando el límite máximo permitido.
     *
-    * @param bonusUsed Bonus actuales del ítem.
+    * @param totalBonus Cantidad solicitada.
+    * @param excludedBonuses Bonus externos que no deben repetirse en la nueva lista.
     * @param bonusCategory Categoría de bonus a generar.
     * @param itemLv Nivel interno del ítem utilizado para escalar valores.
     * @param quaility Calidad utilizada para determinar la calidad de los bonus generados.
@@ -111,18 +113,18 @@ export class GenerateItemBonusService {
         itemLv: number,
         quaility: ItemBonusQuality,
         maxQuantity: number,
-        sub_type_equip: subTypeEquip
+        sub_type_equip: subTypeEquip,
+        excludedBonuses: BonusInItem[] = []
     ) {
         const newBonuses: BonusInItem[] = []
+        const targetQuantity = Math.min(totalBonus, maxQuantity)
 
-        for (let index = 0; index < totalBonus; index++) {
-            if (newBonuses.length >= maxQuantity) {
-                break;
-            }
-            const bonus = this.generateBonusService.generateBonus(bonusCategory, newBonuses, itemLv, quaility,sub_type_equip)
+        while (newBonuses.length < targetQuantity) {
+            const bonus = this.generateBonusService.generateBonus(
+                bonusCategory, [...excludedBonuses, ...newBonuses], itemLv, quaility, sub_type_equip)
             newBonuses.push(...bonus)
         }
-        return this.adjustBonusQuantityCap(newBonuses, maxQuantity)
+        return this.adjustBonusQuantityCap(newBonuses, targetQuantity)
     }
 
     /**
@@ -148,8 +150,9 @@ export class GenerateItemBonusService {
         bonuses: BonusInItem[],
         maxQuantity: number,
     ): BonusInItem[] {
-        if (bonuses.length <= maxQuantity) {
-            return bonuses
+        const adjustedBonuses = [...bonuses]
+        if (adjustedBonuses.length <= maxQuantity) {
+            return adjustedBonuses
         }
 
         const hasSpecialBonus = bonuses.some(
@@ -160,23 +163,25 @@ export class GenerateItemBonusService {
             return bonuses.slice(0, maxQuantity)
         }
 
-        const removableBonuses = bonuses.filter(
-            bonus =>
-                bonus.bonusRef !== 'media' &&
-                bonus.bonusRef !== 'habilidad',
-        )
-
-        if (removableBonuses.length === 0) {
-            throw new Error(
-                'No se puede ajustar el cap de bonus sin separar media/habilidad',
+        while (adjustedBonuses.length > maxQuantity) {
+            const removableBonuses = adjustedBonuses.filter(
+                bonus =>
+                    bonus.bonusRef !== 'media' &&
+                    bonus.bonusRef !== 'habilidad',
             )
-        }
 
-        const bonusToRemove =
-            removableBonuses[
-            this.rngService.randomNumberInRange(0, removableBonuses.length - 1)
+            if (removableBonuses.length === 0) {
+                throw new Error(
+                    'No se puede ajustar el cap de bonus sin separar media/habilidad',
+                )
+            }
+
+            const bonusToRemove = removableBonuses[
+                this.rngService.randomNumberInRange(0, removableBonuses.length - 1)
             ]
 
-        return bonuses.filter(bonus => bonus !== bonusToRemove)
+            adjustedBonuses.splice(adjustedBonuses.indexOf(bonusToRemove), 1)
+        }
+        return adjustedBonuses
     }
 }

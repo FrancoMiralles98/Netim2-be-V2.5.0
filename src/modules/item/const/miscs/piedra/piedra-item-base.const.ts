@@ -6,6 +6,7 @@ export const BASE_PIEDRA_ITEM = {
     size: {cols:1,rows:1},
     upgradeLv: 0,
     implicitBonus: [],
+    corruptExplicitBonus: [],
     acc: false,
     lvUtility: 0,
     maxCantidad: 1,

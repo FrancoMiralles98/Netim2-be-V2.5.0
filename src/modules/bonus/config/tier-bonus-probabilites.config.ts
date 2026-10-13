@@ -18,8 +18,8 @@ export const TIER_BONUS_PROBABILITIES_X_QUALITY: Record<ItemBonusQuality, Record
     normal: {
         1: 55,
         2: 37,
-        3: 7.5,
-        4: 0.5
+        3: 7,
+        4: 1
     },
     magic: {
         1: 45,

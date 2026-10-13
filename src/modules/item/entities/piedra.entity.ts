@@ -20,10 +20,10 @@ export class Piedra extends UtilityBase {
     this.props.implicitBonus = implicitBonus;
   }
 
-  addSpecialCorruptBonus(bonus: SpecialCorruptBonus[]): void {
-    if (this.props.specialCorruptBonus) {
+  addSpecialCorruptBonus(bonus: BonusInItem[]): void {
+    if (this.props.corruptExplicitBonus) {
       throw new Error('It already has a bonus inserted');
     }
-    this.props.specialCorruptBonus = bonus;
+    this.props.corruptExplicitBonus = bonus;
   }
 }
