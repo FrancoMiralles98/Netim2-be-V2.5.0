@@ -137,8 +137,6 @@ export class CharacterService {
                 character: this.characterMapper.toSummary(characterCreated),
             };
         } catch (error) {
-            console.log(error);
-
             if (this.isDuplicateKeyError(error)) {
                 throw new ConflictException('Ya existe un personaje con ese nombre.');
             }

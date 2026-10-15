@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CharacterService } from './character.service';
-import { CharacterController } from './character.controller';
+import { CharacterController } from './controller/character.controller';
+import { CharacterEquipmentController } from './controller/character-equipment.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CharacterModel, characterSchema } from './schema/character.schema';
 import { CharacterRepository } from './repository/character-repository';
@@ -15,6 +16,8 @@ import { BuffStatsCalculatorService } from './services/stats/calculator/buff-sta
 import { UpdateStatsService } from './services/stats/update-stats.service';
 import { BonusModule } from '../bonus/bonus.module';
 import { CharacterBuffService } from './services/buffos/character-buff.service';
+import { CharacterEquipService } from './services/equip/character-equip.service';
+import { CharacterEquipOrchestratorService } from './services/equip/character-equip-orchestrator.service';
 
 @Module({
   imports: [
@@ -26,8 +29,8 @@ import { CharacterBuffService } from './services/buffos/character-buff.service';
       { name: CharacterModel.name, schema: characterSchema }
     ])
   ],
-  controllers: [CharacterController],
-  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterBuffService],
+  controllers: [CharacterController, CharacterEquipmentController],
+  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterBuffService, CharacterEquipService, CharacterEquipOrchestratorService],
   exports: [
     CharacterService,
     CharacterMapper,
@@ -36,7 +39,9 @@ import { CharacterBuffService } from './services/buffos/character-buff.service';
     CharacterLevelScalingService,
     BuffStatsCalculatorService,
     UpdateStatsService,
-    CharacterBuffService
+    CharacterBuffService,
+    CharacterEquipService,
+    CharacterEquipOrchestratorService
   ]
 })
 export class CharacterModule { }

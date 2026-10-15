@@ -35,8 +35,8 @@ export class UserService {
         await this.userRepository.updateUserDataById(userId, { reino },session)
     }
 
-    async updateUserDataById(userId: string, data: Partial<UserPersistence>) {
-        await this.userRepository.updateUserDataById(userId, data)
+    async updateUserDataById(userId: string, data: Partial<UserPersistence>, session?: ClientSession) {
+        await this.userRepository.updateUserDataById(userId, data, session)
     }
 
 

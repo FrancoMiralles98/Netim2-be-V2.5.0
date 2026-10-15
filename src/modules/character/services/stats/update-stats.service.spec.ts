@@ -239,13 +239,13 @@ describe('UpdateStatsService', () => {
       first.stats,
       'guerrero',
       gear,
-      source,
+      first.attributes,
       buffs,
       11,
     );
     expect(second).toEqual(first);
     expect(
-      service.updateStats(second.stats, 'guerrero', gear, source, buffs, 11),
+      service.updateStats(second.stats, 'guerrero', gear, second.attributes, buffs, 11),
     ).toEqual(first);
     expect(source).toEqual(attrs());
   });
@@ -260,7 +260,7 @@ describe('UpdateStatsService', () => {
       1,
     );
     expect(
-      service.updateStats(boosted.stats, 'guerrero', [], attrs(), [], 1),
+      service.updateStats(boosted.stats, 'guerrero', [], boosted.attributes, [], 1),
     ).toEqual(service.updateStats(stats(), 'guerrero', [], attrs(), [], 1));
   });
 
@@ -391,11 +391,26 @@ describe('UpdateStatsService', () => {
       'guerrero',
       [gear, second],
       source,
-      [buff([cap])],
+      [buff([cap, attribute(150)])],
       1,
     );
     expect(result.stats.general.ad.min).toBe(212); // cap general STR = 100
     expect(source.STR).toEqual({ lvPoints: 150, bonusPoints: 150 });
+  });
+
+  it('discards all previous bonusPoints without modifying input or lvPoints', () => {
+    const source = attrs(150);
+    source.STR.bonusPoints = 300;
+    source.INT.bonusPoints = -20;
+    source.DEX.bonusPoints = 50;
+    source.VIT.bonusPoints = 80;
+    const original = structuredClone(source);
+    const result = service.updateStats(stats(), 'guerrero', [], source, [], 1);
+    expect(result).toEqual(service.updateStats(stats(), 'guerrero', [], attrs(150), [], 1));
+    for (const key of ['STR', 'INT', 'DEX', 'VIT'] as const) {
+      expect(result.attributes[key]).toEqual({ lvPoints: source[key].lvPoints, bonusPoints: 0 });
+    }
+    expect(source).toEqual(original);
   });
 
   it('returns attributes updated by flat and percentage modifiers without cutting lvPoints or bonuses at the cap', () => {
@@ -424,9 +439,11 @@ describe('UpdateStatsService', () => {
     );
     expect(cappedResult.attributes.STR).toEqual({
       lvPoints: 150,
-      bonusPoints: 305,
+      bonusPoints: 5,
     });
-    expect(cappedResult.stats.general.ad.min).toBe(412);
+    expect(cappedResult).toEqual(service.updateStats(
+      stats(), 'guerrero', [item([attribute(5)])], attrs(150), [], 1,
+    ));
   });
 
   it('derives stats from the already modified attributes with each cap applied only once', () => {
@@ -525,7 +542,7 @@ describe('UpdateStatsService', () => {
       operation: 'flat',
     };
     const buffCap = { ...gearCap, bonusValue: 7 };
-    const gear = item([gearCap]);
+    const gear = item([gearCap, attribute(500)]);
     gear.corrupt = true;
     const second = item();
     second.corrupt = true;

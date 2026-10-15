@@ -4,10 +4,11 @@ import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.
 import { ATTRIBUTE_POINT_PROGRESSION } from "../const/statsProgress/attribute-point-progression.const";
 import { EXP_PER_LV } from "../const/exp-per-lv.const";
 import { isUtilityItem } from "src/modules/item/types/item-type-guard.type";
-import {  AddItemResult, AttributesRefKeys, CharacterPersistence, CharacterRace, CharacterSpeciality, InventoryChangeResult, InventoryItem, ItemDTO, ItemsToConsumeType, MasteryLvRank, Position } from "netim2-shared";
+import {  AddItemResult, AttributesRefKeys, CharacterPersistence, CharacterRace, CharacterSpeciality, EquipType, InventoryChangeResult, InventoryItem, ItemDTO, ItemsToConsumeType, MasteryLvRank, Position, subTypeEquip } from "netim2-shared";
 import { SkillAuraEntity } from "src/modules/skill/entities/skill-aura.entity";
 import { SkillDamageEntity } from "src/modules/skill/entities/skill-damage.entity";
 import { SkillBuffEntity } from "src/modules/skill/entities/skill-buff.entity";
+import { Inventory } from "../../inventory/entities/inventory.entity";
 
 export class CharacterEntity {
     private readonly MAX_LV = 125 //nivel maximo del personaje 
@@ -41,6 +42,104 @@ export class CharacterEntity {
 
     removeItemFromInventory(id: string): InventoryItem {
         return this.props.inventario.removeItemById(id)
+    }
+
+    /** Equipa una instancia del inventario. Prepara el intercambio antes de modificar el personaje. */
+    equipItemFromInventory(itemId: string): AddItemResult {
+        const equipmentKey = this.getSelectedEquipmentKey();
+        const item = this.props.inventario.getItemById(itemId);
+        if (item.type !== 'equip') {
+            throw new Error('El ítem seleccionado no es equipamiento');
+        }
+        if (!item.restricted.includes(this.props.raza)) {
+            throw new Error('El equipamiento no es compatible con la raza del personaje');
+        }
+        if (this.props.lv < item.lvReq) {
+            throw new Error('El personaje no tiene el nivel requerido para equipar el ítem');
+        }
+
+        const currentEquipment = this.props[equipmentKey];
+        const matchingItems = currentEquipment.filter(equipped => equipped.sub_type_equip === item.sub_type_equip);
+        if (matchingItems.length > 1) {
+            throw new Error('El equipo contiene más de un ítem del mismo subtipo');
+        }
+        const previous = matchingItems[0];
+        const nextInventory = new Inventory(structuredClone(this.props.inventario.getInventory()));
+        const removedItem = nextInventory.removeItemById(itemId);
+        // El ítem entrante libera espacio; se verifica el tamaño real del reemplazado.
+        const inventoryChanges: AddItemResult = previous
+            ? this.returnEquipmentToInventory(nextInventory, previous)
+            : { newItems: [], updatedItems: [] };
+        // Sin cantidad, el contrato indica eliminar la instancia del inventario.
+        inventoryChanges.updatedItems.push({ id: removedItem.id });
+
+        // El ID de instancia viaja con el equipo; su antigua posición solo pertenece al inventario.
+        const { position, ...equippedItem } = structuredClone(item);
+        const nextEquipment = currentEquipment.filter(equipped => equipped.sub_type_equip !== item.sub_type_equip);
+        nextEquipment.push(equippedItem);
+        this.props.inventario = nextInventory;
+        this.props[equipmentKey] = nextEquipment;
+        if (item.sub_type_equip === 'arma') {
+            this.props.type_weapon = item.type_weapon ?? '';
+        }
+        return structuredClone(inventoryChanges);
+    }
+
+    /** Retira un slot del set activo solo después de verificar y preparar su regreso al inventario. */
+    unequipItemToInventory(subType: subTypeEquip): AddItemResult {
+        const equipmentKey = this.getSelectedEquipmentKey();
+        const currentEquipment = this.props[equipmentKey];
+        const matches = currentEquipment.filter(item => item.sub_type_equip === subType);
+        if (matches.length === 0) {
+            throw new Error('No hay un ítem equipado en el slot indicado');
+        }
+        if (matches.length > 1) {
+            throw new Error('El equipo contiene más de un ítem del mismo subtipo');
+        }
+        const nextInventory = new Inventory(structuredClone(this.props.inventario.getInventory()));
+        const inventoryChanges = this.returnEquipmentToInventory(nextInventory, matches[0]);
+        this.props.inventario = nextInventory;
+        this.props[equipmentKey] = currentEquipment.filter(item => item.sub_type_equip !== subType);
+        if (subType === 'arma') this.props.type_weapon = '';
+        return structuredClone(inventoryChanges);
+    }
+
+    unlockEquipmentSlot(slot: 1 | 2 | 3): void {
+        const keys = { 1: 'equipo1_on', 2: 'equipo2_on', 3: 'equipo3_on' } as const;
+        const key = keys[slot];
+        if (!key) throw new Error('Slot de equipo inválido');
+        if (this.props.equipo_options[key]) throw new Error('El slot de equipo ya está desbloqueado');
+        this.props.equipo_options[key] = true;
+    }
+
+    selectEquipment(slot: 1 | 2 | 3): void {
+        const equipmentKey = this.getSelectedEquipmentKey(slot);
+        const weapon = this.props[equipmentKey].find(item => item.sub_type_equip === 'arma');
+        this.props.equipo_selected = slot;
+        this.props.type_weapon = weapon?.type_weapon ?? '';
+    }
+
+    private getSelectedEquipmentKey(slot: 1 | 2 | 3 = this.props.equipo_selected): 'equipo_1' | 'equipo_2' | 'equipo_3' {
+        const sets = {
+            1: { key: 'equipo_1', enabled: this.props.equipo_options.equipo1_on },
+            2: { key: 'equipo_2', enabled: this.props.equipo_options.equipo2_on },
+            3: { key: 'equipo_3', enabled: this.props.equipo_options.equipo3_on },
+        } as const;
+        const selected = sets[slot];
+        if (!selected || !selected.enabled) {
+            throw new Error('El set de equipo seleccionado no está habilitado');
+        }
+        return selected.key;
+    }
+
+    private returnEquipmentToInventory(inventory: Inventory, item: EquipType): AddItemResult {
+        if (!inventory.findFirstAvailableSpace(item)) {
+            throw new Error('No hay espacio suficiente en el inventario para el ítem desequipado');
+        }
+        const added = inventory.addItem(item);
+        // Los equipos legacy pueden no tener ID; los que sí lo tienen conservan su instancia.
+        if ('id' in item && typeof item.id === 'string') added.newItems[0].id = item.id;
+        return added;
     }
 
     moveItemFromInventory(id: string, position: Position): InventoryItem {
