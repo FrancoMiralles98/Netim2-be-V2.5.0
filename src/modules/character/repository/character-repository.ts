@@ -36,8 +36,8 @@ export class CharacterRepository {
         return this.characterMapper.toDomain(characterPersistence)
     }
 
-    async getCharacterById(id: string): Promise<CharacterDocument> {
-        const character = await this.characterModel.findById(id)
+    async getCharacterById(id: string, session?: ClientSession): Promise<CharacterDocument> {
+        const character = await this.characterModel.findById(id, null, { session })
         if (!character) {
             throw new NotFoundException('character not found')
         }
@@ -56,8 +56,8 @@ export class CharacterRepository {
         return character
     }
 
-    async updateCharacterById(id: string, data: CharacterPersistence): Promise<CharacterModel> {
-        const updatedCharacter = await this.characterModel.findByIdAndUpdate(id, { $set: data }, { new: true })
+    async updateCharacterById(id: string, data: CharacterPersistence, session?: ClientSession): Promise<CharacterModel> {
+        const updatedCharacter = await this.characterModel.findByIdAndUpdate(id, { $set: data }, { new: true, session })
         if (!updatedCharacter) {
             throw new NotFoundException('character not found')
         }

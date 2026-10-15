@@ -33,9 +33,9 @@ export class UpdateStatsService {
 
   /**
    * Reconstruye stats desde las constantes; del snapshot recibido solo usa HP/mana actuales.
-   * attributes es la fuente base persistida, sin bonus ya calculados de equipo/buffos.
+   * Usa lvPoints como fuente base; reconstruye bonusPoints desde equipo y buffos.
    * Devuelve stats y attributes calculados en copias; lvPoints se conserva intacto.
-   * Para recalcular se debe seguir usando la fuente base, no attributes del resultado.
+   * Permite recalcular usando attributes del resultado sin acumular bonus previos.
    * level procede de CharacterModel.lv; no se puede deducir de Stats.
    */
   updateStats(
@@ -63,10 +63,14 @@ export class UpdateStatsService {
     const buffBonuses = this.buffCalculator.getBonuses(buffs);
     const bonuses = [...equipmentBonuses, ...buffBonuses];
 
-    // 2. Aporte de nivel limitado por raza/especialidad; bonus de la fuente base conservados.
+    // 2. Conserva el aporte de nivel y descarta los bonus del cálculo anterior.
+    const baseAttributes = structuredClone(attributes);
+    for (const attribute of Object.keys(baseAttributes) as AttributesRefKeys[]) {
+      baseAttributes[attribute].bonusPoints = 0;
+    }
     const sourceAttributes =
       this.attributeCalculator.limitAttributeLevelContributions(
-        attributes,
+        baseAttributes,
         race,
         speciality,
       );
