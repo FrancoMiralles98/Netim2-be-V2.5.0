@@ -18,6 +18,10 @@ import { BonusModule } from '../bonus/bonus.module';
 import { CharacterBuffService } from './services/buffos/character-buff.service';
 import { CharacterEquipService } from './services/equip/character-equip.service';
 import { CharacterEquipOrchestratorService } from './services/equip/character-equip-orchestrator.service';
+import { ItemModule } from '../item/item.module';
+import { CharacterInventoryController } from './controller/character-inventory.controller';
+import { CharacterInventoryService } from './services/inventory/character-inventory.service';
+import { CharacterInventoryOrchestratorService } from './services/inventory/character-inventory-orchestrator.service';
 
 @Module({
   imports: [
@@ -25,12 +29,13 @@ import { CharacterEquipOrchestratorService } from './services/equip/character-eq
     SharedModule,
     AuthModule,
     UserModule,
+    ItemModule,
     MongooseModule.forFeature([
       { name: CharacterModel.name, schema: characterSchema }
     ])
   ],
-  controllers: [CharacterController, CharacterEquipmentController],
-  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterBuffService, CharacterEquipService, CharacterEquipOrchestratorService],
+  controllers: [CharacterController, CharacterEquipmentController, CharacterInventoryController],
+  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService],
   exports: [
     CharacterService,
     CharacterMapper,
@@ -41,7 +46,9 @@ import { CharacterEquipOrchestratorService } from './services/equip/character-eq
     UpdateStatsService,
     CharacterBuffService,
     CharacterEquipService,
-    CharacterEquipOrchestratorService
+    CharacterEquipOrchestratorService,
+    CharacterInventoryService,
+    CharacterInventoryOrchestratorService
   ]
 })
 export class CharacterModule { }

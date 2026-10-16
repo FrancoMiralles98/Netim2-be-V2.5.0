@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { BonusInItem, BonusRefKeys } from "netim2-shared";
+import { BonusCategory, BonusInItem, BonusRefKeys } from "netim2-shared";
 import { BONUS_LIST } from "src/modules/bonus/const/bonus-list.cons";
 
 @Injectable()
@@ -21,7 +21,8 @@ export class BonusSharedService {
     transformToBonusInItem(
         bonusRefKey: BonusRefKeys,
         bonusValue: BonusInItem['bonusValue'],
-        origin: BonusInItem['origin']
+        origin: BonusInItem['origin'],
+        category?: BonusCategory['type']
     ): BonusInItem {
         const bonusInfo = BONUS_LIST.find(bonus => bonus.bonus_ref_name === bonusRefKey)
 
@@ -33,6 +34,7 @@ export class BonusSharedService {
             bonusFullName: bonusInfo.full_name,
             bonusRef: bonusRefKey,
             bonusValue,
+            displayFormat: bonusInfo.displayFormat,
             category: structuredClone(bonusInfo.category),
             effects: structuredClone(bonusInfo.effects),
             origin

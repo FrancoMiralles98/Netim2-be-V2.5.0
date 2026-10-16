@@ -86,7 +86,6 @@ export class ItemHydrationService {
             corrupt: savedItem.corrupt,
             corruptExplicitBonus: savedItem.corruptExplicitBonus,
             corruptImplicitBonus: savedItem.corruptImplicitBonus,
-            corruptSpecialBonus: savedItem.corruptSpecialBonus,
             itemLv: savedItem.itemLv,
             piedras: savedItem.piedras,
             upgradeLv: savedItem.upgradeLv,

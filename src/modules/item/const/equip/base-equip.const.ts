@@ -14,7 +14,6 @@ export const BASE_EQUIP_ITEM = {
   bonus6_7: [],
   corruptExplicitBonus: [],
   corruptImplicitBonus: [],
-  corruptSpecialBonus: [],
   legendary: false,
   randomImplicitBonus: [],
   corrupt: false,

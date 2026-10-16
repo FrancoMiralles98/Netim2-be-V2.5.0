@@ -1,7 +1,7 @@
 
 import { ItemBase } from './item-base.entity';
 import { EQUIP_RULES } from '../config/items-rule.const';
-import { BonusInItem, EquipType, PiedrasInItem, SpecialCorruptBonus } from 'netim2-shared';
+import { BonusInItem, EquipType, PiedrasInItem } from 'netim2-shared';
 import { PiedraIdItem } from 'netim2-shared/dist/item/iditems/miscs/piedra-id-item.enum';
 
 
@@ -130,12 +130,6 @@ export class Equip extends ItemBase {
     this.props.corruptExplicitBonus = bonus;
   }
 
-  insertSpecialCorruptBonus(bonus: SpecialCorruptBonus[]): void {
-    if (!this.isCorrupted()) {
-      throw new Error('Item not corrupted');
-    }
-    this.props.corruptSpecialBonus = bonus;
-  }
 
   isWeaponItem(): boolean {
     return this.props.type_weapon !== undefined && this.props.sub_type_equip === 'arma';

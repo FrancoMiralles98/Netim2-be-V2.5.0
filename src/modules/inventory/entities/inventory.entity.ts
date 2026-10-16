@@ -114,6 +114,9 @@ export class Inventory {
      * @returns {InventoryItem} - 
      */
     moveItem(id: string, position: Position): InventoryItem {
+        if (!Number.isInteger(position.row) || !Number.isInteger(position.col) || position.row < 0 || position.col < 0) {
+            throw new Error('La posición debe tener coordenadas enteras y no negativas');
+        }
         const itemToMove = this.items.find(i => i.id === id)
         if (!itemToMove) {
             throw new Error('Id Item not found')
@@ -122,7 +125,7 @@ export class Inventory {
             itemToMove,
             position.row,
             position.col,
-            this.items,
+            this.items.filter(item => item.id !== id),
             this.DEFAULT_ROWS,
             this.DEFAULT_COLS
         )

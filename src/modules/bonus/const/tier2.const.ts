@@ -8,6 +8,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'def_espada',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_espada'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
@@ -16,6 +17,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'def_dos_manos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_dos_manos'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
@@ -24,6 +26,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'def_daga',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_daga'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
@@ -32,6 +35,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'def_fan',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_fan'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
@@ -40,6 +44,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'def_campana',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_campana'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
@@ -48,6 +53,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'def_flecha',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_flecha'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
@@ -56,14 +62,16 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'def_magia',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_magia'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['brazalete', 'pendiente', 'casco', 'armadura'],
   },
   {
     category: { type: 'generic', tier: 2 },
     full_name: allFullNameBonusList.PROB_DE_GOLPES_CRITICOS,
     bonus_ref_name: 'critico',
-    effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.critico'] },
+    effects: { type: 'stat_modifiers', operation: 'porcentage', target: ['bonus.daño.critico'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['arma', 'botas', 'collar'],
   },
   {
@@ -72,6 +80,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'retardo',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.cc.retardo'] },
     values: { min: 1, max: 15 },
+    displayFormat: 'porcentage',
     valid: ['arma', 'casco'],
   },
   {
@@ -80,6 +89,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'desmayo',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.cc.desmayo'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['arma', 'collar', 'botas'],
   },
   {
@@ -88,6 +98,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'penetracion',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.penetracion'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['arma', 'brazalete', 'collar'],
   },
   {
@@ -96,6 +107,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'chances_objetos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.miscs.chances_objetos'] },
     values: { min: 1, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['brazalete', 'pendiente', 'botas'],
   },
   {
@@ -104,6 +116,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'chances_raros',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.miscs.chances_raros'] },
     values: { min: 1, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['brazalete', 'pendiente', 'botas'],
   },
   {
@@ -112,6 +125,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'chances_yang',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.miscs.chances_yang'] },
     values: { min: 1, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['collar', 'escudo', 'botas'],
   },
   {
@@ -120,6 +134,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'chances_exp',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.miscs.chances_exp'] },
     values: { min: 1, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['collar', 'botas', 'escudo'],
   },
   {
@@ -128,6 +143,7 @@ export const tier2BonusList: BonusType[] = [
     bonus_ref_name: 'def_desmayo',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_desmayo'] },
     values: { min: 1, max: 50 },
+    displayFormat: 'porcentage',
     valid: ['escudo'],
   },
 ];

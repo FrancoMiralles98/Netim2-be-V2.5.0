@@ -7,6 +7,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'VIT',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.VIT.bonusPoints' },
     values: {min:1,max: 1},
+    displayFormat: 'flat',
     valid: ['escudo', 'arma'],
   },
   {
@@ -15,6 +16,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'misticos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.misticos'] },
     values: {min:1,max: 2},
+    displayFormat: 'porcentage',
     valid: ['escudo', 'arma'],
   },
   {
@@ -23,6 +25,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'STR',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.STR.bonusPoints' },
     values: {min:1,max: 1},
+    displayFormat: 'flat',
     valid: ['casco', 'botas'],
   },
   {
@@ -31,6 +34,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'demonios',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.demonios'] },
     values: {min:1,max: 2},
+    displayFormat: 'porcentage',
     valid: ['casco', 'botas'],
   },
   {
@@ -39,6 +43,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'INT',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.INT.bonusPoints' },
     values: {min:1,max: 1},
+    displayFormat: 'flat',
     valid: ['armadura', 'brazalete'],
   },
   {
@@ -47,6 +52,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'orcos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.orcos'] },
     values: {min:1,max: 2},
+    displayFormat: 'porcentage',
     valid: ['armadura', 'brazalete'],
   },
   {
@@ -55,6 +61,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'DEX',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.DEX.bonusPoints' },
     values: {min:1,max: 1},
+    displayFormat: 'flat',
     valid: ['pendiente', 'collar'],
   },
   {
@@ -63,6 +70,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'animales',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.animales'] },
     values: {min:1,max: 2},
+    displayFormat: 'porcentage',
     valid: ['pendiente', 'collar'],
   },
   {
@@ -71,6 +79,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'penetracion_habilidad',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.penetracion_habilidad'] },
     values: {min:1,max: 1},
+    displayFormat: 'porcentage',
     valid: ['arma'],
   },
   {
@@ -79,6 +88,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'va',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.va'] },
     values: {min:1,max: 2},
+    displayFormat: 'flat',
     valid: ['arma'],
   },
   {
@@ -87,6 +97,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'medio_humanos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.medio_humanos'] },
     values: {min:1,max: 5},
+    displayFormat: 'porcentage',
     valid: ['casco'],
   },
   {
@@ -95,6 +106,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'monstruos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.monstruos'] },
     values: {min:1,max: 5},
+    displayFormat: 'porcentage',
     valid: ['casco'],
   },
   {
@@ -103,6 +115,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'daño_critico',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.daño_critico'] },
     values: {min:1,max: 5},
+    displayFormat: 'porcentage',
     valid: ['armadura'],
   },
   {
@@ -111,6 +124,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'hp',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.hp'] },
     values: {min:150,max: 700},
+    displayFormat: 'flat',
     valid: ['armadura'],
   },
   {
@@ -119,6 +133,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'duracion_estado',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.duracion_estado'] },
     values: {min:1,max: 4},
+    displayFormat: 'porcentage',
     valid: ['escudo'],
   },
   {
@@ -127,6 +142,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'vm',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.vm'] },
     values: {min:1,max: 5},
+    displayFormat: 'flat',
     valid: ['escudo'],
   },
   {
@@ -135,6 +151,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'bonus_estado',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.bonus_estado'] },
     values: {min:1,max: 2},
+    displayFormat: 'porcentage',
     valid: ['botas'],
   },
   {
@@ -143,6 +160,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'regen_hp',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.regen_hp'] },
     values: {min:5,max: 10},
+    displayFormat: 'flat',
     valid: ['botas'],
   },
   {
@@ -151,6 +169,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'bonus_veneno',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.bonus_veneno'] },
     values: {min:1,max: 4},
+    displayFormat: 'porcentage',
     valid: ['collar'],
   },
   {
@@ -159,6 +178,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'vh',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.vh'] },
     values: {min:1,max: 1},
+    displayFormat: 'flat',
     valid: ['collar'],
   },
   {
@@ -167,6 +187,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'bonus_sangrado',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.bonus_sangrado'] },
     values: {min:1,max: 4},
+    displayFormat: 'porcentage',
     valid: ['brazalete'],
   },
   {
@@ -175,6 +196,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'def_hab',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_hab'] },
     values: {min:1,max: 1},
+    displayFormat: 'porcentage',
     valid: ['brazalete'],
   },
   {
@@ -183,6 +205,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'bonus_fuego',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.bonus_fuego'] },
     values: {min:1,max: 4},
+    displayFormat: 'porcentage',
     valid: ['pendiente'],
   },
   {
@@ -191,6 +214,7 @@ export const CORRUPT_IMPLICIT_BONUS: BonusType[] = [
     bonus_ref_name: 'def_media',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_media'] },
     values: {min:1,max: 1},
+    displayFormat: 'porcentage',
     valid: ['pendiente'],
   },
 ];

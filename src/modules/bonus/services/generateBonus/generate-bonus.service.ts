@@ -80,6 +80,7 @@ export class GenerateBonusService {
             bonusRef: bonus.bonus_ref_name,
             category: bonus.category,
             effects: bonus.effects,
+            displayFormat: bonus.displayFormat,
             bonusValue: this.rngService.randomNumberInRange(bonus.values.min, bonus.values.max),
             origin: 'random',
         };

@@ -3,13 +3,15 @@ import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
 import { CharacterDocument } from './schema/character.schema';
-import { AppliedBuffos, Atributos, CharacterPersistence, CharacterPersistenceWithId, CharacterRace, CharacterSpeciality, CharacterSummary, EquipType, Stats } from 'netim2-shared';
+import { allFullNameBonusList, AppliedBuffos, Atributos, CharacterPersistence, CharacterPersistenceWithId, CharacterRace, CharacterSpeciality, CharacterSummary, EquipType, IdItem, Stats } from 'netim2-shared';
 import { UserService } from '../user/user.service';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { UpdatedStatsResult, UpdateStatsService } from './services/stats/update-stats.service';
 import { CharacterBuffService } from './services/buffos/character-buff.service';
 import { ATTRIBUTE_BASE_BY_RACE } from './const/statsProgress/attribute-base-by-race.const';
+import { ITEM_LIST } from '../item/const/items.const';
+import { ItemService } from '../item/item.service';
 
 @Injectable()
 export class CharacterService {
@@ -18,6 +20,7 @@ export class CharacterService {
         private characterMapper: CharacterMapper,
         private userService: UserService,
         private characterBuffService: CharacterBuffService,
+        private itemService: ItemService,
         private updateStatsService: UpdateStatsService,
         @InjectConnection()
         private readonly connection: Connection,
@@ -61,6 +64,8 @@ export class CharacterService {
             character.lv,
             character.especialidad
         )
+
+        character.inventario = character.inventario.map(i => this.itemService.getUpdatedInventoryItem(i))
 
 
         character.stats = stats
@@ -126,10 +131,126 @@ export class CharacterService {
                 reino: reinoFinal,
             });
 
-            this.InicializateBaseValues(baseCharacter)
+            const espada = ITEM_LIST.find(i => i.idItem === IdItem.ESPADA) as EquipType
+            const daga = ITEM_LIST.find(i => i.idItem === IdItem.DAGA)
+            const glaive = ITEM_LIST.find(i => i.idItem === IdItem.GLAIVE)
+
+            if (!espada || !daga || !glaive) {
+                throw new BadRequestException('arma no existe')
+            }
+
+            espada.slot = 3
+            espada.corruptExplicitBonus = [{
+                    bonusFullName: allFullNameBonusList.BONUS_INCENDIO,
+                    bonusRef: 'electrico',
+                    bonusValue: 20,
+                    category: { type: 'bonus6_7' },
+                    displayFormat: 'porcentage',
+                    effects: {
+                        type: 'stat_modifiers',
+                        operation: 'flat',
+                        target: ['bonus.daño.electrico'],
+                    },
+                    origin: 'random'
+                },]
+            espada.corruptImplicitBonus = [{
+                    bonusFullName: allFullNameBonusList.CORRUPT_IMPLICIT_DAÑO_CRITICO,
+                    bonusRef: 'electrico',
+                    bonusValue: 4,
+                    category: { type: 'corrupt',sub_type: 'corrupt_item_acc' },
+                    displayFormat: 'porcentage',
+                    effects: {
+                        type: 'stat_modifiers',
+                        operation: 'flat',
+                        target: ['bonus.daño.electrico'],
+                    },
+                    origin: 'random'
+                },]
+            espada.bonus6_7 = [
+                {
+                    bonusFullName: allFullNameBonusList.FUERZA_CONTRA_GUERREROS,
+                    bonusRef: 'electrico',
+                    bonusValue: 10,
+                    category: { type: 'bonus6_7' },
+                    displayFormat: 'porcentage',
+                    effects: {
+                        type: 'stat_modifiers',
+                        operation: 'flat',
+                        target: ['bonus.daño.electrico'],
+                    },
+                    origin: 'random'
+                },
+                {
+                    bonusFullName: allFullNameBonusList.VALOR_DE_ATAQUE,
+                    bonusRef: 'electrico',
+                    bonusValue: 5,
+                    category: { type: 'bonus6_7' },
+                    displayFormat: 'flat',
+                    effects: {
+                        type: 'stat_modifiers',
+                        operation: 'flat',
+                        target: ['bonus.daño.electrico'],
+                    },
+                    origin: 'random'
+                },
+            ]
+            espada.explicitBonus = [{
+                bonusFullName: allFullNameBonusList.BONUS_ELECTRICO,
+                bonusRef: 'electrico',
+                bonusValue: 13,
+                category: { type: 'bonus6_7' },
+                displayFormat: 'porcentage',
+                effects: {
+                    type: 'stat_modifiers',
+                    operation: 'flat',
+                    target: ['bonus.daño.electrico'],
+                },
+                origin: 'random'
+            },
+            {
+                bonusFullName: allFullNameBonusList.DEFENSA_DAGA,
+                bonusRef: 'electrico',
+                bonusValue: 9,
+                category: { type: 'bonus6_7' },
+                displayFormat: 'porcentage',
+                effects: {
+                    type: 'stat_modifiers',
+                    operation: 'flat',
+                    target: ['bonus.daño.electrico'],
+                },
+                origin: 'random'
+            }
+            ]
+            espada.piedras = [{
+                idItem: IdItem.PIEDRA_DE_RAPIDEZ,
+                name: 'Piedra de Rapidez',
+                corruptExplicitBonus: [],
+                upgradeLv: 1,
+                implicitBonus: [{
+                    bonusFullName: allFullNameBonusList.VELOCIDAD_DE_MOVIMIENTO,
+                    bonusRef: 'vm',
+                    bonusValue: 10,
+                    displayFormat: 'flat',
+                    category: { type: 'bonus6_7' },
+                    effects: {
+                        type: 'stat_modifiers',
+                        operation: 'flat',
+                        target: ['general.vm']
+                    },
+                    origin: 'configured'
+                }]
+            }]
+
+            const entity = this.characterMapper.toDomain(baseCharacter)
+            entity.addItemToInventory(espada)
+            entity.addItemToInventory(daga)
+            entity.addItemToInventory(glaive)
+            const newCharacter = this.characterMapper.toPersistence(entity)
+
+            this.InicializateBaseValues(newCharacter)
 
             const characterCreated = await this.characterRepository.createCharacter(
-                baseCharacter,
+                newCharacter,
                 userId,
             );
 

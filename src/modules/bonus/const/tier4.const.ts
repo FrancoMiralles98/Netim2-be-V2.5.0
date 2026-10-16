@@ -7,6 +7,7 @@ export const tier4BonusList: BonusType[] = [
     bonus_ref_name: 'media',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.media'] },
     values: { min: 1, max: 60 },
+    displayFormat: 'porcentage',
     valid: ['arma'],
   },
   {
@@ -15,6 +16,7 @@ export const tier4BonusList: BonusType[] = [
     bonus_ref_name: 'regen_hp',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.regen_hp'] },
     values: { min: 5, max: 50 },
+    displayFormat: 'flat',
     valid: ['escudo'],
   },
   {
@@ -23,6 +25,7 @@ export const tier4BonusList: BonusType[] = [
     bonus_ref_name: 'penetracion_habilidad',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.penetracion_habilidad'] },
     values: { min: 1, max: 7 },
+    displayFormat: 'porcentage',
     valid: ['brazalete'],
   },
   {
@@ -31,6 +34,7 @@ export const tier4BonusList: BonusType[] = [
     bonus_ref_name: 'habilidad',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.habilidad'] },
     values: { min: 1, max: 30 },
+    displayFormat: 'porcentage',
     valid: ['arma'],
   },
   {
@@ -39,6 +43,7 @@ export const tier4BonusList: BonusType[] = [
     bonus_ref_name: 'robo_vida',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.robo_vida'] },
     values: { min: 1, max: 3 },
+    displayFormat: 'porcentage',
     valid: ['armadura'],
   },
   {
@@ -47,6 +52,7 @@ export const tier4BonusList: BonusType[] = [
     bonus_ref_name: 'def_hab',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_hab'] },
     values: { min: 1, max: 7 },
+    displayFormat: 'porcentage',
     valid: ['escudo', 'casco'],
   },
   {
@@ -55,6 +61,7 @@ export const tier4BonusList: BonusType[] = [
     bonus_ref_name: 'def_media',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_media'] },
     values: { min: 1, max: 7 },
+    displayFormat: 'porcentage',
     valid: ['collar', 'pendiente'],
   },
   {
@@ -63,6 +70,7 @@ export const tier4BonusList: BonusType[] = [
     bonus_ref_name: 'vampirismo_hechizo',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.vampirismo_hechizo'] },
     values: { min: 1, max: 5 },
+    displayFormat: 'porcentage',
     valid: ['botas'],
   },
 ];
