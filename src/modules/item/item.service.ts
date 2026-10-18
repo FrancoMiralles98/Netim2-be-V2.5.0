@@ -9,7 +9,7 @@ import { ItemHydrationService } from './services/item-hydration.service';
 import { RandomImplicitBonusService } from './services/implicitScaling/random-implicit-bonus.service';
 import { ItemFactory } from './factories/item-factory';
 import { Chest } from './entities/chest.entity';
-import { BonusInItem, IdItemList, InventoryItem, ItemDTO, Reward, subTypeEquip, UpgradeLv } from 'netim2-shared';
+import { BonusInItem, EquipType, IdItemList, InventoryItem, ItemDTO, Reward, subTypeEquip, UpgradeLv } from 'netim2-shared';
 
 @Injectable()
 export class ItemService {
@@ -67,9 +67,19 @@ export class ItemService {
     ): InventoryItem {
         const baseItem = this.getCoreItemInfoByIdItem(item.idItem)
 
-        return this.itemHydrationService.hydrateInventoryItem(baseItem, item)
+        const hydrated = structuredClone(this.itemHydrationService.hydrateInventoryItem(baseItem, item))
+        // El escalado debe usar la mejora y los bonus aleatorios de la instancia guardada.
+        this.itemImplicitBonusService.getUpdatedImplicits(hydrated)
+        return hydrated
     }
 
+    /** Actualiza un equipo conservando su identidad, mejoras y bonus propios, sin mutarlo. */
+    getUpdatedEquipmentItem<T extends EquipType>(item: T): T {
+        const baseItem = this.getCoreItemInfoByIdItem(item.idItem)
+        const hydrated = this.itemHydrationService.hydrateEquipmentItem(baseItem, item)
+        this.itemImplicitBonusService.getUpdatedImplicits(hydrated)
+        return hydrated
+    }
 
     rollItemLv(lvReq: number, bonification?: number): number {
         const distanceToMax = EQUIP_RULES.MAX__NORMAL_ITEM_LV - lvReq;

@@ -36,7 +36,7 @@ export class ItemHydrationService {
 
         if (isEquipItem(savedItem)) {
             return {
-                ...this.mergeEquipItem(baseItem, savedItem),
+                ...this.hydrateEquipmentItem(baseItem, savedItem),
                 ...commonState
             }
         }
@@ -75,13 +75,14 @@ export class ItemHydrationService {
         }
     }
 
-    private mergeEquipItem(baseItem: ItemDTO, savedItem: EquipType): EquipType {
+    hydrateEquipmentItem<T extends EquipType>(baseItem: ItemDTO, savedItem: T): T {
         if (!isEquipItem(baseItem)) {
             throw new Error(`el item ${baseItem.idItem} no es tipo equip`)
         }
         const mergedItem: EquipType = {
             ...baseItem,
             explicitBonus: savedItem.explicitBonus,
+            randomImplicitBonus: savedItem.randomImplicitBonus,
             bonus6_7: savedItem.bonus6_7,
             corrupt: savedItem.corrupt,
             corruptExplicitBonus: savedItem.corruptExplicitBonus,
@@ -92,7 +93,7 @@ export class ItemHydrationService {
             weight: savedItem.weight
         }
 
-        return mergedItem
+        return { ...structuredClone(savedItem), ...structuredClone(mergedItem) }
     }
 
     private mergePiedraItem(baseItem: ItemDTO, savedItem: PiedraType): PiedraType {

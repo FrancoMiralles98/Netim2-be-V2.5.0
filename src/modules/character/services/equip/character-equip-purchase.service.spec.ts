@@ -10,6 +10,7 @@ import { UserEntity } from '../../../user/entity/user-entity';
 import { UserRole } from '../../../user/types/user-roles.enum';
 import { Inventory } from '../../../inventory/entities/inventory.entity';
 import { UpdateStatsService } from '../stats/update-stats.service';
+import { ItemService } from '../../../item/item.service';
 
 describe('CharacterEquipService slot purchases', () => {
     let stored: CharacterPersistence;
@@ -49,7 +50,7 @@ describe('CharacterEquipService slot purchases', () => {
         };
         service = new CharacterEquipService(new CharacterMapper(),
             characterRepository as unknown as CharacterRepository,
-            userService as unknown as UserService, connection as unknown as Connection, {} as UpdateStatsService);
+            userService as unknown as UserService, connection as unknown as Connection, {} as UpdateStatsService, {} as ItemService);
     });
 
     it('charges character yang for slot 2 and enables only that slot', async () => {

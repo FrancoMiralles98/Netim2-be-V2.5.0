@@ -3,7 +3,7 @@ import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
 import { CharacterDocument } from './schema/character.schema';
-import { allFullNameBonusList, AppliedBuffos, Atributos, CharacterPersistence, CharacterPersistenceWithId, CharacterRace, CharacterSpeciality, CharacterSummary, EquipType, IdItem, Stats } from 'netim2-shared';
+import { AppliedBuffos, Atributos, CharacterPersistence, CharacterPersistenceWithId, CharacterRace, CharacterSpeciality, CharacterSummary, EquipType, IdItem, Stats } from 'netim2-shared';
 import { UserService } from '../user/user.service';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
@@ -44,34 +44,40 @@ export class CharacterService {
     }
 
     async getCharacterById(characterId: string, userId: string): Promise<CharacterPersistenceWithId> {
-        const character = await this.characterRepository.getCharacterById(characterId)
+        try {
 
-        if (character.user_owner !== userId) {
-            throw new ConflictException('No puedes conectarte con este personaje.')
+            const character = await this.characterRepository.getCharacterById(characterId)
+
+            if (character.user_owner !== userId) {
+                throw new ConflictException('No puedes conectarte con este personaje.')
+            }
+
+            const equipSelected = this.selecteEquip(character.equipo_1,
+                character.equipo_2,
+                character.equipo_3,
+                character.equipo_selected)
+
+            const { attributes, stats } = this.updateStatsAndAtributtes(
+                character.stats,
+                character.raza,
+                equipSelected,
+                character.atributos,
+                character.buffos,
+                character.lv,
+                character.especialidad
+            )
+
+            character.inventario = character.inventario.map(i => this.itemService.getUpdatedInventoryItem(i))
+
+
+            character.stats = stats
+            character.atributos = attributes
+
+            return { ...this.characterMapper.fromDb(character), id: character._id.toString() }
+        } catch (error) {
+            console.log('error al seleccionar', error);
+            throw new Error('error')
         }
-
-        const equipSelected = this.selecteEquip(character.equipo_1,
-            character.equipo_2,
-            character.equipo_3,
-            character.equipo_selected)
-
-        const { attributes, stats } = this.updateStatsAndAtributtes(
-            character.stats,
-            character.raza,
-            equipSelected,
-            character.atributos,
-            character.buffos,
-            character.lv,
-            character.especialidad
-        )
-
-        character.inventario = character.inventario.map(i => this.itemService.getUpdatedInventoryItem(i))
-
-
-        character.stats = stats
-        character.atributos = attributes
-
-        return { ...this.characterMapper.fromDb(character), id: character._id.toString() }
     }
 
     async getCharactersByUserId(userId: string): Promise<CharacterDocument[]> {
@@ -133,118 +139,29 @@ export class CharacterService {
 
             const espada = ITEM_LIST.find(i => i.idItem === IdItem.ESPADA) as EquipType
             const daga = ITEM_LIST.find(i => i.idItem === IdItem.DAGA)
-            const glaive = ITEM_LIST.find(i => i.idItem === IdItem.GLAIVE)
+            const armor = ITEM_LIST.find(i => i.idItem === IdItem.ARMADURA_DE_MONJE)
+            const c = ITEM_LIST.find(i => i.idItem === IdItem.CASCO_TRADICIONAL)
+            const e = ITEM_LIST.find(i => i.idItem === IdItem.ESCUDO_DE_BATALLA)
+            const b = ITEM_LIST.find(i => i.idItem === IdItem.BRAZALETE_DE_MADERA)
+            const bo = ITEM_LIST.find(i => i.idItem === IdItem.ZAPATILLAS_DE_CUERO)
+            const p = ITEM_LIST.find(i => i.idItem === IdItem.PENDIENTES_DE_MADERA)
+            const co = ITEM_LIST.find(i => i.idItem === IdItem.COLLAR_DE_MADERA)
 
-            if (!espada || !daga || !glaive) {
+            if (!espada || !daga || !armor || !c || !e || !b || !bo || !p || !co) {
                 throw new BadRequestException('arma no existe')
             }
 
-            espada.slot = 3
-            espada.corruptExplicitBonus = [{
-                    bonusFullName: allFullNameBonusList.BONUS_INCENDIO,
-                    bonusRef: 'electrico',
-                    bonusValue: 20,
-                    category: { type: 'bonus6_7' },
-                    displayFormat: 'porcentage',
-                    effects: {
-                        type: 'stat_modifiers',
-                        operation: 'flat',
-                        target: ['bonus.daño.electrico'],
-                    },
-                    origin: 'random'
-                },]
-            espada.corruptImplicitBonus = [{
-                    bonusFullName: allFullNameBonusList.CORRUPT_IMPLICIT_DAÑO_CRITICO,
-                    bonusRef: 'electrico',
-                    bonusValue: 4,
-                    category: { type: 'corrupt',sub_type: 'corrupt_item_acc' },
-                    displayFormat: 'porcentage',
-                    effects: {
-                        type: 'stat_modifiers',
-                        operation: 'flat',
-                        target: ['bonus.daño.electrico'],
-                    },
-                    origin: 'random'
-                },]
-            espada.bonus6_7 = [
-                {
-                    bonusFullName: allFullNameBonusList.FUERZA_CONTRA_GUERREROS,
-                    bonusRef: 'electrico',
-                    bonusValue: 10,
-                    category: { type: 'bonus6_7' },
-                    displayFormat: 'porcentage',
-                    effects: {
-                        type: 'stat_modifiers',
-                        operation: 'flat',
-                        target: ['bonus.daño.electrico'],
-                    },
-                    origin: 'random'
-                },
-                {
-                    bonusFullName: allFullNameBonusList.VALOR_DE_ATAQUE,
-                    bonusRef: 'electrico',
-                    bonusValue: 5,
-                    category: { type: 'bonus6_7' },
-                    displayFormat: 'flat',
-                    effects: {
-                        type: 'stat_modifiers',
-                        operation: 'flat',
-                        target: ['bonus.daño.electrico'],
-                    },
-                    origin: 'random'
-                },
-            ]
-            espada.explicitBonus = [{
-                bonusFullName: allFullNameBonusList.BONUS_ELECTRICO,
-                bonusRef: 'electrico',
-                bonusValue: 13,
-                category: { type: 'bonus6_7' },
-                displayFormat: 'porcentage',
-                effects: {
-                    type: 'stat_modifiers',
-                    operation: 'flat',
-                    target: ['bonus.daño.electrico'],
-                },
-                origin: 'random'
-            },
-            {
-                bonusFullName: allFullNameBonusList.DEFENSA_DAGA,
-                bonusRef: 'electrico',
-                bonusValue: 9,
-                category: { type: 'bonus6_7' },
-                displayFormat: 'porcentage',
-                effects: {
-                    type: 'stat_modifiers',
-                    operation: 'flat',
-                    target: ['bonus.daño.electrico'],
-                },
-                origin: 'random'
-            }
-            ]
-            espada.piedras = [{
-                idItem: IdItem.PIEDRA_DE_RAPIDEZ,
-                name: 'Piedra de Rapidez',
-                corruptExplicitBonus: [],
-                upgradeLv: 1,
-                implicitBonus: [{
-                    bonusFullName: allFullNameBonusList.VELOCIDAD_DE_MOVIMIENTO,
-                    bonusRef: 'vm',
-                    bonusValue: 10,
-                    displayFormat: 'flat',
-                    category: { type: 'bonus6_7' },
-                    effects: {
-                        type: 'stat_modifiers',
-                        operation: 'flat',
-                        target: ['general.vm']
-                    },
-                    origin: 'configured'
-                }]
-            }]
 
             const entity = this.characterMapper.toDomain(baseCharacter)
             entity.addItemToInventory(espada)
             entity.addItemToInventory(daga)
-            entity.addItemToInventory(glaive)
+            entity.addItemToInventory(c)
+            entity.addItemToInventory(co)
+            entity.addItemToInventory(armor)
+            entity.addItemToInventory(p)
+            entity.addItemToInventory(b)
+            entity.addItemToInventory(e)
+            entity.addItemToInventory(bo)
             const newCharacter = this.characterMapper.toPersistence(entity)
 
             this.InicializateBaseValues(newCharacter)

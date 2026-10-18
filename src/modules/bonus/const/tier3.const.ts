@@ -13,6 +13,15 @@ export const tier3BonusList: BonusType[] = [
   },
   {
     category: { type: 'generic', tier: 3 },
+    full_name: allFullNameBonusList.DEFENSA,
+    bonus_ref_name: 'def',
+    effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.def'] },
+    values: { min: 1, max: 10 },
+    displayFormat: 'flat',
+    valid: [],
+  },
+  {
+    category: { type: 'generic', tier: 3 },
     full_name: allFullNameBonusList.MAX_HP,
     bonus_ref_name: 'hp',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.hp'] },

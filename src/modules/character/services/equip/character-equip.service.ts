@@ -7,6 +7,7 @@ import { CharacterRepository } from "../../repository/character-repository";
 import { UserService } from "../../../user/user.service";
 import { EQUIPMENT_SLOTS_CONFIG } from "../../config/equip-slot.config";
 import { UpdateStatsService } from "../stats/update-stats.service";
+import { ItemService } from "../../../item/item.service";
 
 export type CharacterEquipmentResult = {
     newItems: InventoryItem[];
@@ -27,11 +28,18 @@ export class CharacterEquipService {
         private readonly userService: UserService,
         @InjectConnection() private readonly connection: Connection,
         private readonly updateStatsService: UpdateStatsService,
+        private readonly itemService: ItemService,
     ) { }
 
     /** Devuelve los datos actualizados; el consumidor debe persistir inventario y equipo juntos. */
     equipItem(character: CharacterPersistence, itemId: string): CharacterEquipmentResult {
-        const entity = this.characterMapper.toDomain(structuredClone(character));
+        const prepared = this.prepareEquipment(character);
+        prepared.inventario = prepared.inventario.map(item =>
+            item.id === itemId && item.type === 'equip'
+                ? this.itemService.getUpdatedInventoryItem(item)
+                : item,
+        );
+        const entity = this.characterMapper.toDomain(prepared);
         const inventoryChanges = entity.equipItemFromInventory(itemId);
         return {
             character: this.updateEquipmentStats(this.characterMapper.toPersistence(entity)),
@@ -40,7 +48,7 @@ export class CharacterEquipService {
     }
 
     unequipItem(character: CharacterPersistence, subType: subTypeEquip): CharacterEquipmentResult {
-        const entity = this.characterMapper.toDomain(structuredClone(character));
+        const entity = this.characterMapper.toDomain(this.prepareEquipment(character));
         const inventoryChanges = entity.unequipItemToInventory(subType);
         return {
             character: this.updateEquipmentStats(this.characterMapper.toPersistence(entity)),
@@ -50,13 +58,23 @@ export class CharacterEquipService {
 
     /** Devuelve una copia con el set solicitado activo; el consumidor debe persistir el resultado. */
     selectEquipment(character: CharacterPersistence, slot: 1 | 2 | 3): CharacterEquipmentResult {
-        const entity = this.characterMapper.toDomain(structuredClone(character));
+        const entity = this.characterMapper.toDomain(this.prepareEquipment(character, slot));
         entity.selectEquipment(slot);
         return {
             character: this.updateEquipmentStats(this.characterMapper.toPersistence(entity)),
             newItems: [],
             updatedItems: [],
         };
+    }
+
+    private prepareEquipment(character: CharacterPersistence, slot = character.equipo_selected): CharacterPersistence {
+        const prepared = structuredClone(character);
+        const key = ({ 1: 'equipo_1', 2: 'equipo_2', 3: 'equipo_3' } as const)[slot];
+        // La entidad conserva la validación de slots inválidos o bloqueados.
+        if (key) {
+            prepared[key] = prepared[key].map(item => this.itemService.getUpdatedEquipmentItem(item));
+        }
+        return prepared;
     }
 
     private updateEquipmentStats(character: CharacterPersistence): CharacterPersistence {
