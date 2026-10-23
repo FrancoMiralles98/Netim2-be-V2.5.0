@@ -24,6 +24,7 @@ export class BonusSharedService {
         origin: BonusInItem['origin'],
         category?: BonusCategory['type']
     ): BonusInItem {
+        
         const bonusInfo = BONUS_LIST.find(bonus => bonus.bonus_ref_name === bonusRefKey)
 
         if (!bonusInfo) {

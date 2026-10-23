@@ -34,7 +34,10 @@ describe('Equipment with real item hydration and stat calculators', () => {
                 EquipStatsCalculatorService, BuffStatsCalculatorService, LimitBonusService,
                 { provide: CharacterRepository, useValue: repository },
                 { provide: UserService, useValue: {} },
-                { provide: getConnectionToken(), useValue: {} },
+                { provide: getConnectionToken(), useValue: { startSession: async () => ({
+                    withTransaction: async (action: () => Promise<unknown>) => action(),
+                    endSession: async () => undefined,
+                }) } },
             ],
         }).compile();
         service = module.get(CharacterEquipService);
@@ -80,7 +83,7 @@ describe('Equipment with real item hydration and stat calculators', () => {
         expect(repository.updateCharacterById).toHaveBeenCalledTimes(1);
         expect(repository.updateCharacterById).toHaveBeenCalledWith('character', expect.objectContaining({
             [key]: [response.equippedItem], inventario: [], stats: response.stats,
-        }));
+        }), expect.anything());
         expect(source).toEqual(original);
     });
 

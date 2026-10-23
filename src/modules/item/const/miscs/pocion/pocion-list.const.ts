@@ -4,24 +4,31 @@ import { createPocionItem } from "src/modules/item/factories/item-builder";
 
 export const POCION_LIST: PocionType[] = [
     createPocionItem({
+        potionType: 'normal',
         name: 'Poción Roja(P)',
         img: '/items/Poción_Roja(P).png',
         maxCantidad: 200,
-        effect: [{ resource: 'hp', amount: 300 }],
+        effect: [{ resource: 'hp', amount: 300 }, { resource: 'mana', amount: 200 }],
         price: 25,
         description: '',
         idItem: IdItem.POCION_ROJA_P,
     }),
     createPocionItem({
+        potionType: 'reserve',
         name: 'Poción Roja(M)',
+        reserve: {
+            actual: 1000,
+            max: 1000
+        },
         img: '/items/Poción_Roja(M).png',
         maxCantidad: 200,
-        effect: [{ resource: 'hp', amount: 700 }],
+        resource: ['hp'],
         price: 50,
         description: '',
         idItem: IdItem.POCION_ROJA_M,
     }),
     createPocionItem({
+        potionType: 'normal',
         name: 'Poción Roja(G)',
         img: '/items/Poción_Roja(G).png',
         maxCantidad: 200,
@@ -31,6 +38,7 @@ export const POCION_LIST: PocionType[] = [
         idItem: IdItem.POCION_ROJA_G,
     }),
     createPocionItem({
+        potionType: 'normal',
         name: 'Poción Roja(XXL)',
         img: '/items/Poción_Roja_(XXL).png',
         maxCantidad: 200,
@@ -40,6 +48,7 @@ export const POCION_LIST: PocionType[] = [
         idItem: IdItem.POCION_ROJA_XXL,
     }),
     createPocionItem({
+        potionType: 'normal',
         name: 'Poción Roja (T)',
         img: '/items/Red_Potion_T.png',
         maxCantidad: 200,

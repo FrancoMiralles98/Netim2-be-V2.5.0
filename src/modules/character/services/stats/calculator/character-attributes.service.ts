@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import {
-  ATTRIBUTE_EFFECTS_CONFIG,
   Atributos,
   AttributesRefKeys,
   BonusInItem,
@@ -10,6 +9,7 @@ import {
   EquipType,
   Stats,
 } from 'netim2-shared';
+import { ATTRIBUTE_EFFECTS_CONFIG } from '../../../../gameData/const/attributes-config';
 import { ATTRIBUTE_RACE_CAPS } from '../../../const/statsProgress/attribute-race-caps.const';
 import { ATTRIBUTE_SPECIALITY_CAPS } from '../../../const/statsProgress/attribute-speciality-caps.const';
 import { ATTRIBUTE_BASE_BY_RACE } from '../../../const/statsProgress/attribute-base-by-race.const';

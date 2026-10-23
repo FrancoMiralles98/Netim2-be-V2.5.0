@@ -1,4 +1,4 @@
-import { BuffType, IdItem } from "netim2-shared";
+import { allFullNameBonusList, BuffType, IdItem } from "netim2-shared";
 import { createBuffItem } from "src/modules/item/factories/item-builder";
 
 
@@ -1146,16 +1146,28 @@ export const BUFF_LIST: BuffType[] = [
 
     createBuffItem({
         name: 'Rocío Verde',
-        img: '/itemsUtility/rocio/Rocío_Verde.png',
+        img: '/items/Rocío_Verde.png',
         cantidad: 1,
         lvUtility: 0,
         maxCantidad: 200,
         idBuff: 36,
         description: 'Aumenta el AD en 40 puntos.',
-        duration: 30,
+        duration: 1,
 
         price: 5000,
-        implicitBonus: [],
+        implicitBonus: [{
+            bonusFullName: allFullNameBonusList.VALOR_DE_ATAQUE,
+            bonusRef: 'ad',
+            bonusValue: 10,
+            category: {type: 'bonus6_7'},
+            displayFormat: 'flat',
+            effects: {
+                type: 'stat_modifiers',
+                operation: 'flat',
+                target: ['general.ad']
+            },
+            origin: 'configured'
+        }],
         corruptBonus: [],
         idItem: IdItem.ROCIO_VERDE,
     }),

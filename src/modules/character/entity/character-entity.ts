@@ -44,6 +44,14 @@ export class CharacterEntity {
         return this.props.inventario.removeItemById(id)
     }
 
+    splitItemFromInventory(id: string, quantity: number): AddItemResult {
+        return this.props.inventario.splitItem(id, quantity);
+    }
+
+    mergeItemsFromInventory(id: string, targetId: string, quantity: number): InventoryChangeResult[] {
+        return this.props.inventario.mergeItems(id, targetId, quantity);
+    }
+
     /** Equipa una instancia del inventario. Prepara el intercambio antes de modificar el personaje. */
     equipItemFromInventory(itemId: string): AddItemResult {
         const equipmentKey = this.getSelectedEquipmentKey();
@@ -194,6 +202,15 @@ export class CharacterEntity {
     * @param expToGain Cantidad de experiencia a agregar
     */
     gainExp(expToGain: number): void {
+        if (!Number.isFinite(expToGain) || expToGain < 0) {
+            throw new Error('La experiencia ganada debe ser finita y no negativa');
+        }
+        if (!Number.isInteger(this.props.lv) || this.props.lv < 1 || this.props.lv > this.MAX_LV ||
+            !Number.isFinite(this.props.exp) || this.props.exp < 0 ||
+            !Number.isFinite(this.props.exp_next_lv) || this.props.exp_next_lv <= 0 || this.props.exp > this.props.exp_next_lv ||
+            !Number.isInteger(this.props.atribute_per_lv) || this.props.atribute_per_lv < 0 || this.props.atribute_per_lv > 3) {
+            throw new Error('El progreso de experiencia del personaje no es válido');
+        }
         let remainingExp = expToGain;
         while (remainingExp > 0) {
 
@@ -209,16 +226,15 @@ export class CharacterEntity {
              */
             const percentageExp = (this.props.exp * 100) / this.props.exp_next_lv;
 
+            const attributePointGained = this.checkGainAttributePoint(percentageExp)
+            this.props.puntos_atributos += attributePointGained
+
             if (percentageExp >= 100 && this.props.lv === this.MAX_LV) {
                 this.props.exp = this.props.exp_next_lv
                 break;
             }
 
-            const attributePointGained = this.checkGainAttributePoint(percentageExp)
-            this.props.puntos_atributos += attributePointGained
-
             if (this.props.exp >= this.props.exp_next_lv) {
-                expToGain = expToGain + this.props.exp - this.props.exp_next_lv
                 this.props.exp = 0
                 this.lvUp()
             }
@@ -354,6 +370,8 @@ export class CharacterEntity {
             newAttributeProgress = 1;
         }
 
+        // Perder EXP no vuelve a habilitar umbrales ya cobrados en este nivel.
+        newAttributeProgress = Math.max(this.props.atribute_per_lv, newAttributeProgress);
         const gainedPoints = newAttributeProgress - this.props.atribute_per_lv;
 
         this.props.atribute_per_lv = newAttributeProgress;

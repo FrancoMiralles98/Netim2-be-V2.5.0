@@ -55,11 +55,21 @@ export class ItemHydrationService {
             case 'cebo':
             case 'utility':
             case 'chest':
-            case 'poción':
                 return {
                     ...this.mergeGenericUtilityItem(baseItem, savedItem),
                     ...commonState
                 }
+            case 'poción': {
+                if (baseItem.type_utility !== 'poción') throw new Error('La base del item no es una poción');
+                if (baseItem.potionType === 'reserve') {
+                    if (savedItem.potionType !== 'reserve') throw new Error('La poción guardada no contiene una reserva compatible');
+                    return {
+                        ...baseItem, ...commonState, cantidad: savedItem.cantidad,
+                        reserve: structuredClone(savedItem.reserve),
+                    };
+                }
+                return { ...baseItem, ...commonState, cantidad: savedItem.cantidad };
+            }
             case 'caña':
                 return {
                     ...this.mergeCañaItem(baseItem, savedItem),

@@ -88,20 +88,22 @@ export class RngService {
             (total, item) => {
                 const weight = getWeight(item)
 
-                return total + Math.max(0, weight)
+                if (!Number.isFinite(weight) || weight < 0) throw new Error('Los pesos deben ser finitos y no negativos')
+                return total + weight
             },
             0
         )
 
-        if (totalWeight <= 0) {
+        if (!Number.isFinite(totalWeight) || totalWeight <= 0) {
             throw new Error(
                 'La suma de los pesos debe ser mayor a 0'
             )
         }
 
         const roll = this.randomNumberInRange(
-            1,
-            totalWeight
+            0,
+            totalWeight,
+            true
         )
 
         let accumulatedWeight = 0
@@ -115,7 +117,7 @@ export class RngService {
 
             accumulatedWeight += weight
 
-            if (roll <= accumulatedWeight) {
+            if (roll < accumulatedWeight) {
                 return item
             }
         }

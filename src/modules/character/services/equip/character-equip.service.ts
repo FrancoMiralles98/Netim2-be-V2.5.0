@@ -91,6 +91,7 @@ export class CharacterEquipService {
             character.buffos,
             character.lv,
             character.especialidad,
+            character.reino,
         );
         character.stats = stats;
         character.atributos = attributes
@@ -117,13 +118,13 @@ export class CharacterEquipService {
                     throw new ConflictException('El slot de equipo ya está desbloqueado');
                 }
                 const entity = this.characterMapper.toDomain(structuredClone(character));
-                let response: BuyEquipmentSlotResponse;
+                let payment: { currency: 'yang'; yang: number } | { currency: 'md'; md: number };
                 if (config.currency === 'yang') {
                     if (!Number.isFinite(character.yang) || character.yang < config.cost) {
                         throw new BadRequestException('Yang insuficiente para comprar el slot');
                     }
                     entity.removeYang(config.cost);
-                    response = { slot, currency: 'yang', yang: entity.toPrimitives().yang };
+                    payment = { currency: 'yang', yang: entity.toPrimitives().yang };
                 } else {
                     const user = await this.userService.getUserById(userId, session);
                     const md = user.toPrimitives().md;
@@ -133,11 +134,16 @@ export class CharacterEquipService {
                     user.extractMd(config.cost);
                     const finalMd = user.toPrimitives().md;
                     await this.userService.updateUserDataById(userId, { md: finalMd }, session);
-                    response = { slot, currency: 'md', md: finalMd };
+                    payment = { currency: 'md', md: finalMd };
                 }
                 entity.unlockEquipmentSlot(slot);
                 const result = this.characterMapper.toPersistence(entity);
                 await this.characterRepository.updateCharacterById(characterId, result, session);
+                const response: BuyEquipmentSlotResponse = {
+                    slot,
+                    equipo_options: structuredClone(result.equipo_options),
+                    ...payment,
+                };
                 return { character: result, response };
             });
         } finally {

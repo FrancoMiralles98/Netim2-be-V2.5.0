@@ -13,7 +13,7 @@ createGenericUtilityItem({
 createGenericUtilityItem({
     name: 'Piel de Lobo',
     description: 'Los pelos más gruesos del lobo se utilizan para fabricar cepillos y peines.',
-    img: '/itemsUtility/Piel_de_Lobo.png',
+    img: '/items/Piel_de_Lobo.png',
     maxCantidad: 20,
     price: 600,
     idItem: IdItem.PIEL_DE_LOBO

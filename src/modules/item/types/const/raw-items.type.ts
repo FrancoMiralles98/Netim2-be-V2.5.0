@@ -19,9 +19,13 @@ export type RawPiedraItem = Omit<PiedraType,keyof typeof BASE_PIEDRA_ITEM>;
 
 export type RawGenericUtilityItem = Omit<UtilityType,keyof typeof BASE_GENERIC_UTILITY>;
 
-export type RawChestItem = Omit<ChestType,keyof typeof BASE_CHEST_ITEM>;
+export type RawChestItem = ChestType extends infer T
+    ? T extends ChestType ? Omit<T, keyof typeof BASE_CHEST_ITEM> : never
+    : never;
 
-export type RawPocionItem = Omit<PocionType,keyof typeof POCION_BASE_ITEM>;
+export type RawPocionItem =
+    | Omit<Extract<PocionType, { potionType: 'normal' }>, keyof typeof POCION_BASE_ITEM>
+    | Omit<Extract<PocionType, { potionType: 'reserve' }>, keyof typeof POCION_BASE_ITEM>;
 
 export type RawMonturaItem = Omit<MonturaType,keyof typeof LICENCIA_MONTURA_BASE_ITEM>;
 

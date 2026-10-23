@@ -66,6 +66,7 @@ export const MOB_BASE_STATS: MobStats = {
             def_dos_manos: 0,
             def_espada: 0,
             esquivar_ataques: 0,
+            esquivar_hechizos: 0,
             def_fan: 0,
             def_flecha: 0,
             def_magia: 0,

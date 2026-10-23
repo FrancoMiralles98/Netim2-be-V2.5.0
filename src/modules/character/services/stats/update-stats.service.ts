@@ -6,6 +6,8 @@ import {
   CharacterRace,
   CharacterSpeciality,
   EquipType,
+  BonusRefKeys,
+  ReinosNames,
   Stats,
 } from 'netim2-shared';
 import { GENERAL_CHARACTER_STATS } from '../../const/characterProps/base-character-stats.const';
@@ -15,6 +17,8 @@ import { CharacterAttributesService } from './calculator/character-attributes.se
 import { EquipStatsCalculatorService } from './calculator/equip-stats-calculator.service';
 import { BuffStatsCalculatorService } from './calculator/buff-stats-calculator.service';
 import { applyBonusModifiers } from './calculator/bonus-modifiers-calculator';
+import { ReinosBuff } from '../../../gameData/reinos/reinos-buff.config';
+import { DODGE_CHANCE_PER_MOVEMENT_SPEED, SPELL_DODGE_CHANCE_PER_MOVEMENT_SPEED } from '../../../gameData/const/bonus.const';
 
 export interface UpdatedStatsResult {
   stats: Stats;
@@ -46,6 +50,7 @@ export class UpdateStatsService {
     buffs: AppliedBuffos[],
     level: number,
     speciality?: CharacterSpeciality,
+    kingdom?: ReinosNames,
   ): UpdatedStatsResult {
     this.assertFiniteNumbers(attributes);
     this.assertFiniteNumbers(equipment);
@@ -110,17 +115,23 @@ export class UpdateStatsService {
       'stats',
     );
     const percentageStats = applyBonusModifiers(
-      flatStats.stats,
+      this.applyKingdomBonuses(flatStats.stats, kingdom),
       flatStats.atributos,
       bonuses,
       'porcentage',
       'stats',
     );
-    const result = this.limitCalculator.applyBonusLimitsToStats(
+    const limitedStats = this.limitCalculator.applyBonusLimitsToStats(
       percentageStats.stats,
       bonuses,
       derivedStats,
     );
+
+    // VM efectiva después de límites; la esquiva se suma a la aportada por equipo/buffos.
+    const movementSpeed = Math.max(0, limitedStats.general.vm);
+    limitedStats.bonus.defensa.esquivar_ataques += movementSpeed * DODGE_CHANCE_PER_MOVEMENT_SPEED;
+    limitedStats.bonus.defensa.esquivar_hechizos += movementSpeed * SPELL_DODGE_CHANCE_PER_MOVEMENT_SPEED;
+    const result = this.limitCalculator.applyBonusLimitsToStats(limitedStats, bonuses, derivedStats);
     this.assertFiniteNumbers(result);
 
     // 5. Normalización; incrementar máximos no cura ni regenera recursos actuales.
@@ -145,10 +156,31 @@ export class UpdateStatsService {
         effectiveAttributes.atributos[attribute].bonusPoints;
     }
     this.assertFiniteNumbers(updatedAttributes);
-    // Conserva como máximo un decimal, sin redondear y solo al terminar el cálculo.
+    // Normaliza únicamente al terminar: recursos, daño, defensa y regeneración enteros.
+    for (const key of ['hp', 'mana', 'ad', 'ap'] as const) {
+      this.truncateStatValues(result.general[key], 0);
+    }
+    for (const key of ['def', 'regen_hp', 'regen_mana'] as const) {
+      const truncated = Math.trunc(result.general[key]);
+      result.general[key] = truncated === 0 ? 0 : truncated;
+    }
+    // El resto conserva como máximo un decimal, sin redondear.
     this.truncateStatValues(result);
 
     return { stats: result, attributes: updatedAttributes };
+  }
+
+  private applyKingdomBonuses(stats: Stats, kingdom?: ReinosNames): Stats {
+    if (!kingdom) return stats;
+    const config = ReinosBuff[kingdom];
+    if (!config) throw new Error('No existe configuración de bonus para el reino');
+    this.assertFiniteNumbers(config);
+    for (const [ref, value] of Object.entries(config) as [BonusRefKeys, number][]) {
+      const group = Object.values(stats.bonus).find(values => ref in values) as Partial<Record<BonusRefKeys, number>> | undefined;
+      if (!group) throw new Error(`No se encuentra la stat del bonus de reino: ${ref}`);
+      group[ref] = (group[ref] ?? 0) + value;
+    }
+    return stats;
   }
 
   private assertFiniteNumbers(value: unknown): void {
@@ -160,14 +192,15 @@ export class UpdateStatsService {
     }
   }
 
-  private truncateStatValues(value: object): void {
+  private truncateStatValues(value: object, decimals: 0 | 1 = 1): void {
+    const factor = 10 ** decimals;
     const values = value as Record<string, unknown>;
     for (const [key, entry] of Object.entries(values)) {
       if (typeof entry === 'number') {
-        const truncated = Number.isInteger(entry) ? entry : Math.trunc(entry * 10) / 10;
+        const truncated = Number.isInteger(entry) ? entry : Math.trunc(entry * factor) / factor;
         values[key] = truncated === 0 ? 0 : truncated;
       } else if (entry && typeof entry === 'object') {
-        this.truncateStatValues(entry);
+        this.truncateStatValues(entry, decimals);
       }
     }
   }

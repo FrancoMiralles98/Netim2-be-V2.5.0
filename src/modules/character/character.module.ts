@@ -15,13 +15,17 @@ import { CharacterLevelScalingService } from './services/stats/calculator/charac
 import { BuffStatsCalculatorService } from './services/stats/calculator/buff-stats-calculator.service';
 import { UpdateStatsService } from './services/stats/update-stats.service';
 import { BonusModule } from '../bonus/bonus.module';
-import { CharacterBuffService } from './services/buffos/character-buff.service';
+import { CharacterBuffService } from './services/item-use/character-buff.service';
 import { CharacterEquipService } from './services/equip/character-equip.service';
 import { CharacterEquipOrchestratorService } from './services/equip/character-equip-orchestrator.service';
 import { ItemModule } from '../item/item.module';
 import { CharacterInventoryController } from './controller/character-inventory.controller';
 import { CharacterInventoryService } from './services/inventory/character-inventory.service';
 import { CharacterInventoryOrchestratorService } from './services/inventory/character-inventory-orchestrator.service';
+import { CharacterPotionService } from './services/item-use/character-potion.service';
+import { CharacterItemUseController } from './controller/character-item-use.controller';
+import { CharacterItemUseOrchestratorService } from './services/item-use/character-item-use-orchestrator.service';
+import { CharacterChestService } from './services/item-use/character-chest.service';
 
 @Module({
   imports: [
@@ -34,8 +38,8 @@ import { CharacterInventoryOrchestratorService } from './services/inventory/char
       { name: CharacterModel.name, schema: characterSchema }
     ])
   ],
-  controllers: [CharacterController, CharacterEquipmentController, CharacterInventoryController],
-  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService],
+  controllers: [CharacterController, CharacterEquipmentController, CharacterInventoryController, CharacterItemUseController],
+  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService, CharacterPotionService, CharacterItemUseOrchestratorService, CharacterChestService],
   exports: [
     CharacterService,
     CharacterMapper,
@@ -48,7 +52,9 @@ import { CharacterInventoryOrchestratorService } from './services/inventory/char
     CharacterEquipService,
     CharacterEquipOrchestratorService,
     CharacterInventoryService,
-    CharacterInventoryOrchestratorService
+    CharacterInventoryOrchestratorService,
+    CharacterPotionService,
+    CharacterItemUseOrchestratorService
   ]
 })
 export class CharacterModule { }

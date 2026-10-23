@@ -1,6 +1,7 @@
 import { isEquipItem, isUtilityItem } from "src/modules/item/types/item-type-guard.type";
 import { InventoryItemFactory } from "../factories/inventory-item.factory";
 import { randomUUID } from "crypto";
+import { isDeepStrictEqual } from 'node:util';
 import { AddItemResult, IdItemList, InventoryChangeResult, InventoryItem, ItemDTO, ItemsToConsumeType, Position, UtilityItemDTO } from "netim2-shared";
 
 export class Inventory {
@@ -24,6 +25,55 @@ export class Inventory {
             throw new Error('Item No encontrado')
         }
         return itemToFind
+    }
+
+    /** Transfiere hasta el espacio disponible del destino, sin crear nuevas instancias. */
+    mergeItems(id: string, targetId: string, quantity: number): InventoryChangeResult[] {
+        if (id === targetId) throw new Error('El origen y el destino deben ser items distintos');
+        const source = this.getItemById(id);
+        const target = this.getItemById(targetId);
+        if (!isUtilityItem(source) || !isUtilityItem(target) || source.acc !== true || target.acc !== true ||
+            !Number.isSafeInteger(source.maxCantidad) || source.maxCantidad <= 1 ||
+            !Number.isSafeInteger(target.maxCantidad) || target.maxCantidad <= 1) {
+            throw new Error('Ambos items deben ser acumulables y admitir más de una unidad');
+        }
+        if (source.idItem !== target.idItem) throw new Error('Los items deben tener el mismo idItem');
+        if (!Number.isSafeInteger(source.cantidad) || source.cantidad <= 0 || source.cantidad > source.maxCantidad ||
+            !Number.isSafeInteger(target.cantidad) || target.cantidad <= 0 || target.cantidad > target.maxCantidad) {
+            throw new Error('Los stacks tienen cantidades inválidas');
+        }
+        if (!Number.isSafeInteger(quantity) || quantity <= 0 || quantity > source.cantidad) {
+            throw new Error('La cantidad a agrupar debe ser positiva y no superar la disponible');
+        }
+        const available = target.maxCantidad - target.cantidad;
+        if (available === 0) throw new Error('El stack de destino ya está completo');
+        const transferred = Math.min(quantity, available);
+        source.cantidad -= transferred;
+        target.cantidad += transferred;
+        const changes: InventoryChangeResult[] = [
+            { id: source.id, cantidad: source.cantidad },
+            { id: target.id, cantidad: target.cantidad },
+        ];
+        if (source.cantidad === 0) this.removeItemById(source.id);
+        return changes;
+    }
+
+    /** Divide sin reagrupar: comprueba espacio antes de descontar del stack original. */
+    splitItem(id: string, quantity: number): AddItemResult {
+        const item = this.getItemById(id);
+        if (!isUtilityItem(item) || !item.acc || !Number.isSafeInteger(item.maxCantidad) || item.maxCantidad <= 1) {
+            throw new Error('El item no admite dividir su cantidad');
+        }
+        if (!Number.isSafeInteger(quantity) || quantity <= 0 ||
+            !Number.isSafeInteger(item.cantidad) || quantity >= item.cantidad || quantity > item.maxCantidad) {
+            throw new Error('La cantidad a dividir debe ser positiva, menor al stack y no superar su máximo');
+        }
+        const position = this.findFirstAvailableSpace(item);
+        if (!position) throw new Error('No hay espacio suficiente en el inventario');
+        const newItem = InventoryItemFactory.create({ ...item, cantidad: quantity }, position);
+        item.cantidad -= quantity;
+        this.items.push(newItem);
+        return structuredClone({ newItems: [newItem], updatedItems: [{ id: item.id, cantidad: item.cantidad }] });
     }
 
     /**
@@ -137,7 +187,7 @@ export class Inventory {
     }
 
     addItem(item: InventoryItem | ItemDTO): AddItemResult {
-        if (isUtilityItem(item)) {
+        if (isUtilityItem(item) && item.acc && !(item.type_utility === 'poción' && item.potionType === 'reserve')) {
             return this.addStackableItem(item)
         }
         return this.addNonStackableItem(item)
@@ -255,10 +305,21 @@ export class Inventory {
     private addStackableItem(
         item: UtilityItemDTO
     ): AddItemResult {
+        if (!Number.isSafeInteger(item.cantidad) || item.cantidad <= 0 ||
+            !Number.isSafeInteger(item.maxCantidad) || item.maxCantidad <= 0) {
+            throw new Error('La cantidad y el máximo del stack deben ser enteros positivos');
+        }
         let totalQuantity = item.cantidad
         /** Arrelgo para agregar los cambios realizados a los items para luego pasarlos al cliente */
         const updatedItems: InventoryChangeResult[] = []
-        const sameItems = this.findSameStackItems(item.idItem)
+        const state = (value: ItemDTO | InventoryItem) => {
+            const copy = { ...value } as Record<string, unknown>;
+            delete copy.id;
+            delete copy.position;
+            delete copy.cantidad;
+            return copy;
+        };
+        const sameItems = this.findSameStackItems(item.idItem).filter(stored => isDeepStrictEqual(state(stored), state(item)))
         //Se fija en el inventario si hay items del mismo tipo (idItem) para agrupar mas cantidad hasta llegar al maximo
         for (const storedItem of sameItems) {
             if (!isUtilityItem(storedItem)) {
@@ -266,22 +327,26 @@ export class Inventory {
             }
             if (totalQuantity <= 0) break
             const availableQuantity = item.maxCantidad - storedItem.cantidad
+            if (availableQuantity <= 0) continue;
             const quantityToAdd = Math.min(availableQuantity, totalQuantity)
             totalQuantity -= quantityToAdd
             storedItem.cantidad += quantityToAdd
             updatedItems.push({ id: storedItem.id, cantidad: storedItem.cantidad })
         }
         // Si al distribuir con los items del mismo tipo (si es que hubo) y sobra cantidad, se agrega en un nuevo espacio
-        if (totalQuantity > 0) {
-            const position = this.findFirstAvailableSpace({ ...item, cantidad: totalQuantity })
+        const newItems: InventoryItem[] = [];
+        while (totalQuantity > 0) {
+            const quantity = Math.min(totalQuantity, item.maxCantidad);
+            const position = this.findFirstAvailableSpace(item)
             if (!position) {
                 throw new Error('Error al encontrar un espacio en el inventario')
             }
-            const newItem = InventoryItemFactory.create({ ...item, cantidad: totalQuantity }, position)
+            const newItem = InventoryItemFactory.create({ ...item, cantidad: quantity }, position)
             this.items.push(newItem)
-            return { newItems: [newItem], updatedItems }
+            newItems.push(newItem);
+            totalQuantity -= quantity;
         }
-        return { newItems: [], updatedItems }
+        return { newItems, updatedItems }
     }
 
     /**

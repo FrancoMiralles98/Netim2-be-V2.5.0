@@ -5,8 +5,10 @@ import { tier1BonusList } from "./tier1.const";
 import { tier2BonusList } from "./tier2.const";
 import { tier3BonusList } from "./tier3.const";
 import { tier4BonusList } from "./tier4.const";
+import { BONUS_DEFINITION_CONST } from "./bonus-definition.const";
 
 export const BONUS_LIST: BonusType[] = [
+    ...BONUS_DEFINITION_CONST,
     ...bonus6_7BonusList,
     ...CORRUPT_IMPLICIT_BONUS,
     ...tier1BonusList,

@@ -1,4 +1,5 @@
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
+import { Connection } from 'mongoose';
 import { plainToInstance } from 'class-transformer';
 import { validate } from 'class-validator';
 import { InventoryItem } from 'netim2-shared';
@@ -50,7 +51,7 @@ describe('Character inventory movement', () => {
             getCharacterById: jest.fn().mockResolvedValue({ ...source, user_owner: 'owner' }),
             updateCharacterById: jest.fn().mockResolvedValue(undefined),
         };
-        const service = new CharacterInventoryOrchestratorService(repository as unknown as CharacterRepository, mapper, actions);
+        const service = new CharacterInventoryOrchestratorService(repository as unknown as CharacterRepository, mapper, actions, {} as Connection);
         expect(await service.moveItem('character', 'owner', 'moving', { row: 2, col: 3 })).toEqual({ id: 'moving', position: { row: 2, col: 3 } });
         expect(repository.getCharacterById).toHaveBeenCalledTimes(1);
         expect(repository.updateCharacterById).toHaveBeenCalledWith('character', { inventario: [

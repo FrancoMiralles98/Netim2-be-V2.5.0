@@ -6,6 +6,7 @@ import { GENERAL_CHARACTER } from '../../const/general-character.const';
 import { CharacterEquipService } from './character-equip.service';
 import { CharacterEquipOrchestratorService } from './character-equip-orchestrator.service';
 import { EquipType } from 'netim2-shared';
+import { Connection } from 'mongoose';
 
 describe('CharacterEquipOrchestratorService ownership', () => {
     const actions = [
@@ -15,6 +16,7 @@ describe('CharacterEquipOrchestratorService ownership', () => {
     let repository: { getCharacterById: jest.Mock; updateCharacterById: jest.Mock };
     let equipment: Record<string, jest.Mock>;
     let service: CharacterEquipOrchestratorService;
+    const session = { withTransaction: jest.fn(async (action: () => Promise<unknown>) => action()), endSession: jest.fn() };
     let resultCharacter: typeof GENERAL_CHARACTER;
 
     beforeEach(() => {
@@ -28,11 +30,12 @@ describe('CharacterEquipOrchestratorService ownership', () => {
             equipItem: jest.fn().mockReturnValue(changes),
             unequipItem: jest.fn().mockReturnValue(changes),
             selectEquipment: jest.fn().mockReturnValue(changes),
-            buyEquipmentSlot: jest.fn().mockResolvedValue({ character: resultCharacter, response: { slot: 2, currency: 'yang', yang: 200_000 } }),
+            buyEquipmentSlot: jest.fn().mockResolvedValue({ character: resultCharacter, response: { slot: 2, currency: 'yang', yang: 200_000, equipo_options: { equipo1_on: true, equipo2_on: true, equipo3_on: false } } }),
         };
         service = new CharacterEquipOrchestratorService(
             equipment as unknown as CharacterEquipService,
             repository as unknown as CharacterRepository, mapper,
+            { startSession: jest.fn().mockResolvedValue(session) } as unknown as Connection,
         );
     });
 
@@ -49,7 +52,7 @@ describe('CharacterEquipOrchestratorService ownership', () => {
         expect(response).not.toHaveProperty('character');
         expect(response).not.toHaveProperty('updatedItems');
         expect(repository.getCharacterById).toHaveBeenCalledTimes(1);
-        expect(repository.getCharacterById).toHaveBeenCalledWith('character');
+        expect(repository.getCharacterById).toHaveBeenCalledWith('character', session);
         const document = await repository.getCharacterById.mock.results[0].value;
         expect(equipment[method]).toHaveBeenCalledWith(mapper.fromDb(document), argument);
     });
@@ -79,7 +82,7 @@ describe('CharacterEquipOrchestratorService ownership', () => {
         expect(repository.updateCharacterById).toHaveBeenCalledWith('character', {
             inventario: [], [key]: resultCharacter[key], stats: resultCharacter.stats,
             atributos: resultCharacter.atributos, type_weapon: 'espada',
-        });
+        }, session);
     });
 
     it('persists inventory and equipment together when unequipping', async () => {
@@ -90,7 +93,7 @@ describe('CharacterEquipOrchestratorService ownership', () => {
         await service.unequipItem('character', 'owner', 'arma');
         expect(repository.updateCharacterById).toHaveBeenCalledWith('character', {
             inventario: resultCharacter.inventario, equipo_1: [],
-        });
+        }, session);
     });
 
     it('persists the selected slot and changed derived stats without rewriting equipment', async () => {
@@ -100,13 +103,29 @@ describe('CharacterEquipOrchestratorService ownership', () => {
         await service.selectEquipment('character', 'owner', 2);
         expect(repository.updateCharacterById).toHaveBeenCalledWith('character', {
             equipo_selected: 2, stats: resultCharacter.stats,
-        });
+        }, session);
     });
 
     it('skips persistence when no equipment fields changed', async () => {
         resultCharacter.equipo_1 = [];
         await service.selectEquipment('character', 'owner', 1);
         expect(repository.updateCharacterById).not.toHaveBeenCalled();
+    });
+
+    it('recalculates from a fresh read when the transaction retries after a conflict', async () => {
+        const initial = { ...structuredClone(GENERAL_CHARACTER), user_owner: 'owner' };
+        const latest = structuredClone(initial);
+        latest.stats.general.hp.max += 100;
+        repository.getCharacterById.mockResolvedValueOnce(initial).mockResolvedValueOnce(latest);
+        equipment.selectEquipment.mockImplementation((source) => ({ character: source }));
+        session.withTransaction.mockImplementationOnce(async (action: () => Promise<unknown>) => {
+            await action(); // El primer intento se abortaría por conflicto de escritura.
+            return action();
+        });
+
+        const response = await service.selectEquipment('character', 'owner', 1);
+        expect(repository.getCharacterById).toHaveBeenCalledTimes(2);
+        expect(response.stats.general.hp.max).toBe(latest.stats.general.hp.max);
     });
 
     it.each(actions)('does not persist when %s fails', async (method, argument) => {
@@ -130,15 +149,15 @@ describe('CharacterEquipOrchestratorService ownership', () => {
     });
 
     it('does not load before a purchase: ownership is checked inside the purchase transaction', async () => {
-        expect(await service.buyEquipmentSlot('character', 'owner', 2)).toEqual({ slot: 2, currency: 'yang', yang: 200_000 });
+        expect(await service.buyEquipmentSlot('character', 'owner', 2)).toEqual({ slot: 2, currency: 'yang', yang: 200_000, equipo_options: { equipo1_on: true, equipo2_on: true, equipo3_on: false } });
         expect(repository.getCharacterById).not.toHaveBeenCalled();
         expect(equipment.buyEquipmentSlot).toHaveBeenCalledWith('character', 'owner', 2);
         expect(repository.updateCharacterById).not.toHaveBeenCalled();
     });
 
-    it('returns only the account MD balance from a purchase', async () => {
-        equipment.buyEquipmentSlot.mockResolvedValue({ character: resultCharacter, response: { slot: 3, currency: 'md', md: 500 } });
-        expect(await service.buyEquipmentSlot('character', 'owner', 3)).toEqual({ slot: 3, currency: 'md', md: 500 });
+    it('returns the account MD balance and unlocked equipment options from a purchase', async () => {
+        equipment.buyEquipmentSlot.mockResolvedValue({ character: resultCharacter, response: { slot: 3, currency: 'md', md: 500, equipo_options: { equipo1_on: true, equipo2_on: false, equipo3_on: true } } });
+        expect(await service.buyEquipmentSlot('character', 'owner', 3)).toEqual({ slot: 3, currency: 'md', md: 500, equipo_options: { equipo1_on: true, equipo2_on: false, equipo3_on: true } });
         expect(repository.getCharacterById).not.toHaveBeenCalled();
     });
 

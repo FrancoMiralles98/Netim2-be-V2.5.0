@@ -3,15 +3,16 @@ import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
 import { CharacterDocument } from './schema/character.schema';
-import { AppliedBuffos, Atributos, CharacterPersistence, CharacterPersistenceWithId, CharacterRace, CharacterSpeciality, CharacterSummary, EquipType, IdItem, Stats } from 'netim2-shared';
+import { AppliedBuffos, Atributos, CharacterPersistence, CharacterPersistenceWithId, CharacterRace, CharacterSpeciality, CharacterSummary, EquipType, IdItem, ReinosNames, Stats } from 'netim2-shared';
 import { UserService } from '../user/user.service';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { UpdatedStatsResult, UpdateStatsService } from './services/stats/update-stats.service';
-import { CharacterBuffService } from './services/buffos/character-buff.service';
+import { CharacterBuffService } from './services/item-use/character-buff.service';
 import { ATTRIBUTE_BASE_BY_RACE } from './const/statsProgress/attribute-base-by-race.const';
 import { ITEM_LIST } from '../item/const/items.const';
 import { ItemService } from '../item/item.service';
+import { Pocion } from '../item/entities/pocion.entity';
 
 @Injectable()
 export class CharacterService {
@@ -33,9 +34,10 @@ export class CharacterService {
         attributes: Atributos,
         buffs: AppliedBuffos[],
         level: number,
-        speciality?: CharacterSpeciality): UpdatedStatsResult {
+        speciality?: CharacterSpeciality,
+        kingdom?: ReinosNames): UpdatedStatsResult {
         const updatedBuffos = this.characterBuffService.removeExpiredBuffs(buffs)
-        return this.updateStatsService.updateStats(stats, race, equipment, attributes, updatedBuffos, level, speciality)
+        return this.updateStatsService.updateStats(stats, race, equipment, attributes, updatedBuffos, level, speciality, kingdom)
     }
 
     async validateCharacterOwnership(characterId: string, accountId: string): Promise<boolean> {
@@ -64,7 +66,8 @@ export class CharacterService {
                 character.atributos,
                 character.buffos,
                 character.lv,
-                character.especialidad
+                character.especialidad,
+                character.reino
             )
 
             character.inventario = character.inventario.map(i => this.itemService.getUpdatedInventoryItem(i))
@@ -140,31 +143,31 @@ export class CharacterService {
             const espada = ITEM_LIST.find(i => i.idItem === IdItem.ESPADA) as EquipType
             const daga = ITEM_LIST.find(i => i.idItem === IdItem.DAGA)
             const armor = ITEM_LIST.find(i => i.idItem === IdItem.ARMADURA_DE_MONJE)
-            const c = ITEM_LIST.find(i => i.idItem === IdItem.CASCO_TRADICIONAL)
-            const e = ITEM_LIST.find(i => i.idItem === IdItem.ESCUDO_DE_BATALLA)
-            const b = ITEM_LIST.find(i => i.idItem === IdItem.BRAZALETE_DE_MADERA)
-            const bo = ITEM_LIST.find(i => i.idItem === IdItem.ZAPATILLAS_DE_CUERO)
-            const p = ITEM_LIST.find(i => i.idItem === IdItem.PENDIENTES_DE_MADERA)
-            const co = ITEM_LIST.find(i => i.idItem === IdItem.COLLAR_DE_MADERA)
+            const poscion = ITEM_LIST.find(i => i.idItem === IdItem.POCION_ROJA_P)
+            const peil = ITEM_LIST.find(i => i.idItem === IdItem.CAJA_DE_HABILIDADES_DE_SURA)
+            const poM = ITEM_LIST.find(i => i.idItem === IdItem.CAJA_DE_HABILIDADES_DE_GUERRERO)
 
-            if (!espada || !daga || !armor || !c || !e || !b || !bo || !p || !co) {
+            if (!espada || !daga || !armor || !poscion || !peil || !poM) {
                 throw new BadRequestException('arma no existe')
+            }
+
+            if (poM.type === 'utility' && poM.type_utility === 'chest') {
+                poM.cantidad = poM.maxCantidad
             }
 
 
             const entity = this.characterMapper.toDomain(baseCharacter)
             entity.addItemToInventory(espada)
             entity.addItemToInventory(daga)
-            entity.addItemToInventory(c)
-            entity.addItemToInventory(co)
             entity.addItemToInventory(armor)
-            entity.addItemToInventory(p)
-            entity.addItemToInventory(b)
-            entity.addItemToInventory(e)
-            entity.addItemToInventory(bo)
+            entity.addItemToInventory(poscion)
+            entity.addItemToInventory(peil)
+            entity.addItemToInventory(poM)
             const newCharacter = this.characterMapper.toPersistence(entity)
 
             this.InicializateBaseValues(newCharacter)
+            newCharacter.yang += 600000
+            newCharacter.stats.general.hp.actual = 300
 
             const characterCreated = await this.characterRepository.createCharacter(
                 newCharacter,
@@ -220,7 +223,8 @@ export class CharacterService {
             baseCharacter.atributos,
             baseCharacter.buffos,
             baseCharacter.lv,
-            baseCharacter.especialidad
+            baseCharacter.especialidad,
+            baseCharacter.reino
         )
 
         baseCharacter.stats = stats
