@@ -6,6 +6,9 @@ import request = require('supertest');
 import { ITEM_LIST } from './const/items.const';
 import { ItemModule } from './item.module';
 import { ItemService } from './item.service';
+import { CAÑA_LIST } from './const/miscs/caña/caña-list.const';
+import { ConfiguredItemBonusCalculatorService } from './services/implicitScaling/configured-item-bonus-calculator.service';
+import { isPiedraItem } from './types/item-type-guard.type';
 
 describe('Item details', () => {
     let app: INestApplication;
@@ -18,6 +21,33 @@ describe('Item details', () => {
         await app.init();
     });
     afterAll(async () => { await app?.close(); });
+
+    it('does not classify fishing rods with upgradeLv as stones', () => {
+        for (const rod of CAÑA_LIST) expect(isPiedraItem(rod)).toBe(false);
+        const stone = ITEM_LIST.find(item => item.type === 'utility' && item.type_utility === 'piedra');
+        if (!stone) throw new Error('Missing stone fixture');
+        expect(isPiedraItem(stone)).toBe(true);
+    });
+
+    it('hydrates inventory fishing rods without calculating implicits and preserves their progression', () => {
+        const calculator = app.get(ConfiguredItemBonusCalculatorService);
+        const calculation = jest.spyOn(calculator, 'getConfiguredImplicitStats');
+        try {
+            for (const rod of CAÑA_LIST) {
+                const saved = { ...structuredClone(rod), id: `rod-${rod.idItem}`, cantidad: 1,
+                    position: { row: 0, col: 0 }, exp: 42, expOfLv: 100, upgradeLv: 3, pescaSkill: 20 };
+                const before = structuredClone(saved);
+                expect(service.getUpdatedInventoryItem(saved)).toMatchObject({
+                    id: saved.id, idItem: rod.idItem, type_utility: 'caña', exp: 42, expOfLv: 100,
+                    upgradeLv: 3, pescaSkill: 20, position: saved.position,
+                });
+                expect(saved).toEqual(before);
+            }
+            expect(calculation).not.toHaveBeenCalled();
+        } finally {
+            calculation.mockRestore();
+        }
+    });
 
     it('preserves request order, applies upgrade zero and quantity, and recalculates real weapon bonuses', () => {
         const result = service.getItems({ items: [

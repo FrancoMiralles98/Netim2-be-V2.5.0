@@ -31,6 +31,7 @@ import { LICENCIA_MONTURA_LIST } from "./miscs/montura/lincencia-montura-list.co
 import { PIEDRA_LIST } from "./miscs/piedra/piedra-list.const";
 import { POCION_LIST } from "./miscs/pocion/pocion-list.const";
 import { SPECIAL_MISCS } from "./miscs/special/special-mics-list.const";
+import { CEBO_LIST } from "./miscs/cebo/cebo-list.const";
 
 export const ITEM_LIST: ItemDTO[] = [
     ...GUERRERO_ARMORS,
@@ -65,4 +66,5 @@ export const ITEM_LIST: ItemDTO[] = [
     ...PIEDRA_LIST,
     ...POCION_LIST,
     ...SPECIAL_MISCS,
+    ...CEBO_LIST
 ]

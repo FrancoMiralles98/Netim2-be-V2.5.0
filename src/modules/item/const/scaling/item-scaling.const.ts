@@ -19,6 +19,7 @@ import { CASCO_LEGENDARIO_SCALING } from "./legendarios/casco-legendario-scaling
 import { COLLAR_LEGENDARIO_SCALING } from "./legendarios/collar-legendario-scaling.const";
 import { ESCUDO_LEGENDARIO_SCALING } from "./legendarios/escudo-legendario.const";
 import { PENDIENTE_LEGENDARIO_SCALING } from "./legendarios/pendiente-legendario-scaling.const";
+import { PIEDRAS_SCALING } from "./piedras/piedras-scaling.const";
 
 export const ITEM_SCALING_CONST: CoreImplicitItem[] = [
     ...ESPADA_SCALING,
@@ -41,4 +42,5 @@ export const ITEM_SCALING_CONST: CoreImplicitItem[] = [
     ...COLLAR_LEGENDARIO_SCALING,
     ...ESCUDO_LEGENDARIO_SCALING,
     ...PENDIENTE_LEGENDARIO_SCALING,
+    ...PIEDRAS_SCALING
 ]

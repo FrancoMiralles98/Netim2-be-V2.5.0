@@ -1,4 +1,4 @@
-import { BuffType, CañaType, ChestType, EquipType, MonturaType, PiedraType, PocionType, UtilityType } from "netim2-shared";
+import { BuffType, CañaType, CeboType, ChestType, EquipType, MonturaType, PiedraType, PocionType, UtilityType } from "netim2-shared";
 import { BASE_EQUIP_ITEM } from "../../const/equip/base-equip.const";
 import { BASE_LEGENDARIO_ITEM } from "../../const/equip/legendarios/base-legendario-item.const";
 import { BASE_BUFF_ITEM } from "../../const/miscs/buff/buff-item-base.const";
@@ -8,6 +8,7 @@ import { BASE_GENERIC_UTILITY } from "../../const/miscs/generic-utility-base.con
 import { LICENCIA_MONTURA_BASE_ITEM } from "../../const/miscs/montura/montura-base-item.const";
 import { BASE_PIEDRA_ITEM } from "../../const/miscs/piedra/piedra-item-base.const";
 import { POCION_BASE_ITEM } from "../../const/miscs/pocion/pocion-base.const";
+import { BASE_CEBO } from "../../const/miscs/cebo/base-cebo.const";
 
 export type RawEquipItem = Omit<EquipType,keyof typeof BASE_EQUIP_ITEM>;
 
@@ -30,3 +31,4 @@ export type RawPocionItem =
 export type RawMonturaItem = Omit<MonturaType,keyof typeof LICENCIA_MONTURA_BASE_ITEM>;
 
 export type RawCañaItem = Omit<CañaType,keyof typeof CAÑA_BASE_ITEM>;
+export type RawCeboItem = Omit<CeboType,keyof typeof BASE_CEBO>;

@@ -3,10 +3,10 @@ import { CAÑA_EXP_X_LV } from "src/modules/item/config/caña.config";
 import { EQUIP_RULES } from "src/modules/item/config/items-rule.const";
 
 export const CAÑA_BASE_ITEM = {
-    acc: true,
+    acc: false,
     cantidad: 1,
     lvUtility: 1,
-    size: {cols: 3,rows: 1},
+    size: {cols: 1,rows: 3},
     type: 'utility',
     expOfLv: CAÑA_EXP_X_LV[1],
     maxCantidad: 1,

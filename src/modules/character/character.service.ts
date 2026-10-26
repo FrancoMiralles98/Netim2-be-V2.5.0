@@ -142,9 +142,9 @@ export class CharacterService {
 
             const espada = ITEM_LIST.find(i => i.idItem === IdItem.ESPADA) as EquipType
             const daga = ITEM_LIST.find(i => i.idItem === IdItem.DAGA)
-            const armor = ITEM_LIST.find(i => i.idItem === IdItem.ARMADURA_DE_MONJE)
-            const poscion = ITEM_LIST.find(i => i.idItem === IdItem.POCION_ROJA_P)
-            const peil = ITEM_LIST.find(i => i.idItem === IdItem.CAJA_DE_HABILIDADES_DE_SURA)
+            const armor = ITEM_LIST.find(i => i.idItem === IdItem.CANA_DE_PESCAR)
+            const poscion = ITEM_LIST.find(i => i.idItem === IdItem.GUSANO)
+            const peil = ITEM_LIST.find(i => i.idItem === IdItem.PIEDRA_DE_INTELIGENCIA)
             const poM = ITEM_LIST.find(i => i.idItem === IdItem.CAJA_DE_HABILIDADES_DE_GUERRERO)
 
             if (!espada || !daga || !armor || !poscion || !peil || !poM) {
