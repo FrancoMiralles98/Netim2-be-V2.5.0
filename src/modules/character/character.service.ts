@@ -3,13 +3,16 @@ import { CharacterRepository } from './repository/character-repository';
 import { CreateCharacterDto } from './dto/create-character.dto';
 import { CharacterMapper } from './mapper/character-mapper';
 import { CharacterDocument } from './schema/character.schema';
-import { AppliedBuffos, Atributos, CharacterPersistence, CharacterPersistenceWithId, CharacterRace, CharacterSpeciality, CharacterSummary, EquipType, Stats } from 'netim2-shared';
+import { AppliedBuffos, Atributos, CharacterPersistence, CharacterPersistenceWithId, CharacterRace, CharacterSpeciality, CharacterSummary, EquipType, IdItem, ReinosNames, Stats } from 'netim2-shared';
 import { UserService } from '../user/user.service';
 import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import { UpdatedStatsResult, UpdateStatsService } from './services/stats/update-stats.service';
-import { CharacterBuffService } from './services/buffos/character-buff.service';
+import { CharacterBuffService } from './services/item-use/character-buff.service';
 import { ATTRIBUTE_BASE_BY_RACE } from './const/statsProgress/attribute-base-by-race.const';
+import { ITEM_LIST } from '../item/const/items.const';
+import { ItemService } from '../item/item.service';
+import { Pocion } from '../item/entities/pocion.entity';
 
 @Injectable()
 export class CharacterService {
@@ -18,6 +21,7 @@ export class CharacterService {
         private characterMapper: CharacterMapper,
         private userService: UserService,
         private characterBuffService: CharacterBuffService,
+        private itemService: ItemService,
         private updateStatsService: UpdateStatsService,
         @InjectConnection()
         private readonly connection: Connection,
@@ -30,9 +34,10 @@ export class CharacterService {
         attributes: Atributos,
         buffs: AppliedBuffos[],
         level: number,
-        speciality?: CharacterSpeciality): UpdatedStatsResult {
+        speciality?: CharacterSpeciality,
+        kingdom?: ReinosNames): UpdatedStatsResult {
         const updatedBuffos = this.characterBuffService.removeExpiredBuffs(buffs)
-        return this.updateStatsService.updateStats(stats, race, equipment, attributes, updatedBuffos, level, speciality)
+        return this.updateStatsService.updateStats(stats, race, equipment, attributes, updatedBuffos, level, speciality, kingdom)
     }
 
     async validateCharacterOwnership(characterId: string, accountId: string): Promise<boolean> {
@@ -41,32 +46,41 @@ export class CharacterService {
     }
 
     async getCharacterById(characterId: string, userId: string): Promise<CharacterPersistenceWithId> {
-        const character = await this.characterRepository.getCharacterById(characterId)
+        try {
 
-        if (character.user_owner !== userId) {
-            throw new ConflictException('No puedes conectarte con este personaje.')
+            const character = await this.characterRepository.getCharacterById(characterId)
+
+            if (character.user_owner !== userId) {
+                throw new ConflictException('No puedes conectarte con este personaje.')
+            }
+
+            const equipSelected = this.selecteEquip(character.equipo_1,
+                character.equipo_2,
+                character.equipo_3,
+                character.equipo_selected)
+
+            const { attributes, stats } = this.updateStatsAndAtributtes(
+                character.stats,
+                character.raza,
+                equipSelected,
+                character.atributos,
+                character.buffos,
+                character.lv,
+                character.especialidad,
+                character.reino
+            )
+
+            character.inventario = character.inventario.map(i => this.itemService.getUpdatedInventoryItem(i))
+
+
+            character.stats = stats
+            character.atributos = attributes
+
+            return { ...this.characterMapper.fromDb(character), id: character._id.toString() }
+        } catch (error) {
+            console.log('error al seleccionar', error);
+            throw new Error('error')
         }
-
-        const equipSelected = this.selecteEquip(character.equipo_1,
-            character.equipo_2,
-            character.equipo_3,
-            character.equipo_selected)
-
-        const { attributes, stats } = this.updateStatsAndAtributtes(
-            character.stats,
-            character.raza,
-            equipSelected,
-            character.atributos,
-            character.buffos,
-            character.lv,
-            character.especialidad
-        )
-
-
-        character.stats = stats
-        character.atributos = attributes
-
-        return { ...this.characterMapper.fromDb(character), id: character._id.toString() }
     }
 
     async getCharactersByUserId(userId: string): Promise<CharacterDocument[]> {
@@ -126,10 +140,37 @@ export class CharacterService {
                 reino: reinoFinal,
             });
 
-            this.InicializateBaseValues(baseCharacter)
+            const espada = ITEM_LIST.find(i => i.idItem === IdItem.ESPADA) as EquipType
+            const daga = ITEM_LIST.find(i => i.idItem === IdItem.DAGA)
+            const armor = ITEM_LIST.find(i => i.idItem === IdItem.CANA_DE_PESCAR)
+            const poscion = ITEM_LIST.find(i => i.idItem === IdItem.GUSANO)
+            const peil = ITEM_LIST.find(i => i.idItem === IdItem.PIEDRA_DE_INTELIGENCIA)
+            const poM = ITEM_LIST.find(i => i.idItem === IdItem.CAJA_DE_HABILIDADES_DE_GUERRERO)
+
+            if (!espada || !daga || !armor || !poscion || !peil || !poM) {
+                throw new BadRequestException('arma no existe')
+            }
+
+            if (poM.type === 'utility' && poM.type_utility === 'chest') {
+                poM.cantidad = poM.maxCantidad
+            }
+
+
+            const entity = this.characterMapper.toDomain(baseCharacter)
+            entity.addItemToInventory(espada)
+            entity.addItemToInventory(daga)
+            entity.addItemToInventory(armor)
+            entity.addItemToInventory(poscion)
+            entity.addItemToInventory(peil)
+            entity.addItemToInventory(poM)
+            const newCharacter = this.characterMapper.toPersistence(entity)
+
+            this.InicializateBaseValues(newCharacter)
+            newCharacter.yang += 600000
+            newCharacter.stats.general.hp.actual = 300
 
             const characterCreated = await this.characterRepository.createCharacter(
-                baseCharacter,
+                newCharacter,
                 userId,
             );
 
@@ -182,7 +223,8 @@ export class CharacterService {
             baseCharacter.atributos,
             baseCharacter.buffos,
             baseCharacter.lv,
-            baseCharacter.especialidad
+            baseCharacter.especialidad,
+            baseCharacter.reino
         )
 
         baseCharacter.stats = stats

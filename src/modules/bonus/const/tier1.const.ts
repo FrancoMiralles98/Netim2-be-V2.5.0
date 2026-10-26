@@ -6,6 +6,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'orcos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.orcos'] },
     values: { min: 10, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['arma', 'brazalete', 'collar', 'pendiente', 'casco'],
   },
   {
@@ -14,6 +15,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'animales',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.animales'] },
     values: { min: 10, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['arma', 'brazalete', 'collar', 'pendiente', 'casco'],
   },
   {
@@ -22,6 +24,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'misticos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.misticos'] },
     values: { min: 10, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['arma', 'brazalete', 'collar', 'pendiente', 'casco'],
   },
   {
@@ -30,6 +33,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'demonios',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.demonios'] },
     values: { min: 10, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['arma', 'brazalete', 'collar', 'pendiente', 'casco'],
   },
   {
@@ -38,6 +42,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'def_retardo',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_retardo'] },
     values: { min: 1, max: 50 },
+    displayFormat: 'porcentage',
     valid: ['escudo'],
   },
   {
@@ -46,6 +51,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'reflectar',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.reflectar'] },
     values: { min: 1, max: 25 },
+    displayFormat: 'porcentage',
     valid: ['armadura', 'escudo'],
   },
   {
@@ -54,6 +60,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'bloquear_ataques',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.bloquear_ataques'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['escudo', 'botas'],
   },
   {
@@ -62,6 +69,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'def_incendio',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_incendio'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['casco', 'botas', 'armadura'],
   },
   {
@@ -70,6 +78,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'def_veneno',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_veneno'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['casco', 'botas', 'armadura'],
   },
   {
@@ -78,6 +87,7 @@ export const tier1BonusList: BonusType[] = [
     bonus_ref_name: 'def_sangrado',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_sangrado'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['casco', 'botas', 'armadura'],
   },
 ];

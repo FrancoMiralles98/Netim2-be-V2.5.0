@@ -167,12 +167,16 @@ export class BasicAttackActionResolverService {
             };
         }
 
-        const extraAttackTriggered = this.rngService.rollChance(attackSpeed);
+        // Cada 100 VA garantiza un ataque adicional; el resto se sortea una sola vez.
+        const guaranteedExtraAttacks = Math.floor(attackSpeed / 100);
+        const remainingChance = attackSpeed % 100;
+        const rolledExtraAttack = remainingChance > 0 && this.rngService.rollChance(remainingChance);
+        const extraAttacks = guaranteedExtraAttacks + (rolledExtraAttack ? 1 : 0);
 
         return {
-            hitCount: extraAttackTriggered ? 2 : 1,
+            hitCount: 1 + extraAttacks,
             missChance: 0,
-            extraAttackTriggered
+            extraAttackTriggered: extraAttacks > 0
         };
     }
 

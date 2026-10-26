@@ -10,6 +10,7 @@ import { UserEntity } from '../../../user/entity/user-entity';
 import { UserRole } from '../../../user/types/user-roles.enum';
 import { Inventory } from '../../../inventory/entities/inventory.entity';
 import { UpdateStatsService } from '../stats/update-stats.service';
+import { ItemService } from '../../../item/item.service';
 
 describe('CharacterEquipService slot purchases', () => {
     let stored: CharacterPersistence;
@@ -49,13 +50,15 @@ describe('CharacterEquipService slot purchases', () => {
         };
         service = new CharacterEquipService(new CharacterMapper(),
             characterRepository as unknown as CharacterRepository,
-            userService as unknown as UserService, connection as unknown as Connection, {} as UpdateStatsService);
+            userService as unknown as UserService, connection as unknown as Connection, {} as UpdateStatsService, {} as ItemService);
     });
 
     it('charges character yang for slot 2 and enables only that slot', async () => {
         const { character: result, response } = await service.buyEquipmentSlot('character', 'owner', 2);
         expect(result.yang).toBe(200_000);
-        expect(response).toEqual({ slot: 2, currency: 'yang', yang: 200_000 });
+        expect(response).toEqual({ slot: 2, currency: 'yang', yang: 200_000,
+            equipo_options: { equipo1_on: true, equipo2_on: true, equipo3_on: false } });
+        expect(stored.equipo_options).toEqual(response.equipo_options);
         expect(result.equipo_options).toEqual({ equipo1_on: true, equipo2_on: true, equipo3_on: false });
         expect(result.equipo_selected).toBe(1);
         expect(md).toBe(1_000);
@@ -70,7 +73,9 @@ describe('CharacterEquipService slot purchases', () => {
         stored.yang = 0;
         const { character: result, response } = await service.buyEquipmentSlot('character', 'owner', 3);
         expect(md).toBe(500);
-        expect(response).toEqual({ slot: 3, currency: 'md', md: 500 });
+        expect(response).toEqual({ slot: 3, currency: 'md', md: 500,
+            equipo_options: { equipo1_on: true, equipo2_on: false, equipo3_on: true } });
+        expect(stored.equipo_options).toEqual(response.equipo_options);
         expect(result.yang).toBe(0);
         expect(result.equipo_options.equipo3_on).toBe(true);
         expect(result.equipo_options.equipo2_on).toBe(false);

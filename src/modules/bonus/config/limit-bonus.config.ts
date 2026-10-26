@@ -27,6 +27,7 @@ export const LIMIT_BONUS_CONFIG: Partial<Record<BonusRefKeys, number>> = {
     def_veneno: 75,
     def_electrico: 75,
     esquivar_ataques: 50,
+    esquivar_hechizos: 50,
 }
 
 export const COMBAT_STAT_TO_BONUS_REF: Partial<Record<CombatStatKey, BonusRefKeys>> = {

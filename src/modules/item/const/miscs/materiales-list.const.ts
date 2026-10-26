@@ -13,7 +13,7 @@ createGenericUtilityItem({
 createGenericUtilityItem({
     name: 'Piel de Lobo',
     description: 'Los pelos más gruesos del lobo se utilizan para fabricar cepillos y peines.',
-    img: '/itemsUtility/Piel_de_Lobo.png',
+    img: '/items/Piel_de_Lobo.png',
     maxCantidad: 20,
     price: 600,
     idItem: IdItem.PIEL_DE_LOBO
@@ -497,38 +497,6 @@ createGenericUtilityItem({
     maxCantidad: 20,
     price: 1800,
     idItem: IdItem.PATAS_DE_ARANA
-}),
-createGenericUtilityItem({
-    name: 'Pasta',
-    description: 'Un cebo ligero y económico, pero medio torpe para la pesca.',
-    img: '/itemsUtility/Pasta.png',
-    maxCantidad: 200,
-    price: 50,
-    idItem: IdItem.PASTA
-}),
-createGenericUtilityItem({
-    name: 'Gusano',
-    description: 'Cebo popular que atrae a los peces.',
-    img: '/itemsUtility/Gusano.png',
-    maxCantidad: 200,
-    price: 250,
-    idItem: IdItem.GUSANO
-}),
-createGenericUtilityItem({
-    name: 'Pececillo',
-    description: 'Pez pequeño utilzado como cebo para grandes peces.',
-    img: '/itemsUtility/Pececillo.png',
-    maxCantidad: 200,
-    price: 500,
-    idItem: IdItem.PECECILLO
-}),
-createGenericUtilityItem({
-    name: 'Camarón',
-    description: 'Un gran cebo que aumenta las posibilidades de atraer a los peces más exóticos.',
-    img: '/itemsUtility/Camaron.png',
-    maxCantidad: 200,
-    price: 1000,
-    idItem: IdItem.CAMARON
 }),
 createGenericUtilityItem({
     name: 'Fibra de carbono',

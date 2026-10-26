@@ -8,7 +8,17 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'va',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.va'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'flat',
     valid: ['botas', 'casco'],
+  },
+  {
+    category: { type: 'generic', tier: 3 },
+    full_name: allFullNameBonusList.DEFENSA,
+    bonus_ref_name: 'def',
+    effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.def'] },
+    values: { min: 1, max: 10 },
+    displayFormat: 'flat',
+    valid: [],
   },
   {
     category: { type: 'generic', tier: 3 },
@@ -16,6 +26,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'hp',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.hp'] },
     values: { min: 100, max: 2000 },
+    displayFormat: 'flat',
     valid: ['brazalete', 'collar', 'armadura', 'botas'],
   },
   {
@@ -24,6 +35,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'ad',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.ad'] },
     values: { min: 10, max: 30 },
+    displayFormat: 'flat',
     valid: ['armadura'],
   },
   {
@@ -32,6 +44,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'veneno',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.veneno'] },
     values: { min: 1, max: 15 },
+    displayFormat: 'porcentage',
     valid: ['arma', 'casco'],
   },
   {
@@ -40,6 +53,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'STR',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.STR.bonusPoints' },
     values: { min: 2, max: 12 },
+    displayFormat: 'flat',
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
@@ -48,6 +62,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'INT',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.INT.bonusPoints' },
     values: { min: 2, max: 12 },
+    displayFormat: 'flat',
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
@@ -56,6 +71,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'DEX',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.DEX.bonusPoints' },
     values: { min: 2, max: 12 },
+    displayFormat: 'flat',
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
@@ -64,6 +80,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'VIT',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.VIT.bonusPoints' },
     values: { min: 2, max: 12 },
+    displayFormat: 'flat',
     valid: ['arma', 'pendiente', 'escudo'],
   },
   {
@@ -72,6 +89,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'monstruos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.monstruos'] },
     values: { min: 5, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['pendiente', 'collar', 'escudo'],
   },
   {
@@ -80,14 +98,16 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'medio_humanos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.medio_humanos'] },
     values: { min: 5, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['escudo', 'brazalete', 'pendiente'],
   },
   {
     category: { type: 'generic', tier: 3 },
     full_name: allFullNameBonusList.DAÑO_CRITICO,
     bonus_ref_name: 'daño_critico',
-    effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.daño_critico'] },
+    effects: { type: 'stat_modifiers', operation: 'porcentage', target: ['bonus.daño.daño_critico'] },
     values: { min: 1, max: 15 },
+    displayFormat: 'porcentage',
     valid: ['casco', 'armadura', 'collar'],
   },
   {
@@ -96,6 +116,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'corta_curacion',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.corta_curacion'] },
     values: { min: 1, max: 50 },
+    displayFormat: 'porcentage',
     valid: ['armadura', 'escudo'],
   },
   {
@@ -104,6 +125,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'sangrado',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.sangrado'] },
     values: { min: 1, max: 15 },
+    displayFormat: 'porcentage',
     valid: ['botas', 'brazalete'],
   },
   {
@@ -112,6 +134,7 @@ export const tier3BonusList: BonusType[] = [
     bonus_ref_name: 'incendio',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.incendio'] },
     values: { min: 1, max: 15 },
+    displayFormat: 'porcentage',
     valid: ['pendiente', 'collar'],
   },
 ];

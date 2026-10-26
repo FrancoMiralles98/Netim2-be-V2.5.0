@@ -8,7 +8,7 @@ import { SkillCooldownReductionResult } from "../types/fighter/cooldown.types";
 import { HealingReductionResult, HealingReductionSource } from "../types/fighter/healing-reduction.types";
 import { FightConfig } from "netim2-shared/dist/character/character-fight-config.type";
 import { ActiveStatusEffectId } from "../types/statusEffects/active-status-effect.types";
-import { CD_REDUCTION_PER_VH } from "src/modules/shared/config/character-stats.config";
+import { calculateCooldownReductionPercent } from "../../gameData/const/calculate-cooldown-reduction";
 import { COMBAT_STAT_TO_BONUS_REF, LIMIT_BONUS_CONFIG } from "src/modules/bonus/config/limit-bonus.config";
 
 export class FighterCombatEntity {
@@ -506,7 +506,7 @@ export class FighterCombatEntity {
 
         const vh = this.effectiveStats.general.vh;
 
-        const cooldownReduction = vh * CD_REDUCTION_PER_VH;
+        const cooldownReduction = calculateCooldownReductionPercent(vh);
 
         const cooldownMultiplier = 1 - (cooldownReduction / 100);
 

@@ -67,6 +67,7 @@ describe('UpdateStatsService', () => {
       bonusFullName: allFullNameBonusList.MAX_HP,
       bonusRef: 'hp',
       bonusValue: value,
+      displayFormat: 'flat',
       category: { type: 'generic', tier: 1 },
       origin: 'random',
       effects: { type: 'stat_modifiers', target: [target], operation },
@@ -198,7 +199,7 @@ describe('UpdateStatsService', () => {
       ],
       1,
     );
-    expect(result.stats.general.ad.min).toBe(81.9);
+    expect(result.stats.general.ad.min).toBe(81);
   });
 
   it('combines positive/negative flats and increases/reductions as signed percentages', () => {
@@ -215,7 +216,7 @@ describe('UpdateStatsService', () => {
       ],
       1,
     );
-    expect(result.stats.general.ad.min).toBe(90.2);
+    expect(result.stats.general.ad.min).toBe(90);
   });
 
   it('can recalculate its own result repeatedly without accumulating modifiers', () => {
@@ -603,7 +604,7 @@ describe('UpdateStatsService', () => {
     }).toEqual(constants);
   });
 
-  it('keeps at most one decimal without rounding in every stat, including negatives and resources', () => {
+  it('truncates resources, attack ranges and defense to integers and keeps one decimal in other stats', () => {
     const input = stats();
     input.general.hp.actual = 500.99;
     input.general.mana.actual = 100.99;
@@ -612,12 +613,12 @@ describe('UpdateStatsService', () => {
       bonus('general.def', -12.89), bonus('general.vm', -0.09),
       bonus('bonus.daño.critico', 45.99),
     ])], attrs(0), [], 1);
-    expect(result.stats.general.ad).toEqual({ min: 12.9, max: 17.9 });
-    expect(result.stats.general.def).toBe(-12.8);
+    expect(result.stats.general.ad).toEqual({ min: 12, max: 17 });
+    expect(result.stats.general.def).toBe(-12);
     expect(Object.is(result.stats.general.vm, 0)).toBe(true);
     expect(result.stats.bonus.daño.critico).toBe(45.9);
-    expect(result.stats.general.hp.actual).toBe(500.9);
-    expect(result.stats.general.mana.actual).toBe(100.9);
+    expect(result.stats.general.hp.actual).toBe(500);
+    expect(result.stats.general.mana.actual).toBe(100);
     const check = (value: object): void => {
       for (const entry of Object.values(value)) {
         if (typeof entry === 'number') expect(entry).toBeCloseTo(Math.trunc(entry * 10) / 10, 10);
@@ -628,6 +629,28 @@ describe('UpdateStatsService', () => {
     expect(input.general.hp.actual).toBe(500.99);
   });
 
+  it('truncates HP, mana, both attack endpoints and regeneration only at the end', () => {
+    const input = stats();
+    input.general.hp.actual = 500.99;
+    input.general.mana.actual = 100.99;
+    const result = service.updateStats(input, 'guerrero', [item([
+      bonus('general.hp', 0.99), bonus('general.mana', 0.99),
+      bonus('general.ad', { min: 0.99, max: 5.99 }),
+      bonus('general.ap', { min: 0.99, max: 2.99 }),
+      bonus('general.regen_hp', 0.95), bonus('general.regen_mana', 0.95),
+      bonus('general.def', -0.99), bonus('general.va', 1.99),
+    ])], attrs(0), [], 2);
+    expect(result.stats.general.hp).toEqual({ actual: 500, max: 926 });
+    expect(result.stats.general.mana).toEqual({ actual: 100, max: 255 });
+    expect(result.stats.general.ad).toEqual({ min: 14, max: 19 });
+    expect(result.stats.general.ap).toEqual({ min: 6, max: 8 });
+    expect(result.stats.general.regen_hp).toBe(9);
+    expect(result.stats.general.regen_mana).toBe(3);
+    expect(Object.is(result.stats.general.def, 0)).toBe(true);
+    expect(result.stats.general.va).toBe(1.9);
+    expect(input.general.hp.actual).toBe(500.99);
+  });
+
   it('keeps precision during intermediate calculations and in returned attributes', () => {
     const result = service.updateStats(stats(), 'guerrero', [item([
       attribute(5), bonus('general.ad', 0.8),
@@ -635,7 +658,7 @@ describe('UpdateStatsService', () => {
       attribute(25, 'porcentage'), bonus('general.ad', 0.8),
     ])], 1);
     expect(result.attributes.STR).toEqual({ lvPoints: 10, bonusPoints: 8.75 });
-    expect(result.stats.general.ad.min).toBe(51.1); // 12 + 18.75 * 2 + 0.8 + 0.8 = 51.1
+    expect(result.stats.general.ad.min).toBe(51); // trunc(12 + 18.75 * 2 + 0.8 + 0.8)
   });
 
   it('does not mutate any input and rejects non-finite source values', () => {

@@ -56,7 +56,8 @@ export class CharacterRepository {
         return character
     }
 
-    async updateCharacterById(id: string, data: CharacterPersistence, session?: ClientSession): Promise<CharacterModel> {
+    /** Actualiza solo las propiedades recibidas; los objetos y arrays enviados se reemplazan completos. */
+    async updateCharacterById(id: string, data: Partial<CharacterPersistence>, session?: ClientSession): Promise<CharacterModel> {
         const updatedCharacter = await this.characterModel.findByIdAndUpdate(id, { $set: data }, { new: true, session })
         if (!updatedCharacter) {
             throw new NotFoundException('character not found')

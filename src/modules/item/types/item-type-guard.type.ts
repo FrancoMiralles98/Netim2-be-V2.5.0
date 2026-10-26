@@ -10,7 +10,7 @@ export const isEquipItem = (item: InventoryItem | ItemDTO): item is EquipType =>
 }
 
 export const isPiedraItem = (item: InventoryItem | ItemDTO): item is PiedraType => {
-    return item.type === 'utility' && 'upgradeLv' in item
+    return item.type === 'utility' && item.type_utility === 'piedra'
 }
 
 export const isMonturaItem = (item: InventoryItem | ItemDTO): item is MonturaType => {

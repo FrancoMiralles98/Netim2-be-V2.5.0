@@ -24,6 +24,7 @@ export class SpecialBonusService {
         const mainBonus: BonusInItem = {
             bonusFullName: bonus.full_name,
             bonusRef: ref,
+            displayFormat: bonus.displayFormat,
             category: bonus.category,
             effects: bonus.effects,
             bonusValue: this.rngService.randomNumberInRange(rollTier.minValue, rollTier.maxValue),
@@ -68,6 +69,7 @@ export class SpecialBonusService {
             bonusRef: ref,
             category: counterpart.category,
             effects: counterpart.effects,
+            displayFormat: counterpart.displayFormat,
             bonusValue: -this.rngService.randomNumberInRange(range.minValue, range.maxValue),
             origin: 'random',
         };

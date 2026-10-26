@@ -36,7 +36,7 @@ export class ItemHydrationService {
 
         if (isEquipItem(savedItem)) {
             return {
-                ...this.mergeEquipItem(baseItem, savedItem),
+                ...this.hydrateEquipmentItem(baseItem, savedItem),
                 ...commonState
             }
         }
@@ -55,11 +55,21 @@ export class ItemHydrationService {
             case 'cebo':
             case 'utility':
             case 'chest':
-            case 'poción':
                 return {
                     ...this.mergeGenericUtilityItem(baseItem, savedItem),
                     ...commonState
                 }
+            case 'poción': {
+                if (baseItem.type_utility !== 'poción') throw new Error('La base del item no es una poción');
+                if (baseItem.potionType === 'reserve') {
+                    if (savedItem.potionType !== 'reserve') throw new Error('La poción guardada no contiene una reserva compatible');
+                    return {
+                        ...baseItem, ...commonState, cantidad: savedItem.cantidad,
+                        reserve: structuredClone(savedItem.reserve),
+                    };
+                }
+                return { ...baseItem, ...commonState, cantidad: savedItem.cantidad };
+            }
             case 'caña':
                 return {
                     ...this.mergeCañaItem(baseItem, savedItem),
@@ -75,25 +85,25 @@ export class ItemHydrationService {
         }
     }
 
-    private mergeEquipItem(baseItem: ItemDTO, savedItem: EquipType): EquipType {
+    hydrateEquipmentItem<T extends EquipType>(baseItem: ItemDTO, savedItem: T): T {
         if (!isEquipItem(baseItem)) {
             throw new Error(`el item ${baseItem.idItem} no es tipo equip`)
         }
         const mergedItem: EquipType = {
             ...baseItem,
             explicitBonus: savedItem.explicitBonus,
+            randomImplicitBonus: savedItem.randomImplicitBonus,
             bonus6_7: savedItem.bonus6_7,
             corrupt: savedItem.corrupt,
             corruptExplicitBonus: savedItem.corruptExplicitBonus,
             corruptImplicitBonus: savedItem.corruptImplicitBonus,
-            corruptSpecialBonus: savedItem.corruptSpecialBonus,
             itemLv: savedItem.itemLv,
             piedras: savedItem.piedras,
             upgradeLv: savedItem.upgradeLv,
             weight: savedItem.weight
         }
 
-        return mergedItem
+        return { ...structuredClone(savedItem), ...structuredClone(mergedItem) }
     }
 
     private mergePiedraItem(baseItem: ItemDTO, savedItem: PiedraType): PiedraType {

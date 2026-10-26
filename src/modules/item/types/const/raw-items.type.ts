@@ -1,4 +1,4 @@
-import { BuffType, CañaType, ChestType, EquipType, MonturaType, PiedraType, PocionType, UtilityType } from "netim2-shared";
+import { BuffType, CañaType, CeboType, ChestType, EquipType, MonturaType, PiedraType, PocionType, UtilityType } from "netim2-shared";
 import { BASE_EQUIP_ITEM } from "../../const/equip/base-equip.const";
 import { BASE_LEGENDARIO_ITEM } from "../../const/equip/legendarios/base-legendario-item.const";
 import { BASE_BUFF_ITEM } from "../../const/miscs/buff/buff-item-base.const";
@@ -8,6 +8,7 @@ import { BASE_GENERIC_UTILITY } from "../../const/miscs/generic-utility-base.con
 import { LICENCIA_MONTURA_BASE_ITEM } from "../../const/miscs/montura/montura-base-item.const";
 import { BASE_PIEDRA_ITEM } from "../../const/miscs/piedra/piedra-item-base.const";
 import { POCION_BASE_ITEM } from "../../const/miscs/pocion/pocion-base.const";
+import { BASE_CEBO } from "../../const/miscs/cebo/base-cebo.const";
 
 export type RawEquipItem = Omit<EquipType,keyof typeof BASE_EQUIP_ITEM>;
 
@@ -19,10 +20,15 @@ export type RawPiedraItem = Omit<PiedraType,keyof typeof BASE_PIEDRA_ITEM>;
 
 export type RawGenericUtilityItem = Omit<UtilityType,keyof typeof BASE_GENERIC_UTILITY>;
 
-export type RawChestItem = Omit<ChestType,keyof typeof BASE_CHEST_ITEM>;
+export type RawChestItem = ChestType extends infer T
+    ? T extends ChestType ? Omit<T, keyof typeof BASE_CHEST_ITEM> : never
+    : never;
 
-export type RawPocionItem = Omit<PocionType,keyof typeof POCION_BASE_ITEM>;
+export type RawPocionItem =
+    | Omit<Extract<PocionType, { potionType: 'normal' }>, keyof typeof POCION_BASE_ITEM>
+    | Omit<Extract<PocionType, { potionType: 'reserve' }>, keyof typeof POCION_BASE_ITEM>;
 
 export type RawMonturaItem = Omit<MonturaType,keyof typeof LICENCIA_MONTURA_BASE_ITEM>;
 
 export type RawCañaItem = Omit<CañaType,keyof typeof CAÑA_BASE_ITEM>;
+export type RawCeboItem = Omit<CeboType,keyof typeof BASE_CEBO>;

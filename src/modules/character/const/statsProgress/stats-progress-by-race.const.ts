@@ -10,27 +10,29 @@ import { CharacterStatsProgress } from "../../types/character-stats-progress.typ
  * - Los valores `base` representan las estadísticas iniciales del personaje.
  * - Los valores `per_lv` indican cuánto crece cada stat al subir de nivel.
  *
- * @note - ESTOS VALORES ESTAN PSEUDO BALANCEADOS (NO ESTAN TESTEADOS)
+ * Presupuestos por raza: base 1200 HP/mana, 10 AD/AP y 15 de regeneración;
+ * por nivel 30 HP/mana, 3 AD/AP y 0.20 de regeneración.
+ * Igualar presupuestos no garantiza el balance efectivo en combate.
  */
 export const STATS_PROGRESS_BY_RACE: Record<CharacterRace, CharacterStatsProgress> = {
     guerrero: {
         base: {
-            hp: 900,
+            hp: 950,
             mana: 250,
-            ap: 3,
-            ad: 7,
-            regen_hp: 8,
+            ap: 2,
+            ad: 8,
+            regen_hp: 12,
             regen_mana: 3,
         },
 
         per_lv: {
-            hp: 26,
-            mana: 5,
+            hp: 24,
+            mana: 6,
 
-            ap: 1,
-            ad: 2,
+            ap: 0.6,
+            ad: 2.4,
 
-            regen_hp: 0.10,
+            regen_hp: 0.16,
             regen_mana: 0.04,
         }
     },
@@ -38,18 +40,18 @@ export const STATS_PROGRESS_BY_RACE: Record<CharacterRace, CharacterStatsProgres
     chaman: {
         base: {
             hp: 650,
-            mana: 600,
-            ap: 7,
-            ad: 3,
+            mana: 550,
+            ap: 8,
+            ad: 2,
             regen_hp: 4,
-            regen_mana: 10,
+            regen_mana: 11,
         },
 
         per_lv: {
-            hp: 16,
+            hp: 14,
             mana: 16,
-            ap: 2.2,
-            ad: 0.8,
+            ap: 2.4,
+            ad: 0.6,
             regen_hp: 0.06,
             regen_mana: 0.14,
         }
@@ -57,41 +59,41 @@ export const STATS_PROGRESS_BY_RACE: Record<CharacterRace, CharacterStatsProgres
 
     ninja: {
         base: {
-            hp: 720,
-            mana: 350,
+            hp: 800,
+            mana: 400,
             ap: 4,
             ad: 6,
-            regen_hp: 6,
-            regen_mana: 6,
+            regen_hp: 8,
+            regen_mana: 7,
         },
 
         per_lv: {
-            hp: 19,
-            mana: 8,
+            hp: 18,
+            mana: 12,
             ap: 1.2,
             ad: 1.8,
-            regen_hp: 0.07,
-            regen_mana: 0.07,
+            regen_hp: 0.10,
+            regen_mana: 0.10,
         }
     },
 
     sura: {
         base: {
-            hp: 780,
-            mana: 500,
+            hp: 850,
+            mana: 350,
             ap: 5,
             ad: 5,
-            regen_hp: 7,
-            regen_mana: 8,
+            regen_hp: 9,
+            regen_mana: 6,
         },
 
         per_lv: {
-            hp: 21,
-            mana: 12,
-            ap: 1.7,
-            ad: 1.4,
-            regen_hp: 0.09,
-            regen_mana: 0.10,
+            hp: 20,
+            mana: 10,
+            ap: 1.5,
+            ad: 1.5,
+            regen_hp: 0.12,
+            regen_mana: 0.08,
         }
     }
 };

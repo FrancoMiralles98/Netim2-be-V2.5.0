@@ -1,5 +1,5 @@
 
-import { BonusInItem, PiedraType, SpecialCorruptBonus } from 'netim2-shared';
+import { BonusInItem, PiedraType } from 'netim2-shared';
 import { UtilityBase } from './utility-base.entity';
 
 export class Piedra extends UtilityBase {

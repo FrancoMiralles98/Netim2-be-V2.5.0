@@ -16,7 +16,6 @@ export const BASE_LEGENDARIO_ITEM = {
     bonus6_7: [],
     corruptExplicitBonus: [],
     corruptImplicitBonus: [],
-    corruptSpecialBonus: [],
     legendary: true,
     randomImplicitBonus: [],
 } satisfies Partial<EquipType>;

@@ -7,6 +7,7 @@ import { CharacterRepository } from "../../repository/character-repository";
 import { UserService } from "../../../user/user.service";
 import { EQUIPMENT_SLOTS_CONFIG } from "../../config/equip-slot.config";
 import { UpdateStatsService } from "../stats/update-stats.service";
+import { ItemService } from "../../../item/item.service";
 
 export type CharacterEquipmentResult = {
     newItems: InventoryItem[];
@@ -27,11 +28,18 @@ export class CharacterEquipService {
         private readonly userService: UserService,
         @InjectConnection() private readonly connection: Connection,
         private readonly updateStatsService: UpdateStatsService,
+        private readonly itemService: ItemService,
     ) { }
 
     /** Devuelve los datos actualizados; el consumidor debe persistir inventario y equipo juntos. */
     equipItem(character: CharacterPersistence, itemId: string): CharacterEquipmentResult {
-        const entity = this.characterMapper.toDomain(structuredClone(character));
+        const prepared = this.prepareEquipment(character);
+        prepared.inventario = prepared.inventario.map(item =>
+            item.id === itemId && item.type === 'equip'
+                ? this.itemService.getUpdatedInventoryItem(item)
+                : item,
+        );
+        const entity = this.characterMapper.toDomain(prepared);
         const inventoryChanges = entity.equipItemFromInventory(itemId);
         return {
             character: this.updateEquipmentStats(this.characterMapper.toPersistence(entity)),
@@ -40,7 +48,7 @@ export class CharacterEquipService {
     }
 
     unequipItem(character: CharacterPersistence, subType: subTypeEquip): CharacterEquipmentResult {
-        const entity = this.characterMapper.toDomain(structuredClone(character));
+        const entity = this.characterMapper.toDomain(this.prepareEquipment(character));
         const inventoryChanges = entity.unequipItemToInventory(subType);
         return {
             character: this.updateEquipmentStats(this.characterMapper.toPersistence(entity)),
@@ -50,13 +58,23 @@ export class CharacterEquipService {
 
     /** Devuelve una copia con el set solicitado activo; el consumidor debe persistir el resultado. */
     selectEquipment(character: CharacterPersistence, slot: 1 | 2 | 3): CharacterEquipmentResult {
-        const entity = this.characterMapper.toDomain(structuredClone(character));
+        const entity = this.characterMapper.toDomain(this.prepareEquipment(character, slot));
         entity.selectEquipment(slot);
         return {
             character: this.updateEquipmentStats(this.characterMapper.toPersistence(entity)),
             newItems: [],
             updatedItems: [],
         };
+    }
+
+    private prepareEquipment(character: CharacterPersistence, slot = character.equipo_selected): CharacterPersistence {
+        const prepared = structuredClone(character);
+        const key = ({ 1: 'equipo_1', 2: 'equipo_2', 3: 'equipo_3' } as const)[slot];
+        // La entidad conserva la validación de slots inválidos o bloqueados.
+        if (key) {
+            prepared[key] = prepared[key].map(item => this.itemService.getUpdatedEquipmentItem(item));
+        }
+        return prepared;
     }
 
     private updateEquipmentStats(character: CharacterPersistence): CharacterPersistence {
@@ -73,6 +91,7 @@ export class CharacterEquipService {
             character.buffos,
             character.lv,
             character.especialidad,
+            character.reino,
         );
         character.stats = stats;
         character.atributos = attributes
@@ -99,13 +118,13 @@ export class CharacterEquipService {
                     throw new ConflictException('El slot de equipo ya está desbloqueado');
                 }
                 const entity = this.characterMapper.toDomain(structuredClone(character));
-                let response: BuyEquipmentSlotResponse;
+                let payment: { currency: 'yang'; yang: number } | { currency: 'md'; md: number };
                 if (config.currency === 'yang') {
                     if (!Number.isFinite(character.yang) || character.yang < config.cost) {
                         throw new BadRequestException('Yang insuficiente para comprar el slot');
                     }
                     entity.removeYang(config.cost);
-                    response = { slot, currency: 'yang', yang: entity.toPrimitives().yang };
+                    payment = { currency: 'yang', yang: entity.toPrimitives().yang };
                 } else {
                     const user = await this.userService.getUserById(userId, session);
                     const md = user.toPrimitives().md;
@@ -115,11 +134,16 @@ export class CharacterEquipService {
                     user.extractMd(config.cost);
                     const finalMd = user.toPrimitives().md;
                     await this.userService.updateUserDataById(userId, { md: finalMd }, session);
-                    response = { slot, currency: 'md', md: finalMd };
+                    payment = { currency: 'md', md: finalMd };
                 }
                 entity.unlockEquipmentSlot(slot);
                 const result = this.characterMapper.toPersistence(entity);
                 await this.characterRepository.updateCharacterById(characterId, result, session);
+                const response: BuyEquipmentSlotResponse = {
+                    slot,
+                    equipo_options: structuredClone(result.equipo_options),
+                    ...payment,
+                };
                 return { character: result, response };
             });
         } finally {

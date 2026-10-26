@@ -11,6 +11,7 @@ import { CharacterAttributesService } from '../stats/calculator/character-attrib
 import { EquipStatsCalculatorService } from '../stats/calculator/equip-stats-calculator.service';
 import { BuffStatsCalculatorService } from '../stats/calculator/buff-stats-calculator.service';
 import { LimitBonusService } from '../../../bonus/services/limit-bonus.service';
+import { ItemService } from '../../../item/item.service';
 
 describe('CharacterEquipService', () => {
     const mapper = new CharacterMapper();
@@ -18,7 +19,11 @@ describe('CharacterEquipService', () => {
         new CharacterLevelScalingService(), new CharacterAttributesService(),
         new EquipStatsCalculatorService(), new BuffStatsCalculatorService(), new LimitBonusService(),
     );
-    const service = new CharacterEquipService(mapper, {} as CharacterRepository, {} as UserService, {} as Connection, calculator);
+    const items = {
+        getUpdatedInventoryItem: (item: InventoryItem) => structuredClone(item),
+        getUpdatedEquipmentItem: (item: EquipType) => structuredClone(item),
+    } as ItemService;
+    const service = new CharacterEquipService(mapper, {} as CharacterRepository, {} as UserService, {} as Connection, calculator, items);
 
     function equipment(props: Partial<EquipType> = {}): EquipType {
         return {
@@ -27,7 +32,7 @@ describe('CharacterEquipService', () => {
             upgradeLv: 0, upgradeMax: 9, sub_type_equip: 'arma', type_weapon: 'espada',
             legendary: false, restricted: ['guerrero'], slot: 0, weight: 0, especial: false,
             implicitBonus: [], randomImplicitBonus: [], explicitBonus: [], piedras: [],
-            bonus6_7: [], corruptExplicitBonus: [], corruptImplicitBonus: [], corruptSpecialBonus: [],
+            bonus6_7: [], corruptExplicitBonus: [], corruptImplicitBonus: [],
             ...props,
         };
     }
@@ -265,6 +270,7 @@ describe('CharacterEquipService', () => {
         const original = structuredClone(source);
         const bonus: EquipType['explicitBonus'][number] = {
             bonusFullName: allFullNameBonusList.VALOR_DE_ATAQUE, bonusRef: 'ad', bonusValue: 25,
+            displayFormat: 'flat',
             category: { type: 'generic', tier: 1 }, origin: 'random',
             effects: { type: 'stat_modifiers', target: ['general.ad'], operation: 'flat' },
         };
@@ -296,6 +302,7 @@ describe('CharacterEquipService', () => {
         const source = character();
         const bonus: EquipType['explicitBonus'][number] = {
             bonusFullName: allFullNameBonusList.STR, bonusRef: 'STR', bonusValue: 5,
+            displayFormat: 'flat',
             category: { type: 'generic', tier: 1 }, origin: 'random',
             effects: { type: 'attribute_modifier', target: 'atribute.STR.bonusPoints', operation: 'flat' },
         };

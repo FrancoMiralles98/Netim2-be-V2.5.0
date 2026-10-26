@@ -7,6 +7,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'ad',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.ad'] },
     values: { min: 10, max: 25 },
+    displayFormat: 'flat',
     valid: [
       'armadura',
       'brazalete',
@@ -24,6 +25,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'ap',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.ap'] },
     values: { min: 10, max: 25 },
+    displayFormat: 'flat',
     valid: [
       'armadura',
       'brazalete',
@@ -41,6 +43,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'def_veneno',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_veneno'] },
     values: { min: 1, max: 5 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -58,6 +61,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'def_incendio',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_incendio'] },
     values: { min: 1, max: 5 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -75,6 +79,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'def_sangrado',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_sangrado'] },
     values: { min: 1, max: 5 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -92,6 +97,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'chaman',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.chaman'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -109,6 +115,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'guerrero',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.guerrero'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -126,6 +133,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'sura',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.sura'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -143,6 +151,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'ninja',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.ninja'] },
     values: { min: 5, max: 10 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -160,6 +169,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'def_chaman',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_chaman'] },
     values: { min: 3, max: 5 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -177,6 +187,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'def_guerrero',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_guerrero'] },
     values: { min: 3, max: 5 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -194,6 +205,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'def_ninja',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_ninja'] },
     values: { min: 3, max: 5 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -211,6 +223,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'def_sura',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_sura'] },
     values: { min: 3, max: 5 },
+    displayFormat: 'porcentage',
     valid: [
       'armadura',
       'brazalete',
@@ -228,6 +241,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'hp',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.hp'] },
     values: { min: 50, max: 800 },
+    displayFormat: 'flat',
     valid: [
       'armadura',
       'brazalete',
@@ -245,6 +259,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'va',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.va'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'flat',
     valid: ['arma'],
   },
   {
@@ -253,6 +268,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'monstruos',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.daño.monstruos'] },
     values: { min: 5, max: 20 },
+    displayFormat: 'porcentage',
     valid: ['collar'],
   },
   {
@@ -261,6 +277,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'def_hab',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_hab'] },
     values: { min: 1, max: 5 },
+    displayFormat: 'porcentage',
     valid: ['armadura'],
   },
   {
@@ -269,6 +286,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'def_media',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.def_media'] },
     values: { min: 1, max: 5 },
+    displayFormat: 'porcentage',
     valid: ['armadura'],
   },
   {
@@ -277,6 +295,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'STR',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.STR.bonusPoints' },
     values: { min: 1, max: 10 },
+    displayFormat: 'flat',
     valid: ['brazalete'],
   },
   {
@@ -285,6 +304,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'INT',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.INT.bonusPoints' },
     values: { min: 1, max: 10 },
+    displayFormat: 'flat',
     valid: ['brazalete'],
   },
   {
@@ -293,6 +313,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'DEX',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.DEX.bonusPoints' },
     values: { min: 1, max: 10 },
+    displayFormat: 'flat',
     valid: ['brazalete'],
   },
   {
@@ -301,6 +322,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'VIT',
     effects: { type: 'attribute_modifier', operation: 'flat', target: 'atribute.VIT.bonusPoints' },
     values: { min: 1, max: 10 },
+    displayFormat: 'flat',
     valid: ['brazalete'],
   },
   {
@@ -309,6 +331,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'robo_vida',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.robo_vida'] },
     values: { min: 1, max: 5 },
+    displayFormat: 'porcentage',
     valid: ['botas'],
   },
   {
@@ -317,6 +340,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'bloquear_ataques',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['bonus.defensa.bloquear_ataques'] },
     values: { min: 1, max: 10 },
+    displayFormat: 'porcentage',
     valid: ['escudo'],
   },
   {
@@ -325,6 +349,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'vm',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.vm'] },
     values: { min: 1, max: 20 },
+    displayFormat: 'flat',
     valid: ['escudo'],
   },
   {
@@ -333,6 +358,7 @@ export const bonus6_7BonusList: BonusType[] = [
     bonus_ref_name: 'regen_hp',
     effects: { type: 'stat_modifiers', operation: 'flat', target: ['general.regen_hp'] },
     values: { min: 1, max: 35 },
+    displayFormat: 'flat',
     valid: ['pendiente'],
   },
 ];

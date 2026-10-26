@@ -10,18 +10,58 @@ export const CHEST_LIST: ChestType[] = [
         img: '/itemsUtility/hab/Caja_Guerrero.png',
         maxCantidad: 20,
         price: 1000,
-        rewardConfig: 'random',
-        rewards: [],
+        rewardConfig: 'pick',
+        pickCount: 3,
+        rewards: [
+            {
+                type_reward: 'item',
+                idItem: IdItem.ESPADA,
+                rewardOptions: {
+                    upgradeChances: { min: 3, max: 3 }
+                },
+                weight: 1
+            },
+            {
+                type_reward: 'item',
+                idItem: IdItem.ESCUDO_DE_BATALLA,
+                weight: 1
+            },
+            {
+                type_reward: 'item',
+                idItem: IdItem.CASCO_TRADICIONAL,
+                weight: 1
+            },
+            {
+                type_reward: 'item',
+                idItem: IdItem.LIBRO_DE_GIRO_DE_ESPADA,
+                weight: 1,
+            },
+            {
+                type_reward: 'item',
+                idItem: IdItem.LIBRO_DE_BERSEK,
+                weight: 1,
+                rewardOptions: { cantidadChances: { min: 20, max: 20 } }
+            }
+        ],
     }),
     createChestItem({
         idItem: IdItem.CAJA_DE_HABILIDADES_DE_SURA,
         name: 'Caja de Habilidades de Sura',
         description: 'Una caja que en su interior puede tener las lecturas para el aprendizaje de una habilidad.',
-        img: '/itemsUtility/hab/Caja_Sura.png',
+        img: '/items/Caja_Sura.png',
         maxCantidad: 20,
         price: 1000,
-        rewardConfig: 'random',
-        rewards: [],
+        rewardConfig: 'all',
+        rewards: [{
+            type_reward: 'item',
+            idItem: IdItem.ESPADA,
+            weight: 1
+        },
+        {
+            type_reward: 'item',
+            idItem: IdItem.ESCUDO_DE_BATALLA,
+            weight: 1
+        },],
     }),
     createChestItem({
         idItem: IdItem.CAJA_DE_HABILIDADES_DE_NINJA,
@@ -31,6 +71,7 @@ export const CHEST_LIST: ChestType[] = [
         maxCantidad: 20,
         price: 1000,
         rewardConfig: 'random',
+        allowBulkOpen: false,
         rewards: [],
     }),
     createChestItem({
@@ -41,6 +82,7 @@ export const CHEST_LIST: ChestType[] = [
         maxCantidad: 20,
         price: 1000,
         rewardConfig: 'random',
+        allowBulkOpen: false,
         rewards: [],
     }),
     createChestItem({
@@ -51,6 +93,7 @@ export const CHEST_LIST: ChestType[] = [
         maxCantidad: 20,
         price: 500,
         rewardConfig: 'random',
+        allowBulkOpen: false,
         rewards: [],
     }),
     createChestItem({
@@ -61,6 +104,7 @@ export const CHEST_LIST: ChestType[] = [
         maxCantidad: 20,
         price: 500,
         rewardConfig: 'random',
+        allowBulkOpen: false,
         rewards: [],
     }),
     createChestItem({
@@ -71,6 +115,7 @@ export const CHEST_LIST: ChestType[] = [
         maxCantidad: 20,
         price: 500,
         rewardConfig: 'random',
+        allowBulkOpen: false,
         rewards: [],
     }),
     createChestItem({
@@ -81,6 +126,7 @@ export const CHEST_LIST: ChestType[] = [
         maxCantidad: 20,
         price: 500,
         rewardConfig: 'random',
+        allowBulkOpen: false,
         rewards: [],
     }),
     createChestItem({
@@ -91,6 +137,7 @@ export const CHEST_LIST: ChestType[] = [
         maxCantidad: 20,
         price: 500,
         rewardConfig: 'random',
+        allowBulkOpen: false,
         rewards: [],
     }),
     createChestItem({
@@ -101,6 +148,7 @@ export const CHEST_LIST: ChestType[] = [
         maxCantidad: 20,
         price: 500,
         rewardConfig: 'random',
+        allowBulkOpen: false,
         rewards: [],
     }),
 ]
