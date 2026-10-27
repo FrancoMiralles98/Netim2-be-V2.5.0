@@ -141,9 +141,9 @@ export class CharacterService {
             });
 
             const espada = ITEM_LIST.find(i => i.idItem === IdItem.ESPADA) as EquipType
-            const daga = ITEM_LIST.find(i => i.idItem === IdItem.DAGA)
-            const armor = ITEM_LIST.find(i => i.idItem === IdItem.CANA_DE_PESCAR)
-            const poscion = ITEM_LIST.find(i => i.idItem === IdItem.GUSANO)
+            const daga = ITEM_LIST.find(i => i.idItem === IdItem.DAGA) as EquipType
+            const armor = ITEM_LIST.find(i => i.idItem === IdItem.ARMADURA_DE_MONJE) as EquipType
+            const poscion = ITEM_LIST.find(i => i.idItem === IdItem.GLAIVE) as EquipType
             const peil = ITEM_LIST.find(i => i.idItem === IdItem.PIEDRA_DE_INTELIGENCIA)
             const poM = ITEM_LIST.find(i => i.idItem === IdItem.CAJA_DE_HABILIDADES_DE_GUERRERO)
 
@@ -168,6 +168,7 @@ export class CharacterService {
             this.InicializateBaseValues(newCharacter)
             newCharacter.yang += 600000
             newCharacter.stats.general.hp.actual = 300
+            newCharacter.puntos_atributos += 100
 
             const characterCreated = await this.characterRepository.createCharacter(
                 newCharacter,

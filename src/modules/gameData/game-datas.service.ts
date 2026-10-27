@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { RACE_INFO } from './const/race-info.const';
 import { GENERAL_ATTRIBUTE_CAP } from '../character/const/statsProgress/general-attribute-cap.const';
 import { CharacterService } from '../character/character.service';
 import { CharacterMapper } from '../character/mapper/character-mapper';
-import { CharacterSelectionDataType, GameConfigResponse } from 'netim2-shared';
+import { CharacterRace, CharacterSelectionDataType, CharacterSpeciality, GameConfigResponse } from 'netim2-shared';
 import { ReinosBuff } from './reinos/reinos-buff.config';
 import { MAX_CHARACTERS } from './const/max-characters.const';
 import { ATTRIBUTE_EFFECTS_CONFIG } from './const/attributes-config';
@@ -11,6 +11,8 @@ import { CAST_SPEED_COOLDOWN_SCALING_CONFIG, DODGE_CHANCE_PER_MOVEMENT_SPEED, SP
 import { BONUS_EFFECTS_CONFIG } from '../fight/config/bonus-effects.config';
 import { EQUIPMENT_SLOTS_CONFIG } from '../character/config/equip-slot.config';
 import { MAX_ACTIVE_BUFF } from '../character/config/buffs.config';
+import { ATTRIBUTE_RACE_CAPS } from '../character/const/statsProgress/attribute-race-caps.const';
+import { ATTRIBUTE_SPECIALITY_CAPS } from '../character/const/statsProgress/attribute-speciality-caps.const';
 
 @Injectable()
 export class GameDatasService {
@@ -19,8 +21,21 @@ export class GameDatasService {
         private characterMapper: CharacterMapper
     ) { }
 
-    getGameConfig(): GameConfigResponse {
+    getGameConfig(race: CharacterRace, speciality?: CharacterSpeciality): GameConfigResponse {
+        const raceInfo = RACE_INFO.find(info => info.raza === race);
+        if (!raceInfo) throw new BadRequestException('La raza no es válida');
+        const specialityCaps = speciality !== undefined ? ATTRIBUTE_SPECIALITY_CAPS[speciality] : undefined;
+        if (speciality !== undefined && (!Object.hasOwn(raceInfo.especialidades, speciality) ||
+            !Object.hasOwn(ATTRIBUTE_SPECIALITY_CAPS, speciality) || !specialityCaps)) {
+            throw new BadRequestException('La especialidad no corresponde a la raza indicada');
+        }
         return structuredClone({
+            character: {
+                attributeCaps: {
+                    race: ATTRIBUTE_RACE_CAPS[race],
+                    ...(specialityCaps ? { speciality: specialityCaps } : {}),
+                },
+            },
             attributes: {
                 effects: ATTRIBUTE_EFFECTS_CONFIG,
             },
