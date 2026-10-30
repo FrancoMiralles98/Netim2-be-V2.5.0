@@ -4,6 +4,7 @@ import { FighterCombatFactory } from "../factories/fighter-combat-entity.factory
 import { BASE_FIGHT_CONFIG } from "src/modules/character/const/characterProps/base-fight-config.const";
 import { GENERAL_CHARACTER_STATS, GENERAL_MOB_STATS } from "src/modules/character/const/characterProps/base-character-stats.const";
 import { FightResponse, UNIQUE_ID_SKILLS } from "netim2-shared";
+import { SURA_SKILLS_SCALING } from '../../skill/config/skillScaling/sura-skills-scaling.const';
 
 @Injectable()
 export class LabFightService {
@@ -26,6 +27,8 @@ export class LabFightService {
 
 
     getFighter() {
+        const auraScaling = SURA_SKILLS_SCALING.Espejo?.[UNIQUE_ID_SKILLS.HOJA_ENCANTADA]
+        if (auraScaling?.type !== 'aura') throw new Error('No se encuentra el escalado de Hoja Encantada')
         const fighterA = this.fighterCombatFactory.createFighter({
             fightConfig: BASE_FIGHT_CONFIG,
             id: 'gueerero-id',
@@ -33,6 +36,7 @@ export class LabFightService {
             skills: [
                 {
                     type: 'aura',
+                    escalado: structuredClone(auraScaling),
                     cd: { onDeactivate: 10 },
                     description: 'Aumenta el Daño de Media y Robo de Vida',
                     id: UNIQUE_ID_SKILLS.HOJA_ENCANTADA,

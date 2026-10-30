@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { RACE_INFO } from './const/race-info.const';
 import { GENERAL_ATTRIBUTE_CAP } from '../character/const/statsProgress/general-attribute-cap.const';
 import { CharacterService } from '../character/character.service';
@@ -13,6 +13,9 @@ import { EQUIPMENT_SLOTS_CONFIG } from '../character/config/equip-slot.config';
 import { MAX_ACTIVE_BUFF } from '../character/config/buffs.config';
 import { ATTRIBUTE_RACE_CAPS } from '../character/const/statsProgress/attribute-race-caps.const';
 import { ATTRIBUTE_SPECIALITY_CAPS } from '../character/const/statsProgress/attribute-speciality-caps.const';
+import { CHARACTER_SPECIALITYS } from '../character/const/character-specialitys.const';
+import { ALL_SKILLS } from '../skill/const/skills';
+import { STATUS_EFFECTS_CONFIG } from '../fight/config/status-effects.config';
 
 @Injectable()
 export class GameDatasService {
@@ -22,19 +25,24 @@ export class GameDatasService {
     ) { }
 
     getGameConfig(race: CharacterRace, speciality?: CharacterSpeciality): GameConfigResponse {
-        const raceInfo = RACE_INFO.find(info => info.raza === race);
-        if (!raceInfo) throw new BadRequestException('La raza no es válida');
-        const specialityCaps = speciality !== undefined ? ATTRIBUTE_SPECIALITY_CAPS[speciality] : undefined;
-        if (speciality !== undefined && (!Object.hasOwn(raceInfo.especialidades, speciality) ||
-            !Object.hasOwn(ATTRIBUTE_SPECIALITY_CAPS, speciality) || !specialityCaps)) {
+        if (!Object.hasOwn(CHARACTER_SPECIALITYS, race)) throw new BadRequestException('La raza no es válida');
+        const specialities = CHARACTER_SPECIALITYS[race];
+        if (speciality !== undefined && !specialities.includes(speciality)) {
             throw new BadRequestException('La especialidad no corresponde a la raza indicada');
         }
+        const specialityCaps = specialities.map(specialidad => {
+            const caps = ATTRIBUTE_SPECIALITY_CAPS[specialidad];
+            if (!caps) throw new InternalServerErrorException(`No hay caps configurados para ${specialidad}`);
+            return { specialidad, caps };
+        });
         return structuredClone({
             character: {
-                attributeCaps: {
-                    race: ATTRIBUTE_RACE_CAPS[race],
-                    ...(specialityCaps ? { speciality: specialityCaps } : {}),
-                },
+                race: ATTRIBUTE_RACE_CAPS[race],
+                speciality: specialityCaps,
+                idSkillsSpeciality: specialities.map(specialidad => ({
+                    specialidad,
+                    idSkills: [...new Set(ALL_SKILLS[specialidad].map(skill => skill.id))],
+                })),
             },
             attributes: {
                 effects: ATTRIBUTE_EFFECTS_CONFIG,
@@ -44,6 +52,7 @@ export class GameDatasService {
                 spellDodgePerMovementSpeed: SPELL_DODGE_CHANCE_PER_MOVEMENT_SPEED,
                 cooldownScaling: CAST_SPEED_COOLDOWN_SCALING_CONFIG,
                 bonusEffects: BONUS_EFFECTS_CONFIG,
+                statusEffect: structuredClone(STATUS_EFFECTS_CONFIG)
             },
             equipment: {
                 slots: [...EQUIPMENT_SLOTS_CONFIG.slots],

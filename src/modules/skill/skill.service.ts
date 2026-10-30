@@ -6,6 +6,8 @@ import { ALL_SKILLS } from './const/skills';
 import { Atributos, CharacterRace, CharacterSpeciality, SkillType, Stats } from 'netim2-shared';
 import { BuffSkillService } from './services/buffo/buff-skill.service';
 import { SkillMapper } from './mapper/skill-mapper';
+import { HealSkillService } from './services/heal/heal-skill.service';
+import { SKILL_SCALING_BY_RACE_CONFIG } from './config/skillScaling/skill-scaling-by-race.const';
 
 @Injectable()
 export class SkillService {
@@ -14,6 +16,7 @@ export class SkillService {
         private damageSkillService: DamageSkillService,
         private auraSkillService: AuraSkillService,
         private buffSkillService: BuffSkillService,
+        private healSkillService: HealSkillService,
     ) { }
 
     /**
@@ -27,8 +30,11 @@ export class SkillService {
     */
     getSpecialitySkillPool(speciality: CharacterSpeciality): SkillType[] {
         const summarySkills = ALL_SKILLS[speciality]
+        const scalingConfig = Object.values(SKILL_SCALING_BY_RACE_CONFIG).find(config => config[speciality])?.[speciality]
         const skills = summarySkills.map(summary => {
-            const skillEntity = SkillFactory.create(SkillMapper.summaryToSkill(summary))
+            const scaling = scalingConfig?.[summary.id]
+            if (!scaling) throw new Error(`No se encuentra el escalado de la skill ${summary.id} de ${speciality}`)
+            const skillEntity = SkillFactory.create(SkillMapper.summaryToSkill(summary, scaling))
             return skillEntity.toPrimitives()
         })
         return skills
@@ -94,6 +100,8 @@ export class SkillService {
         atributos:Atributos
     ): SkillType {
         switch (skill.type) {
+            case 'heal':
+                return this.healSkillService.getUpdatedSkill(skill, race, speciality, atributos)
             case 'damage':
                 return this.damageSkillService.getUpdatedSkill(skill, stats, race, speciality,atributos)
             case 'aura':

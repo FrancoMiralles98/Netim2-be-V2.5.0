@@ -35,6 +35,7 @@ export class DamageSkillService {
         const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
         return {
             ...skill,
+            escalado: structuredClone(scaling),
             cd: scaling.cd,
             components: this.damageCalculatorService.getDamage(skill, scaling, stats,atributos),
             mana: this.sharedSkillService.getManaCost(skill.mana, scaling, skill.lv),

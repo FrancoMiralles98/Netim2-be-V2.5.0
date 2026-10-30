@@ -1,3 +1,4 @@
+import { SkillHealEntity } from "src/modules/skill/entities/skill-heal.entity";
 import { CharacterDomain } from "../types/character-domain.type";
 import { ATTRIBUTE_SPECIALITY_CAPS } from "../const/statsProgress/attribute-speciality-caps.const";
 import { ATTRIBUTE_RACE_CAPS } from "../const/statsProgress/attribute-race-caps.const";
@@ -277,7 +278,7 @@ export class CharacterEntity {
         this.props.puntos_atributos -= 1
     }
 
-    increaseSkillLv(idSkill: number): SkillAuraEntity | SkillDamageEntity | SkillBuffEntity {
+    increaseSkillLv(idSkill: number): SkillAuraEntity | SkillDamageEntity | SkillBuffEntity | SkillHealEntity {
         const skill = this.findSkillById(idSkill)
         if (!this.canUpgradeSkill(skill.lv)) {
             throw new Error(`No se puede subir de nivel la skill idSkill: ${idSkill} `)
@@ -331,7 +332,7 @@ export class CharacterEntity {
         return attributesCaps[attribute]
     }
 
-    private findSkillById(idSkill: number): SkillAuraEntity | SkillDamageEntity | SkillBuffEntity {
+    private findSkillById(idSkill: number): SkillAuraEntity | SkillDamageEntity | SkillBuffEntity | SkillHealEntity {
         const skill = this.props.hab.find(h => h.idSkill === idSkill)
         if (!skill) {
             throw new Error(`No se encuentra la skill idSkill: ${idSkill}`)

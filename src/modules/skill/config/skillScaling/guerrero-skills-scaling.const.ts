@@ -22,6 +22,9 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
                 base: 1,
                 perLv: 1
             },
+            statusEffectScaling: {
+                sangrado: { base: 15, perLv: 1 }
+            },
             hitModifiersScaling: {
                 type: 'chance_multi_hit',
                 chancesConfig: {
@@ -72,7 +75,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
             components: [{
                 damageType: 'ad',
                 escaladoLv: ESCALADO_LV_DEFAULT,
-                escaladoMain: { min: 1, max: 1 },
+                escaladoMain: { min: 2, max: 2.5 },
 
                 tags: ['ad', 'melee', 'skill'],
                 escaladoAtributos: {

@@ -11,7 +11,7 @@ export class SkillAuraEntity extends BaseSkillEntity<SkillAura> {
         return structuredClone(this.props)
     }
 
-    static summaryToSkillType (summary:SkillAuraSummary): SkillAura {
+    static summaryToSkillType(summary: SkillAuraSummary, scaling: SkillAura['escalado']): SkillAura {
         return {
             ...summary,
             lv: 1,
@@ -19,6 +19,7 @@ export class SkillAuraEntity extends BaseSkillEntity<SkillAura> {
             statsModifiers: [],
             cd: {},
             nombre: '',
+            escalado: structuredClone(scaling),
         }
     }
 }

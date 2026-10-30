@@ -6,6 +6,7 @@ import { SkillScalingLv } from "../types/scaling/escalado-lv.types";
 import { SkillAuraScaling } from "../types/scaling/aura/skill-aura-scaling.type";
 import { SkillDamageScaling } from "../types/scaling/damage/skill-damage-scaling.type";
 import { SkillBuffScaling } from "../types/scaling/buff/skill-buff-scaling.type";
+import { SkillHealScaling } from "../types/scaling/heal/skill-heal-scaling.types";
 
 @Injectable()
 export class SharedSkillService {
@@ -126,7 +127,7 @@ export class SharedSkillService {
 
     getManaCost(
         mana: SkillManaCost,
-        scaling: SkillAuraScaling | SkillDamageScaling | SkillBuffScaling,
+        scaling: SkillAuraScaling | SkillDamageScaling | SkillBuffScaling | SkillHealScaling,
         skillLv: number | MasteryLvRank
     ): SkillManaCost {
         const totalLvPoints = this.getPointsLvBonification(skillLv)

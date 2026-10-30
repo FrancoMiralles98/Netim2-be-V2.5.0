@@ -11,7 +11,7 @@ export class SkillHealEntity extends BaseSkillEntity<SkillHeal> {
         return structuredClone(this.props)
     }
 
-    static summaryToSkillType(summary: SkillHealSummary): SkillHeal {
+    static summaryToSkillType(summary: SkillHealSummary, scaling: SkillHeal['escalado']): SkillHeal {
         return {
             components: [],
             ...summary,
@@ -19,6 +19,7 @@ export class SkillHealEntity extends BaseSkillEntity<SkillHeal> {
             mastery: 'N',
             cd: {},
             nombre: '',
+            escalado: structuredClone(scaling),
         }
     }
 }

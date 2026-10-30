@@ -8,6 +8,7 @@ import { DamageCalculatorService } from './services/damage/damage-calculator.ser
 import { ModifiersCalculatorService } from './services/damage/modifiers-calculator.service';
 import { EffectsCalculatorService } from './services/damage/effects-calculator.service';
 import { BuffSkillService } from './services/buffo/buff-skill.service';
+import { HealSkillService } from './services/heal/heal-skill.service';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { BuffSkillService } from './services/buffo/buff-skill.service';
   controllers: [],
   providers: [
     SkillService,
+    HealSkillService,
     AuraSkillService,
     SharedSkillService,
     DamageCalculatorService,

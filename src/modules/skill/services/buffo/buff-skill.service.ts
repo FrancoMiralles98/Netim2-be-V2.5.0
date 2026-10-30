@@ -25,6 +25,7 @@ export class BuffSkillService {
     buildUpdatedSkill(skill: SkillBuff, scaling: SkillBuffScaling): SkillBuff {
         return {
             ...skill,
+            escalado: structuredClone(scaling),
             cd: scaling.cd,
             mana: this.sharedSkillService.getManaCost(skill.mana, scaling, skill.lv),
             effects: this.calculateBuffEffect(skill, scaling)

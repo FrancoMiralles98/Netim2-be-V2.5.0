@@ -38,12 +38,12 @@ export const NINJA_SKILLS_SCALING: StructureSkillScaling = {
                 optionsScaling: [{
                     hitsConfig: { base: 2, perLv: 0 },
                     chancesConfig: { base: 70, per_lv: -1 },
-                    damageMultiplierPerHitConfig: { base: 1, perLv: 1 }
+                    damageMultiplierPerHitConfig: { base: 1, perLv: 0 }
                 },
                 {
                     hitsConfig: { base: 3, perLv: 0 },
                     chancesConfig: { base: 10, per_lv: 1 },
-                    damageMultiplierPerHitConfig: { base: 1, perLv: 1 }
+                    damageMultiplierPerHitConfig: { base: 1, perLv: 0 }
                 },]
             },
             statusEffectScaling: {
@@ -172,12 +172,12 @@ export const NINJA_SKILLS_SCALING: StructureSkillScaling = {
             damageModifiersScaling: {
                 type: 'weighted_multiplier',
                 options: [{
-                    chanceConfig: { baseChance: 0, perLv: 0 },
+                    chanceConfig: { baseChance: 1, perLv: 0 },
                     multiplier: { baseMultiplier: 2, perLv: 0 },
 
                 },
                 {
-                    chanceConfig: { baseChance: 0, perLv: 0 },
+                    chanceConfig: { baseChance: 1, perLv: 0 },
                     multiplier: { baseMultiplier: 3, perLv: 0 }
                 },
                 {

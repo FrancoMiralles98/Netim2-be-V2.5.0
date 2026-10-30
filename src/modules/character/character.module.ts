@@ -29,6 +29,10 @@ import { CharacterChestService } from './services/item-use/character-chest.servi
 import { CharacterAttributeController } from './controller/character-attribute.controller';
 import { CharacterAttributeService } from './services/atributos/character-attribute.service';
 import { CharacterAttributeOrchestratorService } from './services/atributos/character-attribute-orchestrator.service';
+import { SkillModule } from '../skill/skill.module';
+import { CharacterSkillService } from './services/skill/character-skill.service';
+import { CharacterSkillOrchestratorService } from './services/skill/character-skill-orchestrator.service';
+import { CharacterSkillController } from './controller/character-skill.controller';
 
 @Module({
   imports: [
@@ -37,12 +41,13 @@ import { CharacterAttributeOrchestratorService } from './services/atributos/char
     AuthModule,
     UserModule,
     ItemModule,
+    SkillModule,
     MongooseModule.forFeature([
       { name: CharacterModel.name, schema: characterSchema }
     ])
   ],
-  controllers: [CharacterController, CharacterEquipmentController, CharacterInventoryController, CharacterItemUseController, CharacterAttributeController],
-  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService, CharacterPotionService, CharacterItemUseOrchestratorService, CharacterChestService, CharacterAttributeService, CharacterAttributeOrchestratorService],
+  controllers: [CharacterController, CharacterEquipmentController, CharacterInventoryController, CharacterItemUseController, CharacterAttributeController, CharacterSkillController],
+  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService, CharacterPotionService, CharacterItemUseOrchestratorService, CharacterChestService, CharacterAttributeService, CharacterAttributeOrchestratorService, CharacterSkillService, CharacterSkillOrchestratorService],
   exports: [
     CharacterService,
     CharacterMapper,
@@ -59,7 +64,9 @@ import { CharacterAttributeOrchestratorService } from './services/atributos/char
     CharacterPotionService,
     CharacterItemUseOrchestratorService,
     CharacterAttributeService,
-    CharacterAttributeOrchestratorService
+    CharacterAttributeOrchestratorService,
+    CharacterSkillService,
+    CharacterSkillOrchestratorService
   ]
 })
 export class CharacterModule { }

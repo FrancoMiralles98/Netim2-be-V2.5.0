@@ -30,10 +30,14 @@ export class AuraSkillService {
         const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
         return {
             ...skill,
+            escalado: structuredClone(scaling),
             cd: scaling.cd,
             duration: this.calculateDurationSkill(skill, scaling, lvPoints),
             mana: this.sharedSkillService.getManaCost(skill.mana, scaling, skill.lv),
-            statsModifiers: []
+            statsModifiers: scaling.escaladoStatsModifiers.map(({ escalado, ...modifier }) => ({
+                ...modifier,
+                value: Math.floor(this.calculateBuff(escalado, lvPoints, skill.lv, atributo, scaling)),
+            }))
         }
     }
 

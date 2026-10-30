@@ -83,7 +83,7 @@ export const SURA_SKILLS_SCALING: StructureSkillScaling = {
             cd: { onDeactivate: 5 },
             mana: { base: 1, perLv: 1 },
             duration: { base: 1, perLv: 1 },
-            escaladoStatsModifiers:[]
+            escaladoStatsModifiers: []
         },
     },
     Espejo: {
@@ -138,7 +138,40 @@ export const SURA_SKILLS_SCALING: StructureSkillScaling = {
             mana: { base: 1, perLv: 1 },
             duration: { base: 1, perLv: 1 },
             escaladoAtributos: { INT: 1.5, VIT: 0.5 },
-            escaladoStatsModifiers: []
+            escaladoStatsModifiers: [
+                {
+                    bonusRefKey: 'media',
+                    escalado: {
+                        scaleWithAttribute: true,
+                        base: 5,
+                        escaladoLv: {
+                            basicMulti: 1,
+                            granMasterMulti: 1.2,
+                            masterMulti: 1.3,
+                            perfectMulti: 1.4,
+                            perLv: 1
+                        }
+                    },
+                    operation: 'flat',
+                    target: 'bonus.daño.media'
+                },
+                {
+                    bonusRefKey: 'robo_vida',
+                    escalado: {
+                        scaleWithAttribute: false,
+                        base: 1,
+                        escaladoLv: {
+                            basicMulti: 1,
+                            granMasterMulti: 1.2,
+                            masterMulti: 1.3,
+                            perfectMulti: 1.4,
+                            perLv: 1
+                        }
+                    },
+                    operation: 'flat',
+                    target: 'general.ad'
+                }
+            ]
         },
         [UNIQUE_ID_SKILLS.ARMADURA_ENCANTADA]: {
             type: "aura",
