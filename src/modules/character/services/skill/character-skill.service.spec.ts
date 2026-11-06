@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { validateSync } from 'class-validator';
 import { CharacterRace } from 'netim2-shared';
+import { Connection } from 'mongoose';
 import { SkillModule } from '../../../skill/skill.module';
 import { ALL_SKILLS } from '../../../skill/const/skills';
 import { GENERAL_CHARACTER } from '../../const/general-character.const';
-import { CHARACTER_SPECIALITYS } from '../../const/character-specialitys.const';
+import { CHARACTER_SPECIALITYS, MIN_LV_TO_SELECT_SPECIALITY } from '../../const/character-specialitys.const';
 import { CharacterMapper } from '../../mapper/character-mapper';
 import { CharacterRepository } from '../../repository/character-repository';
 import { GetCharacterSpecialitySkillsDto } from '../../dto/get-character-speciality-skills.dto';
@@ -19,6 +20,8 @@ import { BuffStatsCalculatorService } from '../stats/calculator/buff-stats-calcu
 import { LimitBonusService } from '../../../bonus/services/limit-bonus.service';
 import { SkillService } from '../../../skill/skill.service';
 import { SKILL_SCALING_BY_RACE_CONFIG } from '../../../skill/config/skillScaling/skill-scaling-by-race.const';
+import { SharedFightService } from '../../../fight/services/shared-fight.service';
+import { FighterCombatEntity } from '../../../fight/entities/fighter-combat.entity';
 
 describe('Character speciality skills preview', () => {
     let module: TestingModule;
@@ -54,11 +57,8 @@ describe('Character speciality skills preview', () => {
                     expect(skill.escalado).toEqual(scaling);
                     expect(skill.escalado).not.toBe(scaling);
                     if (skill.type === 'damage' || skill.type === 'heal') {
-                        expect(skill.components.length).toBeGreaterThan(0);
-                        for (const component of skill.components) {
-                            expect(Number.isFinite(component.range.min)).toBe(true);
-                            expect(component.range.max).toBeGreaterThanOrEqual(component.range.min);
-                        }
+                        expect(Number.isFinite(skill.components.range.min)).toBe(true);
+                        expect(skill.components.range.max).toBeGreaterThanOrEqual(skill.components.range.min);
                     }
                 }
                 expect(character).toEqual(before);
@@ -76,11 +76,12 @@ describe('Character speciality skills preview', () => {
         const scaling = SKILL_SCALING_BY_RACE_CONFIG.guerrero.Corporal?.[base.id];
         expect(base.escalado).toEqual(scaling);
         expect(base.escalado).not.toBe(scaling);
-        base.escalado.mana.base = -999;
+        const before = structuredClone(scaling);
+        base.escalado.cd.onActivate = { progression: { type: 'constant', value: -999 } };
         const updated = skillService.getUpdatedSkill(base, character.raza, 'Corporal', character.stats, character.atributos);
         expect(updated.escalado).toEqual(scaling);
         expect(updated.escalado).not.toBe(scaling);
-        expect(scaling?.mana.base).not.toBe(-999);
+        expect(scaling).toEqual(before);
     });
 
     it('uses the active equipment and character context to recalculate before calculating skills', () => {
@@ -130,7 +131,7 @@ describe('Character speciality skills preview', () => {
         const response = { skills: [], stats: GENERAL_CHARACTER.stats, attributes: GENERAL_CHARACTER.atributos };
         const actions = { getSpecialitySkills: jest.fn().mockReturnValue(response) };
         const orchestrator = new CharacterSkillOrchestratorService(repository as unknown as CharacterRepository,
-            mapper as unknown as CharacterMapper, actions as unknown as CharacterSkillService);
+            mapper as unknown as CharacterMapper, actions as unknown as CharacterSkillService, {} as Connection);
         const request = { speciality: 'Corporal' as const };
         await expect(orchestrator.getSpecialitySkills('character', 'owner', request)).resolves.toEqual(response);
         expect(repository.getCharacterById).toHaveBeenCalledTimes(1);
@@ -138,5 +139,86 @@ describe('Character speciality skills preview', () => {
         actions.getSpecialitySkills.mockClear();
         await expect(orchestrator.getSpecialitySkills('character', 'other', request)).rejects.toThrow(ForbiddenException);
         expect(actions.getSpecialitySkills).not.toHaveBeenCalled();
+    });
+
+    it('selects all enabled specialities at the minimum level with unlearned skills, without mutating inputs', () => {
+        const catalogBefore = structuredClone(ALL_SKILLS);
+        const scalingBefore = structuredClone(SKILL_SCALING_BY_RACE_CONFIG);
+        for (const [race, specialities] of Object.entries(CHARACTER_SPECIALITYS)) {
+            for (const speciality of specialities) {
+                const character = structuredClone(GENERAL_CHARACTER);
+                character.raza = race as CharacterRace;
+                character.especialidad = undefined;
+                character.lv = MIN_LV_TO_SELECT_SPECIALITY;
+                character.hab = [];
+                character.puntos_habilidad = 3;
+                const before = structuredClone(character);
+                const calculateSkill = jest.spyOn(module.get(SkillService), 'getUpdatedSkill');
+                try {
+                    const result = service.selectSpeciality(character, { speciality });
+                    expect(result.character.especialidad).toBe(speciality);
+                    expect(result.response.speciality).toBe(speciality);
+                    expect(result.response.skills.map(skill => skill.id)).toEqual(ALL_SKILLS[speciality].map(skill => skill.id));
+                    expect(result.character.hab).toEqual(result.response.skills);
+                    expect(result.character.stats).toEqual(result.response.stats);
+                    expect(result.character.atributos).toEqual(result.response.attributes);
+                    expect(result.character.puntos_habilidad).toBe(3);
+                    for (const skill of result.response.skills) {
+                        expect(skill.lv).toBe(0);
+                        expect(skill.mastery).toBe('N');
+                        expect(skill.nombre.length).toBeGreaterThan(0);
+                        expect(skill.escalado.type).toBe(skill.type);
+                        const actor = { isSkillOnCooldown: jest.fn(), hasEnoughMana: jest.fn() };
+                        expect(new SharedFightService().canUseSkill(actor as unknown as FighterCombatEntity, skill)).toBe(false);
+                        expect(actor.isSkillOnCooldown).not.toHaveBeenCalled();
+                    }
+                    expect(calculateSkill).not.toHaveBeenCalled();
+                    expect(() => service.selectSpeciality(result.character, { speciality })).toThrow('ya tiene una especialidad');
+                    expect(character).toEqual(before);
+                } finally { calculateSkill.mockRestore(); }
+            }
+        }
+        expect(ALL_SKILLS).toEqual(catalogBefore);
+        expect(SKILL_SCALING_BY_RACE_CONFIG).toEqual(scalingBefore);
+    });
+
+    it('recalculates stats with the selected speciality and the active equipment', () => {
+        const character = structuredClone(GENERAL_CHARACTER);
+        character.raza = 'guerrero';
+        character.especialidad = undefined;
+        character.lv = MIN_LV_TO_SELECT_SPECIALITY;
+        character.equipo_selected = 2;
+        const update = jest.spyOn(module.get(UpdateStatsService), 'updateStats');
+        try {
+            service.selectSpeciality(character, { speciality: 'Corporal' });
+            expect(update).toHaveBeenCalledWith(character.stats, 'guerrero', character.equipo_2,
+                character.atributos, character.buffos, character.lv, 'Corporal', character.reino);
+        } finally { update.mockRestore(); }
+    });
+
+    it.each([MIN_LV_TO_SELECT_SPECIALITY - 1, 0, 1.5, NaN, Infinity])('rejects an invalid selection level %s', lv => {
+        const character = structuredClone(GENERAL_CHARACTER);
+        character.raza = 'guerrero';
+        character.especialidad = undefined;
+        character.lv = lv;
+        expect(() => service.selectSpeciality(character, { speciality: 'Corporal' })).toThrow(BadRequestException);
+    });
+
+    it('rejects incompatible, disabled or already assigned specialities and existing skill progress', () => {
+        const character = structuredClone(GENERAL_CHARACTER);
+        character.raza = 'guerrero';
+        character.lv = MIN_LV_TO_SELECT_SPECIALITY;
+        character.especialidad = undefined;
+        expect(() => service.selectSpeciality(character, { speciality: 'Luz' })).toThrow(BadRequestException);
+        const enabled = CHARACTER_SPECIALITYS.guerrero;
+        try {
+            CHARACTER_SPECIALITYS.guerrero = ['Mental'];
+            expect(() => service.selectSpeciality(character, { speciality: 'Corporal' })).toThrow(BadRequestException);
+        } finally { CHARACTER_SPECIALITYS.guerrero = enabled; }
+        character.especialidad = 'Mental';
+        expect(() => service.selectSpeciality(character, { speciality: 'Corporal' })).toThrow('ya tiene una especialidad');
+        character.especialidad = undefined;
+        character.hab = module.get(SkillService).getSpecialitySkillPool('Corporal');
+        expect(() => service.selectSpeciality(character, { speciality: 'Corporal' })).toThrow('habilidades asignadas');
     });
 });

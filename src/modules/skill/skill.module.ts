@@ -1,7 +1,8 @@
 import { Module } from '@nestjs/common';
 import { SkillService } from './skill.service';
 import { AuraSkillService } from './services/aura/aura-skill.service';
-import { SharedSkillService } from './services/shared-skill.service';
+import { SharedSkillScalingService } from './services/shared-skill-scaling.service';
+import { SkillScalingConfigService } from './services/skill-scaling-config.service';
 import { DamageSkillService } from './services/damage/damage-skill.service';
 import { SharedModule } from '../shared/shared.module';
 import { DamageCalculatorService } from './services/damage/damage-calculator.service';
@@ -19,7 +20,8 @@ import { HealSkillService } from './services/heal/heal-skill.service';
     SkillService,
     HealSkillService,
     AuraSkillService,
-    SharedSkillService,
+    SharedSkillScalingService,
+    SkillScalingConfigService,
     DamageCalculatorService,
     ModifiersCalculatorService,
     EffectsCalculatorService,
@@ -27,7 +29,8 @@ import { HealSkillService } from './services/heal/heal-skill.service';
     DamageSkillService
   ],
   exports: [
-    SkillService
+    SkillService,
+    SharedSkillScalingService
   ]
 })
 export class SkillModule { }

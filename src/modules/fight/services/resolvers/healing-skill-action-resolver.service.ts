@@ -94,10 +94,8 @@ export class HealingSkillActionResolverService {
         skill: SkillHeal,
         actor: FighterCombatEntity
     ): { heal: number, critical: boolean } {
-        let totalHealing = 0
-        skill.components.forEach(comp => {
-            totalHealing += this.rngService.randomNumberInRange(comp.range.min, comp.range.max)
-        })
+        const { min, max } = skill.components.range
+        let totalHealing = this.rngService.randomNumberInRange(min, max)
 
         const isCritic = this.rngService.rollChance(actor.effectiveStats.bonus.daño.critico)
 

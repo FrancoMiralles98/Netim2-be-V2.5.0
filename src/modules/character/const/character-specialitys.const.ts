@@ -6,3 +6,5 @@ export const CHARACTER_SPECIALITYS: Record<CharacterRace,CharacterSpeciality[]> 
     ninja: ['Daga','Flecha'],
     sura: ['MagiaNegra','Espejo']
 }
+
+export const MIN_LV_TO_SELECT_SPECIALITY = 3

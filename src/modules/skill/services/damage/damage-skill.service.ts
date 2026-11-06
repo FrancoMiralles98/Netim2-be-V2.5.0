@@ -1,48 +1,43 @@
-import { Injectable, InternalServerErrorException } from "@nestjs/common";
-import { SharedSkillService } from "../shared-skill.service";
-import { Atributos, CharacterRace, CharacterSpeciality, SkillDamage, Stats } from "netim2-shared";
-import { isSkillDamageScaling } from "../../types/skills.guards";
-import { DamageCalculatorService } from "./damage-calculator.service";
-import { EffectsCalculatorService } from "./effects-calculator.service";
-import { ModifiersCalculatorService } from "./modifiers-calculator.service";
-import { SkillDamageScaling } from "../../types/scaling/damage/skill-damage-scaling.type";
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import type { Atributos, CharacterRace, CharacterSpeciality, DamageSkillValueScaling, SkillDamage, Stats } from 'netim2-shared';
+import { SharedSkillScalingService } from '../shared-skill-scaling.service';
+import { SkillScalingConfigService } from '../skill-scaling-config.service';
+import { DamageCalculatorService } from './damage-calculator.service';
+import { EffectsCalculatorService } from './effects-calculator.service';
+import { ModifiersCalculatorService } from './modifiers-calculator.service';
 
+/** Coordina el cálculo del daño, costes, efectos y modificadores de una habilidad. */
 @Injectable()
 export class DamageSkillService {
-
     constructor(
-        private sharedSkillService: SharedSkillService,
-        private damageCalculatorService: DamageCalculatorService,
-        private effectsCalculatorService: EffectsCalculatorService,
-        private modifiersCalculatorService: ModifiersCalculatorService,
-    ) { }
+        private readonly scalingValues: SharedSkillScalingService,
+        private readonly configs: SkillScalingConfigService,
+        private readonly damageCalculatorService: DamageCalculatorService,
+        private readonly effectsCalculatorService: EffectsCalculatorService,
+        private readonly modifiersCalculatorService: ModifiersCalculatorService,
+    ) {}
 
-    getUpdatedSkill(
-        skill: SkillDamage,
-        stats: Stats,
-        race: CharacterRace,
-        speciality: CharacterSpeciality,
-        atributos: Atributos
-    ): SkillDamage {
-        const scalingSkillInfo = this.sharedSkillService.getSkillScalingInfo(skill.id, race, speciality)
-        if (!isSkillDamageScaling(scalingSkillInfo)) {
-            throw new InternalServerErrorException(`La skill ${skill.id} no posee una configuración de escalado de daño válida`)
-        }
-        return this.buildUpdatedSkill(skill, scalingSkillInfo, stats, atributos)
+    /** Valida el tipo de escalado y devuelve una copia calculada, sin ejecutar ataques ni RNG. */
+    getUpdatedSkill(skill: SkillDamage, stats: Stats, race: CharacterRace,
+        speciality: CharacterSpeciality, attributes: Atributos): SkillDamage {
+        const scaling = this.configs.getSkillScalingInfo(skill.id, race, speciality);
+        if (scaling.type !== 'damage') throw new InternalServerErrorException('Escalado de daño inválido');
+        return this.buildUpdatedSkill(skill, scaling, stats, attributes);
     }
 
-    private buildUpdatedSkill(skill: SkillDamage, scaling: SkillDamageScaling, stats: Stats, atributos: Atributos): SkillDamage {
-        const lvPoints = this.sharedSkillService.getPointsLvBonification(skill.lv)
+    /** Usa la misma progresión y fuentes del personaje para todos los valores de la skill. */
+    private buildUpdatedSkill(skill: SkillDamage, scaling: DamageSkillValueScaling, stats: Stats, attributes: Atributos): SkillDamage {
+        const context = this.scalingValues.createContext(skill, stats, attributes);
         return {
             ...skill,
             escalado: structuredClone(scaling),
-            cd: scaling.cd,
-            components: this.damageCalculatorService.getDamage(skill, scaling, stats,atributos),
-            mana: this.sharedSkillService.getManaCost(skill.mana, scaling, skill.lv),
-            mechanicsEffects: this.effectsCalculatorService.getMechanicsEffects(lvPoints, scaling),
-            statusEffects: this.effectsCalculatorService.getStatusEffects(lvPoints, scaling),
-            damageModifiers: this.modifiersCalculatorService.getDamageModifier(skill, lvPoints, scaling),
-            hitModifiers: this.modifiersCalculatorService.getHitModifier(skill, lvPoints, scaling),
-        }
+            cd: this.scalingValues.calculateCooldowns(scaling.cd, context),
+            mana: this.scalingValues.calculateManaCost(scaling.mana, context),
+            components: this.damageCalculatorService.getDamage(skill, scaling, stats, attributes),
+            mechanicsEffects: this.effectsCalculatorService.getMechanicsEffects(context, scaling),
+            statusEffects: this.effectsCalculatorService.getStatusEffects(context, scaling),
+            damageModifiers: this.modifiersCalculatorService.getDamageModifier(context, scaling),
+            hitModifiers: this.modifiersCalculatorService.getHitModifier(context, scaling),
+        };
     }
 }

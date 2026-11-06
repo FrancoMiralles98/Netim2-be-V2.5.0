@@ -11,12 +11,18 @@ export class SkillDamageEntity extends BaseSkillEntity<SkillDamage> {
         return structuredClone(this.props)
     }
 
+    /** Arma la skill base con un componente válido; el calculador completa el rango con las stats del personaje. */
     static summaryToSkillType(summary: SkillDamageSummary, scaling: SkillDamage['escalado']): SkillDamage {
         return {
             ...summary,
             lv: 1,
             mastery: 'N',
-            components: [],
+            components: {
+                range: { min: 0, max: 0 },
+                damageType: scaling.components.damageType,
+                tags: [...scaling.components.tags],
+                flags: scaling.components.flags ? { ...scaling.components.flags } : undefined,
+            },
             cd: {},
             nombre: '',
             escalado: structuredClone(scaling),

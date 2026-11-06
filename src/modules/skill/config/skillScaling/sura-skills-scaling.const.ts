@@ -1,193 +1,443 @@
 import { UNIQUE_ID_SKILLS } from "netim2-shared";
 import { StructureSkillScaling } from "../../types/structureSkillScaling.types";
-import { ESCALADO_LV_DEFAULT } from "../escaladoLvDefault";
+
 
 
 export const SURA_SKILLS_SCALING: StructureSkillScaling = {
     MagiaNegra: {
         [UNIQUE_ID_SKILLS.GOLPE_OSCURO]: {
             type: 'damage',
-            cd: { onActivate: 1 },
-            components: [{
+            components: {
+                damage: {
+                    type: 'damage',
+                    range: {
+                        min: {
+                            progression: {
+                                type: 'per_level', base: 10,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 1.5,
+                                source: { type: 'stat', path: 'general.ap.min' },
+                            }],
+                        },
+                        max: {
+                            progression: {
+                                type: 'per_level', base: 20,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 3,
+                                source: { type: 'stat', path: 'general.ap.max' },
+                            }],
+                        },
+                    },
+                },
                 damageType: 'ap',
-                escaladoLv: ESCALADO_LV_DEFAULT,
-                escaladoMain: { min: 1, max: 2 },
-                tags: ['ap', 'ranged', 'skill', 'weapon'],
-                escaladoAtributos: { VIT: 1, INT: 1 }
-            }],
-            mana: { base: 1, perLv: 1 },
+                tags: [],
+            },
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 80,
+                        perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
+                    },
+                },
+            },
         },
         [UNIQUE_ID_SKILLS.ESPIRITU_DE_LA_LLAMA]: {
-            type: "damage",
-            mana: {
-                base: 1,
-                perLv: 1
-            },
-            cd: { onDeactivate: 3 },
-            components: [{
+            type: 'damage',
+            components: {
+                damage: {
+                    type: 'damage',
+                    range: {
+                        min: {
+                            progression: {
+                                type: 'per_level', base: 10,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 1.5,
+                                source: { type: 'stat', path: 'general.ap.min' },
+                            }],
+                        },
+                        max: {
+                            progression: {
+                                type: 'per_level', base: 20,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 3,
+                                source: { type: 'stat', path: 'general.ap.max' },
+                            }],
+                        },
+                    },
+                },
                 damageType: 'ap',
-                escaladoLv: ESCALADO_LV_DEFAULT,
-                escaladoMain: { min: 1, max: 2 },
-                tags: ['ap', 'skill', 'ranged', 'incendio'],
-                escaladoAtributos: { VIT: 1, INT: 1 }
-            }],
-            statusEffectScaling: {
-                incendio: { base: 10, perLv: 0.4 }
+                tags: [],
+            },
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 80,
+                        perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
+                    },
+                },
             },
         },
         [UNIQUE_ID_SKILLS.GOLPE_ESPIRITUAL]: {
             type: 'damage',
-            cd: { onActivate: 1 },
-            components: [{
+            components: {
+                damage: {
+                    type: 'damage',
+                    range: {
+                        min: {
+                            progression: {
+                                type: 'per_level', base: 10,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 1.5,
+                                source: { type: 'stat', path: 'general.ap.min' },
+                            }],
+                        },
+                        max: {
+                            progression: {
+                                type: 'per_level', base: 20,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 3,
+                                source: { type: 'stat', path: 'general.ap.max' },
+                            }],
+                        },
+                    },
+                },
                 damageType: 'ap',
-                escaladoLv: ESCALADO_LV_DEFAULT,
-                escaladoMain: { min: 1, max: 2 },
-                tags: ['ap', 'ranged', 'skill', 'cc'],
-                escaladoAtributos: { VIT: 1, INT: 1 }
-            }],
-            mana: { base: 1, perLv: 1 },
-            statusEffectScaling: {
-                retardo: { base: 34.8, perLv: 1.89 }
+                tags: [],
+            },
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 80,
+                        perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
+                    },
+                },
             },
         },
         [UNIQUE_ID_SKILLS.GOLPE_DE_LLAMA]: {
             type: 'damage',
-            cd: { onActivate: 1 },
-            components: [{
+            components: {
+                damage: {
+                    type: 'damage',
+                    range: {
+                        min: {
+                            progression: {
+                                type: 'per_level', base: 10,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 1.5,
+                                source: { type: 'stat', path: 'general.ap.min' },
+                            }],
+                        },
+                        max: {
+                            progression: {
+                                type: 'per_level', base: 20,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 3,
+                                source: { type: 'stat', path: 'general.ap.max' },
+                            }],
+                        },
+                    },
+                },
                 damageType: 'ap',
-                escaladoLv: ESCALADO_LV_DEFAULT,
-                escaladoMain: { min: 1, max: 2 },
-                tags: ['ap', 'ranged', 'skill', 'incendio'],
-                escaladoAtributos: { VIT: 1, INT: 1, STR: 1 }
-            }],
-            mana: { base: 1, perLv: 1 },
-            statusEffectScaling: {
-                incendio: { base: 30, perLv: 10 }
-            }
+                tags: [],
+            },
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 80,
+                        perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
+                    },
+                },
+            },
         },
         [UNIQUE_ID_SKILLS.ORBE_OSCURO]: {
             type: 'damage',
-            cd: { onActivate: 1 },
-            components: [{
+            components: {
+                damage: {
+                    type: 'damage',
+                    range: {
+                        min: {
+                            progression: {
+                                type: 'per_level', base: 10,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 1.5,
+                                source: { type: 'stat', path: 'general.ap.min' },
+                            }],
+                        },
+                        max: {
+                            progression: {
+                                type: 'per_level', base: 20,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 3,
+                                source: { type: 'stat', path: 'general.ap.max' },
+                            }],
+                        },
+                    },
+                },
                 damageType: 'ap',
-                escaladoLv: ESCALADO_LV_DEFAULT,
-                escaladoMain: { min: 1, max: 2 },
-                tags: ['ap', 'ranged', 'skill', 'weapon'],
-                escaladoAtributos: { VIT: 1, INT: 1 }
-            }],
-            mana: { base: 1, perLv: 1 },
+                tags: [],
+            },
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 80,
+                        perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
+                    },
+                },
+            },
         },
         [UNIQUE_ID_SKILLS.PROTECCION_OSCURA]: {
-            type: "aura",
-            escaladoAtributos: {},
-            cd: { onDeactivate: 5 },
-            mana: { base: 1, perLv: 1 },
-            duration: { base: 1, perLv: 1 },
-            escaladoStatsModifiers: []
+            type: 'aura',
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            duration: {
+                type: 'turns',
+                turns: {
+                    progression: {
+                        type: 'per_level', base: 10,
+                        perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 15,
+                    },
+                },
+            },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 10,
+                        perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 100,
+                    },
+                },
+            },
+            tags: [],
+            statsModifiers: [],
         },
     },
     Espejo: {
         [UNIQUE_ID_SKILLS.GOLPE_DE_DEDO]: {
             type: 'damage',
-            cd: { onActivate: 1 },
-            components: [{
-                damageType: 'ad',
-                escaladoLv: ESCALADO_LV_DEFAULT,
-                escaladoMain: { min: 1, max: 2 },
-                tags: ['ad', 'melee', 'skill'],
-                escaladoAtributos: { VIT: 1, INT: 1 }
-            }],
-            mana: { base: 1, perLv: 1 },
-            mechanicsEffectScaling: {
-                penetracion_habilidad: { base: 1, perLv: 1 }
-            }
+            components: {
+                damage: {
+                    type: 'damage',
+                    range: {
+                        min: {
+                            progression: {
+                                type: 'per_level', base: 10,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 1.5,
+                                source: { type: 'stat', path: 'general.ap.min' },
+                            }],
+                        },
+                        max: {
+                            progression: {
+                                type: 'per_level', base: 20,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 3,
+                                source: { type: 'stat', path: 'general.ap.max' },
+                            }],
+                        },
+                    },
+                },
+                damageType: 'ap',
+                tags: [],
+            },
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 80,
+                        perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
+                    },
+                },
+            },
         },
         [UNIQUE_ID_SKILLS.REMOLINO_DRAGON]: {
             type: 'damage',
-            cd: { onActivate: 1 },
-            components: [{
-                damageType: 'ad',
-                escaladoLv: ESCALADO_LV_DEFAULT,
-                escaladoMain: { min: 1, max: 2 },
-                tags: ['ad', 'melee', 'skill', 'weapon'],
-                escaladoAtributos: { VIT: 1, INT: 1 }
-            }],
-            mana: { base: 1, perLv: 1 },
-            statusEffectScaling: {
-                retardo: { base: 1, perLv: 1 }
-            }
+            components: {
+                damage: {
+                    type: 'damage',
+                    range: {
+                        min: {
+                            progression: {
+                                type: 'per_level', base: 10,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 1.5,
+                                source: { type: 'stat', path: 'general.ap.min' },
+                            }],
+                        },
+                        max: {
+                            progression: {
+                                type: 'per_level', base: 20,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 3,
+                                source: { type: 'stat', path: 'general.ap.max' },
+                            }],
+                        },
+                    },
+                },
+                damageType: 'ap',
+                tags: [],
+            },
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 80,
+                        perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
+                    },
+                },
+            },
         },
         [UNIQUE_ID_SKILLS.ANULAR_MAGIA]: {
             type: 'damage',
-            cd: { onActivate: 1 },
-            components: [{
+            components: {
+                damage: {
+                    type: 'damage',
+                    range: {
+                        min: {
+                            progression: {
+                                type: 'per_level', base: 10,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 1.5,
+                                source: { type: 'stat', path: 'general.ap.min' },
+                            }],
+                        },
+                        max: {
+                            progression: {
+                                type: 'per_level', base: 20,
+                                perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 500,
+                            },
+                            contributions: [{
+                                operation: 'flat', coefficient: 3,
+                                source: { type: 'stat', path: 'general.ap.max' },
+                            }],
+                        },
+                    },
+                },
                 damageType: 'ap',
-                escaladoLv: ESCALADO_LV_DEFAULT,
-                escaladoMain: { min: 1, max: 2 },
-                tags: ['ap', 'ranged', 'skill'],
-                escaladoAtributos: { VIT: 1, INT: 1 }
-            }],
-            mana: { base: 1, perLv: 1 },
-            mechanicsEffectScaling: {
-                vampirismo_hechizo: { base: 2, perLv: 1 }
-            }
+                tags: [],
+            },
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 80,
+                        perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
+                    },
+                },
+            },
         },
         [UNIQUE_ID_SKILLS.HOJA_ENCANTADA]: {
-            type: "aura",
-            cd: { onDeactivate: 5 },
-            mana: { base: 1, perLv: 1 },
-            duration: { base: 1, perLv: 1 },
-            escaladoAtributos: { INT: 1.5, VIT: 0.5 },
-            escaladoStatsModifiers: [
-                {
-                    bonusRefKey: 'media',
-                    escalado: {
-                        scaleWithAttribute: true,
-                        base: 5,
-                        escaladoLv: {
-                            basicMulti: 1,
-                            granMasterMulti: 1.2,
-                            masterMulti: 1.3,
-                            perfectMulti: 1.4,
-                            perLv: 1
-                        }
+            type: 'aura',
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            duration: {
+                type: 'turns',
+                turns: {
+                    progression: {
+                        type: 'per_level', base: 10,
+                        perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 15,
                     },
-                    operation: 'flat',
-                    target: 'bonus.daño.media'
                 },
-                {
-                    bonusRefKey: 'robo_vida',
-                    escalado: {
-                        scaleWithAttribute: false,
-                        base: 1,
-                        escaladoLv: {
-                            basicMulti: 1,
-                            granMasterMulti: 1.2,
-                            masterMulti: 1.3,
-                            perfectMulti: 1.4,
-                            perLv: 1
-                        }
+            },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 10,
+                        perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 100,
                     },
-                    operation: 'flat',
-                    target: 'general.ad'
-                }
-            ]
+                },
+            },
+            tags: [],
+            statsModifiers: [],
         },
         [UNIQUE_ID_SKILLS.ARMADURA_ENCANTADA]: {
-            type: "aura",
-            cd: { onDeactivate: 5 },
-            mana: { base: 1, perLv: 1 },
-            duration: { base: 1, perLv: 1 },
-            escaladoAtributos: {},
-            escaladoStatsModifiers: []
+            type: 'aura',
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            duration: {
+                type: 'turns',
+                turns: {
+                    progression: {
+                        type: 'per_level', base: 10,
+                        perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 15,
+                    },
+                },
+            },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 10,
+                        perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 100,
+                    },
+                },
+            },
+            tags: [],
+            statsModifiers: [],
         },
         [UNIQUE_ID_SKILLS.MIEDO]: {
-            type: "aura",
-            cd: { onDeactivate: 5 },
-            mana: { base: 1, perLv: 1 },
-            duration: { base: 1, perLv: 1 },
-            escaladoAtributos: {},
-            escaladoStatsModifiers: []
+            type: 'aura',
+            cd: { onActivate: { progression: { type: 'constant', value: 20 } } },
+            duration: {
+                type: 'turns',
+                turns: {
+                    progression: {
+                        type: 'per_level', base: 10,
+                        perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 15,
+                    },
+                },
+            },
+            mana: {
+                type: 'instant',
+                amount: {
+                    progression: {
+                        type: 'per_level', base: 10,
+                        perLevel: { N: 1, M: 2, G: 3 }, perfectBonus: 100,
+                    },
+                },
+            },
+            tags: [],
+            statsModifiers: [],
         },
     },
 }

@@ -101,13 +101,13 @@ export class SkillService {
     ): SkillType {
         switch (skill.type) {
             case 'heal':
-                return this.healSkillService.getUpdatedSkill(skill, race, speciality, atributos)
+                return this.healSkillService.getUpdatedSkill(skill, race, speciality, stats, atributos)
             case 'damage':
                 return this.damageSkillService.getUpdatedSkill(skill, stats, race, speciality,atributos)
             case 'aura':
                 return this.auraSkillService.getUpdatedAura(skill, stats, race, speciality,atributos)
             case 'buff':
-                return this.buffSkillService.getUpdatedSkill(skill, race, speciality)
+                return this.buffSkillService.getUpdatedSkill(skill, race, speciality, stats, atributos)
             default:
                 throw new Error(`No se encuentra un tipo de la habilidad para actualizar`);
         }
