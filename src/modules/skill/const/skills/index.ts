@@ -10,12 +10,12 @@ import { SkillSummary } from "../../types/summary-skills.types";
 import { CharacterSpeciality } from "netim2-shared";
 
 export const ALL_SKILLS: Record<CharacterSpeciality, SkillSummary[]> = {
-    Corporal: { ...CORPORAL_SKILLS },
-    Daga: { ...DAGA_SKILLS },
-    Dragon: { ...DRAGON_SKILLS },
-    Espejo: { ...ESPEJO_SKILLS },
-    Flecha: { ...FLECHA_SKILLS },
-    Luz: { ...LUZ_SKILLS },
-    MagiaNegra: { ...MAGIA_NEGRA_SKILLS },
-    Mental: { ...MENTAL_SKILLS },
+    Corporal: [...CORPORAL_SKILLS],
+    Daga: [...DAGA_SKILLS],
+    Dragon: [...DRAGON_SKILLS],
+    Espejo: [...ESPEJO_SKILLS],
+    Flecha: [...FLECHA_SKILLS],
+    Luz: [...LUZ_SKILLS],
+    MagiaNegra: [...MAGIA_NEGRA_SKILLS],
+    Mental: [...MENTAL_SKILLS],
 }

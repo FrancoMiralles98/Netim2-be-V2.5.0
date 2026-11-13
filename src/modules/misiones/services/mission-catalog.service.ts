@@ -1,99 +1,108 @@
-import { Injectable } from "@nestjs/common";
-import { Missions } from "../types/mission-base.type";
-import { MISSION_LIST } from "../const/mission-list.const";
-import { IdMissionsList } from "../types/idMissions/id-mission-list.enum";
-import { MissionInCharacter } from "netim2-shared";
+import { Injectable, NotFoundException } from '@nestjs/common';
+import type {
+    CharacterPersistence, IdMissionsList, IdMobList, MissionObjective, MissionObjectiveDetail, MissionProgress,
+    MissionStep, MissionStepDetail,
+} from 'netim2-shared';
+import { ITEM_LIST } from '../../item/const/items.const';
+import { MobService } from '../../mob/mob.service';
+import { MISSION_LIST, MISSIONS_BY_ID } from '../const';
+import type { CatalogMission, MissionListEntry, MissionListResponse } from '../types/mission-api.types';
+import { MissionProgressService } from './mission-progress.service';
+import { MissionRewardService } from './mission-reward.service';
 
-/**
- * Servicio encargado de consultar la información base de las misiones.
- *
- * Este servicio trabaja sobre el catálogo estático de misiones (`MISSION_LIST`)
- * y permite obtener misiones disponibles, buscar una misión por ID y reconstruir
- * la información completa de las misiones que el personaje tiene en progreso.
- *
- * No se encarga de actualizar progreso ni de completar misiones.
- */
+const ITEM_NAMES = new Map(ITEM_LIST.map(item => [item.idItem, item.name]));
+
+/** Consulta el catálogo y arma la vista de misiones del personaje. */
 @Injectable()
 export class MissionCatalogService {
+    constructor(
+        private readonly progress: MissionProgressService,
+        private readonly rewards: MissionRewardService,
+        private readonly mobs: MobService,
+    ) {}
 
-    /**
-     * Obtiene las misiones disponibles para un personaje.
-     *
-     * Una misión se considera disponible si:
-     * - El personaje cumple con el nivel requerido.
-     * - El personaje completó todas las misiones requeridas previamente.
-     * - La misión no está actualmente en progreso.
-     * - La misión no fue completada anteriormente.
-     *
-     * @param missionsDone Lista de IDs de misiones ya completadas por el personaje.
-     * @param missionsInProgress Lista de misiones actualmente en progreso.
-     * @param characterLv Nivel actual del personaje.
-     *
-     * @returns Lista de misiones disponibles para aceptar.
-     */
-    getAvailableMissions(
-        missionsDone: IdMissionsList[],
-        missionInProgress: Missions[],
-        characterLv: number
-    ): Missions[] {
-        return MISSION_LIST.filter(mission =>
-            mission.missionReq.lvReq <= characterLv &&
-            mission.missionReq.idMissionDone.every(idMission => missionsDone.includes(idMission)) &&
-            !missionInProgress.some(missionProgress => missionProgress.idMission === mission.idMission) &&
-            !missionsDone.includes(mission.idMission)
-        )
+    /** Busca una definición por su ID de catálogo. */
+    getById(id: IdMissionsList): CatalogMission {
+        const mission = MISSIONS_BY_ID.get(id);
+        if (!mission) throw new NotFoundException('No se encuentra la misión');
+        return mission;
     }
 
-    /**
-     * Obtiene la información base de una misión a partir de su ID.
-     *
-     * @param idMission ID de la misión a buscar.
-     *
-     * @returns Información base de la misión encontrada.
-     *
-     * @throws Si no existe una misión asociada al ID recibido.
-     */
-    getMissionInfoById(idMission: IdMissionsList): Missions {
-        const mision = MISSION_LIST.find(m => m.idMission === idMission)
-
-        if (!mision) {
-            throw new Error(`No se encuentra la mision idMIssion ${idMission}`)
+    /** Devuelve las misiones habilitadas y los intentos existentes con sus recompensas. */
+    async list(character: CharacterPersistence, now: Date): Promise<MissionListResponse> {
+        const result: MissionListResponse = { available: [], active: [], idMissionsDone: character.mission_option.idMissionsDone };
+        for (const entry of await this.describeMissions(MISSION_LIST, character, now)) {
+            if (entry.status === 'available') result.available.push(entry);
+            else if (entry.progress) result.active.push(entry);
         }
-
-        return mision
+        return result;
     }
 
-    /**
-     * Reconstruye la información completa de las misiones en progreso de un personaje.
-     *
-     * Las misiones guardadas en el personaje suelen contener únicamente la información
-     * persistente necesaria, como el ID de misión y su progreso actual.
-     *
-     * Este método toma cada misión en progreso, obtiene su información base desde
-     * el catálogo de misiones y reemplaza el progreso original por el progreso
-     * guardado en el personaje.
-     *
-     * De esta forma se obtiene una misión completa lista para ser consultada,
-     * mostrada o procesada.
-     *
-     * @param missionsInProgress Lista de misiones en progreso guardadas en el personaje.
-     *
-     * @returns Lista de misiones completas con el progreso actual del personaje.
-     *
-     * @throws Si alguna misión en progreso no existe en el catálogo base.
-     */
-    getCharacterMissionInfo(missionInProgress: MissionInCharacter[]): Missions[] {
-        const missions: Missions[] = []
+    /** Arma el detalle visible con contadores, fechas serializadas y recompensas completas. */
+    async describe(definition: CatalogMission, character: CharacterPersistence, now: Date): Promise<MissionListEntry | null> {
+        const [entry] = await this.describeMissions([definition], character, now);
+        return entry ?? null;
+    }
 
-        for (const mission of missionInProgress) {
-            const missionData = structuredClone(MISSION_LIST.find(m => m.idMission === mission.idMission))
-            if (!missionData) {
-                throw new Error(`No se encuentra la info de la mission ${mission.idMission}`)
+    /** Resuelve los mobs visibles en una sola consulta y arma las vistas de misión. */
+    private async describeMissions(definitions: readonly CatalogMission[], character: CharacterPersistence,
+        now: Date): Promise<MissionListEntry[]> {
+        const visible = definitions.flatMap(definition => {
+            const status = this.progress.status(definition, character, now);
+            return status && status !== 'reward_claimed' ? [{ definition, status }] : [];
+        });
+        const mobIds = new Set<IdMobList>();
+        for (const { definition } of visible) {
+            for (const { objectives } of definition.steps) {
+                for (const objective of objectives) {
+                    if (objective.type === 'hunt' && 'mobIds' in objective.target) {
+                        for (const id of objective.target.mobIds) mobIds.add(id);
+                    }
+                }
             }
-            missionData.missionProgress = mission.missionProgress
-            missions.push(missionData)
         }
+        const mobs = mobIds.size ? await this.mobs.getMobsByIdMobs([...mobIds]) : [];
+        const mobNames = new Map(mobs.map(mob => [mob.idMob, mob.nombre]));
 
-        return missions
+        return visible.map(({ definition, status }) => {
+            const progress = character.mission_option.missionsInProgress.find(attempt => attempt.missionId === definition.id);
+            const [first, ...remaining] = definition.steps;
+            return {
+                ...definition, status, rewards: this.rewards.describe(definition.rewards),
+                steps: [this.describeStep(first, mobNames), ...remaining.map(step => this.describeStep(step, mobNames))],
+                ...(progress ? { progress: this.describeProgress(definition, progress, character.inventario) } : {}),
+            };
+        });
+    }
+
+    /** Agrega los nombres de catálogo a los objetivos del paso. */
+    private describeStep(step: MissionStep, mobNames: ReadonlyMap<IdMobList, string>): MissionStepDetail {
+        const objectives = step.objectives.map((objective: MissionObjective): MissionObjectiveDetail => {
+            if (objective.type === 'collect') {
+                return { ...objective, itemName: ITEM_NAMES.get(objective.itemId) ?? `Ítem #${objective.itemId}` };
+            }
+            if (objective.type === 'hunt' && 'mobIds' in objective.target) {
+                const mobs = objective.target.mobIds.map(idMob => ({
+                    idMob, name: mobNames.get(idMob) ?? `Mob #${idMob}`,
+                }));
+                return { ...objective, mobs };
+            }
+            return objective;
+        });
+        return { ...step, objectives };
+    }
+
+    /** Incluye el progreso actual de cada objetivo para el frontend. */
+    private describeProgress(definition: CatalogMission, progress: MissionProgress,
+        inventory: CharacterPersistence['inventario']): NonNullable<MissionListEntry['progress']> {
+        return {
+            ...progress,
+            startedAt: progress.startedAt.toISOString(),
+            expiresAt: progress.expiresAt?.toISOString(),
+            completedAt: progress.completedAt?.toISOString(),
+            objectivesProgress: definition.steps.flatMap(step => step.objectives.map(objective => ({
+                objectiveId: objective.id, count: this.progress.objectiveCount(objective, progress, inventory),
+            }))),
+        };
     }
 }

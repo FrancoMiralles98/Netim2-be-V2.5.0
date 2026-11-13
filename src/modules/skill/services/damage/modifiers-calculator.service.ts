@@ -1,178 +1,81 @@
-import { Injectable } from "@nestjs/common";
-import { LetterMasteryLv, SkillDamage, WeightedDamageModifier, WeightedHitCountModifier } from "netim2-shared";
-import { SharedSkillService } from "../shared-skill.service";
-import { SkillDamageScaling, WeightedDamageModifierScaling, WeightedHitCountScaling } from "../../types/scaling/damage/skill-damage-scaling.type";
+import { Injectable } from '@nestjs/common';
+import type { DamageSkillValueScaling, SkillDamage, SkillWeightedOptionScaling } from 'netim2-shared';
+import { SharedSkillScalingService } from '../shared-skill-scaling.service';
+import type { SkillScalingContext } from '../../types/skill-scaling-context.type';
 
+/** Prepara modificadores calculados; la selección aleatoria y las condiciones se resuelven en combate. */
 @Injectable()
 export class ModifiersCalculatorService {
-    constructor(
-        private readonly sharedSkillService: SharedSkillService,
-    ) { }
+    constructor(private readonly scalingValues: SharedSkillScalingService) {}
 
-    getHitModifier(
-        skill: SkillDamage,
-        lvPoints: number,
-        scaling: SkillDamageScaling,
-    ): SkillDamage['hitModifiers'] {
-        const scalingInfo = scaling.hitModifiersScaling;
-
-        if (!scalingInfo) return undefined
-
-        switch (scalingInfo.type) {
-            case 'chance_multi_hit': {
-                const chance =
-                    scalingInfo.chancesConfig.base +
-                    lvPoints * scalingInfo.chancesConfig.per_lv
-
-                const hits =
-                    scalingInfo.hitsConfig.base +
-                    lvPoints * scalingInfo.hitsConfig.perLv
-
-                return {
-                    type: 'chance_multi_hit',
-                    chance: this.clampPercentage(chance),
-                    damageMultiplierPerHit:
-                        scalingInfo.damageMultiplierPerHitConfig.base +
-                        lvPoints *
-                        scalingInfo.damageMultiplierPerHitConfig.perLv,
-                    hits: Math.max(1, Math.floor(hits)),
-                }
-            }
-            case 'weighted_hit_count':
-                return this.calculateWeightedHitModifier(skill, lvPoints, scalingInfo)
-            default:
-                throw new Error(`Tipo de escalado de golpes no soportado`)
+    /** Calcula golpes enteros y factor por golpe; devuelve undefined si no hay modificador habilitado. */
+    getHitModifier(context: SkillScalingContext, scaling: DamageSkillValueScaling): SkillDamage['hitModifiers'] {
+        const modifier = scaling.hitModifiers;
+        if (!modifier) return undefined;
+        if (modifier.type === 'chance_multi_hit') {
+            if (!this.scalingValues.isUnlocked(modifier.unlockAt, context)) return undefined;
+            return {
+                type: modifier.type,
+                chance: this.scalingValues.calculateConstrainedValue(modifier.chance, context, 0, false, 100),
+                hits: this.scalingValues.calculateConstrainedValue(modifier.hits, context, 1, true),
+                damageMultiplierPerHit: this.scalingValues.calculateConstrainedValue(modifier.damageMultiplierPerHit, context, 0),
+                description: modifier.description,
+            };
         }
-    }
-
-    getDamageModifier(
-        skill: SkillDamage,
-        lvPoints: number,
-        scaling: SkillDamageScaling,
-    ): SkillDamage['damageModifiers'] {
-        const scalingInfo = scaling.damageModifiersScaling;
-
-        if (!scalingInfo) return undefined;
-
-
-        switch (scalingInfo.type) {
-            case 'chance_multiplier': {
-                const chance =
-                    scalingInfo.chanceConfig.baseChance +
-                    lvPoints *
-                    scalingInfo.chanceConfig.perLv
-
-                return {
-                    type: 'chance_multiplier',
-                    chance: this.clampPercentage(chance),
-                    multiplier:
-                        scalingInfo.multiplier.baseMultiplier +
-                        lvPoints *
-                        scalingInfo.multiplier.perLv,
-                }
-            }
-            case 'conditional_multiplier':
-                return {
-                    type: 'conditional_multiplier',
-                    condition: scalingInfo.condition,
-                    multiplier:
-                        scalingInfo.multiplier.baseMultiplier +
-                        lvPoints *
-                        scalingInfo.multiplier.perLv,
-                }
-            case 'weighted_multiplier':
-                return this.calculateWeightedDamageModifier(skill,lvPoints,scalingInfo)
-            default:
-                throw new Error(`Tipo de modificador de daño no soportado`)
-        }
-    }
-
-    private calculateWeightedHitModifier(
-        skill: SkillDamage,
-        lvPoints: number,
-        scaling: WeightedHitCountScaling,
-    ): WeightedHitCountModifier {
-        const skillMasteryRank = this.getSkillMasteryRank(skill);
-
-        const options = scaling.optionsScaling
-            .filter(option =>this.isOptionUnlocked(skillMasteryRank,option.unlockLv))
-            .map(option => {
-                const chance =
-                    option.chancesConfig.base +
-                    option.chancesConfig.per_lv * lvPoints;
-
-                const hits =
-                    option.hitsConfig.base +
-                    option.hitsConfig.perLv * lvPoints;
-
-                return {
-                    chance: this.clampPercentage(chance),
-                    hits: Math.max(1, Math.floor(hits)),
-                    damageMultiplierPerHit:
-                        option.damageMultiplierPerHitConfig.base +
-                        option.damageMultiplierPerHitConfig.perLv *
-                        lvPoints,
-                }
-            })
+        const options = this.weightedOptions(modifier.options, context);
+        if (options.length === 0) return undefined;
         return {
             type: 'weighted_hit_count',
-            options,
-        }
+            options: options.map(({ option, weight }) => ({
+                // El contrato calculado conserva chance, pero representa peso relativo.
+                chance: weight,
+                hits: this.scalingValues.calculateConstrainedValue(option.hits, context, 1, true),
+                damageMultiplierPerHit: this.scalingValues.calculateConstrainedValue(option.damageMultiplierPerHit, context, 0),
+                description: option.description,
+            })),
+        };
     }
 
-    private calculateWeightedDamageModifier(
-        skill: SkillDamage,
-        lvPoints: number,
-        scaling: WeightedDamageModifierScaling,
-    ): WeightedDamageModifier {
-        const skillMasteryRank = this.getSkillMasteryRank(skill);
-
-        const options = scaling.options
-            .filter(option =>this.isOptionUnlocked(skillMasteryRank,option.unlockLv))
-            .map(option => {
-                const chance =
-                    option.chanceConfig.baseChance +
-                    option.chanceConfig.perLv * lvPoints;
-
-                return {
-                    chance: this.clampPercentage(chance),
-                    multiplier:
-                        option.multiplier.baseMultiplier +
-                        option.multiplier.perLv * lvPoints,
-                }
-            })
-
-        return {
-            type: 'weighted_multiplier',
-            options,
+    /** Calcula chances, pesos y multiplicadores; conserva la condición sin evaluar source/target. */
+    getDamageModifier(context: SkillScalingContext, scaling: DamageSkillValueScaling): SkillDamage['damageModifiers'] {
+        const modifier = scaling.damageModifiers;
+        if (!modifier) return undefined;
+        if (modifier.type === 'weighted_multiplier') {
+            const options = this.weightedOptions(modifier.options, context);
+            if (options.length === 0) return undefined;
+            return {
+                type: modifier.type,
+                options: options.map(({ option, weight }) => ({
+                    chance: weight,
+                    multiplier: this.scalingValues.calculateConstrainedValue(option.multiplier, context, 0),
+                    description: option.description,
+                })),
+            };
         }
+        if (!this.scalingValues.isUnlocked(modifier.unlockAt, context)) return undefined;
+        const multiplier = this.scalingValues.calculateConstrainedValue(modifier.multiplier, context, 0);
+        if (modifier.type === 'chance_multiplier') {
+            return {
+                type: modifier.type, multiplier, description: modifier.description,
+                chance: this.scalingValues.calculateConstrainedValue(modifier.chance, context, 0, false, 100),
+            };
+        }
+        return { type: modifier.type, multiplier, description: modifier.description, condition: structuredClone(modifier.condition) };
     }
 
-    private getSkillMasteryRank(
-        skill: SkillDamage,
-    ): LetterMasteryLv | null {
-        if (typeof skill.lv === 'number') {
-            return null;
+    /** Filtra desbloqueos y calcula pesos sin cap de 100; rechaza IDs duplicados y totales no positivos. */
+    private weightedOptions<T extends SkillWeightedOptionScaling>(options: readonly T[], context: SkillScalingContext) {
+        const ids = new Set<string>();
+        for (const option of options) {
+            if (ids.has(option.id)) throw new Error('ID de opción ponderada duplicado');
+            ids.add(option.id);
         }
-        return this.sharedSkillService.getLetterAndNumberOfMasteryLvRank(skill.lv).letterLv
-    }
-
-    private isOptionUnlocked(
-        skillMasteryRank: LetterMasteryLv | null,
-        requiredMasteryRank?: LetterMasteryLv,
-    ): boolean {
-        if (!requiredMasteryRank) {
-            return true;
-        }
-
-        if (skillMasteryRank === null) {
-            return false;
-        }
-
-        return this.sharedSkillService.meetsMasteryRequirement(skillMasteryRank,requiredMasteryRank)
-    }
-
-    private clampPercentage(value: number): number {
-        return Math.max(0, Math.min(100, value));
+        const enabled = options.filter(option => this.scalingValues.isUnlocked(option.unlockAt, context)).map(option => ({
+            option,
+            weight: this.scalingValues.calculateConstrainedValue(option.weight, context, 0),
+        }));
+        const total = enabled.reduce((sum, item) => sum + item.weight, 0);
+        if (enabled.length > 0 && (!Number.isFinite(total) || total <= 0)) throw new Error('La tabla ponderada debe tener peso total positivo y finito');
+        return enabled;
     }
 }

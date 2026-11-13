@@ -11,7 +11,7 @@ export class SkillBuffEntity extends BaseSkillEntity<SkillBuff> {
         return structuredClone(this.props)
     }
 
-    static summaryToSkillType(summary: SkillBuffSummary): SkillBuff {
+    static summaryToSkillType(summary: SkillBuffSummary, scaling: SkillBuff['escalado']): SkillBuff {
         return {
             stats: [],
             duration: {turns:0,type:'turns'},
@@ -21,6 +21,7 @@ export class SkillBuffEntity extends BaseSkillEntity<SkillBuff> {
             effects: [],
             cd: {},
             nombre: '',
+            escalado: structuredClone(scaling),
         }
     }
 }

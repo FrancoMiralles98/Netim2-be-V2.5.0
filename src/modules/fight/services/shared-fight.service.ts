@@ -5,7 +5,9 @@ import { SkillType } from "netim2-shared";
 @Injectable()
 export class SharedFightService {
 
+    /** Requiere una habilidad aprendida (lv >= 1), disponible y con maná suficiente. */
     canUseSkill(actor: FighterCombatEntity, skill: SkillType): boolean {
+        if (!Number.isSafeInteger(skill.lv) || skill.lv < 1) return false;
         if (actor.isSkillOnCooldown(skill.id)) {
             return false;
         }

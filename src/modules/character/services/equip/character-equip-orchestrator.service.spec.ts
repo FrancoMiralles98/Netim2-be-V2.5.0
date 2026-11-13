@@ -1,3 +1,4 @@
+import { MissionProgressService } from '../../../misiones/services/mission-progress.service';
 import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { CharacterDocument } from '../../schema/character.schema';
 import { CharacterRepository } from '../../repository/character-repository';
@@ -36,6 +37,7 @@ describe('CharacterEquipOrchestratorService ownership', () => {
             equipment as unknown as CharacterEquipService,
             repository as unknown as CharacterRepository, mapper,
             { startSession: jest.fn().mockResolvedValue(session) } as unknown as Connection,
+            new MissionProgressService(),
         );
     });
 

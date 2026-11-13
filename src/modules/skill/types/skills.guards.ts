@@ -1,21 +1,16 @@
-import { SkillAura, SkillBuff, SkillDamage, SkillHeal } from "netim2-shared";
-import { SkillDamageScaling } from "./scaling/damage/skill-damage-scaling.type";
-import { SkillAuraScaling } from "./scaling/aura/skill-aura-scaling.type";
-import { SkillBuffScaling } from "./scaling/buff/skill-buff-scaling.type";
-import { SkillHealScaling } from "./scaling/heal/skill-heal-scaling.types";
+import { AuraSkillValueScaling, BuffSkillValueScaling, DamageSkillValueScaling, SkillAura, SkillBuff, SkillDamage, SkillHeal,SkillScalingConfig } from "netim2-shared";
 
-export const isSkillDamageScaling = (
-    scaling: SkillDamageScaling | SkillAuraScaling | SkillBuffScaling | SkillHealScaling): scaling is SkillDamageScaling => {
+export const isSkillDamageScaling = (scaling: SkillScalingConfig): scaling is DamageSkillValueScaling => {
     return scaling.type === 'damage'
 }
 
 export const isSkillBuffScaling = (
-    scaling: SkillDamageScaling | SkillAuraScaling | SkillBuffScaling | SkillHealScaling): scaling is SkillBuffScaling => {
+    scaling: SkillScalingConfig): scaling is BuffSkillValueScaling => {
     return scaling.type === 'buff'
 }
 
 export const isSkillAuraScaling = (
-    scaling: SkillDamageScaling | SkillAuraScaling | SkillBuffScaling | SkillHealScaling): scaling is SkillAuraScaling => {
+    scaling: SkillScalingConfig): scaling is AuraSkillValueScaling => {
     return scaling.type === 'aura'
 }
 

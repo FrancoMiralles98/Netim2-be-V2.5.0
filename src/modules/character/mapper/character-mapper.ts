@@ -7,6 +7,7 @@ import { CreateCharacterDto } from "../dto/create-character.dto";
 import { Injectable } from "@nestjs/common";
 import { Atributos, CharacterPersistence, CharacterRace, CharacterSummary } from "netim2-shared";
 import { ATTRIBUTE_BASE_BY_RACE } from "../const/statsProgress/attribute-base-by-race.const";
+import { readMissionOption } from "../../misiones/services/utils/read-mission-option";
 
 /**
  * Mapper encargado de transformar datos entre las distintas capas:
@@ -40,7 +41,7 @@ export class CharacterMapper {
             exp_next_lv: doc.exp_next_lv,
             genero: doc.genero,
             lv: doc.lv,
-            mission_option: doc.mission_option,
+            mission_option: readMissionOption(doc.mission_option),
             montura_lv: doc.montura_lv,
             nombre: doc.nombre,
             puntos_atributos: doc.puntos_atributos,

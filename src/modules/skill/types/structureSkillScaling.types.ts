@@ -1,8 +1,4 @@
-import { CharacterSpeciality , UNIQUE_ID_SKILLS } from "netim2-shared";
-import { SkillDamageScaling } from "./scaling/damage/skill-damage-scaling.type";
-import { SkillAuraScaling } from "./scaling/aura/skill-aura-scaling.type";
-import { SkillBuffScaling } from "./scaling/buff/skill-buff-scaling.type";
-import { SkillHealScaling } from "./scaling/heal/skill-heal-scaling.types";
+import { CharacterSpeciality , SkillScalingConfig, UNIQUE_ID_SKILLS } from "netim2-shared";
 
 export type StructureSkillScaling =  
-Partial<Record<CharacterSpeciality,Partial<Record<UNIQUE_ID_SKILLS,SkillDamageScaling | SkillAuraScaling | SkillBuffScaling | SkillHealScaling>>>>
+Partial<Record<CharacterSpeciality,Partial<Record<UNIQUE_ID_SKILLS,SkillScalingConfig>>>>

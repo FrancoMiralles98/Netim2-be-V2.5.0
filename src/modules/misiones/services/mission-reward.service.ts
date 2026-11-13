@@ -1,90 +1,86 @@
-import { Injectable } from "@nestjs/common";
-import { IdMissionsList } from "../types/idMissions/id-mission-list.enum";
-import { EXP_PER_LV } from "src/modules/character/const/exp-per-lv.const";
-import { EXP_MISSION_CONFIG } from "../config/exp-mission.config";
-import { ItemsConfig } from "../types/mission-base.type";
-import { isEquipItem, isPiedraItem, isUtilityItem } from "src/modules/item/types/item-type-guard.type";
-import { ItemService } from "src/modules/item/item.service";
-import { ItemDTO } from "netim2-shared";
+import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import type { IdItemList, InventoryItem, MissionReward, MissionRewardDetail } from 'netim2-shared';
+import { ItemService } from '../../item/item.service';
+import type { CharacterEntity } from '../../character/entity/character-entity';
 
+
+type ItemReward = Extract<MissionReward, { type: 'item' }>;
+
+/** Prepara recompensas de catálogo y las aplica a una entidad de trabajo. */
 @Injectable()
 export class MissionRewardService {
-    constructor(
-        private itemService: ItemService
-    ) {}
+    constructor(private readonly items: ItemService) {}
 
-    /**
-    * Genera la lista de ítems que serán entregados como recompensa de misión.
-    *
-    * Recorre la configuración de recompensas (`itemsConfig`), obtiene la
-    * información base de cada ítem a partir de su `idItem` y aplica las opciones
-    * correspondientes según el tipo de recompensa.
-    *
-    * Para ítems de tipo equipamiento o piedra:
-    * - Asigna el nivel de mejora (`upgradeLv`) configurado.
-    * - Actualiza sus bonus implícitos según el nuevo nivel de mejora.
-    *
-    * Para ítems utilitarios:
-    * - Asigna la cantidad configurada.
-    *
-    * @param itemsConfig Configuración de los ítems que deben generarse como recompensa.
-    *
-    * @returns Lista de ítems finales que serán entregados al jugador.
-    */
-    getItemsRewards(itemsConfig: ItemsConfig[]): ItemDTO[] {
-        const rewards: ItemDTO[] = []
-        for (const config of itemsConfig) {
-            const item = this.itemService.getCoreItemInfoByIdItem(config.idItem)
-            if (config.itemOptions.type === 'equip' && (isEquipItem(item) || isPiedraItem(item))) {
-                item.upgradeLv = config.itemOptions.upgradeLv
-                this.itemService.getUpdatedImplicitBonus(item)
-                rewards.push(item)
-                continue;
+    /** Resuelve los datos completos de cada ítem, incluida su mejora. */
+    describe(rewards: readonly MissionReward[]): MissionRewardDetail[] {
+        return rewards.map(reward => {
+            if (reward.type !== 'item') {
+                this.assertAmount(reward.amount, 0);
+                return reward;
             }
-            if (config.itemOptions.type === 'utility' && isUtilityItem(item)) {
-                item.cantidad = config.itemOptions.cantidad
-                rewards.push(item)
-                continue;
-            }
-        }
-        return rewards
+            const item = this.prepareItem(reward);
+            if (item.type === 'utility') item.cantidad = reward.quantity;
+            return { ...reward, item };
+        });
     }
 
-
-    /**
-    * Obtiene la experiencia final que debe otorgar una misión.
-    *
-    * Si la misión ya tiene una experiencia definida mayor a `0`, se considera
-    * que ese valor fue asignado intencionalmente en la configuración de la misión
-    * y se devuelve directamente.
-    *
-    * Si la experiencia configurada es `0`, el valor se calcula automáticamente
-    * usando la experiencia total correspondiente al nivel de la misión y el
-    * porcentaje configurado para ese tipo o grupo de misión.
-    *
-    * @param missionLv Nivel de la misión utilizado para obtener la experiencia base.
-    * @param expOfMission Experiencia definida directamente en la configuración de la misión.
-    * @param idMission ID de la misión utilizado para buscar su configuración de porcentaje.
-    *
-    * @returns Experiencia final que otorgará la misión.
-    *
-    * @throws Si no existe experiencia base configurada para el nivel de la misión.
-    * @throws Si no existe una configuración de porcentaje asociada a la misión.
-    */
-    getUpdatedExp(missionLv: number, expOfMission: number, idMission: IdMissionsList): number {
-        if (expOfMission > 0) {
-            return expOfMission
+    /** Consume los objetivos de entrega sobre una copia del personaje. */
+    consume(entity: CharacterEntity, inventory: InventoryItem[], deliveries: Map<IdItemList, number>): void {
+        for (const [idItem, quantity] of deliveries) {
+            const matching = inventory.filter(item => item.idItem === idItem);
+            if (matching[0]?.type === 'utility') {
+                entity.consumeItemsFromInventory([{ idItem, cantidad: quantity }]);
+            } else {
+                entity.consumeItemsFromInventory(matching.slice(0, quantity).map(item => ({ idItem, id: item.id })));
+            }
         }
-        const totalExpLv = EXP_PER_LV[missionLv]
-        if (!totalExpLv) {
-            throw new Error(`No se puede asignar una exp predeterminada a la mision`)
-        }
-        const expMissionConfig = EXP_MISSION_CONFIG.find(mission => mission.idMissions.includes(idMission))
+    }
 
-        if (!expMissionConfig) {
-            throw new Error(`No se encuentra la configuracion de la experiencia de la mission ${idMission}`)
+    /** Inserta todos los ítems y aplica los recursos; la copia se descarta ante cualquier error. */
+    grant(entity: CharacterEntity, rewards: readonly MissionReward[], currentYang: number): void {
+        let exp = 0;
+        let yang = 0;
+        for (const reward of this.describe(rewards)) {
+            if (reward.type === 'exp') exp += reward.amount;
+            else if (reward.type === 'yang') yang += reward.amount;
+            else {
+                const item = reward.item;
+                const stackable = item.type === 'utility' && item.acc &&
+                    !(item.type_utility === 'poción' && item.potionType === 'reserve');
+                try {
+                    if (stackable) {
+                        entity.addItemToInventory(item);
+                    } else {
+                        if (item.type === 'utility') item.cantidad = 1;
+                        for (let unit = 0; unit < reward.quantity; unit++) {
+                            entity.addItemToInventory(structuredClone(item));
+                        }
+                    }
+                } catch {
+                    throw new BadRequestException('No hay espacio suficiente para todas las recompensas');
+                }
+            }
         }
+        this.assertAmount(exp, 0);
+        this.assertAmount(currentYang + yang, 0);
+        if (yang > 0) entity.addYang(yang);
+        if (exp > 0) entity.gainExp(exp);
+    }
 
-        return Math.trunc(totalExpLv * (expMissionConfig.exp / 100))
+    /** Valida cantidad y mejora usando la resolución del catálogo de ítems. */
+    private prepareItem(reward: ItemReward) {
+        this.assertAmount(reward.quantity, 1);
+        const [item] = this.items.getItems({
+            items: [{ idItem: reward.itemId, upgradeLv: reward.upgradeLv }],
+        });
+        if (item.type === 'utility') this.assertAmount(item.maxCantidad, 1);
+        return item;
+    }
+
+    /** Valida valores configurados antes de conceder recursos. */
+    private assertAmount(amount: number, minimum: number): void {
+        if (!Number.isSafeInteger(amount) || amount < minimum) {
+            throw new InternalServerErrorException('Cantidad de recompensa inválida');
+        }
     }
 }

@@ -1,3 +1,4 @@
+import { MissionProgressService } from '../../../misiones/services/mission-progress.service';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Connection } from 'mongoose';
 import { GENERAL_CHARACTER } from '../../const/general-character.const';
@@ -27,7 +28,7 @@ describe('CharacterAttributeOrchestratorService', () => {
             response: { stats: result.stats, attributes: result.atributos, puntos_atributos: 1 } }) };
         session = { withTransaction: jest.fn(async callback => callback()), endSession: jest.fn().mockResolvedValue(undefined) };
         service = new CharacterAttributeOrchestratorService(repository as unknown as CharacterRepository, mapper,
-            actions as unknown as CharacterAttributeService, { startSession: jest.fn().mockResolvedValue(session) } as unknown as Connection);
+            actions as unknown as CharacterAttributeService, { startSession: jest.fn().mockResolvedValue(session) } as unknown as Connection, new MissionProgressService());
     });
 
     it('reads once and saves only stats, attributes and available points in the same transaction', async () => {

@@ -17,15 +17,15 @@ export class DamageCalculatorService {
     }
 
     prepareSkillDamage(attacker: FighterCombatEntity, skill: SkillDamage): PreparedSkillDamage {
-        const components = skill.components.map((component, index): PreparedSkillDamageComponent => {
-            return {
-                componentIndex: index,
-                damageType: component.damageType,
-                tags: [...component.tags],
-                flags: component.flags,
-                runtimeScaling: this.calculateRunTimeScaling(attacker, component)
-            }
-        })
+        const component = skill.components
+        // El formato preparado conserva el array que ya consumen los resolvers y las estadísticas.
+        const components: PreparedSkillDamageComponent[] = [{
+            componentIndex: 0,
+            damageType: component.damageType,
+            tags: [...component.tags],
+            flags: component.flags,
+            runtimeScaling: this.calculateRunTimeScaling(attacker, component)
+        }]
 
         return {
             skillId: skill.id,

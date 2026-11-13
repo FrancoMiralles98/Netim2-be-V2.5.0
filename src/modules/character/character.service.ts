@@ -169,6 +169,8 @@ export class CharacterService {
             newCharacter.yang += 600000
             newCharacter.stats.general.hp.actual = 300
             newCharacter.puntos_atributos += 100
+            newCharacter.lv = 3
+            newCharacter.puntos_habilidad = 100
 
             const characterCreated = await this.characterRepository.createCharacter(
                 newCharacter,
