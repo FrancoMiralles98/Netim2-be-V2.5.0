@@ -1,7 +1,9 @@
 import { MobStats } from "../../types/mobProps/mob-stats.type";
+import { GENERAL_CHARACTER_STATS } from '../../../character/const/characterProps/base-character-stats.const';
 
 export const MOB_BASE_STATS: MobStats = {
     general: {
+        ...GENERAL_CHARACTER_STATS.general,
         ad: {min:0, max: 0},
         ap: {min:0, max: 0},
         def: 0,
@@ -12,6 +14,7 @@ export const MOB_BASE_STATS: MobStats = {
         vm: 0
     },
     bonus: {
+        miscs: { ...GENERAL_CHARACTER_STATS.bonus.miscs },
         daño: {
             animales: 0,
             bonus_electrico: 0,

@@ -1,19 +1,4 @@
-import { BonusCCRefKeys, BonusDañoRefKeys, BonusDefensaRefKeys } from "netim2-shared";
+import type { Stats } from 'netim2-shared';
 
-export interface MobStats {
-  general: {
-    hp: {actual:number, max: number};
-    regen_hp: number;
-    def: number;
-    vh: number;
-    va: number;
-    vm: number;
-    ad: { min: number, max: number };
-    ap: { min: number, max: number };
-  };
-  bonus: {
-    daño: Record<BonusDañoRefKeys, number>
-    defensa: Record<BonusDefensaRefKeys, number>
-    cc: Record<BonusCCRefKeys, number>
-  }
-}
+/** Estadísticas completas de un mob que puede recibir el motor de combate. */
+export type MobStats = Stats;
