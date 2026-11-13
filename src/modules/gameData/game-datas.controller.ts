@@ -2,7 +2,7 @@ import { Controller, Get, Query, Req, UseGuards } from '@nestjs/common';
 import { GameDatasService } from './game-datas.service';
 import { AccessTokenGuard } from '../auth/guards/access-token.guard';
 import { AuthRequest } from '../auth/types/request/auth-request.type';
-import { GameConfigResponse } from 'netim2-shared';
+import type { GameConfigApiResponse } from './types/game-config-response.type';
 import { GetGameConfigDto } from './dto/get-game-config.dto';
 
 @Controller('game-data')
@@ -11,7 +11,7 @@ export class GameDatasController {
   constructor(private readonly gameDatasService: GameDatasService) { }
 
   @Get('config')
-  getGameConfig(@Query() query: GetGameConfigDto): { data: GameConfigResponse } {
+  getGameConfig(@Query() query: GetGameConfigDto): { data: GameConfigApiResponse } {
     return { data: this.gameDatasService.getGameConfig(query.race, query.speciality) };
   }
 

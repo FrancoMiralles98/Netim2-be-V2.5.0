@@ -6,6 +6,7 @@ import { CharacterEquipService } from './character-equip.service';
 import { isDeepStrictEqual } from 'node:util';
 import { InjectConnection } from '@nestjs/mongoose';
 import { ClientSession, Connection } from 'mongoose';
+import { MissionProgressService } from '../../../misiones/services/mission-progress.service';
 
 @Injectable()
 export class CharacterEquipOrchestratorService {
@@ -14,6 +15,7 @@ export class CharacterEquipOrchestratorService {
         private readonly characterRepository: CharacterRepository,
         private readonly characterMapper: CharacterMapper,
         @InjectConnection() private readonly connection: Connection,
+        private readonly missions: MissionProgressService,
     ) { }
 
     async equipItem(characterId: string, accountId: string, itemId: string): Promise<EquipItemResponse> {
@@ -24,6 +26,9 @@ export class CharacterEquipOrchestratorService {
             if (!equippedItem || !('id' in equippedItem) || typeof equippedItem.id !== 'string') {
                 throw new InternalServerErrorException('No se encuentra la instancia equipada en el resultado');
             }
+            character.mission_option = this.missions.register(character, [{ type: 'action',
+                action: { event: 'item_equipped', itemId: equippedItem.idItem },
+            }]) ?? character.mission_option;
             await this.persistEquipmentChanges(characterId, source, character, session);
             return {
                 ...this.statsResponse(character),
@@ -37,6 +42,7 @@ export class CharacterEquipOrchestratorService {
     async unequipItem(characterId: string, accountId: string, subType: subTypeEquip): Promise<UnequipItemResponse> {
         return this.withCharacterTransaction(characterId, accountId, async (source, session) => {
             const { character, newItems } = this.characterEquipService.unequipItem(source, subType);
+            character.mission_option = this.missions.register(character, []) ?? character.mission_option;
             await this.persistEquipmentChanges(characterId, source, character, session);
             return {
                 ...this.statsResponse(character),
@@ -75,7 +81,7 @@ export class CharacterEquipOrchestratorService {
     ): Promise<void> {
         const fields = [
             'inventario', 'equipo_1', 'equipo_2', 'equipo_3',
-            'equipo_selected', 'stats', 'atributos', 'type_weapon',
+            'equipo_selected', 'stats', 'atributos', 'type_weapon', 'mission_option',
         ] as const;
         const changes: Partial<CharacterPersistence> = Object.fromEntries(
             fields

@@ -1,3 +1,4 @@
+import { MissionProgressService } from '../../../misiones/services/mission-progress.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { validateSync } from 'class-validator';
@@ -163,7 +164,7 @@ describe('Skill upgrade preview', () => {
         const mapper = { fromDb: jest.fn().mockReturnValue(GENERAL_CHARACTER) };
         const actions = { getUpgradePreview: jest.fn().mockReturnValue({ canUpgrade: false }) };
         const orchestrator = new CharacterSkillOrchestratorService(repository as unknown as CharacterRepository,
-            mapper as unknown as CharacterMapper, actions as unknown as CharacterSkillService, {} as Connection);
+            mapper as unknown as CharacterMapper, actions as unknown as CharacterSkillService, {} as Connection, new MissionProgressService());
         const request = { skillId: UNIQUE_ID_SKILLS.GOLPE_OSCURO };
         await expect(orchestrator.getUpgradePreview('character', 'other', request)).rejects.toThrow(ForbiddenException);
         expect(actions.getUpgradePreview).not.toHaveBeenCalled();

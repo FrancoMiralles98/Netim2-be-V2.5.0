@@ -1,3 +1,4 @@
+import { MissionProgressService } from '../../../misiones/services/mission-progress.service';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Connection } from 'mongoose';
 import { GENERAL_CHARACTER } from '../../const/general-character.const';
@@ -25,7 +26,7 @@ describe('CharacterSkillOrchestratorService speciality selection', () => {
             response: { speciality: 'Corporal', skills: selected.hab, stats: selected.stats, attributes: selected.atributos } }) };
         session = { withTransaction: jest.fn(async callback => callback()), endSession: jest.fn().mockResolvedValue(undefined) };
         service = new CharacterSkillOrchestratorService(repository as unknown as CharacterRepository, new CharacterMapper(),
-            actions as unknown as CharacterSkillService, { startSession: jest.fn().mockResolvedValue(session) } as unknown as Connection);
+            actions as unknown as CharacterSkillService, { startSession: jest.fn().mockResolvedValue(session) } as unknown as Connection, new MissionProgressService());
     });
 
     it('loads once and persists only the selected speciality, skills and recalculated stats in one transaction', async () => {

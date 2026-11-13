@@ -12,6 +12,8 @@ import type { ApplyBuffRequest, ApplyBuffResponse, RefreshBuffsResponse } from '
 import { CharacterChestService } from './character-chest.service';
 import type { OpenChestRequest, OpenChestResponse } from 'netim2-shared';
 import type { OpenChestBulkRequest, OpenChestBulkResponse } from 'netim2-shared';
+import { MissionProgressService } from '../../../misiones/services/mission-progress.service';
+import { getExperienceMissionEvents } from '../../../misiones/services/utils/experience-mission-events';
 
 type ItemUseChanges = Partial<CharacterPersistence> & {
     'stats.general.hp.actual'?: number;
@@ -28,6 +30,7 @@ export class CharacterItemUseOrchestratorService {
         private readonly itemService: ItemService,
         private readonly characterBuffService: CharacterBuffService,
         private readonly characterChestService: CharacterChestService,
+        private readonly missions: MissionProgressService,
     ) {}
 
     usePotion(characterId: string, accountId: string, request: UsePotionRequest): Promise<UsePotionResponse> {
@@ -51,15 +54,17 @@ export class CharacterItemUseOrchestratorService {
     }
 
     openChest(characterId: string, accountId: string, request: OpenChestRequest): Promise<OpenChestResponse> {
-        return this.executeChest(characterId, accountId, character => this.characterChestService.openChest(character, request));
+        return this.executeChest(characterId, accountId, request.itemId, 1,
+            character => this.characterChestService.openChest(character, request));
     }
 
     openChestBulk(characterId: string, accountId: string, request: OpenChestBulkRequest): Promise<OpenChestBulkResponse> {
-        return this.executeChest(characterId, accountId, character => this.characterChestService.openChestBulk(character, request));
+        return this.executeChest(characterId, accountId, request.itemId, request.quantity,
+            character => this.characterChestService.openChestBulk(character, request));
     }
 
     /** Inventario, yang y progreso del lote se confirman juntos. */
-    private async executeChest<T extends OpenChestResponse>(characterId: string, accountId: string,
+    private async executeChest<T extends OpenChestResponse>(characterId: string, accountId: string, chestId: string, quantity: number,
         action: (character: CharacterPersistence) => { character: CharacterPersistence; response: T }): Promise<T> {
         const session = await this.connection.startSession();
         try {
@@ -73,6 +78,14 @@ export class CharacterItemUseOrchestratorService {
                     Object.assign(changes, result.response.progress, { stats: result.character.stats,
                         atributos: result.character.atributos, buffos: result.character.buffos });
                 }
+                const events = getExperienceMissionEvents(source, result.character);
+                const chest = source.inventario.find(item => item.id === chestId);
+                if (chest) events.push({ type: 'action', action: { event: 'chest_opened', itemId: chest.idItem }, quantity });
+                for (const reward of result.response.rewards) {
+                    if (reward.type === 'item') events.push({ type: 'collect', itemId: reward.idItem, quantity: reward.quantity });
+                }
+                const missionOption = this.missions.register(result.character, events);
+                if (missionOption) changes.mission_option = missionOption;
                 await this.characterRepository.updateCharacterById(characterId, changes, session);
                 return result.response;
             });

@@ -1,140 +1,136 @@
-import { Injectable } from "@nestjs/common";
-import { UpdateActionMissionProgress, UpdateCollectMissionProgress, UpdateHuntMissionProgress, UpdateMissionProgress } from "../types/progress-mission.type";
-import { HuntMission } from "../types/hunt-mission.type";
-import { Missions } from "../types/mission-base.type";
-import { CollectMission } from "../types/collect-mission.type";
-import { ActionMission } from "../types/action-mission.type";
+import { Injectable } from '@nestjs/common';
+import { getMissionStatus, getUnlockedMissionObjectives } from 'netim2-shared';
+import type {
+    CharacterPersistence, IdItemList, InventoryItem, MissionDefinition, MissionObjective,
+    MissionOption, MissionProgress, MissionStatus,
+} from 'netim2-shared';
+import { isDeepStrictEqual } from 'node:util';
+import { MISSIONS_BY_ID } from '../const';
+import type { MissionEvent } from '../types/mission-event.types';
 
-/**
- * Servicio encargado de actualizar el progreso de una misión.
- *
- * Determina el tipo de misión recibida y aplica la lógica correspondiente
- * según el tipo de progreso informado:
- *
- * - `hunt`: reduce la cantidad pendiente de mobs por derrotar.
- * - `collect`: reduce la cantidad pendiente de ítems por recolectar.
- * - `action`: marca la misión como completada al realizar la acción requerida.
- *
- * El servicio modifica directamente la misión recibida.
- */
+type MissionCharacter = Pick<CharacterPersistence, 'mission_option' | 'inventario' | 'lv' | 'especialidad'>;
+
+/** Evalúa objetivos, pasos y vencimientos con el estado del personaje. */
 @Injectable()
 export class MissionProgressService {
-
-     /**
-     * Actualiza el progreso de una misión según el tipo de evento recibido.
-     *
-     * Valida que el tipo de progreso coincida con el tipo de misión antes
-     * de aplicar la actualización correspondiente.
-     *
-     * Si los tipos no coinciden, se lanza un error para evitar que una misión
-     * sea actualizada con un progreso incompatible.
-     *
-     * @param progress Progreso recibido a partir de una acción del jugador.
-     * @param mission Misión cuyo progreso será actualizado.
-     *
-     * @throws Si el tipo de progreso no coincide con el tipo de misión.
-     */
-    updateProgressMission(
-        progress: UpdateMissionProgress,
-        mission: Missions
-    ): void {
-        if (mission.type === 'hunt' && progress.type === 'hunt') {
-            this.updateHuntMission(progress, mission)
-            return
-        }
-
-        if (mission.type === 'collect' && progress.type === 'collect') {
-            this.updateCollectMission(progress, mission)
-            return
-        }
-        if (mission.type === 'action' && progress.type === 'action') {
-            this.updateActionMission(progress, mission)
-            return
-        }
-
-        throw new Error(`El tipo de progreso ${progress.type} no coincide con la misión ${mission.type}`)
+    /** Aplica hechos del servidor y devuelve el estado nuevo únicamente si cambió. */
+    register(character: MissionCharacter, events: readonly MissionEvent[], now = new Date()): MissionOption | undefined {
+        if (!character.mission_option?.missionsInProgress.length) return undefined;
+        const missionsInProgress = character.mission_option.missionsInProgress.map(progress => {
+            const definition = MISSIONS_BY_ID.get(progress.missionId);
+            if (!definition || character.mission_option.idMissionsDone.includes(progress.missionId)) return progress;
+            return this.advance(definition, progress, character.inventario, now, events);
+        });
+        if (isDeepStrictEqual(missionsInProgress, character.mission_option.missionsInProgress)) return undefined;
+        return { ...character.mission_option, missionsInProgress };
     }
 
-    /**
-     * Actualiza el progreso de una misión de caza.
-     *
-     * Si la misión aún no está completada, busca dentro de los objetivos
-     * de caza el mob eliminado en caso de coincidir reduce en `1`
-     * la cantidad pendiente.
-     *
-     * verifica si todos los mobs requeridos fueron derrotados. En ese caso,
-     * marca la misión como completada.
-     *
-     * @param progress Progreso de caza generado al derrotar un mob.
-     * @param missions Misión de caza a actualizar.
-     */
-    private updateHuntMission(
-        progress: UpdateHuntMissionProgress,
-        missions: HuntMission
-    ): void {
-        if (missions.missionProgress.isDone) {
-            return
+    /** Registra los hechos para el paso habilitado y avanza por los pasos ya satisfechos. */
+    advance(definition: MissionDefinition, progress: MissionProgress, inventory: InventoryItem[],
+        now: Date, events: readonly MissionEvent[] = []): MissionProgress {
+        if (progress.completedAt || (progress.expiresAt && now >= progress.expiresAt)) return progress;
+        const counts = new Map(progress.objectivesProgress.map(({ objectiveId, count }) => [objectiveId, count]));
+        for (const event of events) {
+            for (const objective of getUnlockedMissionObjectives(definition, progress)) {
+                const quantity = this.eventQuantity(objective, event);
+                if (quantity === 0) continue;
+                counts.set(objective.id, Math.min(objective.quantity, (counts.get(objective.id) ?? 0) + quantity));
+            }
+            // Un hecho puede habilitar el siguiente paso, pero se contabiliza en el que estaba activo.
+            progress = this.advanceSteps(definition, { ...progress,
+                objectivesProgress: this.toProgress(counts) }, counts, inventory, now);
+            if (progress.completedAt) break;
         }
-        for (const hunt of missions.missionProgress.huntsProgress) {
-            if (hunt.idMob === progress.idMob) {
-                hunt.quantity = Math.max(hunt.quantity - 1, 0)
+        return this.advanceSteps(definition, progress, counts, inventory, now);
+    }
+
+    /** Determina si se puede cobrar, incluyendo los ítems que deben seguir disponibles. */
+    status(definition: MissionDefinition, character: MissionCharacter, now: Date): MissionStatus | null {
+        const status = getMissionStatus(definition, character, now);
+        if (status !== 'ready_to_claim') return status;
+        return this.hasClaimItems(definition, character.inventario) ? status : 'in_progress';
+    }
+
+    /** Obtiene el contador visible, consultando el inventario para objetivos de posesión. */
+    objectiveCount(objective: MissionObjective, progress: MissionProgress, inventory: InventoryItem[]): number {
+        if (objective.type === 'collect' && objective.mode === 'inventory') {
+            return Math.min(objective.quantity, this.inventoryCount(inventory, objective.itemId));
+        }
+        return progress.objectivesProgress.find(entry => entry.objectiveId === objective.id)?.count ?? 0;
+    }
+
+    /** Suma las unidades a entregar, incluyendo objetivos distintos del mismo ítem. */
+    requiredDeliveries(definition: MissionDefinition): Map<IdItemList, number> {
+        const deliveries = new Map<IdItemList, number>();
+        for (const { objectives } of definition.steps) {
+            for (const objective of objectives) {
+                if (objective.type !== 'collect' || objective.mode !== 'inventory' || !objective.consumeOnClaim) continue;
+                deliveries.set(objective.itemId, (deliveries.get(objective.itemId) ?? 0) + objective.quantity);
             }
         }
-
-        if (missions.missionProgress.huntsProgress.every(hunt => hunt.quantity <= 0)) {
-            missions.missionProgress.isDone = true
-        }
+        return deliveries;
     }
 
-    /**
-     * Actualiza el progreso de una misión de recolección.
-     *
-     * Si la misión aún no está completada, busca dentro de los objetivos
-     * de recolección el ítem correspondiente al progreso recibido y reduce
-     * la cantidad pendiente según la cantidad entregada.
-     *
-     * Luego de actualizar el objetivo, verifica si todos los ítems requeridos
-     * fueron recolectados. En ese caso, marca la misión como completada.
-     *
-     * @param progress Progreso de recolección generado al obtener ítems.
-     * @param missions Misión de recolección a actualizar.
-     */
-    private updateCollectMission(
-        progress: UpdateCollectMissionProgress,
-        missions: CollectMission
-    ): void {
-        if (missions.missionProgress.isDone) {
-            return
-        }
-        if (progress.quantity <= 0) {
-            return
-        }
-        for (const collect of missions.missionProgress.collectProgress) {
-            if (collect.idItem === progress.idItem) {
-                collect.quantity = Math.max(collect.quantity - progress.quantity, 0)
+    /** Cuenta instancias y unidades de un ítem en el inventario. */
+    private inventoryCount(inventory: InventoryItem[], itemId: IdItemList): number {
+        return inventory.reduce((count, item) =>
+            item.idItem === itemId ? count + (item.type === 'utility' ? item.cantidad : 1) : count, 0);
+    }
+
+    /** Verifica posesión y las cantidades totales que se consumen en la entrega. */
+    private hasClaimItems(definition: MissionDefinition, inventory: InventoryItem[]): boolean {
+        return [...this.requiredDeliveries(definition)].every(([itemId, quantity]) =>
+            this.inventoryCount(inventory, itemId) >= quantity) &&
+            definition.steps.every(step => step.objectives.every(objective =>
+                objective.type !== 'collect' || objective.mode !== 'inventory' ||
+                this.inventoryCount(inventory, objective.itemId) >= objective.quantity));
+    }
+
+    /** Desbloquea los pasos que ya cumplen sus objetivos y registra la finalización. */
+    private advanceSteps(definition: MissionDefinition, progress: MissionProgress, counts: Map<number, number>,
+        inventory: InventoryItem[], now: Date): MissionProgress {
+        if (progress.completedAt) return progress;
+        while (getUnlockedMissionObjectives(definition, progress).every(objective =>
+            (objective.type === 'collect' && objective.mode === 'inventory'
+                ? this.inventoryCount(inventory, objective.itemId) : counts.get(objective.id) ?? 0) >= objective.quantity)) {
+            const index = definition.steps.findIndex(step => step.id === progress.activeStepId);
+            const next = definition.sequentialSteps ? definition.steps[index + 1] : undefined;
+            if (!next) {
+                if (this.hasClaimItems(definition, inventory)) return { ...progress, completedAt: now };
+                break;
             }
+            progress = { ...progress, activeStepId: next.id };
         }
-
-        if(missions.missionProgress.collectProgress.every(collect => collect.quantity <= 0)) {
-            missions.missionProgress.isDone = true
-        }
+        return progress;
     }
 
-    /**
-     * Actualiza el progreso de una misión de acción.
-     *
-     * Compara la acción realizada por el jugador con la acción requerida
-     * por la misión. Si ambas coinciden, marca la misión como completada.
-     *
-     * @param progress Progreso de acción generado por una acción del jugador.
-     * @param mission Misión de acción a actualizar.
-     */
-    private updateActionMission(
-        progress: UpdateActionMissionProgress,
-        mission: ActionMission
-    ) {
-        if (progress.action === mission.missionProgress.typeAction) {
-            mission.missionProgress.isDone = true
+    /** Devuelve la cantidad que aporta un hecho a un objetivo compatible. */
+    private eventQuantity(objective: MissionObjective, event: MissionEvent): number {
+        const quantity = event.quantity ?? 1;
+        if (!Number.isSafeInteger(quantity) || quantity < 1) return 0;
+        if (objective.type === 'hunt' && event.type === 'hunt') {
+            const { target } = objective;
+            if (target.zone !== undefined && target.zone !== event.zone) return 0;
+            if ('mobIds' in target && !target.mobIds.includes(event.mobId)) return 0;
+            if ('enemyType' in target && target.enemyType !== event.enemyType) return 0;
+            return quantity;
         }
+        if (objective.type === 'collect' && objective.mode === 'obtained' && event.type === 'collect') {
+            return objective.itemId === event.itemId ? quantity : 0;
+        }
+        if (objective.type === 'action' && event.type === 'action') {
+            const fields = new Map(Object.entries(event.action));
+            const matches = Object.entries(objective.action).every(([key, value]) =>
+                value === undefined || (key === 'minLevel'
+                    ? typeof value === 'number' && (event.action.level ?? 0) >= value
+                    : fields.get(key) === value));
+            return matches ? quantity : 0;
+        }
+        return 0;
+    }
+
+    /** Serializa los contadores acumulados por objetivo. */
+    private toProgress(counts: Map<number, number>): MissionProgress['objectivesProgress'] {
+        return [...counts].map(([objectiveId, count]) => ({ objectiveId, count }));
     }
 }

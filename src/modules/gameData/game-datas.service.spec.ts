@@ -3,7 +3,7 @@ import type { CharacterRace, CharacterSpeciality } from 'netim2-shared';
 import { UNIQUE_ID_SKILLS } from 'netim2-shared';
 import { CharacterService } from '../character/character.service';
 import { CharacterMapper } from '../character/mapper/character-mapper';
-import { CHARACTER_SPECIALITYS } from '../character/const/character-specialitys.const';
+import { CHARACTER_SPECIALITYS, MIN_LV_TO_SELECT_SPECIALITY } from '../character/const/character-specialitys.const';
 import { ATTRIBUTE_RACE_CAPS } from '../character/const/statsProgress/attribute-race-caps.const';
 import { ATTRIBUTE_SPECIALITY_CAPS } from '../character/const/statsProgress/attribute-speciality-caps.const';
 import { EQUIPMENT_SLOTS_CONFIG } from '../character/config/equip-slot.config';
@@ -50,7 +50,10 @@ describe('GameDatasService game config', () => {
             expect(service.getGameConfig('guerrero').character.idSkillsSpeciality.map(entry => entry.specialidad)).toEqual(['Mental']);
             expect(() => service.getGameConfig('guerrero', 'Corporal')).toThrow(BadRequestException);
             CHARACTER_SPECIALITYS.guerrero = [];
-            expect(service.getGameConfig('guerrero').character).toEqual({ race: ATTRIBUTE_RACE_CAPS.guerrero, speciality: [], idSkillsSpeciality: [] });
+            expect(service.getGameConfig('guerrero').character).toEqual({
+                race: ATTRIBUTE_RACE_CAPS.guerrero, speciality: [], idSkillsSpeciality: [],
+                min_speciality_level: MIN_LV_TO_SELECT_SPECIALITY,
+            });
         } finally { CHARACTER_SPECIALITYS.guerrero = before; }
     });
 

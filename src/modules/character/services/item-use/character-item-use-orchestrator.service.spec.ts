@@ -1,3 +1,4 @@
+import { MissionProgressService } from '../../../misiones/services/mission-progress.service';
 import { BadRequestException, ForbiddenException, NotFoundException } from '@nestjs/common';
 import { Connection } from 'mongoose';
 import { NormalPotion, InventoryItem, ReservePotion } from 'netim2-shared';
@@ -41,7 +42,8 @@ describe('CharacterItemUseOrchestratorService', () => {
         const items = { getUpdatedInventoryItem: jest.fn((item: InventoryItem) =>
             new ItemHydrationService().hydrateInventoryItem(POCION_LIST.find(base => base.idItem === item.idItem)!, item)) };
         service = new CharacterItemUseOrchestratorService(repository as unknown as CharacterRepository, mapper, potions,
-            connection as unknown as Connection, items as unknown as ItemService, buffs as unknown as CharacterBuffService, chests as unknown as CharacterChestService);
+            connection as unknown as Connection, items as unknown as ItemService, buffs as unknown as CharacterBuffService, chests as unknown as CharacterChestService,
+            new MissionProgressService());
     });
 
     it('loads once, saves resource paths and inventory together and returns only the response', async () => {
@@ -192,7 +194,7 @@ describe('CharacterItemUseOrchestratorService', () => {
         await expect(service.openChest('character', 'other', { itemId: 'potion' })).rejects.toBeInstanceOf(ForbiddenException);
         expect(chests.openChest).not.toHaveBeenCalled();
         expect(repository.updateCharacterById).not.toHaveBeenCalled();
-        chests.openChest.mockReturnValue({ character: structuredClone(source), response: { yang: 0 } });
+        chests.openChest.mockReturnValue({ character: structuredClone(source), response: { yang: 0, rewards: [] } });
         repository.updateCharacterById.mockRejectedValue(new Error('write failed'));
         await expect(service.openChest('character', 'owner', { itemId: 'potion' })).rejects.toThrow('write failed');
         expect(session.endSession).toHaveBeenCalledTimes(2);

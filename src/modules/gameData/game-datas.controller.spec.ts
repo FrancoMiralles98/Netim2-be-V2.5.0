@@ -8,8 +8,9 @@ import { ATTRIBUTE_RACE_CAPS } from '../character/const/statsProgress/attribute-
 import { ATTRIBUTE_SPECIALITY_CAPS } from '../character/const/statsProgress/attribute-speciality-caps.const';
 import { GameDatasController } from './game-datas.controller';
 import { GameDatasService } from './game-datas.service';
-import { CHARACTER_SPECIALITYS } from '../character/const/character-specialitys.const';
+import { CHARACTER_SPECIALITYS, MIN_LV_TO_SELECT_SPECIALITY } from '../character/const/character-specialitys.const';
 import { ALL_SKILLS } from '../skill/const/skills';
+import { ZONES_CONFIG } from './const/zones-config.const';
 
 describe('GameDatasController config HTTP', () => {
     let app: INestApplication;
@@ -32,9 +33,12 @@ describe('GameDatasController config HTTP', () => {
         const response = await request(app.getHttpServer()).get('/game-data/config').query({ race: 'ninja' }).expect(200);
         expect(response.body.data.character).toEqual({
             race: ATTRIBUTE_RACE_CAPS.ninja,
+            min_speciality_level: MIN_LV_TO_SELECT_SPECIALITY,
             speciality: CHARACTER_SPECIALITYS.ninja.map(specialidad => ({ specialidad, caps: ATTRIBUTE_SPECIALITY_CAPS[specialidad] })),
             idSkillsSpeciality: CHARACTER_SPECIALITYS.ninja.map(specialidad => ({ specialidad, idSkills: ALL_SKILLS[specialidad].map(skill => skill.id) })),
         });
+        expect(Object.keys(response.body.data.zonas).sort()).toEqual(['city1', 'city2', 'desierto', 'montaña', 'templo', 'valle']);
+        expect(response.body.data.zonas).toEqual(ZONES_CONFIG);
     });
 
     it('keeps all race specialities when a valid selected speciality is supplied', async () => {

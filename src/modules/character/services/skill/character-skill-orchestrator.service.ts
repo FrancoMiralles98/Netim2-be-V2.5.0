@@ -8,6 +8,7 @@ import { InjectConnection } from '@nestjs/mongoose';
 import { Connection } from 'mongoose';
 import type { GetSkillUpgradePreviewRequest, GetSkillUpgradePreviewResponse } from 'netim2-shared';
 import type { UpgradeCharacterSkillRequest, UpgradeCharacterSkillResponse } from '../../types/upgrade-character-skill.types';
+import { MissionProgressService } from '../../../misiones/services/mission-progress.service';
 
 @Injectable()
 export class CharacterSkillOrchestratorService {
@@ -16,6 +17,7 @@ export class CharacterSkillOrchestratorService {
         private readonly characterMapper: CharacterMapper,
         private readonly characterSkillService: CharacterSkillService,
         @InjectConnection() private readonly connection: Connection,
+        private readonly missions: MissionProgressService,
     ) {}
 
     async getUpgradePreview(characterId: string, accountId: string, request: GetSkillUpgradePreviewRequest): Promise<GetSkillUpgradePreviewResponse> {
@@ -31,10 +33,14 @@ export class CharacterSkillOrchestratorService {
                 const document = await this.characterRepository.getCharacterById(characterId, session);
                 if (document.user_owner !== accountId) throw new ForbiddenException('El personaje no pertenece a la cuenta');
                 const { character, response } = this.characterSkillService.upgradeSkill(this.characterMapper.fromDb(document), request);
+                const missionOption = this.missions.register(character, [{ type: 'action',
+                    action: { event: 'skill_upgraded', skillId: request.skillId },
+                }]);
                 await this.characterRepository.updateCharacterById(characterId, {
                     hab: character.hab,
                     inventario: character.inventario,
                     puntos_habilidad: character.puntos_habilidad,
+                    ...(missionOption ? { mission_option: missionOption } : {}),
                 }, session);
                 return response;
             });
@@ -57,11 +63,15 @@ export class CharacterSkillOrchestratorService {
                 const document = await this.characterRepository.getCharacterById(characterId, session);
                 if (document.user_owner !== accountId) throw new ForbiddenException('El personaje no pertenece a la cuenta');
                 const { character, response } = this.characterSkillService.selectSpeciality(this.characterMapper.fromDb(document), request);
+                const missionOption = this.missions.register(character, [{ type: 'action',
+                    action: { event: 'speciality_selected', speciality: response.speciality },
+                }]);
                 await this.characterRepository.updateCharacterById(characterId, {
                     especialidad: character.especialidad,
                     hab: character.hab,
                     stats: character.stats,
                     atributos: character.atributos,
+                    ...(missionOption ? { mission_option: missionOption } : {}),
                 }, session);
                 return response;
             });

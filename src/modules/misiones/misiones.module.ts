@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { MisionesService } from './misiones.service';
-import { MisionesController } from './misiones.controller';
 import { ItemModule } from '../item/item.module';
+import { MobModule } from '../mob/mob.module';
 import { MissionCatalogService } from './services/mission-catalog.service';
 import { MissionProgressService } from './services/mission-progress.service';
 import { MissionRewardService } from './services/mission-reward.service';
 
 @Module({
   imports: [
-    ItemModule
+    ItemModule,
+    MobModule,
   ],
-  controllers: [MisionesController],
   providers: [
     MisionesService,
     MissionCatalogService,
@@ -18,7 +18,10 @@ import { MissionRewardService } from './services/mission-reward.service';
     MissionRewardService
   ],
   exports: [
-    MisionesService
+    MisionesService,
+    MissionCatalogService,
+    MissionProgressService,
+    MissionRewardService,
   ]
 })
 export class MisionesModule {}

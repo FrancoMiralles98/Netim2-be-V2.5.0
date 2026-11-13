@@ -1,3 +1,4 @@
+import { MissionProgressService } from '../../../misiones/services/mission-progress.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException, ForbiddenException } from '@nestjs/common';
 import { validateSync } from 'class-validator';
@@ -131,7 +132,7 @@ describe('Character speciality skills preview', () => {
         const response = { skills: [], stats: GENERAL_CHARACTER.stats, attributes: GENERAL_CHARACTER.atributos };
         const actions = { getSpecialitySkills: jest.fn().mockReturnValue(response) };
         const orchestrator = new CharacterSkillOrchestratorService(repository as unknown as CharacterRepository,
-            mapper as unknown as CharacterMapper, actions as unknown as CharacterSkillService, {} as Connection);
+            mapper as unknown as CharacterMapper, actions as unknown as CharacterSkillService, {} as Connection, new MissionProgressService());
         const request = { speciality: 'Corporal' as const };
         await expect(orchestrator.getSpecialitySkills('character', 'owner', request)).resolves.toEqual(response);
         expect(repository.getCharacterById).toHaveBeenCalledTimes(1);

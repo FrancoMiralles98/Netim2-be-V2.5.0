@@ -3,7 +3,7 @@ import { RACE_INFO } from './const/race-info.const';
 import { GENERAL_ATTRIBUTE_CAP } from '../character/const/statsProgress/general-attribute-cap.const';
 import { CharacterService } from '../character/character.service';
 import { CharacterMapper } from '../character/mapper/character-mapper';
-import { CharacterRace, CharacterSelectionDataType, CharacterSpeciality, GameConfigResponse } from 'netim2-shared';
+import { CharacterRace, CharacterSelectionDataType, CharacterSpeciality } from 'netim2-shared';
 import { ReinosBuff } from './reinos/reinos-buff.config';
 import { MAX_CHARACTERS } from './const/max-characters.const';
 import { ATTRIBUTE_EFFECTS_CONFIG } from './const/attributes-config';
@@ -13,9 +13,11 @@ import { EQUIPMENT_SLOTS_CONFIG } from '../character/config/equip-slot.config';
 import { MAX_ACTIVE_BUFF } from '../character/config/buffs.config';
 import { ATTRIBUTE_RACE_CAPS } from '../character/const/statsProgress/attribute-race-caps.const';
 import { ATTRIBUTE_SPECIALITY_CAPS } from '../character/const/statsProgress/attribute-speciality-caps.const';
-import { CHARACTER_SPECIALITYS } from '../character/const/character-specialitys.const';
+import { CHARACTER_SPECIALITYS, MIN_LV_TO_SELECT_SPECIALITY } from '../character/const/character-specialitys.const';
 import { ALL_SKILLS } from '../skill/const/skills';
 import { STATUS_EFFECTS_CONFIG } from '../fight/config/status-effects.config';
+import { ZONES_CONFIG } from './const/zones-config.const';
+import type { GameConfigApiResponse } from './types/game-config-response.type';
 
 @Injectable()
 export class GameDatasService {
@@ -24,7 +26,7 @@ export class GameDatasService {
         private characterMapper: CharacterMapper
     ) { }
 
-    getGameConfig(race: CharacterRace, speciality?: CharacterSpeciality): GameConfigResponse {
+    getGameConfig(race: CharacterRace, speciality?: CharacterSpeciality): GameConfigApiResponse {
         if (!Object.hasOwn(CHARACTER_SPECIALITYS, race)) throw new BadRequestException('La raza no es válida');
         const specialities = CHARACTER_SPECIALITYS[race];
         if (speciality !== undefined && !specialities.includes(speciality)) {
@@ -39,6 +41,7 @@ export class GameDatasService {
             character: {
                 race: ATTRIBUTE_RACE_CAPS[race],
                 speciality: specialityCaps,
+                min_speciality_level: MIN_LV_TO_SELECT_SPECIALITY,
                 idSkillsSpeciality: specialities.map(specialidad => ({
                     specialidad,
                     idSkills: [...new Set(ALL_SKILLS[specialidad].map(skill => skill.id))],
@@ -59,7 +62,8 @@ export class GameDatasService {
             },
             buff: {
                 max_active_buff: MAX_ACTIVE_BUFF
-            }
+            },
+            zonas: ZONES_CONFIG,
         });
     }
 
