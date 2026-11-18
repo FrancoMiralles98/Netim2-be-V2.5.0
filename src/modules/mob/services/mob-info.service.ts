@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import type { GetMobInfoResponse, GetMobsByUbicationResponse, IdMobList, UbicationNames } from 'netim2-shared';
+import type { GetMobsByUbicationResponse, IdMobList, MobType, UbicationNames } from 'netim2-shared';
 import { MOB_LIST } from '../const/mob-list.const';
 import { MobFactory } from '../factory/mob.factory';
 
@@ -15,7 +15,7 @@ export class MobInfoService {
             }));
     }
 
-    getMobInfo(idMob: IdMobList): GetMobInfoResponse {
+    getMobInfo(idMob: IdMobList): MobType {
         const definition = MOB_LIST.find(mob => mob.idMob === idMob);
         if (!definition) throw new NotFoundException('No se encuentra el mob en el catálogo');
         // También aísla habilidades, recompensas y spawnConfig de la definición compartida.

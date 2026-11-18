@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { UtilityItemDTO } from "netim2-shared";
+import type { DropRange, UtilityItemDTO } from "netim2-shared";
 import { MobModel } from "src/modules/mob/schema/mob.schema";
 import { RngService } from "src/modules/shared/services/rng.service";
 
@@ -29,77 +29,33 @@ export class UtilityItemDropService {
     generateFinalItem(baseItem: UtilityItemDTO, mob: MobModel, rareBonusValue: number): UtilityItemDTO {
         const item = structuredClone(baseItem)
 
-        if (!item.itemDropConfig?.quantity) {
-            return {
-                ...item,
-                cantidad: 1,
-            }
-        }
+        const quantity = item.itemDropConfig?.quantity
+        if (!quantity || quantity.max === 1) return { ...item, cantidad: 1 }
 
-        const cantidad = this.calculateQuantity(
-            item.itemDropConfig.quantity,
-            item.itemDropConfig.levelScaling,
-            mob,
-            rareBonusValue,
-        )
-
-        return {
-            ...item,
-            cantidad,
-        }
+        const weights = this.getQuantityWeights(item, mob, rareBonusValue)
+        return { ...item, cantidad: Number(this.rngService.pickWeightedResult(weights)) }
     }
 
-    /**
-    * Calcula la cantidad final de unidades que serán obtenidas
-    * al dropear un ítem de utilidad.
-    *
-    * Puede aplicar:
-    * - escalado por nivel del mob
-    * - bonificaciones de rareza
-    * - límites mínimo y máximo configurados
-    *
-    * @param quantityConfig Configuración base de cantidad.
-    * @param levelScaling Configuración de escalado por nivel.
-    * @param mob Mob que generó el drop.
-    * @param rareBonusValue Valor de frecuencia de objetos raros.
-    *
-    * @returns Cantidad final generada para el ítem.
-    */
-    private calculateQuantity(
-        quantityConfig: {
-            min: number
-            max: number
-            scaleWithMobLv: boolean
-        } | undefined,
-        levelScaling: {
-            startLv: number
-            maxBonusLv: number
-            maxMultiplier: number
-        } | undefined,
-        mob: MobModel,
-        rareBonusValue: number,
-    ): number {
-        if (!quantityConfig || quantityConfig.max === 1) {
-            return 1
-        }
+    /** Devuelve las cantidades mínima y máxima con peso positivo. */
+    getQuantityRange(item: UtilityItemDTO, mob: MobModel, rareBonusValue: number): DropRange {
+        const quantities = Object.keys(this.getQuantityWeights(item, mob, rareBonusValue)).map(Number)
+        return { min: quantities[0], max: quantities[quantities.length - 1] }
+    }
 
-        let minQuantity = quantityConfig.min
-        let maxQuantity = quantityConfig.max
+    /** Construye los mismos pesos que se usan para sortear la cantidad del drop. */
+    private getQuantityWeights(item: UtilityItemDTO, mob: MobModel, rareBonusValue: number): Record<string, number> {
+        const quantity = item.itemDropConfig?.quantity
+        const levelScaling = item.itemDropConfig?.levelScaling
+        if (!quantity || quantity.max === 1) return { 1: 100 }
 
-        if (quantityConfig.scaleWithMobLv && levelScaling) {
+        let { min, max } = quantity
+        if (quantity.scaleWithMobLv && levelScaling) {
             const multiplier = this.getLevelScalingMultiplier(levelScaling, mob.lv)
-
-            minQuantity = Math.max(1, Math.round(minQuantity * multiplier))
-            maxQuantity = Math.max(minQuantity, Math.round(maxQuantity * multiplier))
+            min = Math.max(1, Math.round(min * multiplier))
+            max = Math.max(min, Math.round(max * multiplier))
         }
 
-        const quantityWeights = this.buildQuantityWeights(
-            minQuantity,
-            maxQuantity,
-            rareBonusValue,
-        )
-
-        return Number(this.rngService.pickWeightedResult(quantityWeights))
+        return this.buildQuantityWeights(min, max, rareBonusValue)
     }
 
     /**
@@ -168,9 +124,9 @@ export class UtilityItemDropService {
         min: number,
         max: number,
         rareBonusValue: number,
-    ): Partial<Record<string, number>> {
+    ): Record<string, number> {
 
-        const weights: Partial<Record<string, number>> = {}
+        const weights: Record<string, number> = {}
 
         for (let quantity = min; quantity <= max; quantity++) {
             const progress = max === min
@@ -179,9 +135,11 @@ export class UtilityItemDropService {
 
             const rareMultiplier = 1 + progress * (rareBonusValue / 100)
 
-            weights[String(quantity)] = Math.round(100 * rareMultiplier)
+            const weight = Math.round(100 * rareMultiplier)
+            if (weight > 0) weights[quantity] = weight
         }
 
+        if (!Object.keys(weights).length) throw new Error('El drop no tiene cantidades con peso positivo')
         return weights
     }
 }

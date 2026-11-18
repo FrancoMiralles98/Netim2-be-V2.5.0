@@ -2,7 +2,7 @@ import type { MobCombatCurvePoint } from '../types/mobProps/mob-combat-config.ty
 
 /** Puntos de balance ordenados por nivel. La factory interpola los niveles intermedios. */
 export const MOB_COMBAT_CURVE: readonly [MobCombatCurvePoint, ...MobCombatCurvePoint[]] = [
-    { level: 1, hp: 120, mana: 40, ad: { min: 25, max: 35 }, ap: { min: 15, max: 25 }, def: 2 },
+    { level: 1, hp: 250, mana: 40, ad: { min: 25, max: 35 }, ap: { min: 15, max: 25 }, def: 2 },
     { level: 10, hp: 480, mana: 90, ad: { min: 70, max: 98 }, ap: { min: 45, max: 65 }, def: 11 },
     { level: 20, hp: 1_000, mana: 150, ad: { min: 110, max: 155 }, ap: { min: 75, max: 105 }, def: 18 },
     { level: 30, hp: 1_750, mana: 220, ad: { min: 150, max: 210 }, ap: { min: 100, max: 145 }, def: 25 },

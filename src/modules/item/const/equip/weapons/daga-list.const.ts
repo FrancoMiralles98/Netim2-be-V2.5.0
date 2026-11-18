@@ -14,7 +14,13 @@ export const DAGA_LIST: EquipType[] = [
         type_weapon: 'daga',
         especial: false,
         price: 300,
-        slot: 1
+        slot: 1,
+        itemDropConfig: {
+            drop_tag: ['equipment'],
+            source: ['mob_drop', 'shop'],
+            mobLv: { min: 1, max: 14 },
+            weight: 'COMMON',
+        }
     }),
     createEquipItem({
         idItem: IdItem.AMIJA,

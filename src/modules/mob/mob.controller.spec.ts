@@ -1,23 +1,32 @@
 import { INestApplication, UnauthorizedException, ValidationPipe } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import request = require('supertest');
-import { IdMob } from 'netim2-shared';
+import { IdMob, type MobDropPreview } from 'netim2-shared';
 import { AccessTokenGuard } from '../auth/guards/access-token.guard';
+import { MobDropPreviewService } from '../drop/service/mob-drop-preview.service';
+import { POCION_LIST } from '../item/const/miscs/pocion/pocion-list.const';
 import { ApiResponseInterceptor } from '../shared/interceptors/api-response.interceptor';
 import { ApiExceptionFilter } from '../shared/filters/api-exception.filter';
 import { MobController } from './mob.controller';
 import { MobFactory } from './factory/mob.factory';
+import { MOB_LIST } from './const/mob-list.const';
 import { MobInfoService } from './services/mob-info.service';
 import { MobOrchestratorService } from './services/mob-orchestrator.service';
 
 describe('GET /mob/:idMob', () => {
   let app: INestApplication;
   const guard = { canActivate: jest.fn(() => true) };
+  const drop: MobDropPreview = [{
+    type: 'utility', item: POCION_LIST[0], chancePerAttempt: 10, chancePerKill: 20,
+    chanceChange: 'unchanged', quantityRange: { min: 1, max: 20 }, dropWeight: 'COMMON',
+  }];
+  const dropPreview = { getMobDropPreview: jest.fn(() => drop) };
 
   beforeAll(async () => {
     const module = await Test.createTestingModule({
       controllers: [MobController],
-      providers: [MobFactory, MobInfoService, MobOrchestratorService],
+      providers: [MobFactory, MobInfoService, MobOrchestratorService,
+        { provide: MobDropPreviewService, useValue: dropPreview }],
     }).overrideGuard(AccessTokenGuard).useValue(guard).compile();
     app = module.createNestApplication();
     app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
@@ -47,16 +56,21 @@ describe('GET /mob/:idMob', () => {
     },
   );
 
-  it('returns the full catalog mob with calculated stats in the API envelope', async () => {
+  it('returns the full catalog mob and its base drops in the API envelope', async () => {
     const { body } = await request(app.getHttpServer()).get(`/mob/${IdMob.PERRO_SALVAJE}`).expect(200);
     expect(body).toMatchObject({ success: true, message: 'Ok', data: {
-      idMob: IdMob.PERRO_SALVAJE, nombre: 'Perro Salvaje',
-      stats: { general: { hp: { max: 120, actual: 120 } } },
+      mob: { idMob: IdMob.PERRO_SALVAJE, nombre: 'Perro Salvaje',
+        stats: { general: { hp: new MobFactory().create(MOB_LIST[0]).stats.general.hp } } },
+      drop,
     } });
-    expect(body.data).toHaveProperty('fightConfig');
-    expect(body.data).toHaveProperty('spawnConfig');
-    expect(body.data).not.toHaveProperty('combatProfile');
-    expect(body.data).not.toHaveProperty('_id');
+    expect(body.data.mob).toHaveProperty('fightConfig');
+    expect(body.data.mob).toHaveProperty('spawnConfig');
+    expect(body.data.mob).not.toHaveProperty('combatProfile');
+    expect(body.data.mob).not.toHaveProperty('_id');
+    expect(dropPreview.getMobDropPreview).toHaveBeenCalledWith(
+      expect.objectContaining({ idMob: IdMob.PERRO_SALVAJE }),
+      expect.objectContaining({ chances_objetos: 0, chances_yang: 0, chances_raros: 0 }),
+    );
   });
 
   it.each(['abc', '0', '-1', '1.5', '9007199254740992'])('rejects invalid id %s', async id => {

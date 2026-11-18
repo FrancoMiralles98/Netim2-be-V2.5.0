@@ -1,5 +1,7 @@
 import type { BonusDefensaRefKeys } from 'netim2-shared';
+import { LIMIT_BONUS_CONFIG } from '../../bonus/config/limit-bonus.config';
 import { BASE_FIGHT_CONFIG } from '../../character/const/characterProps/base-fight-config.const';
+import { applyMovementSpeedDodge } from '../../shared/utils/apply-movement-speed-dodge';
 import { MOB_COMBAT_CURVE } from '../config/mob-combat-curve.config';
 import { MOB_COMBAT_PERFIL } from '../config/mob-combat-perfil.config';
 import { MOB_RACE_MODIFIERS } from '../config/mob-race-modifiers.config';
@@ -20,6 +22,7 @@ export class MobFactory {
         const { combatProfile, stats, fightConfig, ...mob } = data;
         return {
             ...mob,
+            maxQuantitySpawn: data.maxQuantitySpawn ?? 1,
             fightConfig: structuredClone(fightConfig ?? BASE_FIGHT_CONFIG),
             stats: this.calculateCombatStats({ ...mob, combatProfile, stats }),
         };
@@ -64,7 +67,13 @@ export class MobFactory {
             const max = Math.round(general[key].max);
             general[key] = { max, actual: max };
         }
-        return this.applyOverrides(stats, overrides);
+        const result = this.applyOverrides(stats, overrides);
+        applyMovementSpeedDodge(result);
+        for (const key of ['esquivar_ataques', 'esquivar_hechizos'] as const) {
+            const limit = LIMIT_BONUS_CONFIG[key];
+            if (limit !== undefined) result.bonus.defensa[key] = Math.min(result.bonus.defensa[key], limit);
+        }
+        return result;
     }
 
     /** Interpola los valores entre dos niveles y usa el último punto al superar la curva. */

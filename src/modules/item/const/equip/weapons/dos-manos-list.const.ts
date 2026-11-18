@@ -14,7 +14,13 @@ export const DOS_MANOS_LIST: EquipType[] = [
         type_weapon: 'dos_manos',
         especial: false,
         price: 300,
-        slot: 1
+        slot: 1,
+        itemDropConfig: {
+            drop_tag: ['equipment'],
+            source: ['mob_drop', 'shop'],
+            mobLv: { min: 1, max: 14 },
+            weight: 'COMMON',
+        }
     }),
     createEquipItem({
         idItem: IdItem.LANZA,
@@ -237,7 +243,7 @@ export const DOS_MANOS_LIST: EquipType[] = [
         price: 300,
         slot: 3
     }),
-        createEquipItem({
+    createEquipItem({
         idItem: IdItem.ESPADA_RESENTIMIENTO,
         restricted: ['guerrero'],
         name: 'Espada Resentimiento',

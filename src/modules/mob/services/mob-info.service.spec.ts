@@ -31,7 +31,8 @@ describe('MobInfoService', () => {
         result.spawnConfig.canSpawn = true;
         result.stats.general.hp.max = -100;
         expect(MOB_LIST).toEqual(original);
-        expect(service.getMobInfo(IdMob.PERRO_SALVAJE).stats.general.hp.max).toBe(120);
+        expect(service.getMobInfo(IdMob.PERRO_SALVAJE).stats.general.hp.max)
+            .toBe(new MobFactory().create(MOB_LIST[0]).stats.general.hp.max);
     });
 
     it('rejects unknown IDs instead of returning an incomplete mob', () => {

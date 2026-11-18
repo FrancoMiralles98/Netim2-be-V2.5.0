@@ -17,7 +17,9 @@ import type { MobType } from './mob.type';
  * @see MobType
  * @see MobStats
  */
-export type MobCoreData = Omit<MobType, 'stats' | 'fightConfig'> & {
+export type MobCoreData = Omit<MobType, 'stats' | 'fightConfig' | 'maxQuantitySpawn'> & {
+    /** Cantidad máxima por encuentro. Las fichas anteriores usan 1 si se omite. */
+    maxQuantitySpawn?: MobType['maxQuantitySpawn'];
     /** Perfil de combate. Usa `standard` por defecto. */
     combatProfile?: MobCombatProfile;
     /** Valores finales puntuales del mob, aplicados después de la curva y los modificadores. */

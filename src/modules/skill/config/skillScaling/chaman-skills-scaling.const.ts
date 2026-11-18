@@ -326,7 +326,7 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                 type: 'instant',
                 amount: {
                     progression: {
-                        type: 'per_level', base: 80,
+                        type: 'per_level', base: 1,
                         perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
                     },
                 },
@@ -420,7 +420,18 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                 },
             },
             tags: [],
-            statsModifiers: [],
+            statsModifiers: [
+                {
+                    operation: 'flat',
+                    target: 'bonus.defensa.def_media',
+                    value: {
+                        progression: {
+                            type: 'constant',
+                            value: 10
+                        }
+                    }
+                }
+            ],
         },
         [UNIQUE_ID_SKILLS.REFLECTAR]: {
             type: 'aura',

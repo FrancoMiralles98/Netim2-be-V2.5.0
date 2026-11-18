@@ -1,4 +1,4 @@
-import { IdMob } from "netim2-shared";
+import { IdItem, IdMob } from "netim2-shared";
 import type { MobCoreData } from "../../types/mobProps/mob-core-data.type";
 
 export const CITY1_MOB_LIST: MobCoreData[] = [
@@ -13,7 +13,8 @@ export const CITY1_MOB_LIST: MobCoreData[] = [
         nombre: 'Perro Salvaje',
         raza: 'perro',
         spawnConfig: {canSpawn:false},
-        specific_drop: [],
+        specific_drop: [IdItem.PIEL_DE_LOBO],
+        maxQuantitySpawn: 3,
         target_type: 'animales',
         ubication: 'city1',
         yang: {min:10,max:20},

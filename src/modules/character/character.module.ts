@@ -36,6 +36,11 @@ import { CharacterSkillController } from './controller/character-skill.controlle
 import { MisionesModule } from '../misiones/misiones.module';
 import { MisionesController } from '../misiones/misiones.controller';
 import { MissionOrchestratorService } from '../misiones/services/mission-orchestrator.service';
+import { FightModule } from '../fight/fight.module';
+import { MobModule } from '../mob/mob.module';
+import { CharacterFightService } from './services/fight/character-fight.service';
+import { CharacterFightOrchestratorService } from './services/fight/character-fight-orchestrator.service';
+import { CharacterFightController } from './controller/character-fight.controller';
 
 @Module({
   imports: [
@@ -46,12 +51,14 @@ import { MissionOrchestratorService } from '../misiones/services/mission-orchest
     ItemModule,
     SkillModule,
     MisionesModule,
+    FightModule,
+    MobModule,
     MongooseModule.forFeature([
       { name: CharacterModel.name, schema: characterSchema }
     ])
   ],
-  controllers: [CharacterController, CharacterEquipmentController, CharacterInventoryController, CharacterItemUseController, CharacterAttributeController, CharacterSkillController, MisionesController],
-  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService, CharacterPotionService, CharacterItemUseOrchestratorService, CharacterChestService, CharacterAttributeService, CharacterAttributeOrchestratorService, CharacterSkillService, CharacterSkillOrchestratorService, MissionOrchestratorService],
+  controllers: [CharacterController, CharacterEquipmentController, CharacterInventoryController, CharacterItemUseController, CharacterAttributeController, CharacterSkillController, MisionesController, CharacterFightController],
+  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService, CharacterPotionService, CharacterItemUseOrchestratorService, CharacterChestService, CharacterAttributeService, CharacterAttributeOrchestratorService, CharacterSkillService, CharacterSkillOrchestratorService, MissionOrchestratorService, CharacterFightService, CharacterFightOrchestratorService],
   exports: [
     CharacterService,
     CharacterMapper,

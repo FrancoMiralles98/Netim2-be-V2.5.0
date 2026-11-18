@@ -1,15 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { FighterCombatCreationInput } from "./fighter-combat-factory.types";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
-import { CharacterPersistence, CharacterPersistenceWithId, FighterBaseStats, Stats, TypeWeapon } from "netim2-shared";
-import { MobModel } from "src/modules/mob/schema/mob.schema";
+import { CharacterPersistenceWithId, FighterBaseStats, MobType, Stats, TypeWeapon } from "netim2-shared";
 import { randomUUID } from "crypto";
 
 @Injectable()
 export class FighterCombatFactory {
     createSidesWithMobs(
         fighters: CharacterPersistenceWithId[],
-        mobs: MobModel[]
+        mobs: MobType[]
     ): { allies: FighterCombatEntity[], enemies: FighterCombatEntity[] } {
         const allies = fighters.map(fighter => this.createFighter({
             fightConfig: fighter.fightConfig,

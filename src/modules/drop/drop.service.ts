@@ -28,6 +28,9 @@ export class DropService {
     * - Yang.
     * - Un ítem.
     *
+    * Si un intento de ítem agota las categorías sin encontrar candidatos,
+    * vuelve a sortear ese resultado entre yang y nada con sus pesos actuales.
+    *
     * Además, las probabilidades de drop y la cantidad de yang obtenida pueden
     * verse modificadas por los bonus misceláneos del personaje.
     *
@@ -56,23 +59,27 @@ export class DropService {
             yang: 0
         }
 
-        let totalAttempts = this.rngService.randomNumberInRange(dropConfig.attempts.min, dropConfig.attempts.max)
+        const totalAttempts = this.rngService.randomNumberInRange(dropConfig.attempts.min, dropConfig.attempts.max)
 
-        dropConfig.resultChances = this.miscsBonusService.applyItemDropAndYangChanceBonus(dropConfig.resultChances,bonus)
+        const resultChances = this.miscsBonusService.applyItemDropAndYangChanceBonus(dropConfig.resultChances, bonus)
+        const { nothing, yang } = resultChances
 
         for (let index = 0; index < totalAttempts; index++) {
-            const result = this.rngService.pickWeightedResult(dropConfig.resultChances)
+            let result = this.rngService.pickWeightedResult(resultChances)
+            if (result === 'item') {
+                const item = this.itemDropService.dropItem(mob, bonus)
+                if (item) {
+                    dropResult.items.push(item)
+                    continue
+                }
 
-            if (result === 'nothing') {
-                continue;
+                result = nothing > 0 || yang > 0
+                    ? this.rngService.pickWeightedResult({ nothing, yang })
+                    : 'nothing'
             }
 
             if (result === 'yang') {
                 dropResult.yang += this.miscsBonusService.calculateYang(bonus, mob.yang)
-            }
-
-            if (result === 'item') {
-                dropResult.items.push(this.itemDropService.dropItem(mob, bonus))
             }
         }
 

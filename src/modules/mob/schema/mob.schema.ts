@@ -19,6 +19,9 @@ export class MobModel implements MobType {
     @Prop({ type: Number, required: true })
     dificultad!: MobDifficulty;
 
+    @Prop({ type: Number, min: 1, default: 1, required: true })
+    maxQuantitySpawn!: number;
+
     @Prop({ type: Object, required: true })
     spawnConfig!: SpawnConfig;
 

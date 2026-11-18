@@ -13,6 +13,8 @@ import { ATTRIBUTE_BASE_BY_RACE } from './const/statsProgress/attribute-base-by-
 import { ITEM_LIST } from '../item/const/items.const';
 import { ItemService } from '../item/item.service';
 import { Pocion } from '../item/entities/pocion.entity';
+import type { CharacterEntity } from './entity/character-entity';
+import type { IdItemList } from 'netim2-shared';
 
 @Injectable()
 export class CharacterService {
@@ -140,14 +142,11 @@ export class CharacterService {
                 reino: reinoFinal,
             });
 
-            const espada = ITEM_LIST.find(i => i.idItem === IdItem.ESPADA) as EquipType
-            const daga = ITEM_LIST.find(i => i.idItem === IdItem.DAGA) as EquipType
             const armor = ITEM_LIST.find(i => i.idItem === IdItem.ARMADURA_DE_MONJE) as EquipType
-            const poscion = ITEM_LIST.find(i => i.idItem === IdItem.GLAIVE) as EquipType
             const peil = ITEM_LIST.find(i => i.idItem === IdItem.PIEDRA_DE_INTELIGENCIA)
             const poM = ITEM_LIST.find(i => i.idItem === IdItem.CAJA_DE_HABILIDADES_DE_GUERRERO)
 
-            if (!espada || !daga || !armor || !poscion || !peil || !poM) {
+            if (!armor || !peil || !poM) {
                 throw new BadRequestException('arma no existe')
             }
 
@@ -157,10 +156,8 @@ export class CharacterService {
 
 
             const entity = this.characterMapper.toDomain(baseCharacter)
-            entity.addItemToInventory(espada)
-            entity.addItemToInventory(daga)
+            this.addStarterWeapons(entity, baseCharacter.raza)
             entity.addItemToInventory(armor)
-            entity.addItemToInventory(poscion)
             entity.addItemToInventory(peil)
             entity.addItemToInventory(poM)
             const newCharacter = this.characterMapper.toPersistence(entity)
@@ -186,6 +183,20 @@ export class CharacterService {
             }
 
             throw error;
+        }
+    }
+
+    /** Agrega al inventario las armas iniciales correspondientes a la raza del personaje. */
+    private addStarterWeapons(character: CharacterEntity, race: CharacterRace): void {
+        const weaponsByRace = {
+            guerrero: [IdItem.GLAIVE, IdItem.ESPADA],
+            sura: [IdItem.ESPADA],
+            ninja: [IdItem.ESPADA, IdItem.DAGA, IdItem.ARCO],
+            chaman: [IdItem.CAMPANA_DE_COBRE, IdItem.FAN],
+        } satisfies Record<CharacterRace, IdItemList[]>;
+
+        for (const idItem of weaponsByRace[race]) {
+            character.addItemToInventory(this.itemService.getCoreItemInfoByIdItem(idItem));
         }
     }
 

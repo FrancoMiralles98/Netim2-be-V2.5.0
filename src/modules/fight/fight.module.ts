@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { FightService } from './fight.service';
-import { FightController } from './fight.controller';
 import { SharedModule } from '../shared/shared.module';
 import { ActionResolutionService } from './services/action/action-resolution.service';
 import { CombatActionSelectorService } from './services/action/combat-action-selector.service';
@@ -37,12 +36,9 @@ import { StatusEffectManager } from './manager/status-effect-manager';
 import { FighterTurnManager } from './manager/fighter-turn-manager';
 import { FightFactory } from './factories/fight.factory';
 import { FighterCombatFactory } from './factories/fighter-combat-entity.factory';
-import { CharacterModule } from '../character/character.module';
-import { MobModule } from '../mob/mob.module';
 import { TargetSelectorService } from './services/action/target-selector.service';
 import { SideTurnManager } from './manager/side-turn-manger';
 import { SkillDamageSelectorService } from './services/action/skill-damage-selector.service';
-import { LabFightService } from './lab/lab-fight.service';
 import { FightEngine } from './engine/fight-engine';
 import { InitiativeResolverService } from './services/resolvers/initiative-resolver.service';
 import { FightResultProcessorService } from './services/processors/fight-result-processor.service';
@@ -50,11 +46,8 @@ import { ReflectionResolverService } from './services/resolvers/reflection-resol
 
 @Module({
   imports: [
-    SharedModule,
-    CharacterModule,
-    MobModule
+    SharedModule
   ],
-  controllers: [FightController],
   providers: [
     FightService,
     ActionResolutionService,
@@ -66,7 +59,6 @@ import { ReflectionResolverService } from './services/resolvers/reflection-resol
     RegenerationProcessorService,
     StatusEffectProcessorService,
     AuraActionResolverService,
-    LabFightService,
     FightEngine,
     ReflectionResolverService,
     FightResultProcessorService,
@@ -101,5 +93,6 @@ import { ReflectionResolverService } from './services/resolvers/reflection-resol
     FighterCombatFactory,
     TargetSelectorService
   ],
+  exports: [FightService, FighterCombatFactory],
 })
 export class FightModule { }

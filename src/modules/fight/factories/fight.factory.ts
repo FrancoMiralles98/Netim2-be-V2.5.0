@@ -1,37 +1,19 @@
-import { Injectable } from "@nestjs/common";
-import { FightEntity } from "../entities/fight.entity";
-import { randomUUID } from "crypto";
-import { CharacterPersistenceWithId } from "netim2-shared";
-import { MobModel } from "src/modules/mob/schema/mob.schema";
-import { FighterCombatFactory } from "./fighter-combat-entity.factory";
+import { Injectable } from '@nestjs/common';
+import { randomUUID } from 'node:crypto';
+import { FightEntity } from '../entities/fight.entity';
+import type { FighterCombatEntity } from '../entities/fighter-combat.entity';
 
+/** Construye la pelea con sus bandos e identidad de ejecución. */
 @Injectable()
 export class FightFactory {
-
-    constructor(
-        private fighterCombatFactory: FighterCombatFactory
-    ) { }
-
-    createFightAgainstMobs(input: {
-        fighters: CharacterPersistenceWithId[],
-        mobs: MobModel[],
-        maxTurns: number,
-        randomSeed?: string
-    }
-    ): FightEntity {
-        if (input.fighters.length < 1 || input.mobs.length < 1) {
-            throw new Error('A fight requires at least two fighters.');
+    /** Valida los bandos y el límite de turnos antes de crear la pelea. */
+    create(allies: FighterCombatEntity[], enemies: FighterCombatEntity[], maxTurns: number): FightEntity {
+        if (!allies.length || !enemies.length) throw new Error('La pelea requiere combatientes en ambos bandos');
+        if (!Number.isSafeInteger(maxTurns) || maxTurns < 1) {
+            throw new Error('El límite de turnos debe ser un entero positivo');
         }
-
-        const { allies, enemies } = this.fighterCombatFactory.createSidesWithMobs(input.fighters, input.mobs)
-
         return new FightEntity({
-            allies,
-            enemies,
-            id: randomUUID(),
-            randomSeed: input.randomSeed ?? randomUUID(),
-            maxTurns: input.maxTurns
-        })
-
+            allies, enemies, maxTurns, id: randomUUID(), randomSeed: randomUUID(),
+        });
     }
 }
