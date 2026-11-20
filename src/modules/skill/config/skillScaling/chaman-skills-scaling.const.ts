@@ -396,7 +396,18 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                 },
             },
             tags: [],
-            statsModifiers: [],
+            statsModifiers: [
+                {
+                    operation: 'flat',
+                    target: 'bonus.defensa.def_media',
+                    value: {
+                        progression: {
+                            type: 'constant',
+                            value: 10
+                        }
+                    }
+                }
+            ],
         },
         [UNIQUE_ID_SKILLS.BENDICION]: {
             type: 'aura',
@@ -455,7 +466,18 @@ export const CHAMAN_SKILLS_SCALING: StructureSkillScaling = {
                 },
             },
             tags: [],
-            statsModifiers: [],
+            statsModifiers: [
+                {
+                    operation: 'flat',
+                    target: 'bonus.defensa.def_media',
+                    value: {
+                        progression: {
+                            type: 'constant',
+                            value: 10
+                        }
+                    }
+                }
+            ],
         },
     },
 }
