@@ -3,7 +3,7 @@ import { AccessTokenGuard } from '../../auth/guards/access-token.guard';
 import type { AuthRequest } from '../../auth/types/request/auth-request.type';
 import { FightCharacterMobDto, FightCharacterParamsDto } from '../dto/fight-character-mob.dto';
 import { CharacterFightOrchestratorService } from '../services/fight/character-fight-orchestrator.service';
-import type { FightCharacterMobResponse } from 'netim2-shared';
+import type { CharacterFightResultResponse } from 'netim2-shared';
 
 /** Expone las acciones de combate del personaje autenticado. */
 @Controller('character/:id/fight')
@@ -15,7 +15,7 @@ export class CharacterFightController {
     @Post('mob')
     @HttpCode(HttpStatus.OK)
     async fightMob(@Req() request: AuthRequest, @Param() params: FightCharacterParamsDto,
-        @Body() body: FightCharacterMobDto): Promise<{ data: FightCharacterMobResponse }> {
+        @Body() body: FightCharacterMobDto): Promise<{ data: CharacterFightResultResponse }> {
         return { data: await this.fights.fightMob(params.id, request.user.accountId, body) };
     }
 }

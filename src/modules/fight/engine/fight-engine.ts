@@ -5,6 +5,8 @@ import { FightResponse, InitialFighterStats } from "netim2-shared";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 import { FightEntity } from "../entities/fight.entity";
 import { InitiativeResolverService } from "../services/resolvers/initiative-resolver.service";
+import { InitialAurasProcessorService } from "../services/processors/initial-auras-processor.service";
+import { FightOptions } from "../types/fight/fight-options.type";
 
 @Injectable()
 export class FightEngine {
@@ -12,15 +14,19 @@ export class FightEngine {
         private readonly fightFactory: FightFactory,
         private readonly fightManager: FightManager,
         private readonly initiativeResolverService: InitiativeResolverService,
+        private readonly initialAurasProcessor: InitialAurasProcessorService,
     ) { }
 
     /** Ejecuta ambos bandos y devuelve el resultado completo y los datos de reproducción. */
-    execute(allies: FighterCombatEntity[], enemies: FighterCombatEntity[], maxTurns: number): FightResponse {
+    execute(allies: FighterCombatEntity[], enemies: FighterCombatEntity[], maxTurns: number, options: FightOptions = {}): FightResponse {
         const fight = this.fightFactory.create(allies, enemies, maxTurns);
         const initialFighters = this.getInitialFightersState(fight);
+        const preparation = (options.startWithAuras ?? true)
+            ? this.initialAurasProcessor.process(fight)
+            : undefined;
         const initiative = this.initiativeResolverService.resolve(fight.getFighters());
         fight.setInitiative(initiative);
-        const result = this.fightManager.executeFight(fight);
+        const result = this.fightManager.executeFight(fight, preparation);
         return {
             result: result.result,
             initiativeResults: result.initiativeResults,

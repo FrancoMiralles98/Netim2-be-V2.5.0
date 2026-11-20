@@ -23,6 +23,8 @@ export class SharedFightService {
 
     getInitialManaCost(skill: SkillType): number {
         switch (skill.mana.type) {
+            case 'none':
+                return 0;
             case 'instant':
                 return skill.mana.amount
 

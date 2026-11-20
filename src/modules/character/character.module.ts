@@ -41,6 +41,9 @@ import { MobModule } from '../mob/mob.module';
 import { CharacterFightService } from './services/fight/character-fight.service';
 import { CharacterFightOrchestratorService } from './services/fight/character-fight-orchestrator.service';
 import { CharacterFightController } from './controller/character-fight.controller';
+import { DropModule } from '../drop/drop.module';
+import { HistorialModule } from '../historial/historial.module';
+import { CharacterFightTimerService } from './services/fight/character-fight-timer.service';
 
 @Module({
   imports: [
@@ -52,13 +55,15 @@ import { CharacterFightController } from './controller/character-fight.controlle
     SkillModule,
     MisionesModule,
     FightModule,
+    DropModule,
+    HistorialModule,
     MobModule,
     MongooseModule.forFeature([
       { name: CharacterModel.name, schema: characterSchema }
     ])
   ],
   controllers: [CharacterController, CharacterEquipmentController, CharacterInventoryController, CharacterItemUseController, CharacterAttributeController, CharacterSkillController, MisionesController, CharacterFightController],
-  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService, CharacterPotionService, CharacterItemUseOrchestratorService, CharacterChestService, CharacterAttributeService, CharacterAttributeOrchestratorService, CharacterSkillService, CharacterSkillOrchestratorService, MissionOrchestratorService, CharacterFightService, CharacterFightOrchestratorService],
+  providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService, CharacterPotionService, CharacterItemUseOrchestratorService, CharacterChestService, CharacterAttributeService, CharacterAttributeOrchestratorService, CharacterSkillService, CharacterSkillOrchestratorService, MissionOrchestratorService, CharacterFightService, CharacterFightOrchestratorService, CharacterFightTimerService],
   exports: [
     CharacterService,
     CharacterMapper,

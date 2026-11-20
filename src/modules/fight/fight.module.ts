@@ -43,6 +43,7 @@ import { FightEngine } from './engine/fight-engine';
 import { InitiativeResolverService } from './services/resolvers/initiative-resolver.service';
 import { FightResultProcessorService } from './services/processors/fight-result-processor.service';
 import { ReflectionResolverService } from './services/resolvers/reflection-resolver.service';
+import { InitialAurasProcessorService } from './services/processors/initial-auras-processor.service';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { ReflectionResolverService } from './services/resolvers/reflection-resol
     StatusEffectProcessorService,
     AuraActionResolverService,
     FightEngine,
+    InitialAurasProcessorService,
     ReflectionResolverService,
     FightResultProcessorService,
     InitiativeResolverService,

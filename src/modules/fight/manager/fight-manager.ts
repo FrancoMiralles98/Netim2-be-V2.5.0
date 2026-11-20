@@ -14,7 +14,8 @@ export class FightManager {
     ) { }
 
     executeFight(
-        fight: FightEntity
+        fight: FightEntity,
+        preparation?: FightPlaybackTurn,
     ): FightProcessedResult {
 
         if (fight.status === 'pending') {
@@ -22,17 +23,19 @@ export class FightManager {
         }
 
         const turns: SideTurnExecutionResult[] = [];
+        const initialAuraTurns = new Set(preparation?.fighterTurns.map(turn => turn.fighterId));
 
         const fightPlaybackPayload: FightPlaybackPayload = {
             fightId: fight.id,
-            turns: []
+            turns: preparation ? [preparation] : []
         };
 
         while (!fight.isFinished) {
 
             const turn =
                 this.sideTurnManager.executeNextTurn(
-                    fight
+                    fight,
+                    initialAuraTurns,
                 );
 
             turns.push(turn);

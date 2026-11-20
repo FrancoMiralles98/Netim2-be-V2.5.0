@@ -33,7 +33,7 @@ export class CharacterModel {
     @Prop({ type: Number, default: () => Date.now() })
     timer_boss!: number;
 
-    @Prop({ type: Number, default: 15 })
+    @Prop({ type: Number, default: 30 })
     timer_lv!: number;
 
     @Prop({ type: String, required: true })
