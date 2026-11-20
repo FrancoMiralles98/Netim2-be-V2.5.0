@@ -12,7 +12,7 @@ import { RARE_DROP_MULTIPLIER } from "../config/drop/rare-drop-bonus-multiplier.
 import { isEquipItem } from "src/modules/item/types/item-type-guard.type";
 import { EQUIP_DROP_LV_WEIGHT_CONFIG } from "../config/equip/equip-drop-lv.config";
 import { ItemService } from "src/modules/item/item.service";
-import { DropTag, EquipType, ItemDTO, ItemSource, Stats } from "netim2-shared";
+import { DropTag, EquipType, IdItemList, ItemDTO, ItemSource, Stats } from "netim2-shared";
 import { DropWeightType } from "netim2-shared/dist/drop/drop-weight.type";
 
 @Injectable()
@@ -32,8 +32,10 @@ export class ItemDropService {
     * las probabilidades configuradas para el tipo de enemigo y aplicando
     * los modificadores de rareza del personaje.
     *
-    * Una vez determinada la categoría, se obtiene el ítem base correspondiente
-    * y se ejecuta el proceso de generación específico según el tipo de ítem:
+    * Si la categoría no tiene candidatos, se quita de esta tirada y se sortea
+    * de nuevo con los pesos restantes. Al agotar las categorías, devuelve null.
+    *
+    * Con una categoría válida, genera el ítem según su tipo:
     * - Equipos: generación de implícitos, explícitos y calidad.
     * - Utilidades: actualmente la cantidad que se le otorgara.
     *
@@ -41,69 +43,79 @@ export class ItemDropService {
     * @param bonus Bonus misceláneos del personaje que afectan la generación
     * de drops y las probabilidades de rareza.
     *
-    * @returns Ítem completamente generado y listo para ser entregado al jugador.
+    * @returns Ítem generado, o null si ninguna categoría con peso positivo tiene candidatos.
     */
     dropItem(
         mob: MobModel,
         bonus: Stats['bonus']['miscs']
-    ): ItemDTO {
-        let mobDropTags = structuredClone(DROP_TAG_CHANCES_BY_DIFFICULTY[mob.enemie_type])
+    ): ItemDTO | null {
+        const remainingTags = this.getCategoryWeights(mob, bonus.chances_raros)
 
-        mobDropTags = this.miscsBonusService.applyRareDropTagBonus(mobDropTags, bonus.chances_raros)
+        while (Object.values(remainingTags).some(weight => weight > 0)) {
+            const tag = this.rngService.pickWeightedResult(remainingTags)
+            const weights = this.getCandidateWeights(tag, mob, bonus.chances_raros)
+            if (Object.keys(weights).length === 0) {
+                delete remainingTags[tag]
+                continue
+            }
 
-        const tagSelected = this.rngService.pickWeightedResult(mobDropTags)
+            const itemId = Number(this.rngService.pickWeightedResult(weights)) as IdItemList
+            const baseItem = this.itemService.getCoreItemInfoByIdItem(itemId)
+            if (isEquipItem(baseItem)) {
+                return this.equipItemDropService.generateFinalItem(baseItem, mob, bonus.chances_raros)
+            }
 
-        const baseItem = this.getBaseItem(tagSelected, mob, bonus.chances_raros)
-
-        if (isEquipItem(baseItem)) {
-            return this.equipItemDropService.generateFinalItem(baseItem, mob, bonus.chances_raros)
+            return this.utilityItemDropService.generateFinalItem(baseItem, mob, bonus.chances_raros)
         }
 
-        return this.utilityItemDropService.generateFinalItem(baseItem, mob, bonus.chances_raros)
+        return null
     }
 
-    /**
-    * Selecciona un ítem aleatorio dentro del pool disponible para un tag de drop.
-    *
-    * Flujo:
-    * - Obtiene todos los ítems válidos para el tag y el mob recibido.
-    * - Convierte el weight de cada ítem a un valor numérico.
-    * - Realiza una selección ponderada según dichos weights.
-    * - Busca el ítem correspondiente al resultado obtenido.
-    * - Retorna una copia del ítem seleccionado.
-    *
-    * @param tag Tag de drop seleccionado previamente.
-    * @param mob Mob que está generando el drop.
-    *
-    * @returns Copia del ítem seleccionado.
-    */
-    private getBaseItem(
-        tag: DropTag,
-        mob: MobModel,
-        rareBonusValue: number
-    ): ItemDTO {
-        const filterList = this.getFilterList(tag, mob)
+    /** Calcula la probabilidad de cada ítem dado que el intento cayó en un drop de ítem. */
+    getItemProbabilities(mob: MobModel, rareBonusValue: number): Map<IdItemList, number> {
+        const categoryWeights = this.getCategoryWeights(mob, rareBonusValue)
+        const categories: { weight: number; candidates: [string, number][] }[] = []
+        let totalCategoryWeight = 0
+        for (const [tag, weight] of Object.entries(categoryWeights) as [DropTag, number][]) {
+            const candidates = Object.entries(this.getCandidateWeights(tag, mob, rareBonusValue))
+            if (!candidates.length) continue
 
-        if (filterList.length === 0) {
-            throw new Error(`No hay items disponibles para el tag ${tag}`)
+            totalCategoryWeight += weight
+            categories.push({ weight, candidates })
         }
 
-        const weightedItems = Object.fromEntries(
-            filterList.map(item => [
-                String(item.idItem),
-                this.resolveDropWeight(item.itemDropConfig!.weight, rareBonusValue, item, mob),
-            ])
+        const probabilities = new Map<IdItemList, number>()
+        for (const { weight, candidates } of categories) {
+            const totalItemWeight = candidates.reduce((total, [, itemWeight]) => total + itemWeight, 0)
+            const categoryProbability = weight / totalCategoryWeight
+            for (const [id, itemWeight] of candidates) {
+                const itemId = Number(id) as IdItemList
+                const probability = categoryProbability * itemWeight / totalItemWeight
+                probabilities.set(itemId, (probabilities.get(itemId) ?? 0) + probability)
+            }
+        }
+        return probabilities
+    }
+
+    /** Obtiene los pesos de categorías que pueden salir con el bonus de rareza actual. */
+    private getCategoryWeights(mob: MobModel, rareBonusValue: number): Partial<Record<DropTag, number>> {
+        const weights = this.miscsBonusService.applyRareDropTagBonus(
+            DROP_TAG_CHANCES_BY_DIFFICULTY[mob.enemie_type],
+            rareBonusValue,
         )
+        return Object.fromEntries(Object.entries(weights).filter(([, weight]) => weight > 0))
+    }
 
-        const selectedId = Number(this.rngService.pickWeightedResult(weightedItems))
-
-        const selectedItem = this.itemService.getCoreItemInfoByIdItem(selectedId)
-
-        if (!selectedItem) {
-            throw new Error(`No se pudo seleccionar item para el tag ${tag}`)
+    /** Pondera por rareza y nivel los ítems elegibles de una categoría. */
+    private getCandidateWeights(tag: DropTag, mob: MobModel, rareBonusValue: number): Record<string, number> {
+        const weights: Record<string, number> = {}
+        for (const item of this.getFilterList(tag, mob)) {
+            const config = item.itemDropConfig
+            if (!config) throw new Error(`El ítem ${item.idItem} del tag ${tag} no tiene configuración de drop`)
+            const weight = this.resolveDropWeight(config.weight, rareBonusValue, item, mob)
+            if (weight > 0) weights[item.idItem] = weight
         }
-
-        return selectedItem
+        return weights
     }
 
 

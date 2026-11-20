@@ -13,7 +13,7 @@ import { BonusDefensaRefKeys } from "netim2-shared";
  * 
  * Ejemplo:
  * 15: 5
- * - Los mobs de nivel ≤ 15 tendran un agreado de 5 en ese bonus.
+ * - Desde nivel 15 se aplica 5 hasta alcanzar el siguiente umbral.
  *
  * - Los valores NO son acumulativos entre si
  * - Se toma el mayor umbral que sea ≤ al nivel del mob

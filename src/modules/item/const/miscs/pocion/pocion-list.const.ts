@@ -12,6 +12,18 @@ export const POCION_LIST: PocionType[] = [
         price: 25,
         description: '',
         idItem: IdItem.POCION_ROJA_P,
+        itemDropConfig: {
+            drop_tag: ['generic_utility'],
+            source: ['mob_drop', 'netim_drop', 'shop'],
+            mobLv: { min: 1, max: 14 },
+            weight: 'COMMON',
+            quantity: { min: 1, max: 20, scaleWithMobLv: true },
+            levelScaling: {
+                startLv: 5,
+                maxBonusLv: 10,
+                maxMultiplier: 1.3
+            }
+        }
     }),
     createPocionItem({
         potionType: 'reserve',
@@ -26,6 +38,18 @@ export const POCION_LIST: PocionType[] = [
         price: 50,
         description: '',
         idItem: IdItem.POCION_ROJA_M,
+        itemDropConfig: {
+            drop_tag: ['generic_utility'],
+            source: ['mob_drop', 'netim_drop', 'shop'],
+            mobLv: { min: 15, max: 30 },
+            weight: 'COMMON',
+            quantity: { min: 1, max: 20, scaleWithMobLv: true },
+            levelScaling: {
+                startLv: 5,
+                maxBonusLv: 10,
+                maxMultiplier: 1.3
+            }
+        }
     }),
     createPocionItem({
         potionType: 'normal',

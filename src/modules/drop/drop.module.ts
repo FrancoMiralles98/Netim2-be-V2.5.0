@@ -8,6 +8,7 @@ import { EquipItemDropService } from './service/equipment-item-drop.service';
 import { ItemDropService } from './service/item-drop.service';
 import { MicsBonusService } from './service/miscs-bonus.service';
 import { UtilityItemDropService } from './service/utility-item-drop.service';
+import { MobDropPreviewService } from './service/mob-drop-preview.service';
 
 @Module({
   imports: [
@@ -21,7 +22,9 @@ import { UtilityItemDropService } from './service/utility-item-drop.service';
     EquipItemDropService,
     ItemDropService,
     MicsBonusService,
-    UtilityItemDropService
+    UtilityItemDropService,
+    MobDropPreviewService,
   ],
+  exports: [MobDropPreviewService],
 })
 export class DropModule {}

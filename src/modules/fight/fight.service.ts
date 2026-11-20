@@ -1,49 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { FightVsMobInput } from './fight-services.type';
-import { CharacterService } from '../character/character.service';
-import { MobService } from '../mob/mob.service';
-import { MobModel } from '../mob/schema/mob.schema';
+import type { FightResponse } from 'netim2-shared';
 import { FightEngine } from './engine/fight-engine';
+import type { FighterCombatEntity } from './entities/fighter-combat.entity';
 
-/**
- * Servicio principal encargado de ejecutar peleas.
- */
+/** Ejecuta combates con los bandos preparados por el contexto que inicia la pelea. */
 @Injectable()
 export class FightService {
-    constructor(
-        private characterService: CharacterService,
-        private mobService: MobService,
-        private fightEngine: FightEngine,
-    ) { }
+    constructor(private readonly fightEngine: FightEngine) {}
 
-    async fightVsMobs({ characterId, userId, mobs }: FightVsMobInput) {
-        const [character, mobsToFight] = await Promise.all([
-            this.characterService.getCharacterById(characterId, userId),
-            this.getMobs(mobs)
-        ]);
-
-        const result = this.fightEngine.executeAgainstMobs([character], mobsToFight)
-    }
-
-    private async getMobs(mobs: FightVsMobInput['mobs']): Promise<MobModel[]> {
-        const mobIds = mobs.map(({ mobId }) => mobId);
-
-        const mobsData = await this.mobService.getMobsByIdMobs(mobIds);
-
-        const listMobs: MobModel[] = [];
-
-        for (const mobData of mobsData) {
-            const mobConfig = mobs.find(
-                ({ mobId }) => mobId === mobData.idMob
-            );
-
-            if (!mobConfig) continue;
-
-            for (let i = 0; i < mobConfig.quantity; i++) {
-                listMobs.push(structuredClone(mobData));
-            }
-        }
-
-        return listMobs;
+    /** Ejecuta una pelea y devuelve su resultado, estadísticas y reproducción. */
+    fight(allies: FighterCombatEntity[], enemies: FighterCombatEntity[], maxTurns = 500): FightResponse {
+        return this.fightEngine.execute(allies, enemies, maxTurns);
     }
 }

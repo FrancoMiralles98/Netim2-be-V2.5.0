@@ -24,7 +24,7 @@ export const DRAGON_SKILLS: SkillSummary[] = [
     id: UNIQUE_ID_SKILLS.RUGIDO_DEL_DRAGON,
     type: 'damage',
     mana: { type: 'instant', amount: 0 },
-    weaponRestricted: ['campana','fan']
+    weaponRestricted: []
   },
   {
     description: 'Obten posibilidades de generar golpes criticos con el poder del dragón.',

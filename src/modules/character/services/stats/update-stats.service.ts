@@ -18,7 +18,7 @@ import { EquipStatsCalculatorService } from './calculator/equip-stats-calculator
 import { BuffStatsCalculatorService } from './calculator/buff-stats-calculator.service';
 import { applyBonusModifiers } from './calculator/bonus-modifiers-calculator';
 import { ReinosBuff } from '../../../gameData/reinos/reinos-buff.config';
-import { DODGE_CHANCE_PER_MOVEMENT_SPEED, SPELL_DODGE_CHANCE_PER_MOVEMENT_SPEED } from '../../../gameData/const/bonus.const';
+import { applyMovementSpeedDodge } from '../../../shared/utils/apply-movement-speed-dodge';
 
 export interface UpdatedStatsResult {
   stats: Stats;
@@ -128,9 +128,7 @@ export class UpdateStatsService {
     );
 
     // VM efectiva después de límites; la esquiva se suma a la aportada por equipo/buffos.
-    const movementSpeed = Math.max(0, limitedStats.general.vm);
-    limitedStats.bonus.defensa.esquivar_ataques += movementSpeed * DODGE_CHANCE_PER_MOVEMENT_SPEED;
-    limitedStats.bonus.defensa.esquivar_hechizos += movementSpeed * SPELL_DODGE_CHANCE_PER_MOVEMENT_SPEED;
+    applyMovementSpeedDodge(limitedStats);
     const result = this.limitCalculator.applyBonusLimitsToStats(limitedStats, bonuses, derivedStats);
     this.assertFiniteNumbers(result);
 

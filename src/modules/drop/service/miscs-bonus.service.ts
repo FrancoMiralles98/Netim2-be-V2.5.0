@@ -130,8 +130,8 @@ export class MicsBonusService {
 
         return {
             ...chances,
-            yang: Math.round(chances.item * (1 + bonus.chances_yang / 100)),
-            item: Math.round(chances.item * (1 + bonus.chances_objetos / 100)),
+            yang: Math.max(0, Math.round(chances.item * (1 + bonus.chances_yang / 100))),
+            item: Math.max(0, Math.round(chances.item * (1 + bonus.chances_objetos / 100))),
         }
     }
 
