@@ -4,6 +4,7 @@ import { AppliedStatusEffectResolution, DamageHitResolution } from "../../servic
 import { HealingResolution } from "../../services/resolvers/healing-resolver.types";
 import { DamageResolutionResult } from "../../services/resolvers/damage-resolver.types";
 import { ActiveStatusEffectId } from "../statusEffects/active-status-effect.types";
+import type { CombatActionModifiers, CombatHitResult } from 'netim2-shared';
 
 export interface ResolveCombatActionInput {
     context: TurnContext;
@@ -74,6 +75,8 @@ export interface HealingSkillActionResolution
 
 export interface DamageSkillActionResolution
     extends ActionResolutionBase<'use_damage_skill'> {
+    hitResults: CombatHitResult[];
+    modifiers: CombatActionModifiers;
     targetId: string;
     skillId: UNIQUE_ID_SKILLS;
 
@@ -100,6 +103,8 @@ export interface DamageSkillActionResolution
 
 export interface BasicAttackActionResolution
     extends ActionResolutionBase<'basic_attack'> {
+    hitResults: CombatHitResult[];
+    modifiers: CombatActionModifiers;
     targetId: string;
 
     totalDamageApplied: number;

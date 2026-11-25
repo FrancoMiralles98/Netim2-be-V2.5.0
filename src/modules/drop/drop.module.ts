@@ -25,6 +25,6 @@ import { MobDropPreviewService } from './service/mob-drop-preview.service';
     UtilityItemDropService,
     MobDropPreviewService,
   ],
-  exports: [MobDropPreviewService],
+  exports: [MobDropPreviewService, DropService],
 })
 export class DropModule {}

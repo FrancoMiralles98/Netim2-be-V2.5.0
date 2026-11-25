@@ -8,6 +8,7 @@ import { FighterTurnExecutionResult } from "../types/turns/turn.types";
 import { TurnEndProcessorService } from "../services/turn/turn-end-processor.service";
 import { randomUUID } from "crypto";
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
+import { CombatAction } from "netim2-shared";
 
 @Injectable()
 export class FighterTurnManager {
@@ -18,7 +19,8 @@ export class FighterTurnManager {
         private turnEndProcessor: TurnEndProcessorService,
     ) { }
 
-    execute(fight: FightEntity, actor: FighterCombatEntity, turnNumber: number): FighterTurnExecutionResult {
+    /** Procesa el turno; las auras iniciales consumen la primera acción de su dueño. */
+    execute(fight: FightEntity, actor: FighterCombatEntity, turnNumber: number, consumedByInitialAuras = false): FighterTurnExecutionResult {
 
         const context: TurnContext = {
             actor: fight.getFighter(actor.id),
@@ -34,13 +36,19 @@ export class FighterTurnManager {
 
         const startTurnResult = this.turnStartProcessor.process(context)
 
-        const action = this.combatActionSelector.select(context, startTurnResult.canAct)
+        const action: CombatAction = consumedByInitialAuras
+            ? { type: 'skip_turn', reason: 'no_available_action' }
+            : this.combatActionSelector.select(context, startTurnResult.canAct);
+
+        if (consumedByInitialAuras) {
+            context.events.push({ type: 'action_selected', action });
+        }
 
         const resolution = this.actionResolution.resolve(action, context, startTurnResult.canAct)
 
         actor.statistics.registerTurnPlayed()
 
-        if (resolution.type === 'skip_turn' && resolution.reason === 'no_available_action') {
+        if (!consumedByInitialAuras && resolution.type === 'skip_turn' && resolution.reason === 'no_available_action') {
             console.log('action',action);
             
             actor.statistics.registerSkippedTurnByStun()

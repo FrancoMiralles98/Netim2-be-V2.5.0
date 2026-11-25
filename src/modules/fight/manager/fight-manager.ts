@@ -4,7 +4,8 @@ import { SideTurnExecutionResult } from "../types/side/side.types";
 import { SideTurnManager } from "./side-turn-manger";
 import { FightResultProcessorService } from "../services/processors/fight-result-processor.service";
 import { FightProcessedResult } from "../services/processors/fight-result-processor.types";
-import { CombatAction, FightPlaybackPayload, FightPlaybackTurn } from "netim2-shared";
+import type { CombatAction, CombatAttackPlayback, FightPlaybackPayload, FightPlaybackTurn } from 'netim2-shared';
+import type { ActionResolution } from '../types/actionResolution/action-resolution.types';
 
 @Injectable()
 export class FightManager {
@@ -14,7 +15,8 @@ export class FightManager {
     ) { }
 
     executeFight(
-        fight: FightEntity
+        fight: FightEntity,
+        preparation?: FightPlaybackTurn,
     ): FightProcessedResult {
 
         if (fight.status === 'pending') {
@@ -22,17 +24,19 @@ export class FightManager {
         }
 
         const turns: SideTurnExecutionResult[] = [];
+        const initialAuraTurns = new Set(preparation?.fighterTurns.map(turn => turn.fighterId));
 
         const fightPlaybackPayload: FightPlaybackPayload = {
             fightId: fight.id,
-            turns: []
+            turns: preparation ? [preparation] : []
         };
 
         while (!fight.isFinished) {
 
             const turn =
                 this.sideTurnManager.executeNextTurn(
-                    fight
+                    fight,
+                    initialAuraTurns,
                 );
 
             turns.push(turn);
@@ -48,7 +52,8 @@ export class FightManager {
                     turn.actions.map(action => ({
                         events: action.events,
                         fighterId: action.actorId,
-                        targetId: this.getActionTargetIds(action.action, action.actorId)
+                        targetId: this.getActionTargetIds(action.action, action.actorId),
+                        attack: this.getAttackPlayback(action.resolution),
                     }))
             };
 
@@ -65,6 +70,21 @@ export class FightManager {
             turns,
             fightPlaybackPayload
         );
+    }
+
+    /** Expone los hits finales sin recalcular efectos ni estadísticas. */
+    private getAttackPlayback(resolution: ActionResolution): CombatAttackPlayback | undefined {
+        if (resolution.type !== 'basic_attack' && resolution.type !== 'use_damage_skill') return undefined;
+        const hits = resolution.hitResults;
+        const totalDirectDamage = hits.reduce((sum, hit) => sum + hit.damage.direct, 0);
+        const totalAdditionalDamage = hits.reduce((sum, hit) => sum + hit.damage.additional, 0);
+        return {
+            source: resolution.type === 'basic_attack' ? { type: 'basic_attack' } : { type: 'skill', skillId: resolution.skillId },
+            modifiers: resolution.modifiers, hits, totalDirectDamage, totalAdditionalDamage,
+            totalAppliedDamage: totalDirectDamage + totalAdditionalDamage,
+            totalHealing: hits.reduce((sum, hit) => sum + hit.healing.effectiveHealing, 0),
+            totalReflectedDamage: hits.reduce((sum, hit) => sum + hit.reflectedDamage, 0),
+        };
     }
 
     private getActionTargetIds(

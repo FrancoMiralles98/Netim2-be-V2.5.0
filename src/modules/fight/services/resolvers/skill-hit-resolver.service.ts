@@ -72,6 +72,8 @@ export class SkillHitResolver {
                 source: {type: 'skill',skillId: skill.id,sourceFighterId:attacker.id},
                 targetCurrentHp: damageResult.hpAfter,
                 targetDefeated: damageResult.hpAfter <= 0,
+                hitIndex,
+                componentIndex: component.componentIndex,
             })
 
             components.push({

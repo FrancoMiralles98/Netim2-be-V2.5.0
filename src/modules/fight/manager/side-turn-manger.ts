@@ -12,7 +12,7 @@ export class SideTurnManager {
         private readonly figherTurnManager: FighterTurnManager
     ) { }
 
-    executeNextTurn(fight: FightEntity): SideTurnExecutionResult {
+    executeNextTurn(fight: FightEntity, initialAuraTurns: Set<string> = new Set()): SideTurnExecutionResult {
         const { side, turnNumber } = fight.beginNextTurn()
 
         const fighters = fight.getFightersOfSide(side)
@@ -35,7 +35,8 @@ export class SideTurnManager {
                 continue
             }
 
-            const result = this.figherTurnManager.execute(fight, fighter, turnNumber)
+            const consumedByInitialAuras = initialAuraTurns.delete(fighter.id);
+            const result = this.figherTurnManager.execute(fight, fighter, turnNumber, consumedByInitialAuras)
             actions.push(result)
 
             /*

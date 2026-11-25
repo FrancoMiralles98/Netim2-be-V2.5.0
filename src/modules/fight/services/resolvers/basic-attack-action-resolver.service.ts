@@ -2,31 +2,23 @@ import { Injectable } from "@nestjs/common";
 import { BasicAttackActionResolution, BasicAttackHitResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
 import { RngService } from "src/modules/shared/services/rng.service";
 import { BasicAttackHitResolverService } from "./basic-attack-hit-resolver.service";
-import { StatusEffectApplicationResolverService } from "./status-effect-application-resolver.service";
 import { AppliedStatusEffectResolution } from "./dama-skill-action-resolver.types";
-import { ContextualBonusService } from "../contextual-bonus.service";
-import { LifeStealResolverService } from "./life-steal-resolver.service";
 import { HealingResolution } from "./healing-resolver.types";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { FightEntity } from "../../entities/fight.entity";
-import { ReflectionResolverService } from "./reflection-resolver.service";
-import { DamageResolverService } from "./damage-resolver.service";
-import { DamageResolutionResult } from "./damage-resolver.types";
 import { BasicAttackAction } from "netim2-shared";
-import { randomUUID } from "crypto";
+import { HitConsequencesResolverService } from './hit-consequences-resolver.service';
+import type { CombatHitResult } from 'netim2-shared';
 
 @Injectable()
 export class BasicAttackActionResolverService {
     constructor(
         private basicAttackHitResolver: BasicAttackHitResolverService,
-        private statusEffectsApplicationResolver: StatusEffectApplicationResolverService,
-        private contextualBonusSerivce: ContextualBonusService,
-        private reflectionResolverService: ReflectionResolverService,
-        private lifeStealResolverService: LifeStealResolverService,
-        private damageResolver: DamageResolverService,
+        private readonly consequences: HitConsequencesResolverService,
         private rngService: RngService
     ) { }
 
+    /** Resuelve cada golpe y sus consecuencias antes de continuar la secuencia. */
     resolve(
         { action, context }: ResolveActionInput<BasicAttackAction>
     ): BasicAttackActionResolution {
@@ -36,16 +28,11 @@ export class BasicAttackActionResolverService {
 
         const target = context.fight.getFighter(action.targetId)
 
-        /**
-         * Registro en estadisticas que se aplico doble basico ?
-         */
-
         const hits: BasicAttackHitResolution[] = [];
+        const hitResults: CombatHitResult[] = [];
+        const consequences: ReturnType<HitConsequencesResolverService['resolve']>[] = [];
         const statusEffects: AppliedStatusEffectResolution[] = []
 
-        let totalBaseDamage = 0;
-        let totalModifiedDamage = 0;
-        let totalMitigatedDamage = 0;
         let totalAppliedDamage = 0;
 
         if (attackSequence.hitCount > 1) {
@@ -56,7 +43,7 @@ export class BasicAttackActionResolverService {
         }
 
         for (let index = 0; index < attackSequence.hitCount; index++) {
-            if (!target.isAlive()) {
+            if (!target.isAlive() || !context.actor.isAlive()) {
                 break;
             }
 
@@ -70,66 +57,21 @@ export class BasicAttackActionResolverService {
 
             hits.push(hitResult)
 
-            totalBaseDamage += hitResult.baseDamage;
-            totalModifiedDamage += hitResult.modifiedDamage;
-            totalMitigatedDamage += hitResult.mitigatedDamage;
             totalAppliedDamage += hitResult.appliedDamage;
 
-            if (target.isAlive()) {
-                const hitStatusEffects = this.statusEffectsApplicationResolver.resolveEffects({
-                    appliedOnTurn: context.turnNumber,
-                    source: context.actor,
-                    effect: this.contextualBonusSerivce.getBasicAttackStatusEffectsChances(context.actor),
-                    target,
-                    triggeringDamage: hitResult.baseDamage,
-                    isCritic: hitResult.critical,
-                    context
-                })
-                statusEffects.push(...hitStatusEffects)
-            }
+            const result = this.consequences.resolve({
+                context, target, directDamage: hitResult.appliedDamage, baseDamage: hitResult.baseDamage,
+                targetHpBefore: hitResult.hpBefore,
+                hit: { hitIndex: index, outcome: hitResult.outcome === 'applied' ? 'hit' : hitResult.outcome,
+                    critical: hitResult.critical, penetrating: hitResult.penetration,
+                    components: [{ componentIndex: 0, damageType: 'ad', appliedDamage: hitResult.appliedDamage }] },
+            });
+            consequences.push(result);
+            hitResults.push(result.playback);
+            statusEffects.push(...result.statusEffects);
         }
 
-        const lifeStealResult = this.lifeStealResolverService.resolveBasicAttackLifeSteal({
-            attacker: context.actor,
-            damageDealt: totalAppliedDamage,
-            target,
-        })
-
-        const reflectionResult = this.reflectionResolverService.resolve({
-            attacker: context.actor,
-            target,
-            delivery: 'direct',
-            receivedDamage: totalAppliedDamage
-        })
-
-        let reflectedDmgResult: DamageResolutionResult | null = null
-
-        if (reflectionResult) {
-            reflectedDmgResult = this.damageResolver.resolve({
-                attacker: reflectionResult.source,
-                target: reflectionResult.target,
-                damage: reflectionResult.damage,
-                damageType: reflectionResult.damageType,
-                sourceType: 'reflected',
-                reflectedFromDamageType: 'true'
-            })
-
-            this.reflectionResolverService.reflectionDmgResultRegister(
-                reflectionResult.source,
-                reflectedDmgResult)
-            
-            context.events.push({
-                type: 'damage_resolved',
-                critical: false,
-                penetrating: false,
-                source: {type: 'reflected',originalAttackerId:context.actor.id,sourceFighterId:target.id },
-                resolution: {appliedDamage: reflectedDmgResult.effectiveDamage,damageType: 'true',delivery: 'reflected'},
-                targetCurrentHp: reflectedDmgResult.hpAfter,
-                targetDefeated: !target.isAlive()
-            })
-        }
-
-
+        const { lifeStealResult, reflectedDmgResult } = this.consequences.summarize(consequences);
 
         this.BasicAttackActionStatisticRegister(
             context.actor,
@@ -145,6 +87,11 @@ export class BasicAttackActionResolverService {
             extraAttackTriggered: attackSequence.extraAttackTriggered,
             hitCount: attackSequence.hitCount,
             hits,
+            hitResults,
+            modifiers: {
+                plannedHitCount: attackSequence.hitCount, executedHitCount: hits.length,
+                damageMultiplierPerHit: 1, damageModifierApplied: false,
+            },
             reflectedDmgResult,
             lifeSteal: lifeStealResult,
             success: true,
@@ -238,6 +185,5 @@ export class BasicAttackActionResolverService {
             })
         })
     }
-
 
 }

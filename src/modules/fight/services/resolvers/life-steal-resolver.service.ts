@@ -32,7 +32,7 @@ export class LifeStealResolverService {
         return this.healingResolverService.resolve({
             baseAmount: baseHealing,
             healer: input.attacker,
-            source: 'skill'
+            source: 'vampirismo_hechizo'
         })
     }
 

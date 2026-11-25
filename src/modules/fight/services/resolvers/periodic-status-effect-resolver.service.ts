@@ -3,13 +3,11 @@ import { PeriodicStatusEffectResolution } from "../../types/actionResolution/act
 import { FightEntity } from "../../entities/fight.entity";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { ActiveStatusEffectEntity } from "../../entities/active-status-effect.entity";
-import { hasStackExtraDamage, isPeriodicDamageEffectData } from "../processors/status-effect-processor.types";
+import { isPeriodicDamageEffectData } from '../processors/status-effect-processor.types';
 import { DamageResolverService } from "./damage-resolver.service";
-import { PeriodicDamageEffectData } from "../../types/statusEffects/effect-data.types";
 import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
 import { DamageResolutionResult } from "./damage-resolver.types";
 import { TurnContext } from "../../types/fight/fight-context.types";
-import { randomUUID } from "crypto";
 
 @Injectable()
 export class PeriodicStatusEffectResolverService {
@@ -17,6 +15,7 @@ export class PeriodicStatusEffectResolverService {
         private damageResolverService: DamageResolverService
     ) { }
 
+    /** Aplica únicamente el tick; los stacks se detonan al aplicar el estado. */
     resolve(input: {
         fight: FightEntity,
         target: FighterCombatEntity,
@@ -55,36 +54,12 @@ export class PeriodicStatusEffectResolverService {
             targetCurrentHp: tickDamage.hpAfter,
         })
 
-        let totalAppliedDamage = tickDamage.effectiveDamage
-
-        let stackProc: PeriodicStatusEffectResolution['stackProc'];
-
-        if (input.target.isAlive()) {
-            stackProc = this.resolveStackDamage({
-                data,
-                effect: input.effect,
-                source,
-                target: input.target
-            })
-
-            if (stackProc) {
-                totalAppliedDamage += stackProc.damage.effectiveDamage;
-
-                input.context.events.push({
-                    type: 'status_effect_stack_proc',
-                    appliedDamage: stackProc.damage.effectiveDamage,
-                    currentStacks: stackProc.remainingStacks,
-                    effectId: input.effect.getEffectId(),
-                    targetCurrentHp: stackProc.damage.hpAfter,
-                })
-            }
-        }
+        const totalAppliedDamage = tickDamage.effectiveDamage;
 
         input.effect.registerTick()
 
         this.periodicStatusEffectStatisticRegister(
             tickDamage,
-            stackProc,
             input.effect.getEffectId(),
             source,
             input.target
@@ -98,59 +73,12 @@ export class PeriodicStatusEffectResolverService {
             targetFighterId: input.target.id,
             tickDamage,
             totalAppliedDamage,
-            stackProc,
             tickNumber: input.effect.getTicksExecuted()
-        }
-    }
-
-    private resolveStackDamage(input: {
-        source: FighterCombatEntity;
-
-        target: FighterCombatEntity;
-
-        effect: ActiveStatusEffectEntity;
-
-        data: PeriodicDamageEffectData
-    }
-    ): PeriodicStatusEffectResolution['stackProc'] | undefined {
-        if (!hasStackExtraDamage(input.data)) {
-            return undefined
-        }
-
-        const stackResult = input.effect.consumeStacksForExtraDamage()
-
-        if (!stackResult.triggered) {
-            return undefined
-        }
-
-        const damagePerProc = input.data.extraDamageToApplyStacks *
-            input.data.damagePerTick;
-        
-
-        const totalRequestedDamage = damagePerProc * stackResult.procCount        
-        
-        const damage = this.damageResolverService.resolve({
-            sourceType: 'status_effect',
-            attacker: input.source,
-            target: input.target,
-            damage: totalRequestedDamage,
-            damageType: 'ad',
-            effect: input.effect
-        })
-
-        return {
-            consumedStacks: stackResult.consumedStacks,
-            damage,
-            damagePerProc,
-            procCount: stackResult.procCount,
-            remainingStacks: stackResult.remainingStacks,
-            totalRequestedDamage
         }
     }
 
     private periodicStatusEffectStatisticRegister(
         tickDamage: DamageResolutionResult,
-        stackProc: PeriodicStatusEffectResolution['stackProc'] | undefined,
         effectId: ActiveStatusEffectId,
         source: FighterCombatEntity,
         target: FighterCombatEntity
@@ -169,21 +97,5 @@ export class PeriodicStatusEffectResolverService {
             delivery: 'periodic'
         })
 
-        if (stackProc && stackProc.damage) {
-            source.statistics.registerDamageDealt({
-                source: {
-                    type: 'status_effect',
-                    effectId
-                },
-                amount: stackProc.damage.effectiveDamage,
-                damageType: 'ad',
-                delivery: 'periodic'
-            })
-
-            target.statistics.registerDamageMitigated({
-                statusEffectId: effectId,
-                amount: stackProc.damage.mitigatedAmount,
-            })
-        }
     }
 }

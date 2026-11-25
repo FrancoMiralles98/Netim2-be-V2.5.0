@@ -142,11 +142,9 @@ export class CharacterService {
                 reino: reinoFinal,
             });
 
-            const armor = ITEM_LIST.find(i => i.idItem === IdItem.ARMADURA_DE_MONJE) as EquipType
-            const peil = ITEM_LIST.find(i => i.idItem === IdItem.PIEDRA_DE_INTELIGENCIA)
             const poM = ITEM_LIST.find(i => i.idItem === IdItem.CAJA_DE_HABILIDADES_DE_GUERRERO)
 
-            if (!armor || !peil || !poM) {
+            if (!poM) {
                 throw new BadRequestException('arma no existe')
             }
 
@@ -157,15 +155,11 @@ export class CharacterService {
 
             const entity = this.characterMapper.toDomain(baseCharacter)
             this.addStarterWeapons(entity, baseCharacter.raza)
-            entity.addItemToInventory(armor)
-            entity.addItemToInventory(peil)
             entity.addItemToInventory(poM)
             const newCharacter = this.characterMapper.toPersistence(entity)
 
             this.InicializateBaseValues(newCharacter)
             newCharacter.yang += 600000
-            newCharacter.stats.general.hp.actual = 300
-            newCharacter.puntos_atributos += 100
             newCharacter.lv = 3
             newCharacter.puntos_habilidad = 100
 

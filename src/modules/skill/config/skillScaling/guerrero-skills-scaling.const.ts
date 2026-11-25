@@ -17,7 +17,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
                             },
                             contributions: [
                                 {
-                                    operation: 'flat', coefficient: 1.2,
+                                    operation: 'flat', coefficient: 0.70,
                                     source: { type: 'stat', path: 'general.ad.min' },
                                 },
                                 {
@@ -36,7 +36,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
                                 perLevel: { N: 10, M: 20, G: 30 }, perfectBonus: 500,
                             },
                             contributions: [{
-                                operation: 'flat', coefficient: 1.5,
+                                operation: 'flat', coefficient: 0.70,
                                 source: { type: 'stat', path: 'general.ad.max' },
                             },
                             {
@@ -59,7 +59,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
                 type: 'instant',
                 amount: {
                     progression: {
-                        type: 'per_level', base: 80,
+                        type: 'per_level', base: 1,
                         perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
                     },
                 },
@@ -90,7 +90,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
                 chance: {
                     progression: {
                         type: 'per_level',
-                        base: 10,
+                        base: 50,
                         perLevel: {
                             N: 1,
                             M: 2,
@@ -152,7 +152,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
                 type: 'instant',
                 amount: {
                     progression: {
-                        type: 'per_level', base: 80,
+                        type: 'per_level', base: 1,
                         perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
                     },
                 },
@@ -162,7 +162,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
                     effectId: 'desmayo',
                     chance: {
                         progression: {
-                            base: 40,
+                            base: 100,
                             perLevel: {
                                 N: 1,
                                 M: 2,
@@ -210,7 +210,7 @@ export const GUERRERO_SKILLS_SCALING: StructureSkillScaling = {
                 type: 'instant',
                 amount: {
                     progression: {
-                        type: 'per_level', base: 80,
+                        type: 'per_level', base: 1,
                         perLevel: { N: 2, M: 4, G: 5 }, perfectBonus: 200,
                     },
                 },
