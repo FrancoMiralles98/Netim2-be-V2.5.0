@@ -2,6 +2,7 @@ import { CombatStatKey, DamageCondition, SkillDamage, StatsModifiers, StatsScali
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-effect.types";
 import { TurnContext } from "../../types/fight/fight-context.types";
+import type { CombatHitStatusEffect } from 'netim2-shared';
 
 export interface StatusEffectDurationConfig {
     baseTurns: number;
@@ -134,7 +135,7 @@ export interface ResolveSkillEffectsInput {
     context: TurnContext
 }
 
-export interface StatusEffectApplicationResult {
+export interface StatusEffectApplicationResult extends CombatHitStatusEffect {
     effectId: ActiveStatusEffectId;
 
     applied: boolean;

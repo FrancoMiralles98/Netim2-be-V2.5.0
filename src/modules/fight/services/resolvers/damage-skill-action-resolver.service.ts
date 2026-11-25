@@ -1,3 +1,5 @@
+import { HitConsequencesResolverService } from './hit-consequences-resolver.service';
+import type { CombatHitResult } from 'netim2-shared';
 import { Injectable } from "@nestjs/common";
 import { DamageSkillActionResolution, ResolveActionInput } from "../../types/actionResolution/action-resolution.types";
 import { AppliedStatusEffectResolution, DamageHitResolution } from "./dama-skill-action-resolver.types";
@@ -8,15 +10,10 @@ import { DamageCalculatorService } from "../damage-calculator.service";
 import { BuffManager } from "../../manager/buff-manager";
 import { ContextualBonusService } from "../contextual-bonus.service";
 import { SkillHitResolver } from "./skill-hit-resolver.service";
-import { StatusEffectApplicationResolverService } from "./status-effect-application-resolver.service";
-import { LifeStealResolverService } from "./life-steal-resolver.service";
 import { FighterCombatEntity } from "../../entities/fighter-combat.entity";
 import { FightEntity } from "../../entities/fight.entity";
 import { SkillDamage, UseDamageSkillAction } from "netim2-shared";
 import { HealingResolution } from "./healing-resolver.types";
-import { DamageResolutionResult } from "./damage-resolver.types";
-import { ReflectionResolverService } from "./reflection-resolver.service";
-import { DamageResolverService } from "./damage-resolver.service";
 
 @Injectable()
 export class DamageSkillActionResolver {
@@ -27,13 +24,11 @@ export class DamageSkillActionResolver {
         private damageCalculatorService: DamageCalculatorService,
         private contextualBonusService: ContextualBonusService,
         private skillHitResolver: SkillHitResolver,
-        private reflectionResolverService: ReflectionResolverService,
         private buffManager: BuffManager,
-        private statusEffectsApplicationResolver: StatusEffectApplicationResolverService,
-        private lifeStealResolverService: LifeStealResolverService,
-        private damageResolverService: DamageResolverService,
+        private readonly consequences: HitConsequencesResolverService,
     ) { }
 
+    /** Sortea los modificadores una vez y resuelve las consecuencias de cada hit. */
     resolve({ action, context }: ResolveActionInput<UseDamageSkillAction>): DamageSkillActionResolution {
         const skill = context.actor.getSkillById(action.skillId)
         if (!skill || skill.type !== 'damage') {
@@ -54,8 +49,6 @@ export class DamageSkillActionResolver {
             source: context.actor,
             target: target
         })
-
-
 
         const buffDamageMultiplier = this.buffManager.getSkillDamageMultiplier(context.actor, skill.id)
         const contextualBonusDmgMultiplier = this.contextualBonusService.getPossibleSkillBonusMultiplier(
@@ -87,6 +80,8 @@ export class DamageSkillActionResolver {
         }
 
         const hits: DamageHitResolution[] = [];
+        const hitResults: CombatHitResult[] = [];
+        const consequences: ReturnType<HitConsequencesResolverService['resolve']>[] = [];
         const statusEffects: AppliedStatusEffectResolution[] = []
 
         let totalBaseDamage = 0;
@@ -102,7 +97,7 @@ export class DamageSkillActionResolver {
         }
 
         for (let hitIndex = 0; hitIndex < hitModifierResult.hitCount; hitIndex++) {
-            if (!target.isAlive()) {
+            if (!target.isAlive() || !context.actor.isAlive()) {
                 break;
             }
 
@@ -113,6 +108,7 @@ export class DamageSkillActionResolver {
                 source: { type: 'skill', skillId: skill.id },
             })
 
+            const targetHpBefore = target.getCurrentHp();
             const hitResult = this.skillHitResolver.resolveHit({
                 attacker: context.actor,
                 buffDamageMultiplier,
@@ -126,8 +122,6 @@ export class DamageSkillActionResolver {
                 context
             })
 
-
-
             hits.push(hitResult)
 
             totalBaseDamage += hitResult.totalBaseDamage;
@@ -138,81 +132,19 @@ export class DamageSkillActionResolver {
 
             totalAppliedDamage += hitResult.totalAppliedDamage;
 
-            if (target.isAlive()) {
-                const hitStatusEffects = this.statusEffectsApplicationResolver.resolveEffects({
-                    appliedOnTurn: context.turnNumber,
-                    source: context.actor,
-                    effect: skill.statusEffects,
-                    target,
-                    isCritic: hitResult.critical,
-                    triggeringDamage: hitResult.totalBaseDamage,
-                    context
-                })
-                statusEffects.push(...hitStatusEffects)
-            }
+            const result = this.consequences.resolve({
+                context, target, skill, directDamage: hitResult.totalAppliedDamage,
+                baseDamage: hitResult.totalBaseDamage, targetHpBefore,
+                hit: { hitIndex, outcome: 'hit', critical: hitResult.critical, penetrating: false,
+                    components: hitResult.components.map(component => ({ componentIndex: component.componentIndex,
+                        damageType: component.damageType, appliedDamage: component.appliedDamage })) },
+            });
+            consequences.push(result);
+            hitResults.push(result.playback);
+            statusEffects.push(...result.statusEffects);
         }
 
-        const lifeStealResult = this.lifeStealResolverService.resolveSkillLifeSteal({
-            attacker: context.actor,
-            mechanicsEffects: skill.mechanicsEffects,
-            damageDealt: totalAppliedDamage,
-            target,
-        })
-
-        if (lifeStealResult.effectiveHealing > 0) {
-            context.events.push({
-                type: 'healing_resolved',
-                resolution: {
-                    appliedHealing: lifeStealResult.effectiveHealing,
-                    critical: false,
-                    totalPrevented: lifeStealResult.preventedAmount
-                },
-                targetCurrentHp: lifeStealResult.hpAfter,
-            })
-        }
-
-        const reflectionResult = this.reflectionResolverService.resolve({
-            attacker: context.actor,
-            target,
-            delivery: 'direct',
-            receivedDamage: totalAppliedDamage
-        })
-
-        let reflectedDmgResult: DamageResolutionResult | null = null
-
-        if (reflectionResult) {
-            reflectedDmgResult = this.damageResolverService.resolve({
-                attacker: reflectionResult.source,
-                target: reflectionResult.target,
-                damage: reflectionResult.damage,
-                damageType: reflectionResult.damageType,
-                sourceType: 'reflected',
-                reflectedFromDamageType: 'true'
-            })
-
-            context.events.push({
-                type: 'damage_resolved',
-                critical: false,
-                penetrating: false,
-                source: {
-                    type: 'reflected',
-                    originalAttackerId: context.actor.id,
-                    sourceFighterId: target.id
-                },
-                resolution: {
-                    appliedDamage: reflectedDmgResult.effectiveDamage,
-                    damageType: 'true',
-                    delivery: 'reflected'
-                },
-                targetCurrentHp: reflectedDmgResult.hpAfter,
-                targetDefeated: !target.isAlive()
-            })
-
-            this.reflectionResolverService.reflectionDmgResultRegister(
-                reflectionResult.source,
-                reflectedDmgResult)
-        }
-
+        const { lifeStealResult, reflectedDmgResult } = this.consequences.summarize(consequences);
 
         if (skill.cd.onActivate) {
             const result = context.actor.startSkillCooldown(skill.id, skill.cd.onActivate)
@@ -222,7 +154,6 @@ export class DamageSkillActionResolver {
                 skillId: skill.id,
             })
         }
-
 
         this.DamageSkillActionStatisticRegister(
             context.actor,
@@ -240,6 +171,15 @@ export class DamageSkillActionResolver {
             cooldownRemainingTurns: context.actor.getSkillRemainingCooldown(skill.id),
             hitCount: hitModifierResult.hitCount,
             hits,
+            hitResults,
+            modifiers: {
+                plannedHitCount: hitModifierResult.hitCount, executedHitCount: hits.length,
+                damageMultiplierPerHit: hitModifierResult.dmgMultiplierPerHit,
+                skillDamageMultiplier: dmgModifierResult.multiplier,
+                buffDamageMultiplier, contextualDamageMultiplier: contextualBonusDmgMultiplier,
+                damageModifierApplied: dmgModifierResult.applied, damageModifierType: dmgModifierResult.modifierType,
+                damageModifierDescription: dmgModifierResult.description,
+            },
             lifeSteal: lifeStealResult,
             reflectedDmgResult,
             manaSpent: manaSpent.amount,
@@ -290,7 +230,6 @@ export class DamageSkillActionResolver {
                 damageType: component.damageType
             })
         }))
-
 
         lifeStealResult.reductions.forEach(reductionDetail => {
             const fighter = fight.getFighter(reductionDetail.sourceFighterId)

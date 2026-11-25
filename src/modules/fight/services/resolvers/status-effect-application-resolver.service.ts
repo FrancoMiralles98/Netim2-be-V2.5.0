@@ -11,13 +11,15 @@ import { ActiveStatusEffectId } from "../../types/statusEffects/active-status-ef
 import { TurnContext } from "../../types/fight/fight-context.types";
 import { reportUnhandledError } from "rxjs/internal/util/reportUnhandledError";
 import { randomUUID } from "crypto";
+import { StatusEffectStackResolverService } from './status-effect-stack-resolver.service';
 
 @Injectable()
 export class StatusEffectApplicationResolverService {
     constructor(
         private readonly rngService: RngService,
         private readonly statusEffectManager: StatusEffectManager,
-        private readonly contextualBonusService: ContextualBonusService
+        private readonly contextualBonusService: ContextualBonusService,
+        private readonly stackResolver: StatusEffectStackResolverService,
     ) { }
 
 
@@ -33,6 +35,7 @@ export class StatusEffectApplicationResolverService {
         const results: StatusEffectApplicationResult[] = [];
 
         for (const [effectId, chance] of entries) {
+            if (!input.target.isAlive()) break;
             if (chance === undefined || chance <= 0) {
                 continue;
             }
@@ -43,6 +46,7 @@ export class StatusEffectApplicationResolverService {
                 triggeringDamage: input.triggeringDamage,
                 isCritic: input.isCritic,
                 appliedOnTurn: input.appliedOnTurn,
+                context: input.context,
             });
 
             if (result.resisted) {
@@ -52,8 +56,9 @@ export class StatusEffectApplicationResolverService {
                 })
             }
 
+            results.push(result);
+
             if (result.applied) {
-                results.push(result);
                 input.context.events.push({
                     type: 'status_effect_applied',
                     effect: {
@@ -63,6 +68,11 @@ export class StatusEffectApplicationResolverService {
                         stacks: result.stacks
                     },
                 })
+                if (result.stackProc) {
+                    input.context.events.push({ type: 'status_effect_stack_proc', effectId: result.effectId,
+                        currentStacks: result.stackProc.remainingStacks, appliedDamage: result.stackProc.appliedDamage,
+                        targetCurrentHp: result.stackProc.targetHpAfter });
+                }
             }
 
         }
@@ -82,6 +92,7 @@ export class StatusEffectApplicationResolverService {
         triggeringDamage: number;
 
         appliedOnTurn: number;
+        context: TurnContext;
     }): StatusEffectApplicationResult {
         const config = structuredClone(STATUS_EFFECTS_CONFIG[input.effectId])
 
@@ -94,6 +105,7 @@ export class StatusEffectApplicationResolverService {
         if (!applicationSucceeded) {
             return {
                 applied: false,
+                changes: [],
                 resisted: false,
                 baseChance: input.baseChance,
                 effectId: input.effectId,
@@ -110,6 +122,7 @@ export class StatusEffectApplicationResolverService {
             if (resisted) {
                 return {
                     applied: false,
+                    changes: [],
                     resisted: true,
                     baseChance: input.baseChance,
                     effectId: input.effectId,
@@ -133,7 +146,7 @@ export class StatusEffectApplicationResolverService {
             effectId: input.effectId
         });
 
-        const activeEffect = this.statusEffectManager.apply({
+        const application = this.statusEffectManager.applyWithResult({
             source: input.source,
             target: input.target,
             effectId: input.effectId,
@@ -150,7 +163,11 @@ export class StatusEffectApplicationResolverService {
                 : undefined
         });
 
-        const tickDamage = isPeriodicDamageEffectData(data) ? data.damagePerTick : undefined
+        const activeEffect = application.effect;
+        const stackProc = this.stackResolver.resolve(activeEffect, input.target, input.context);
+        if (stackProc) application.changes.push('stack_triggered');
+        const after = this.statusEffectManager.snapshot(activeEffect);
+        const tickDamage = after.damagePerTick;
 
         let stacks: StatusEffectApplicationResult['stacks']
 
@@ -166,6 +183,14 @@ export class StatusEffectApplicationResolverService {
         return {
             effectId:
                 input.effectId,
+            changes: application.changes,
+            before: application.before,
+            after,
+            stackProc: stackProc ? {
+                consumedStacks: stackProc.consumedStacks, remainingStacks: stackProc.remainingStacks,
+                procCount: stackProc.procCount, appliedDamage: stackProc.damage.effectiveDamage,
+                targetHpBefore: stackProc.damage.hpBefore, targetHpAfter: stackProc.damage.hpAfter,
+            } : undefined,
             damageTick: tickDamage,
             applied: true,
             resisted: false,

@@ -6,9 +6,44 @@ import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 import { CombatStatModifier, StatsModifiers, StatusEffectsKeys } from "netim2-shared";
 import { isPeriodicDamageEffectData } from "../types/statusEffects/effect-data.types";
 import { ActiveStatusEffectId } from "../types/statusEffects/active-status-effect.types";
+import type { CombatEffectChange, CombatEffectSnapshot } from 'netim2-shared';
 
 @Injectable()
 export class StatusEffectManager {
+
+    /** Aplica el efecto y describe todos los cambios de su reaplicación. */
+    applyWithResult(input: ApplyStatusEffectInput) {
+        const existing = input.target.getActiveStatusEffectByEffectId(input.effectId);
+        const before = existing ? this.snapshot(existing) : undefined;
+        const effect = this.apply(input);
+        const after = this.snapshot(effect);
+        const changes: CombatEffectChange[] = [];
+        if (!before) {
+            changes.push('applied');
+        } else {
+            changes.push(input.canStackDuration ? 'duration_accumulated' : 'duration_refreshed');
+            if (before.stacks && after.stacks && after.stacks.current > before.stacks.current) changes.push('stack_added');
+            if (before.damagePerTick !== undefined && isPeriodicDamageEffectData(input.data)) {
+                const replaced = input.data.damagePerTick > before.damagePerTick;
+                changes.push(replaced ? 'damage_replaced' : 'damage_kept');
+                if (after.damagePerTick! > Math.max(before.damagePerTick, input.data.damagePerTick)) changes.push('damage_increased');
+            } else {
+                changes.push('application_replaced');
+            }
+        }
+        return { effect, before, after, changes };
+    }
+
+    /** Captura valores, sin exponer referencias al estado mutable del efecto. */
+    snapshot(effect: ActiveStatusEffectEntity): CombatEffectSnapshot {
+        const data = effect.Effectdata;
+        return structuredClone({
+            instanceId: effect.getInstanceId(), sourceFighterId: effect.getSourceFighterId(),
+            remainingTurns: effect.getRemainingTurns(),
+            damagePerTick: isPeriodicDamageEffectData(data) ? data.damagePerTick : undefined,
+            stacks: effect.getStacks(),
+        });
+    }
 
     apply(input: ApplyStatusEffectInput): ActiveStatusEffectEntity {
         const existingEffect = input.target.getActiveStatusEffectByEffectId(input.effectId);

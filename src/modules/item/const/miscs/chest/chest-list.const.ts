@@ -23,8 +23,9 @@ export const CHEST_LIST: ChestType[] = [
             },
             {
                 type_reward: 'item',
-                idItem: IdItem.ESCUDO_DE_BATALLA,
-                weight: 1
+                idItem: IdItem.POCION_ROJA_M,
+                weight: 1,
+                rewardOptions: { cantidadChances: { min: 20, max: 20 } }
             },
             {
                 type_reward: 'item',

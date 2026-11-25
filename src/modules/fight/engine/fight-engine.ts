@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { FightFactory } from "../factories/fight.factory";
 import { FightManager } from "../manager/fight-manager";
-import { FightResponse, InitialFighterStats } from "netim2-shared";
+import type { FightResponse, InitialFighterStats } from 'netim2-shared';
 import { FighterCombatEntity } from "../entities/fighter-combat.entity";
 import { FightEntity } from "../entities/fight.entity";
 import { InitiativeResolverService } from "../services/resolvers/initiative-resolver.service";
