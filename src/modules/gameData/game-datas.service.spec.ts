@@ -1,6 +1,10 @@
 import { BadRequestException } from '@nestjs/common';
 import type { CharacterRace, CharacterSpeciality } from 'netim2-shared';
-import { UNIQUE_ID_SKILLS } from 'netim2-shared';
+import { IdItem, UNIQUE_ID_SKILLS } from 'netim2-shared';
+import { Test, TestingModule } from '@nestjs/testing';
+import { ItemModule } from '../item/item.module';
+import { ItemService } from '../item/item.service';
+import { FORGE_ATTEMPT_MODIFIERS_CONFIG } from '../npc/herrero/config/forge-attempt-modifiers.config';
 import { CharacterService } from '../character/character.service';
 import { CharacterMapper } from '../character/mapper/character-mapper';
 import { CHARACTER_SPECIALITYS, MIN_LV_TO_SELECT_SPECIALITY } from '../character/const/character-specialitys.const';
@@ -12,7 +16,29 @@ import { ATTRIBUTE_EFFECTS_CONFIG } from './const/attributes-config';
 import { GameDatasService } from './game-datas.service';
 
 describe('GameDatasService game config', () => {
-    const service = new GameDatasService({} as CharacterService, new CharacterMapper());
+    let service: GameDatasService;
+    let items: ItemService;
+    let module: TestingModule;
+
+    beforeAll(async () => {
+        module = await Test.createTestingModule({ imports: [ItemModule] }).compile();
+        items = module.get(ItemService);
+        service = new GameDatasService({} as CharacterService, new CharacterMapper(), items);
+    });
+    afterAll(async () => { await module.close(); });
+
+    it('devuelve cada consumible de herrería completo con la configuración usada por el servidor', () => {
+        const result = service.getGameConfig('guerrero');
+        expect(result.herrero.modifiers).toHaveLength(Object.keys(FORGE_ATTEMPT_MODIFIERS_CONFIG).length);
+        for (const idItem of [IdItem.MANUAL_DEL_HERRERO, IdItem.PERGAMINO_BENDICION]) {
+            const modifier = result.herrero.modifiers.find(entry => entry.item.idItem === idItem);
+            expect(modifier).toEqual({ item: items.getCoreItemInfoByIdItem(idItem), config: FORGE_ATTEMPT_MODIFIERS_CONFIG[idItem] });
+        }
+        result.herrero.modifiers[0].item.name = 'Modificado';
+        result.herrero.modifiers[0].config.quantity = 999;
+        expect(service.getGameConfig('guerrero').herrero.modifiers[0].config.quantity).toBe(1);
+        expect(service.getGameConfig('guerrero').herrero.modifiers[0].item.name).not.toBe('Modificado');
+    });
 
     it.each(['guerrero', 'chaman', 'ninja', 'sura'] as const)('returns the %s race caps and all enabled specialities and skill IDs', race => {
         const result = service.getGameConfig(race);

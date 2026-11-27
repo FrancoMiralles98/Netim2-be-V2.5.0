@@ -8,7 +8,7 @@ export const POCION_LIST: PocionType[] = [
         name: 'Poción Roja(P)',
         img: '/items/Poción_Roja(P).png',
         maxCantidad: 200,
-        effect: [{ resource: 'hp', amount: 300 }, { resource: 'mana', amount: 200 }],
+        effect: [{ resource: 'hp', amount: 300 }],
         price: 25,
         description: '',
         idItem: IdItem.POCION_ROJA_P,
@@ -26,15 +26,11 @@ export const POCION_LIST: PocionType[] = [
         }
     }),
     createPocionItem({
-        potionType: 'reserve',
+        potionType: 'normal',
         name: 'Poción Roja(M)',
-        reserve: {
-            actual: 1000,
-            max: 1000
-        },
         img: '/items/Poción_Roja(M).png',
         maxCantidad: 200,
-        resource: ['hp'],
+        effect: [{ resource: 'hp', amount: 700 }],
         price: 50,
         description: '',
         idItem: IdItem.POCION_ROJA_M,

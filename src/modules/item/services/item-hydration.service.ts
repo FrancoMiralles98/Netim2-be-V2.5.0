@@ -1,3 +1,4 @@
+import { withEquipmentForge } from '../utils/equipment-forge';
 import { Injectable } from "@nestjs/common";
 import { isEquipItem, isPiedraItem, isUtilityItem } from "../types/item-type-guard.type";
 import { CañaType, EquipType, InventoryItem, ItemDTO, MonturaType, PiedraType, UtilityItemDTO } from "netim2-shared";
@@ -103,7 +104,8 @@ export class ItemHydrationService {
             weight: savedItem.weight
         }
 
-        return { ...structuredClone(savedItem), ...structuredClone(mergedItem) }
+        return withEquipmentForge({ ...structuredClone(savedItem), ...structuredClone(mergedItem),
+            forge: withEquipmentForge(savedItem).forge })
     }
 
     private mergePiedraItem(baseItem: ItemDTO, savedItem: PiedraType): PiedraType {

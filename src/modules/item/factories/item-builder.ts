@@ -1,3 +1,4 @@
+import { withEquipmentForge } from '../utils/equipment-forge';
 import { BuffType, CañaType, CeboType, ChestType, EquipType, MonturaType, PiedraType, PocionType, UtilityType } from "netim2-shared";
 import { BASE_EQUIP_ITEM } from "../const/equip/base-equip.const";
 import { BASE_LEGENDARIO_ITEM } from "../const/equip/legendarios/base-legendario-item.const";
@@ -13,17 +14,17 @@ import { RawBuffItem, RawCañaItem, RawCeboItem, RawChestItem, RawEquipItem, Raw
 import { BASE_CEBO } from "../const/miscs/cebo/base-cebo.const";
 
 export function createEquipItem(data: RawEquipItem): EquipType {
-    return {
+    return withEquipmentForge({
         ...BASE_EQUIP_ITEM,
         ...data,
-    };
+    });
 }
 
 export function createLegendaryEquipItem(data: RawLegendaryEquipItem): EquipType {
-    return {
+    return withEquipmentForge({
         ...BASE_LEGENDARIO_ITEM,
         ...data,
-    };
+    });
 }
 
 export function createBuffItem(data: RawBuffItem): BuffType {

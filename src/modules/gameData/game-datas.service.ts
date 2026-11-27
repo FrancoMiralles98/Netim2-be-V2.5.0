@@ -3,7 +3,9 @@ import { RACE_INFO } from './const/race-info.const';
 import { GENERAL_ATTRIBUTE_CAP } from '../character/const/statsProgress/general-attribute-cap.const';
 import { CharacterService } from '../character/character.service';
 import { CharacterMapper } from '../character/mapper/character-mapper';
-import { CharacterRace, CharacterSelectionDataType, CharacterSpeciality } from 'netim2-shared';
+import { CharacterRace, CharacterSelectionDataType, CharacterSpeciality, IdItemList } from 'netim2-shared';
+import { ItemService } from '../item/item.service';
+import { FORGE_ATTEMPT_MODIFIERS_CONFIG } from '../npc/herrero/config/forge-attempt-modifiers.config';
 import { ReinosBuff } from './reinos/reinos-buff.config';
 import { MAX_CHARACTERS } from './const/max-characters.const';
 import { ATTRIBUTE_EFFECTS_CONFIG } from './const/attributes-config';
@@ -23,7 +25,8 @@ import type { GameConfigApiResponse } from './types/game-config-response.type';
 export class GameDatasService {
     constructor(
         private characterService: CharacterService,
-        private characterMapper: CharacterMapper
+        private characterMapper: CharacterMapper,
+        private readonly itemService: ItemService,
     ) { }
 
     getGameConfig(race: CharacterRace, speciality?: CharacterSpeciality): GameConfigApiResponse {
@@ -64,6 +67,12 @@ export class GameDatasService {
                 max_active_buff: MAX_ACTIVE_BUFF
             },
             zonas: ZONES_CONFIG,
+            herrero: {
+                modifiers: Object.entries(FORGE_ATTEMPT_MODIFIERS_CONFIG).flatMap(([idItem, config]) => config ? [{
+                    item: this.itemService.getItems({ items: [{ idItem: Number(idItem) as IdItemList }] })[0],
+                    config,
+                }] : []),
+            },
         });
     }
 

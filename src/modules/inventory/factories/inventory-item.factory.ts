@@ -1,3 +1,4 @@
+import { withEquipmentForge } from '../../item/utils/equipment-forge';
 
 import { randomUUID } from "crypto"
 import { InventoryItem, ItemDTO, Position } from "netim2-shared"
@@ -17,7 +18,7 @@ import { InventoryItem, ItemDTO, Position } from "netim2-shared"
 export class InventoryItemFactory {
     static create(item: ItemDTO, position: Position): InventoryItem {
         return structuredClone({
-            ...item,
+            ...(item.type === 'equip' ? withEquipmentForge(item) : item),
             id: randomUUID(),
             position
         })

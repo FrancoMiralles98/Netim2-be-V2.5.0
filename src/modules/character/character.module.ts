@@ -68,6 +68,7 @@ import { CharacterHistorialOrchestratorService } from './services/historial/char
   controllers: [CharacterController, CharacterEquipmentController, CharacterInventoryController, CharacterItemUseController, CharacterAttributeController, CharacterSkillController, MisionesController, CharacterFightController, CharacterHistorialController],
   providers: [CharacterService, CharacterRepository,CharacterMapper, EquipStatsCalculatorService, CharacterAttributesService, CharacterLevelScalingService, BuffStatsCalculatorService, UpdateStatsService, CharacterEquipService, CharacterEquipOrchestratorService, CharacterBuffService, CharacterInventoryService, CharacterInventoryOrchestratorService, CharacterPotionService, CharacterItemUseOrchestratorService, CharacterChestService, CharacterAttributeService, CharacterAttributeOrchestratorService, CharacterSkillService, CharacterSkillOrchestratorService, MissionOrchestratorService, CharacterFightService, CharacterFightOrchestratorService, CharacterFightTimerService, CharacterHistorialService, CharacterHistorialOrchestratorService],
   exports: [
+    CharacterRepository,
     CharacterService,
     CharacterMapper,
     EquipStatsCalculatorService,

@@ -3,9 +3,10 @@ import { GameDatasService } from './game-datas.service';
 import { GameDatasController } from './game-datas.controller';
 import { AuthModule } from '../auth/auth.module';
 import { CharacterModule } from '../character/character.module';
+import { ItemModule } from '../item/item.module';
 
 @Module({
-  imports: [AuthModule,CharacterModule],
+  imports: [AuthModule,CharacterModule,ItemModule],
   controllers: [GameDatasController],
   providers: [GameDatasService],
 })

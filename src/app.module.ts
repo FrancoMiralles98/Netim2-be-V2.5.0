@@ -27,6 +27,7 @@ import { redisConfig } from './config/redis.config';
 import { seconds, ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler'
 import { APP_GUARD } from '@nestjs/core';
 import { GameDatasModule } from './modules/gameData/game-datas.module';
+import { NpcModule } from './modules/npc/npc.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { GameDatasModule } from './modules/gameData/game-datas.module';
     AuthModule,
     RedisModule,
     GameDatasModule,
+    NpcModule,
   ],
   controllers: [AppController],
   providers: [

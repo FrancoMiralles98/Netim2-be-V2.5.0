@@ -1,9 +1,11 @@
+import { MAX_EQUIPMENT_FORGE_DURABILITY } from '../../../config/equipment-forge.config';
 import { EquipType } from "netim2-shared";
 import { EQUIP_RULES } from "src/modules/item/config/items-rule.const";
 
 
 export const BASE_LEGENDARIO_ITEM = {
-    upgradeLv: 0,
+    forge: { durability: MAX_EQUIPMENT_FORGE_DURABILITY },
+  upgradeLv: 0,
     upgradeMax: EQUIP_RULES.MAX_NORMAL_UPGRADE_LV,
     type: 'equip',
     acc: false,
